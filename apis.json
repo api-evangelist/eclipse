@@ -1,0 +1,62 @@
+{
+    "name": "Eclipse",
+    "description": "Facebook probably not the best place to post questions. If you have questions about Eclipse software, the forums is probably the best place to start (http:\/\/www.eclipse.org\/forums). If you're not sure where your question fits, try the \"newcomer\" forum ...",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11773-mosquitto.jpg",
+    "tags": [
+        "api service provider",
+        "have api",
+        "internet of things",
+        "mqtt"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/eclipse\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Eclipse",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11773-mosquitto.jpg",
+            "humanURL": "http:\/\/www.eclipse.org",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/eclipse-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/eclipse-foundation"
+        },
+        {
+            "type": "Email",
+            "url": "license@eclipse.org"
+        },
+        {
+            "type": "Email",
+            "url": "licensing@eclipse.org"
+        },
+        {
+            "type": "Email",
+            "url": "emo-records@eclipse.org"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/EclipseFdn"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/www.eclipse.org\/mosquitto\/"
+        },
+        {
+            "type": "Website",
+            "url": "http:\/\/www.eclipse.org"
+        }
+    ]
+}
