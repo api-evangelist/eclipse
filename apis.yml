@@ -1,0 +1,88 @@
+name: Eclipse Foundation
+description: APIs and services provided by the Eclipse Foundation and its projects
+image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+created: '2024'
+modified: '2024'
+specificationVersion: '0.18'
+url: https://www.eclipse.org
+apis:
+- name: Eclipse Marketplace API
+  description: API for accessing Eclipse Marketplace data including listings, favorites, and installation statistics
+  image: https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+  humanURL: https://marketplace.eclipse.org/
+  baseURL: https://marketplace.eclipse.org/api/p
+  tags:
+  - marketplace
+  - plugins
+  - extensions
+  properties:
+  - type: Documentation
+    url: https://wiki.eclipse.org/Marketplace/REST
+  - type: OpenAPI
+    url: https://marketplace.eclipse.org/api-docs
+  - type: Authentication
+    url: https://wiki.eclipse.org/Marketplace/REST#Authentication
+  contact:
+  - type: Support
+    url: https://www.eclipse.org/org/support/
+- name: Eclipse JGit API
+  description: Java implementation of the Git version control system API
+  humanURL: https://www.eclipse.org/jgit/
+  baseURL: https://download.eclipse.org/jgit/
+  tags:
+  - git
+  - version-control
+  - java
+  properties:
+  - type: Documentation
+    url: https://wiki.eclipse.org/JGit/User_Guide
+  - type: GitHub
+    url: https://github.com/eclipse-jgit/jgit
+  - type: JavaDoc
+    url: https://download.eclipse.org/jgit/site/latest/apidocs/
+- name: Eclipse IoT API
+  description: APIs for IoT protocols and device management including MQTT, CoAP, and LWM2M
+  humanURL: https://iot.eclipse.org/
+  baseURL: https://iot.eclipse.org/
+  tags:
+  - iot
+  - mqtt
+  - coap
+  - devices
+  properties:
+  - type: Documentation
+    url: https://iot.eclipse.org/getting-started
+  - type: GitHub
+    url: https://github.com/eclipse
+- name: Eclipse Foundation Web API
+  description: API for accessing Eclipse Foundation project data, releases, and metadata
+  humanURL: https://api.eclipse.org/
+  baseURL: https://api.eclipse.org/
+  tags:
+  - projects
+  - metadata
+  - releases
+  properties:
+  - type: Documentation
+    url: https://api.eclipse.org/
+  - type: OpenAPI
+    url: https://api.eclipse.org/swagger-ui/
+maintainers:
+- name: Eclipse Foundation
+  email: webmaster@eclipse.org
+  url: https://www.eclipse.org/org/foundation/contact.php
+common:
+- type: Portal
+  url: https://www.eclipse.org/
+- type: Blog
+  url: https://blogs.eclipse.org/
+- type: News
+  url: https://newsroom.eclipse.org/
+- type: GitHub Organization
+  url: https://github.com/eclipse
+- type: Terms of Service
+  url: https://www.eclipse.org/legal/termsofuse.php
+- type: Privacy Policy
+  url: https://www.eclipse.org/legal/privacy.php
+- type: License
+  url: https://www.eclipse.org/legal/epl-2.0/
