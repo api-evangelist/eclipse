@@ -1,8 +1,7 @@
 name: Eclipse Foundation
 description: >-
   APIs and services provided by the Eclipse Foundation and its projects.
-image: 
-  https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 created: '2024'
 modified: '2024'
 specificationVersion: '0.18'
@@ -12,14 +11,13 @@ apis:
     description: >-
       API for accessing Eclipse Marketplace data including listings, favorites, and
       installation statistics.
-    image: 
-      https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+    image: https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
     humanURL: https://marketplace.eclipse.org/
     baseURL: https://marketplace.eclipse.org/api/p
     tags:
-      - marketplace
-      - plugins
-      - extensions
+      - Extensions
+      - Marketplace
+      - Plugins
     properties:
       - type: Documentation
         url: https://wiki.eclipse.org/Marketplace/REST
@@ -36,9 +34,9 @@ apis:
     humanURL: https://www.eclipse.org/jgit/
     baseURL: https://download.eclipse.org/jgit/
     tags:
-      - git
-      - version-control
-      - java
+      - Git
+      - Java
+      - Version-Control
     properties:
       - type: Documentation
         url: https://wiki.eclipse.org/JGit/User_Guide
@@ -52,10 +50,10 @@ apis:
     humanURL: https://iot.eclipse.org/
     baseURL: https://iot.eclipse.org/
     tags:
-      - iot
-      - mqtt
-      - coap
-      - devices
+      - Coap
+      - Devices
+      - Iot
+      - Mqtt
     properties:
       - type: Documentation
         url: https://iot.eclipse.org/getting-started
@@ -67,9 +65,9 @@ apis:
     humanURL: https://api.eclipse.org/
     baseURL: https://api.eclipse.org/
     tags:
-      - projects
-      - metadata
-      - releases
+      - Metadata
+      - Projects
+      - Releases
     properties:
       - type: Documentation
         url: https://api.eclipse.org/
