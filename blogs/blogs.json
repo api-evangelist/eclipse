@@ -1,0 +1,13 @@
+{
+  "repo": "eclipse",
+  "feeds": [
+    {
+      "source": "https://blogs.eclipse.org/",
+      "feed_url": "https://blogs.eclipse.org/blog/feed",
+      "saved": 10,
+      "title": "Blog Posts"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-05-03T23:27:36Z"
+}
