@@ -3,11 +3,12 @@
   "feeds": [
     {
       "source": "https://blogs.eclipse.org/",
-      "feed_url": "https://blogs.eclipse.org/blog/feed",
-      "saved": 10,
-      "title": "Blog Posts"
+      "feed_url": "",
+      "title": "",
+      "saved": 0,
+      "error": "no_feed"
     }
   ],
   "post_count": 10,
-  "fetched": "2026-05-03T23:27:36Z"
+  "fetched": "2026-05-09T20:17:51Z"
 }
