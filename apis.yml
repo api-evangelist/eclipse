@@ -107,11 +107,11 @@ common:
     url: https://blogs.eclipse.org/
   - type: News
     url: https://newsroom.eclipse.org/
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/eclipse
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.eclipse.org/legal/termsofuse.php
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.eclipse.org/legal/privacy.php
   - type: License
     url: https://www.eclipse.org/legal/epl-2.0/
