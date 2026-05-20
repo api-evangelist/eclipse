@@ -99,6 +99,8 @@ apis:
       - type: Documentation
         url: https://webdev.eclipse.org/docs/api/
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/eclipse-foundation
   - type: Portal
     url: https://www.eclipse.org/
   - type: API Documentation Index
