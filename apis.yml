@@ -99,6 +99,10 @@ apis:
       - type: Documentation
         url: https://webdev.eclipse.org/docs/api/
 common:
+  - type: VulnerabilityDisclosure
+    url: security/eclipse-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/eclipse-domain-security.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/eclipse-foundation
   - type: Portal
