@@ -5,7 +5,7 @@
       "source": "https://blogs.eclipse.org/blog/feed",
       "feed_url": "https://blogs.eclipse.org/blog/feed",
       "title": "",
-      "saved": 1,
+      "saved": 5,
       "method": "feed"
     },
     {
@@ -23,6 +23,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 39,
-  "fetched": "2026-06-27T12:03:07Z"
+  "post_count": 48,
+  "fetched": "2026-07-11T11:50:51Z"
 }
