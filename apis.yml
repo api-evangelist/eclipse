@@ -99,6 +99,8 @@ apis:
       - type: Documentation
         url: https://webdev.eclipse.org/docs/api/
 common:
+  - type: AgenticAccess
+    url: agentic-access/eclipse-agentic-access.yml
   - type: VulnerabilityDisclosure
     url: security/eclipse-vulnerability-disclosure.yml
   - type: DomainSecurity
