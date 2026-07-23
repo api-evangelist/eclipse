@@ -1,0 +1,71 @@
+openapi: 3.1.0
+info:
+  title: Eclipse Marketplace REST Eclipse Marketplace REST API API
+  description: 'REST API for the Eclipse Marketplace. Returns XML describing markets,
+
+    categories, taxonomies, individual listing nodes and search results
+
+    that can be used to integrate with the Eclipse Marketplace Client and
+
+    third-party tools. No authentication is required for public reads.
+
+    This specification is a best-effort, documentation-derived description
+
+    and may omit fields.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Eclipse Foundation
+    url: https://wiki.eclipse.org/Marketplace/REST
+servers:
+- url: https://marketplace.eclipse.org/api/p
+  description: Public REST root
+tags:
+- name: Eclipse Marketplace REST API
+paths:
+  /:
+    get:
+      summary: List markets and categories
+      operationId: listMarkets
+      responses:
+        '200':
+          description: XML document describing all markets and their categories.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceMarkets'
+      tags:
+      - Eclipse Marketplace REST API
+components:
+  schemas:
+    MarketplaceMarkets:
+      type: object
+      description: XML root <marketplace> with <market> children carrying <category> entries.
+      properties:
+        markets:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              url:
+                type: string
+                format: uri
+              categories:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    count:
+                      type: integer
+                    url:
+                      type: string
+                      format: uri

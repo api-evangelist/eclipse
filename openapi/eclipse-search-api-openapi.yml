@@ -1,0 +1,136 @@
+openapi: 3.1.0
+info:
+  title: Eclipse Marketplace REST Eclipse Marketplace REST API Search API
+  description: 'REST API for the Eclipse Marketplace. Returns XML describing markets,
+
+    categories, taxonomies, individual listing nodes and search results
+
+    that can be used to integrate with the Eclipse Marketplace Client and
+
+    third-party tools. No authentication is required for public reads.
+
+    This specification is a best-effort, documentation-derived description
+
+    and may omit fields.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Eclipse Foundation
+    url: https://wiki.eclipse.org/Marketplace/REST
+servers:
+- url: https://marketplace.eclipse.org/api/p
+  description: Public REST root
+tags:
+- name: Search
+paths:
+  /search/apachesolr_search/{term}:
+    get:
+      summary: Search marketplace listings
+      operationId: searchListings
+      parameters:
+      - in: path
+        name: term
+        required: true
+        schema:
+          type: string
+        description: URL-encoded search term.
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Zero-indexed result page.
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Optional filter, e.g. tx_eclipse_versions=oxygen.
+      responses:
+        '200':
+          description: Search result XML.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceSearch'
+      tags:
+      - Search
+components:
+  schemas:
+    MarketplaceSearch:
+      type: object
+      description: XML root <marketplace> with a <search> element listing matching nodes.
+      properties:
+        search:
+          type: object
+          properties:
+            count:
+              type: integer
+            term:
+              type: string
+            url:
+              type: string
+              format: uri
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MarketplaceNode'
+    MarketplaceNode:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+        type:
+          type: string
+        categories:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        tags:
+          type: array
+          items:
+            type: string
+        owner:
+          type: string
+        favorited:
+          type: integer
+        installstotal:
+          type: integer
+        installsrecent:
+          type: integer
+        shortdescription:
+          type: string
+        body:
+          type: string
+        image:
+          type: string
+          format: uri
+        license:
+          type: string
+        version:
+          type: string
+        eclipseversion:
+          type: string
+        updateurl:
+          type: string
+          format: uri
+        ius:
+          type: array
+          items:
+            type: string
+        platforms:
+          type: array
+          items:
+            type: string
+        companyname:
+          type: string
+        status:
+          type: string
+        supporturl:
+          type: string
+          format: uri

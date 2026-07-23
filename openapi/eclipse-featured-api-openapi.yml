@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: Eclipse Marketplace REST Eclipse Marketplace REST API Featured API
+  description: 'REST API for the Eclipse Marketplace. Returns XML describing markets,
+
+    categories, taxonomies, individual listing nodes and search results
+
+    that can be used to integrate with the Eclipse Marketplace Client and
+
+    third-party tools. No authentication is required for public reads.
+
+    This specification is a best-effort, documentation-derived description
+
+    and may omit fields.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Eclipse Foundation
+    url: https://wiki.eclipse.org/Marketplace/REST
+servers:
+- url: https://marketplace.eclipse.org/api/p
+  description: Public REST root
+tags:
+- name: Featured
+paths:
+  /featured:
+    get:
+      summary: Featured listings
+      operationId: getFeatured
+      responses:
+        '200':
+          description: XML list of featured listings.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceCategoryListing'
+      tags:
+      - Featured
+components:
+  schemas:
+    MarketplaceNode:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+        type:
+          type: string
+        categories:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        tags:
+          type: array
+          items:
+            type: string
+        owner:
+          type: string
+        favorited:
+          type: integer
+        installstotal:
+          type: integer
+        installsrecent:
+          type: integer
+        shortdescription:
+          type: string
+        body:
+          type: string
+        image:
+          type: string
+          format: uri
+        license:
+          type: string
+        version:
+          type: string
+        eclipseversion:
+          type: string
+        updateurl:
+          type: string
+          format: uri
+        ius:
+          type: array
+          items:
+            type: string
+        platforms:
+          type: array
+          items:
+            type: string
+        companyname:
+          type: string
+        status:
+          type: string
+        supporturl:
+          type: string
+          format: uri
+    MarketplaceCategoryListing:
+      type: object
+      description: XML root <marketplace> with a <category> wrapper that contains <node> children.
+      properties:
+        category:
+          type: object
+          properties:
+            name:
+              type: string
+            url:
+              type: string
+              format: uri
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MarketplaceNode'
