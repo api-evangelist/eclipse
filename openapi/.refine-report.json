@@ -1,0 +1,28 @@
+{
+  "provider": "eclipse",
+  "sources": [
+    "eclipse-eclipse-marketplace-rest-api-api-openapi.yml",
+    "eclipse-favorites-api-openapi.yml",
+    "eclipse-featured-api-openapi.yml",
+    "eclipse-node-api-openapi.yml",
+    "eclipse-popular-api-openapi.yml",
+    "eclipse-recent-api-openapi.yml",
+    "eclipse-search-api-openapi.yml",
+    "eclipse-taxonomy-api-openapi.yml"
+  ],
+  "outputs": [
+    "eclipse-eclipse-marketplace-rest-api-api-openapi.yml",
+    "eclipse-favorites-api-openapi.yml",
+    "eclipse-featured-api-openapi.yml",
+    "eclipse-node-api-openapi.yml",
+    "eclipse-popular-api-openapi.yml",
+    "eclipse-recent-api-openapi.yml",
+    "eclipse-search-api-openapi.yml",
+    "eclipse-taxonomy-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

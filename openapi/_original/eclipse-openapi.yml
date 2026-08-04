@@ -1,0 +1,263 @@
+openapi: 3.1.0
+info:
+  title: Eclipse Marketplace REST API
+  description: |
+    REST API for the Eclipse Marketplace. Returns XML describing markets,
+    categories, taxonomies, individual listing nodes and search results
+    that can be used to integrate with the Eclipse Marketplace Client and
+    third-party tools. No authentication is required for public reads.
+    This specification is a best-effort, documentation-derived description
+    and may omit fields.
+  version: 1.0.0
+  contact:
+    name: Eclipse Foundation
+    url: https://wiki.eclipse.org/Marketplace/REST
+servers:
+  - url: https://marketplace.eclipse.org/api/p
+    description: Public REST root
+paths:
+  /:
+    get:
+      summary: List markets and categories
+      operationId: listMarkets
+      responses:
+        '200':
+          description: XML document describing all markets and their categories.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceMarkets'
+  /node/{nodeId}:
+    get:
+      summary: Get a marketplace listing node
+      operationId: getNode
+      parameters:
+        - in: path
+          name: nodeId
+          required: true
+          schema:
+            type: integer
+          description: Numeric identifier of a marketplace listing.
+      responses:
+        '200':
+          description: Listing XML
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceNode'
+  /taxonomy/term/{ids}:
+    get:
+      summary: List nodes in a taxonomy term
+      operationId: getTaxonomyTerm
+      parameters:
+        - in: path
+          name: ids
+          required: true
+          schema:
+            type: string
+          description: Comma-separated category and market IDs, e.g. `36,31`.
+      responses:
+        '200':
+          description: XML listing nodes that match the taxonomy term.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceCategoryListing'
+  /search/apachesolr_search/{term}:
+    get:
+      summary: Search marketplace listings
+      operationId: searchListings
+      parameters:
+        - in: path
+          name: term
+          required: true
+          schema:
+            type: string
+          description: URL-encoded search term.
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Zero-indexed result page.
+        - in: query
+          name: filter
+          schema:
+            type: string
+          description: Optional filter, e.g. tx_eclipse_versions=oxygen.
+      responses:
+        '200':
+          description: Search result XML.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceSearch'
+  /favorites/top:
+    get:
+      summary: Top favorited listings
+      operationId: getTopFavorites
+      responses:
+        '200':
+          description: XML list of top favorited listings.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceCategoryListing'
+  /popular/top:
+    get:
+      summary: Most popular listings
+      operationId: getTopPopular
+      responses:
+        '200':
+          description: XML list of top popular listings.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceCategoryListing'
+  /recent:
+    get:
+      summary: Recently updated listings
+      operationId: getRecent
+      responses:
+        '200':
+          description: XML list of recently updated listings.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceCategoryListing'
+  /featured:
+    get:
+      summary: Featured listings
+      operationId: getFeatured
+      responses:
+        '200':
+          description: XML list of featured listings.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MarketplaceCategoryListing'
+components:
+  schemas:
+    MarketplaceMarkets:
+      type: object
+      description: XML root <marketplace> with <market> children carrying <category> entries.
+      properties:
+        markets:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              url:
+                type: string
+                format: uri
+              categories:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    count:
+                      type: integer
+                    url:
+                      type: string
+                      format: uri
+    MarketplaceCategoryListing:
+      type: object
+      description: XML root <marketplace> with a <category> wrapper that contains <node> children.
+      properties:
+        category:
+          type: object
+          properties:
+            name:
+              type: string
+            url:
+              type: string
+              format: uri
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MarketplaceNode'
+    MarketplaceSearch:
+      type: object
+      description: XML root <marketplace> with a <search> element listing matching nodes.
+      properties:
+        search:
+          type: object
+          properties:
+            count:
+              type: integer
+            term:
+              type: string
+            url:
+              type: string
+              format: uri
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MarketplaceNode'
+    MarketplaceNode:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+        type:
+          type: string
+        categories:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        tags:
+          type: array
+          items:
+            type: string
+        owner:
+          type: string
+        favorited:
+          type: integer
+        installstotal:
+          type: integer
+        installsrecent:
+          type: integer
+        shortdescription:
+          type: string
+        body:
+          type: string
+        image:
+          type: string
+          format: uri
+        license:
+          type: string
+        version:
+          type: string
+        eclipseversion:
+          type: string
+        updateurl:
+          type: string
+          format: uri
+        ius:
+          type: array
+          items:
+            type: string
+        platforms:
+          type: array
+          items:
+            type: string
+        companyname:
+          type: string
+        status:
+          type: string
+        supporturl:
+          type: string
+          format: uri
