@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API Taxonomy API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Taxonomy",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List nodes in a taxonomy term",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://marketplace.eclipse.org/api/p/taxonomy/term/:ids",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "path",
+                "description": "Comma-separated category and market IDs, e.g. `36,31`."
+              }
+            ]
+          },
+          "docs": "List nodes in a taxonomy term"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

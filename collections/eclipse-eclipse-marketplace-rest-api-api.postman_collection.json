@@ -1,0 +1,99 @@
+{
+  "item": [
+    {
+      "id": "b1b659bc-e715-4f27-a3e0-02f82786c76e",
+      "name": "Eclipse Marketplace REST API",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "877bf9c4-109e-411c-b1a1-7b5ba6d8fb66",
+          "name": "List markets and categories",
+          "request": {
+            "name": "List markets and categories",
+            "description": {},
+            "url": {
+              "path": [
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4120786a-7498-4748-9bae-535283be5589",
+              "name": "XML document describing all markets and their categories.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>\n  <markets>\n    <id>(integer)</id>\n    <name>(string)</name>\n    <url>(string)</url>\n    <categories>\n      <id>(integer)</id>\n      <name>(string)</name>\n      <count>(integer)</count>\n      <url>(string)</url>\n    </categories>\n    <categories>\n      <id>(integer)</id>\n      <name>(string)</name>\n      <count>(integer)</count>\n      <url>(string)</url>\n    </categories>\n  </markets>\n  <markets>\n    <id>(integer)</id>\n    <name>(string)</name>\n    <url>(string)</url>\n    <categories>\n      <id>(integer)</id>\n      <name>(string)</name>\n      <count>(integer)</count>\n      <url>(string)</url>\n    </categories>\n    <categories>\n      <id>(integer)</id>\n      <name>(string)</name>\n      <count>(integer)</count>\n      <url>(string)</url>\n    </categories>\n  </markets>\n</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://marketplace.eclipse.org/api/p",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "7b136a06-e560-465c-899a-5ac279462ebf",
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for the Eclipse Marketplace. Returns XML describing markets,\ncategories, taxonomies, individual listing nodes and search results\nthat can be used to integrate with the Eclipse Marketplace Client and\nthird-party tools. No authentication is required for public reads.\nThis specification is a best-effort, documentation-derived description\nand may omit fields.\n\n\nContact Support:\n Name: Eclipse Foundation",
+      "type": "text/plain"
+    }
+  }
+}

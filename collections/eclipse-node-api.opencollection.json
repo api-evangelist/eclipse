@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API Node API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Node",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a marketplace listing node",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://marketplace.eclipse.org/api/p/node/:nodeId",
+            "params": [
+              {
+                "name": "nodeId",
+                "value": "",
+                "type": "path",
+                "description": "Numeric identifier of a marketplace listing."
+              }
+            ]
+          },
+          "docs": "Get a marketplace listing node"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

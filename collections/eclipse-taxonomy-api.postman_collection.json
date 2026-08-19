@@ -1,0 +1,119 @@
+{
+  "item": [
+    {
+      "id": "c79a9bb9-6013-4bd5-81bf-81d5e1b65022",
+      "name": "Taxonomy",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "191025ef-9ac2-4744-b692-88088e069aef",
+          "name": "List nodes in a taxonomy term",
+          "request": {
+            "name": "List nodes in a taxonomy term",
+            "description": {},
+            "url": {
+              "path": [
+                "taxonomy",
+                "term",
+                ":ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ids",
+                  "description": "(Required) Comma-separated category and market IDs, e.g. `36,31`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a41f3357-f2dc-4844-b60a-b15024a615ef",
+              "name": "XML listing nodes that match the taxonomy term.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "taxonomy",
+                    "term",
+                    ":ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ids",
+                      "description": "(Required) Comma-separated category and market IDs, e.g. `36,31`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>\n  <category>\n    <name>(string)</name>\n    <url>(string)</url>\n    <nodes>\n      <id>(string)</id>\n      <name>(string)</name>\n      <url>(string)</url>\n      <type>(string)</type>\n      <categories>\n      </categories>\n      <categories>\n      </categories>\n      <tags>(string)</tags>\n      <tags>(string)</tags>\n      <owner>(string)</owner>\n      <favorited>(integer)</favorited>\n      <installstotal>(integer)</installstotal>\n      <installsrecent>(integer)</installsrecent>\n      <shortdescription>(string)</shortdescription>\n      <body>(string)</body>\n      <image>(string)</image>\n      <license>(string)</license>\n      <version>(string)</version>\n      <eclipseversion>(string)</eclipseversion>\n      <updateurl>(string)</updateurl>\n      <ius>(string)</ius>\n      <ius>(string)</ius>\n      <platforms>(string)</platforms>\n      <platforms>(string)</platforms>\n      <companyname>(string)</companyname>\n      <status>(string)</status>\n      <supporturl>(string)</supporturl>\n    </nodes>\n    <nodes>\n      <id>(string)</id>\n      <name>(string)</name>\n      <url>(string)</url>\n      <type>(string)</type>\n      <categories>\n      </categories>\n      <categories>\n      </categories>\n      <tags>(string)</tags>\n      <tags>(string)</tags>\n      <owner>(string)</owner>\n      <favorited>(integer)</favorited>\n      <installstotal>(integer)</installstotal>\n      <installsrecent>(integer)</installsrecent>\n      <shortdescription>(string)</shortdescription>\n      <body>(string)</body>\n      <image>(string)</image>\n      <license>(string)</license>\n      <version>(string)</version>\n      <eclipseversion>(string)</eclipseversion>\n      <updateurl>(string)</updateurl>\n      <ius>(string)</ius>\n      <ius>(string)</ius>\n      <platforms>(string)</platforms>\n      <platforms>(string)</platforms>\n      <companyname>(string)</companyname>\n      <status>(string)</status>\n      <supporturl>(string)</supporturl>\n    </nodes>\n  </category>\n</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://marketplace.eclipse.org/api/p",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c8a111dc-91d1-410b-835b-1e0283fc534c",
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API Taxonomy API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for the Eclipse Marketplace. Returns XML describing markets,\ncategories, taxonomies, individual listing nodes and search results\nthat can be used to integrate with the Eclipse Marketplace Client and\nthird-party tools. No authentication is required for public reads.\nThis specification is a best-effort, documentation-derived description\nand may omit fields.\n\n\nContact Support:\n Name: Eclipse Foundation",
+      "type": "text/plain"
+    }
+  }
+}

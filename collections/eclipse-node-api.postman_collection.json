@@ -1,0 +1,117 @@
+{
+  "item": [
+    {
+      "id": "c8e868f0-d5d4-419b-b5d2-fc670eb8f923",
+      "name": "Node",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5af1c208-8567-4f93-866d-a08d5c7f7b87",
+          "name": "Get a marketplace listing node",
+          "request": {
+            "name": "Get a marketplace listing node",
+            "description": {},
+            "url": {
+              "path": [
+                "node",
+                ":nodeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "nodeId",
+                  "description": "(Required) Numeric identifier of a marketplace listing."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "45098016-2d57-4798-be5d-771ab614b9b8",
+              "name": "Listing XML",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "node",
+                    ":nodeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "nodeId",
+                      "description": "(Required) Numeric identifier of a marketplace listing."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/xml"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<element>\n  <id>(string)</id>\n  <name>(string)</name>\n  <url>(string)</url>\n  <type>(string)</type>\n  <categories>\n  </categories>\n  <categories>\n  </categories>\n  <tags>(string)</tags>\n  <tags>(string)</tags>\n  <owner>(string)</owner>\n  <favorited>(integer)</favorited>\n  <installstotal>(integer)</installstotal>\n  <installsrecent>(integer)</installsrecent>\n  <shortdescription>(string)</shortdescription>\n  <body>(string)</body>\n  <image>(string)</image>\n  <license>(string)</license>\n  <version>(string)</version>\n  <eclipseversion>(string)</eclipseversion>\n  <updateurl>(string)</updateurl>\n  <ius>(string)</ius>\n  <ius>(string)</ius>\n  <platforms>(string)</platforms>\n  <platforms>(string)</platforms>\n  <companyname>(string)</companyname>\n  <status>(string)</status>\n  <supporturl>(string)</supporturl>\n</element>",
+              "cookie": [],
+              "_postman_previewlanguage": "xml"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://marketplace.eclipse.org/api/p",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "74bd66ce-1952-4a5f-95e5-3b720ac73321",
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API Node API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for the Eclipse Marketplace. Returns XML describing markets,\ncategories, taxonomies, individual listing nodes and search results\nthat can be used to integrate with the Eclipse Marketplace Client and\nthird-party tools. No authentication is required for public reads.\nThis specification is a best-effort, documentation-derived description\nand may omit fields.\n\n\nContact Support:\n Name: Eclipse Foundation",
+      "type": "text/plain"
+    }
+  }
+}

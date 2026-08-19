@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API Featured API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Featured",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Featured listings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://marketplace.eclipse.org/api/p/featured"
+          },
+          "docs": "Featured listings"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

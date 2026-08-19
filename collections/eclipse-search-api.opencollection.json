@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API Search API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search marketplace listings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://marketplace.eclipse.org/api/p/search/apachesolr_search/:term",
+            "params": [
+              {
+                "name": "term",
+                "value": "",
+                "type": "path",
+                "description": "URL-encoded search term."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-indexed result page."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Optional filter, e.g. tx_eclipse_versions=oxygen."
+              }
+            ]
+          },
+          "docs": "Search marketplace listings"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Eclipse Marketplace REST Eclipse Marketplace REST API API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Eclipse Marketplace REST API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List markets and categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://marketplace.eclipse.org/api/p/"
+          },
+          "docs": "List markets and categories"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
