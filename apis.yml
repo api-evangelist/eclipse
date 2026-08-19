@@ -27,7 +27,7 @@ tags:
   - Standards
 created: '2024-01-01'
 modified: '2026-04-28'
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 apis:
 - aid: eclipse:marketplace-api
   name: Eclipse Marketplace API
