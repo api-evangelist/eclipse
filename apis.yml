@@ -23,6 +23,11 @@ url: https://raw.githubusercontent.com/api-evangelist/eclipse/refs/heads/main/ap
 tags:
   - Eclipse Foundation
   - Foundation
+  - Open-Source
+  - Standards
+tags_raw:
+  - Eclipse Foundation
+  - Foundation
   - Open Source
   - Standards
 created: '2024-01-01'
@@ -59,6 +64,11 @@ apis:
   tags:
   - Foundation
   - Metadata
+  - Project
+  - Releases
+  tags_raw:
+  - Foundation
+  - Metadata
   - Projects
   - Releases
   properties:
@@ -75,6 +85,10 @@ apis:
   baseURL: https://projects.eclipse.org/api/
   tags:
   - Metadata
+  - Project
+  - Releases
+  tags_raw:
+  - Metadata
   - Projects
   - Releases
   properties:
@@ -88,6 +102,11 @@ apis:
   humanURL: https://open-vsx.org/
   baseURL: https://open-vsx.org/api
   tags:
+  - Extensions
+  - Open-Source
+  - Registry
+  - VS Code
+  tags_raw:
   - Extensions
   - Open Source
   - Registry
@@ -104,6 +123,10 @@ apis:
   humanURL: https://newsroom.eclipse.org/
   baseURL: https://newsroom.eclipse.org/api/
   tags:
+  - Event
+  - News
+  - Newsroom
+  tags_raw:
   - Events
   - News
   - Newsroom
