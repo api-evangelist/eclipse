@@ -1,0 +1,227 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  The 18 first-party OpenAPIs harvested 2026-09-07, the two Keycloak OpenID Provider Metadata
+  documents at auth.eclipse.org (saved under well-known/), the RFC 9116 security.txt files on
+  www.eclipse.org and open-vsx.org, and https://www.eclipse.org/security/policy/.
+provider: Eclipse Foundation
+providerId: eclipse
+description: >-
+  Cross-cutting and domain standards the Eclipse Foundation API surface conforms to, each with the
+  evidence that establishes it. Reward-only: a `conforms: false` entry below records a standard we
+  checked for and did not find, not a penalty.
+
+conformance:
+  - id: openapi-3.1
+    name: OpenAPI Specification 3.1.0
+    conforms: true
+    evidence: >-
+      14 of the 18 published specifications declare openapi 3.1.0, including every Quarkus-backed
+      Foundation IT API and the Open VSX registry spec at https://open-vsx.org/v3/api-docs.
+  - id: openapi-3.0
+    name: OpenAPI Specification 3.0.0
+    conforms: true
+    evidence: >-
+      4 specifications declare openapi 3.0.0 — the Eclipse RESTful API, Marketplace REST API,
+      Newsroom REST API and Projects PMI API, all served from
+      https://webdev.eclipse.org/docs/api/.
+  - id: oauth2
+    name: OAuth 2.0 (RFC 6749)
+    conforms: true
+    evidence: >-
+      oauth2 securitySchemes with authorizationCode and clientCredentials flows are declared in
+      openapi/eclipse-openvsx-api-openapi.yml, openapi/eclipse-profile-api-openapi.yml and
+      openapi/eclipse-restful-api-openapi.yml.
+  - id: oidc
+    name: OpenID Connect Core 1.0 / Discovery 1.0
+    conforms: true
+    evidence: >-
+      Two live OpenID Provider Metadata documents, both HTTP 200 on 2026-09-07 —
+      https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration and
+      https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration.
+      Both are declared as openIdConnectUrl by six published OpenAPIs.
+      Saved to well-known/.
+  - id: oauth2-pkce
+    name: PKCE (RFC 7636)
+    conforms: true
+    evidence: >-
+      Both realms advertise code_challenge_methods_supported ["plain","S256"] in their discovery
+      documents.
+  - id: oauth2-device-flow
+    name: OAuth 2.0 Device Authorization Grant (RFC 8628)
+    conforms: true
+    evidence: >-
+      Both realms advertise urn:ietf:params:oauth:grant-type:device_code in
+      grant_types_supported.
+  - id: oauth2-token-exchange
+    name: OAuth 2.0 Token Exchange (RFC 8693)
+    conforms: true
+    evidence: Both realms advertise urn:ietf:params:oauth:grant-type:token-exchange.
+  - id: jwt
+    name: JSON Web Token / JWKS (RFC 7519, RFC 7517)
+    conforms: true
+    evidence: >-
+      jwks_uri published by both realms —
+      https://auth.eclipse.org/auth/realms/foundation/protocol/openid-connect/certs and the
+      document-signature equivalent.
+  - id: oauth-authorization-server-metadata
+    name: OAuth 2.0 Authorization Server Metadata (RFC 8414)
+    conforms: false
+    evidence: >-
+      accounts.eclipse.org — the authorizationUrl/tokenUrl host for three published oauth2 schemes
+      — returns 404 for both /.well-known/oauth-authorization-server and
+      /.well-known/openid-configuration (probed 2026-09-07). Those three schemes cannot be
+      auto-configured.
+  - id: rfc9116
+    name: security.txt (RFC 9116)
+    conforms: true
+    evidence: >-
+      https://www.eclipse.org/.well-known/security.txt and
+      https://open-vsx.org/.well-known/security.txt both return 200 text/plain with Contact,
+      Expires, Encryption, Preferred-Languages, Canonical and Policy fields. Saved to well-known/.
+  - id: rfc8288
+    name: Web Linking / Link header pagination (RFC 8288)
+    conforms: true
+    evidence: >-
+      18 responses across the Eclipse Foundation IT APIs declare a `Link` response header carrying
+      rel=next/prev/first/last as the pagination signal. See conventions/eclipse-conventions.yml.
+  - id: rfc7232
+    name: Conditional Requests / ETag (RFC 7232)
+    conforms: true
+    evidence: >-
+      Etag and Last-Modified response headers plus If-Match, If-None-Match and If-Modified-Since
+      request parameters on the USS blob operations in
+      openapi/eclipse-restful-api-openapi.yml. Scoped to that one store; not surface-wide.
+  - id: rfc9457
+    name: Problem Details for HTTP APIs (RFC 9457 / RFC 7807)
+    conforms: false
+    evidence: >-
+      Zero application/problem+json responses across 445 declared 4xx/5xx responses. The surface
+      uses a proprietary `Error` object (status_code, message, url, friendly_message) redefined
+      independently in 8 specifications. See errors/eclipse-problem-types.yml.
+  - id: rfc9331
+    name: RateLimit header fields (RFC 9331 draft family)
+    conforms: false
+    evidence: >-
+      Rate-limit headers are published, but under two non-standard spellings — X-RateLimit-*
+      (256 responses, Open VSX) and X-Rate-Limit-* (31 responses, Foundation IT). Neither is the
+      standard `RateLimit-*` form. See rate-limits/eclipse-rate-limits.yml.
+  - id: rfc8594
+    name: Sunset header (RFC 8594)
+    conforms: false
+    evidence: >-
+      No Sunset or Deprecation response header on any of the 294 operations. Deprecation is
+      signalled only by `deprecated: true` in the specification, on 5 operations. See
+      lifecycle/eclipse-lifecycle.yml.
+  - id: idempotency-key
+    name: Idempotency-Key header (IETF draft)
+    conforms: false
+    evidence: >-
+      The string "idempoten" appears in none of the 18 specifications. 2 of 83 write operations
+      carry RFC 7232 conditional-request guards instead. See conventions/eclipse-conventions.yml.
+  - id: json-schema-2020-12
+    name: JSON Schema 2020-12
+    conforms: true
+    evidence: >-
+      Implied by the 14 OpenAPI 3.1.0 documents, which bind their schema dialect to JSON Schema
+      2020-12; type unions such as ["string","null"] on the Error schema are used throughout.
+  - id: semver
+    name: Semantic Versioning 2.0.0
+    conforms: true
+    evidence: >-
+      Open VSX release tags v1.1.0 / v1.1.1 / v1.1.2 with parallel cli- and webui- lines. Scoped
+      to the Open VSX estate; the Foundation IT APIs publish no release line at all.
+  - id: sitemaps-org
+    name: Sitemaps XML protocol
+    conforms: true
+    evidence: >-
+      A dedicated `sitemap-controller` tag in openapi/eclipse-open-vsx-registry-api-openapi.yml
+      serves the registry sitemap.
+
+domain_standards:
+  - id: vscode-extension-gallery
+    name: VS Code Extension Gallery API (Microsoft de-facto marketplace protocol)
+    conforms: true
+    market: developer tooling / IDE extension distribution
+    evidence: >-
+      openapi/eclipse-open-vsx-registry-api-openapi.yml declares a `vs-code-api` tag with seven
+      operations implementing the Microsoft gallery wire protocol verbatim:
+      GET|POST /vscode/gallery/extensionquery (extensionQueryAsGet, extensionQuery),
+      GET /vscode/gallery/{namespaceName}/{extensionName}/latest (getLatest),
+      GET /vscode/gallery/publishers/{namespaceName}/vsextensions/{extensionName}/{version}/vspackage (download),
+      GET /vscode/asset/{namespaceName}/{extensionName}/{version}/{assetType}/** (getAsset),
+      GET /vscode/unpkg/{namespaceName}/{extensionName}/{version}/** (browse),
+      GET /vscode/item (getItemUrl).
+    why_it_matters: >-
+      This is the standard that makes Open VSX substitutable. Because the registry speaks the same
+      gallery protocol as the Microsoft marketplace, an unmodified VS Code-compatible client —
+      VSCodium, Eclipse Theia, Gitpod, code-server — repoints at open-vsx.org by changing one URL
+      and needs no bespoke connector. The rest of the registry surface (the /api/* operations) is
+      Open VSX's own design; this tag is the interoperability contract, and it is the single most
+      consequential standards decision on the Eclipse Foundation's API surface.
+  - id: vsix-package-format
+    name: VSIX extension package format
+    conforms: true
+    market: developer tooling
+    evidence: >-
+      The registry publishes, stores and serves .vsix packages as its native artifact — the
+      vspackage download operation above, plus the file-serving operations under
+      /api/{namespace}/{extension}/{version}/file/**. The ovsx CLI packages to VSIX before
+      publishing.
+  - id: spdx
+    name: SPDX licence identifiers
+    conforms: true
+    market: open source governance
+    evidence: >-
+      Extension and namespace metadata in the Open VSX registry schemas carry SPDX licence
+      identifiers, and every first-party package and specification is licensed EPL-2.0 as an SPDX
+      identifier.
+  - id: eclipse-project-handbook
+    name: Eclipse Project Handbook lifecycle (Incubation / Mature / Archived)
+    conforms: true
+    market: open source foundation governance
+    evidence: >-
+      https://www.eclipse.org/projects/handbook/ defines the phase model, and the Projects PMI API
+      exposes it as machine-readable data — project phase, release records, review records and
+      committer data are all readable over
+      openapi/eclipse-projects-pmi-api-openapi.yml. Eclipse Open VSX graduated to the Mature phase
+      in June 2026 under this process.
+    note: >-
+      This is the domain standard the Eclipse Foundation itself AUTHORS, and its Projects PMI API
+      is the reference implementation of reading it programmatically.
+  - id: eclipse-eca
+    name: Eclipse Contributor Agreement validation
+    conforms: true
+    market: open source governance / contribution compliance
+    evidence: >-
+      openapi/eclipse-git-eca-api-openapi.yml exposes ECA validation as a callable service
+      (`ECA Validation` tag) with GitHub and GitLab webhook receivers, so any forge can enforce
+      Eclipse contribution policy without reimplementing it.
+
+compliance:
+  certifications_published: false
+  detail: >-
+    No SOC 2, ISO 27001, PCI DSS, HIPAA or FedRAMP certification is published for the Eclipse
+    Foundation's hosted API infrastructure, and no trust center exists (probed 2026-09-07). What
+    the Foundation does publish is a formal vulnerability reporting policy, a named security team
+    and a public known-vulnerabilities register — a disclosure program rather than an audited
+    compliance program.
+  published_programs:
+    - name: Eclipse Foundation Vulnerability Reporting Policy
+      url: https://www.eclipse.org/security/policy/
+      http_status: 200
+    - name: Eclipse Foundation Security overview and security team
+      url: https://www.eclipse.org/security/
+      http_status: 200
+    - name: Known vulnerabilities register
+      url: https://www.eclipse.org/security/known/
+      http_status: 200
+    - name: RFC 9116 security.txt (two hosts)
+      url: https://www.eclipse.org/.well-known/security.txt
+      http_status: 200
+  regulatory_context: >-
+    The Foundation is a Belgian AISBL operating under EU jurisdiction. GDPR-shaped obligations are
+    visible IN THE CONTRACT rather than only in prose: the Profile API publishes a two-phase user
+    deletion request flow (CreateDeleteRequests / UpdateDeleteRequest / DeleteDeleteRequest) and
+    the Open VSX admin API publishes a `forgetUser` operation whose own summary describes it as a
+    response to a data-protection erasure request.

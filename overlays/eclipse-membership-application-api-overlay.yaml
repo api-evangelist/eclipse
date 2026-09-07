@@ -1,0 +1,35 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Membership portal
+  version: 1.0.0
+extends: openapi/eclipse-membership-application-api-openapi.yml
+x-generated: '2026-09-07'
+x-method: generated
+x-source: Enhancements over the verbatim specification harvested from https://webdev.eclipse.org/docs/api/eclipsefdn-membership-application-api
+  on 2026-09-07. Grounded in apis.yml and the Eclipse Foundation's own published legal/contact pages. The original specification
+  in openapi/ is never mutated.
+actions:
+- target: $.info
+  description: Add a contact the Eclipse Foundation publishes elsewhere; this specification declares none.
+  update:
+    contact:
+      name: Eclipse Foundation
+      url: https://www.eclipse.org/org/foundation/contact.php
+      email: webmaster@eclipse.org
+- target: $.info
+  description: Add the Eclipse.org Terms of Use that govern this API.
+  update:
+    termsOfService: https://www.eclipse.org/legal/termsofuse.php
+- target: $.info
+  description: Add a description; the published specification has none.
+  update:
+    description: Membership portal — a first-party Eclipse Foundation REST API. Harvested from https://webdev.eclipse.org/docs/api/eclipsefdn-membership-application-api
+      on 2026-09-07. See https://webdev.eclipse.org/docs/api/ for the full Eclipse Foundation API index.
+- target: $.info
+  description: 'NOTE ONLY — 24 of 29 operations in this specification declare no operationId, which prevents deterministic
+    tool and SDK generation. No operationId is invented here; naming them is the provider''s call. Affected: GET /form,
+    POST /form, GET /form/{id}, PUT /form/{id}, DELETE /form/{id}, POST /form/{id}/complete, GET /form/{id}/{transactionId},
+    GET /form/{id}/contacts, POST /form/{id}/contacts, GET /form/{id}/contacts/{contactID}, PUT /form/{id}/contacts/{contactID},
+    DELETE /form/{id}/contacts/{contactID} (+12 more)'
+  update:
+    x-api-evangelist-note-missing-operation-ids: 24

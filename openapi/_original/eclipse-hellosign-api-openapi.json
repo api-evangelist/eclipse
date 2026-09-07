@@ -1,0 +1,503 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Hellosign API",
+    "description": "Access information on Eclipse Foundation Hellosign paperwork.",
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org/foundation/hellosign",
+      "description": "Production endpoint for Eclipse Foundation hellosign data."
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Hellosign signature list",
+        "description": "List of Hellosign signature requests created through this API.",
+        "operationId": "getAllHellosignRequests",
+        "security": [
+          {
+            "openId": []
+          }
+        ],
+        "tags": [
+          "Hellosign Signature Request"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EfHellosignRequests"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Hellosign signature",
+        "security": [
+          {
+            "openId": [
+              "eclipsefdn_create_documents"
+            ]
+          }
+        ],
+        "description": "Creates a new Hellosign signature request, given the parameters passed in the request body.",
+        "operationId": "createNewHellosignRequests",
+        "tags": [
+          "Hellosign Signature Request"
+        ],
+        "requestBody": {
+          "description": "Parameters for creating Hellosign signature request jobs",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HellosignSignatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EfHellosignRequests"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid fields)"
+          },
+          "403": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The id of the Hellosign signature request to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Hellosign signature",
+        "description": "Returns a specific Hellosign signature request that was created through this API if it exists.",
+        "operationId": "getHellosignRequestById",
+        "security": [
+          {
+            "openId": []
+          }
+        ],
+        "tags": [
+          "Hellosign Signature Request"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EfHellosignRequest"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{id}/document": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The id of the Hellosign signature request to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Hellosign signature document",
+        "description": "Retrieves a cached version of the Hellosign document and returns the file to the user",
+        "operationId": "getHellosignRequestDocumentById",
+        "tags": [
+          "Hellosign Signature Request"
+        ],
+        "security": [
+          {
+            "openId": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/callback": {
+      "post": {
+        "summary": "Hellosign Events callback",
+        "description": "Callback URL that will be registered with Hellosign for recieving updates on changes to signature requests created through this API.",
+        "operationId": "hellosignRequestEventsCallback",
+        "tags": [
+          "Hellosign Event Callbacks"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "plain/text": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Hello API Event Received"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/templates": {
+      "get": {
+        "summary": "Document signature templates",
+        "description": "Returns list of currently available templates for document signature through this API.",
+        "operationId": "getTemplates",
+        "tags": [
+          "Hellosign Signature Request"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EfSignatureTemplates"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "openId": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration"
+      }
+    },
+    "schemas": {
+      "EfHellosignRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "request_id",
+          "hellosign_signature_id",
+          "template_name",
+          "title",
+          "subject",
+          "message",
+          "response",
+          "created",
+          "events"
+        ],
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "description": "The internal ID for the given request."
+          },
+          "hellosign_signature_id": {
+            "type": "string",
+            "description": "The signature request ID upstream"
+          },
+          "template_name": {
+            "type": "string",
+            "description": "The name of the internal template used for this request"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the signature request"
+          },
+          "subject": {
+            "type": "string",
+            "description": "The subject used for the request"
+          },
+          "message": {
+            "type": "string",
+            "description": "The message used for the request"
+          },
+          "response": {
+            "type": "string",
+            "description": "JSON response from server for the request"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The standardized time that the signature request was registered"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "body",
+                "event_type",
+                "request_id",
+                "created"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Serial ID for the specific event log"
+                },
+                "body": {
+                  "type": "string",
+                  "description": "JSON body associated with the upstream request made with the event"
+                },
+                "event_type": {
+                  "type": "string",
+                  "description": "the event type that was sent with the event for the signature request"
+                },
+                "request_id": {
+                  "type": "string",
+                  "description": "Upstream ID for the signature request associated with the event"
+                },
+                "created": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The standardized time that the event was recieved by the system"
+                }
+              }
+            }
+          }
+        }
+      },
+      "EfHellosignRequests": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EfHellosignRequest"
+        }
+      },
+      "HellosignSignatureRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signers",
+          "template_name"
+        ],
+        "properties": {
+          "signers": {
+            "type": "array",
+            "description": "List of users that will be added as signers for the new document",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "mail",
+                "name",
+                "fullname",
+                "role"
+              ],
+              "properties": {
+                "mail": {
+                  "type": "string",
+                  "description": "The email address of the user to associate with the new request."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The user name for the given user"
+                },
+                "fullname": {
+                  "type": "string",
+                  "description": "The legal name to use for the signature request for current user"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "The Hellosign role associated with the current user (e.g. client)"
+                }
+              }
+            }
+          },
+          "template_name": {
+            "type": "string",
+            "description": "The name of the Hellosign template to create signature requests for"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The subject of the message to the user in the signature request"
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The message to include with the signature request"
+          }
+        }
+      },
+      "EfSignatureTemplates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "template_id",
+            "template_name",
+            "comment",
+            "document",
+            "related_documents",
+            "revoked_documents",
+            "mcca",
+            "aliases"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "the internal name used for lookups and identification"
+            },
+            "template_id": {
+              "type": "string",
+              "description": "The external ID linked to this template, used when targeting upstream services"
+            },
+            "template_name": {
+              "type": "string",
+              "description": "Display name for the current template"
+            },
+            "comment": {
+              "type": "string",
+              "description": "Value used in log events related to general operations of this template in the signature workflow"
+            },
+            "document": {
+              "description": "the main document that is created or updated as part of a workflow using this template",
+              "$ref": "#/components/schemas/EfTemplateDocument"
+            },
+            "related_documents": {
+              "type": "array",
+              "description": "List of related documents that should be updated but not created when this template is used",
+              "items": {
+                "$ref": "#/components/schemas/EfTemplateDocument"
+              }
+            },
+            "revoked_documents": {
+              "type": "array",
+              "description": "list of document IDs that should be revoked if present when workflows using this template are completed.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "mcca": {
+              "type": "boolean",
+              "description": "Whether the current template targets MCCA type document events and can target organizations as well as individuals."
+            },
+            "aliases": {
+              "type": "array",
+              "description": "Previous internal IDs used for this template, used for backwards compatibility",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "EfTemplateDocument": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "version",
+          "message"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "the ID of the document"
+          },
+          "version": {
+            "type": "integer",
+            "format": "double",
+            "description": "the version number associated with the document"
+          },
+          "message": {
+            "type": "string",
+            "description": "the message to include in logs created for the mutation of these documents"
+          }
+        }
+      }
+    }
+  }
+}

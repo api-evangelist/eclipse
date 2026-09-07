@@ -1,0 +1,2479 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Eclipse Project Management Infrastructure (PMI) RESTful API",
+    "description": "This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.\nYou can contribute to this document via our [git repository](https://gitlab.eclipse.org/eclipsefdn/it/websites/projects.eclipse.org).\nIf you have any problems or requests please submit an [issue](https://gitlab.eclipse.org/eclipsefdn/it/websites/projects.eclipse.org/-/issues).\n\n### Rate Limit\nThis API currently limits users to 1000 authenticated requests and 1000 anonymous requests an hour.\n### Pagination\nInformation about pagination is provided in the Link header of an API call. For example, let's make a curl request to the eclipse_profile API, to find out how many org_eclipse_oomph records exist for the user:\n```\ncurl -I \\\"https://projects.eclipse.org/api/projects?page=1&pagesize=20\\\"\n```\nThe -I parameter indicates that we only care about the headers, not the content. In examining the result, you'll notice some information in the Link header that looks like this:\n```\n<https://projects.eclipse.org/api/projects?page=2&amp;pagesize=2>; rel=\"next\",\n<https://projects.eclipse.org/api/projects?page=27&amp;pagesize=2>; rel=\"last\",\n<https://projects.eclipse.org/api/projects?page=1&amp;pagesize=2>; rel=\"first\",\n<https://projects.eclipse.org/api/projects?page=1&amp;pagesize=2>; rel=\"self\"\n```\nLet's break that down. rel=\\\"next\\\" says that the next page is page=2. This makes sense, since by default, all paginated queries start at page 1. rel=\\\"last\\\" provides some more information, stating that the last page of results is on page 27.\nKeep in mind that you should always rely on these link relations provided to you. Don't try to guess or construct your own URL.\n\n### Error States\nThe common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used.\n",
+    "contact": {},
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://projects.eclipse.org",
+      "description": "The production API server"
+    }
+  ],
+  "paths": {
+    "/api/projects": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Fetch Projects",
+        "description": "### Overview\n\nRetrieve metadata for all projects.",
+        "operationId": "FetchProjects",
+        "parameters": [
+          {
+            "name": "github_only",
+            "in": "query",
+            "description": "Select only the projects that have GitHub repositories or a GitHub organisation defined.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "gitlab_only",
+            "in": "query",
+            "description": "Select only the projects that have GitLab repositories defined.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "spec_project",
+            "in": "query",
+            "description": "Filter to specification projects only. Set to any non-zero integer to enable the filter.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "spec_project_working_group",
+            "in": "query",
+            "description": "Filter projects by their specification project working group ID (e.g. `jakarta-ee`).",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "working_group",
+            "in": "query",
+            "description": "Filter projects by their associated working group ID.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "industry_collaboration",
+            "in": "query",
+            "description": "Filter projects by their associated industry collaboration (working group) ID.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "technology_types",
+            "in": "query",
+            "description": "Filter projects by technology type name.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter projects by state. Accepted values: `Regular`, `Archived`, `Incubating` (case-insensitive). Multiple values may be passed as a comma-separated list, e.g. `state=Regular,Incubating`. Values outside the allowed set are silently ignored.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The index of the page to retrieve, defaults to 1.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "The number of records to get per page, defaults to 20. Maximum value is 100.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`, `RANDOM`. When `RANDOM` is used the response is cached for 5 hours.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of projects matching the query.",
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<https://projects.eclipse.org/api/projects?page=2&pagesize=20>; rel=\"next\", <https://projects.eclipse.org/api/projects?page=27&pagesize=20>; rel=\"last\", <https://projects.eclipse.org/api/projects?page=1&pagesize=20>; rel=\"first\", <https://projects.eclipse.org/api/projects?page=1&pagesize=20>; rel=\"self\""
+              },
+              "X-Rate-Limit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "example": 1000
+              },
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "example": 964
+              },
+              "X-Rate-Limit-Reset": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "example": 3553
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FetchProjectsresponse"
+                  },
+                  "description": ""
+                },
+                "example": [
+                  {
+                    "nid": 123,
+                    "project_id": "ee4j.batch",
+                    "short_project_id": "batch",
+                    "name": "Jakarta Batch",
+                    "summary": "The Jakarta Batch project defines and maintains the Jakarta Batch specification.",
+                    "url": "https://projects.eclipse.org/projects/ee4j.batch",
+                    "website_url": "https://projects.eclipse.org/projects/ee4j.batch",
+                    "website_repo": "",
+                    "logo": "",
+                    "tags": [],
+                    "licenses": [
+                      {
+                        "name": "Eclipse Public License 2.0",
+                        "short_name": "EPL-2.0",
+                        "url": "https://www.eclipse.org/legal/epl-2.0/"
+                      }
+                    ],
+                    "github_repos": [
+                      {
+                        "url": "https://github.com/eclipse-ee4j/batch-api"
+                      },
+                      {
+                        "url": "https://github.com/eclipse-ee4j/batch-tck"
+                      }
+                    ],
+                    "github": {
+                      "org": "eclipse-ee4j",
+                      "ignored_repos": []
+                    },
+                    "gitlab_repos": [],
+                    "gitlab": {
+                      "project_group": "",
+                      "ignored_sub_groups": []
+                    },
+                    "gerrit_repos": [],
+                    "contributors": [],
+                    "committers": [
+                      {
+                        "username": "acommitter",
+                        "full_name": "A Committer",
+                        "url": "https://api.eclipse.org/account/profile/acommitter"
+                      }
+                    ],
+                    "project_leads": [
+                      {
+                        "username": "aprojectlead",
+                        "full_name": "A Project Lead",
+                        "url": "https://api.eclipse.org/account/profile/aprojectlead"
+                      }
+                    ],
+                    "working_groups": [
+                      {
+                        "name": "Jakarta EE",
+                        "id": "jakarta-ee"
+                      }
+                    ],
+                    "industry_collaborations": [
+                      {
+                        "name": "Jakarta EE",
+                        "id": "jakarta-ee"
+                      }
+                    ],
+                    "technology_types": [],
+                    "spec_project_working_group": {
+                      "name": "Jakarta EE",
+                      "id": "jakarta-ee"
+                    },
+                    "state": "Regular",
+                    "provisioned": true,
+                    "latest_release_name": "3.0",
+                    "releases": "https://projects.eclipse.org/api/projects/ee4j.batch/releases",
+                    "top_level_project": "ee4j",
+                    "slsa": {
+                      "build_level": ""
+                    },
+                    "dev_list": {
+                      "name": "ee4j-batch-dev",
+                      "email": "ee4j-batch-dev@eclipse.org",
+                      "url": "https://accounts.eclipse.org/mailing-list/ee4j-batch-dev"
+                    },
+                    "mailing_lists": [],
+                    "reviews": "https://projects.eclipse.org/api/projects/ee4j.batch/reviews",
+                    "documentation_url": "",
+                    "gettingstarted_url": "",
+                    "download_url": "",
+                    "scope": "<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>\n\n",
+                    "security_team": {
+                      "individual_members": [],
+                      "groups": {
+                        "include_committers": true,
+                        "include_project_leads": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Retrieve a Project",
+        "description": "### Overview\n\nRetrieve information for a specific project.\n\n**Note** that underscores in a project ID are treated as dots (e.g. `technology_dash` resolves to `technology.dash`). A `.json` suffix is also accepted and stripped.\n\n### Examples:\n\n* https://projects.eclipse.org/api/projects/technology_dash\n* https://projects.eclipse.org/api/projects/ecd_che",
+        "operationId": "RetrieveAProject",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID of the project. Underscores are treated as dots (e.g. `technology_dash` → `technology.dash`). A `.json` suffix is accepted and stripped.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array containing the matching project (with full HTML description).",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The rate limit ceiling for the requester.",
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "example": 1000
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of requests left in the current rate-limit window.",
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "example": 964
+              },
+              "X-Rate-Limit-Reset": {
+                "description": "The number of seconds left until the rate-limit window resets.",
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "example": 3553
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RetrieveaProjectresponse"
+                  },
+                  "description": ""
+                },
+                "example": [
+                  {
+                    "nid": 123,
+                    "project_id": "ee4j.batch",
+                    "short_project_id": "batch",
+                    "name": "Jakarta Batch",
+                    "summary": "The Jakarta Batch project defines and maintains the Jakarta Batch specification.",
+                    "description": "<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>\n\n",
+                    "url": "https://projects.eclipse.org/projects/ee4j.batch",
+                    "website_url": "https://projects.eclipse.org/projects/ee4j.batch",
+                    "website_repo": "",
+                    "logo": "",
+                    "tags": [],
+                    "licenses": [
+                      {
+                        "name": "Eclipse Public License 2.0",
+                        "short_name": "EPL-2.0",
+                        "url": "https://www.eclipse.org/legal/epl-2.0/"
+                      }
+                    ],
+                    "github_repos": [
+                      {
+                        "url": "https://github.com/eclipse-ee4j/batch-api"
+                      },
+                      {
+                        "url": "https://github.com/eclipse-ee4j/batch-tck"
+                      }
+                    ],
+                    "github": {
+                      "org": "eclipse-ee4j",
+                      "ignored_repos": []
+                    },
+                    "gitlab_repos": [],
+                    "gitlab": {
+                      "project_group": "",
+                      "ignored_sub_groups": []
+                    },
+                    "gerrit_repos": [],
+                    "contributors": [],
+                    "committers": [
+                      {
+                        "username": "acommitter",
+                        "full_name": "A Committer",
+                        "url": "https://api.eclipse.org/account/profile/acommitter"
+                      }
+                    ],
+                    "project_leads": [
+                      {
+                        "username": "aprojectlead",
+                        "full_name": "A Project Lead",
+                        "url": "https://api.eclipse.org/account/profile/aprojectlead"
+                      }
+                    ],
+                    "working_groups": [
+                      {
+                        "name": "Jakarta EE",
+                        "id": "jakarta-ee"
+                      }
+                    ],
+                    "industry_collaborations": [
+                      {
+                        "name": "Jakarta EE",
+                        "id": "jakarta-ee"
+                      }
+                    ],
+                    "technology_types": [],
+                    "spec_project_working_group": {
+                      "name": "Jakarta EE",
+                      "id": "jakarta-ee"
+                    },
+                    "state": "Regular",
+                    "provisioned": true,
+                    "latest_release_name": "3.0",
+                    "releases": "https://projects.eclipse.org/api/projects/ee4j.batch/releases",
+                    "top_level_project": "ee4j",
+                    "slsa": {
+                      "build_level": ""
+                    },
+                    "dev_list": {
+                      "name": "ee4j-batch-dev",
+                      "email": "ee4j-batch-dev@eclipse.org",
+                      "url": "https://accounts.eclipse.org/mailing-list/ee4j-batch-dev"
+                    },
+                    "mailing_lists": [],
+                    "reviews": "https://projects.eclipse.org/api/projects/ee4j.batch/reviews",
+                    "documentation_url": "",
+                    "gettingstarted_url": "",
+                    "download_url": "",
+                    "scope": "<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>\n\n",
+                    "security_team": {
+                      "individual_members": [],
+                      "groups": {
+                        "include_committers": true,
+                        "include_project_leads": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/releases": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Fetch Releases for a Project",
+        "description": "### Overview\n\nRetrieve a paginated list of releases associated with the given project.",
+        "operationId": "FetchProjectReleases",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID of the project. Underscores are treated as dots.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The index of the page to retrieve, defaults to 1.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "The number of records to get per page, defaults to 20. Maximum value is 100.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A wrapper object containing the paginated releases.",
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleasesResponse"
+                },
+                "example": {
+                  "releases": [
+                    {
+                      "name": "3.0",
+                      "url": "https://projects.eclipse.org/projects/ee4j.batch/releases/3.0",
+                      "date": "2022-05-31",
+                      "type": 1,
+                      "downloads": {
+                        "tracked": false,
+                        "associated_files": []
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/reviews": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Fetch Reviews for a Project",
+        "description": "### Overview\n\nRetrieve a paginated list of reviews associated with the given project.",
+        "operationId": "FetchProjectReviews",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID of the project. Underscores are treated as dots.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The index of the page to retrieve, defaults to 1.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "The number of records to get per page, defaults to 20. Maximum value is 100.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A wrapper object containing the paginated reviews.",
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewsResponse"
+                },
+                "example": {
+                  "reviews": [
+                    {
+                      "id": 456,
+                      "slides_url": "https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0",
+                      "review_date": "2022-04-13",
+                      "review_name": "Release 3.0",
+                      "status": "success",
+                      "date": "2022-04-13",
+                      "summary": "The committer team proposes releasing Jakarta Batch 3.0."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/proposals": {
+      "get": {
+        "tags": [
+          "Proposals"
+        ],
+        "summary": "Fetch Proposals",
+        "description": "### Overview\n\nRetrieve a paginated list of Eclipse project proposals.\n\nUnlike the projects index, pagination metadata is included in the response body alongside the `result` array, in addition to the `Link` header.",
+        "operationId": "FetchProposals",
+        "parameters": [
+          {
+            "name": "spec_project",
+            "in": "query",
+            "description": "Filter to specification projects only. Set to any non-zero integer to enable.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "spec_project_working_group",
+            "in": "query",
+            "description": "Filter by specification project working group ID.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "industry_collaboration",
+            "in": "query",
+            "description": "Filter by industry collaboration (working group) ID.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter by proposal state (case-insensitive). Accepts a single value (`state=Active`) or an array (`state[]=Active&state[]=Draft`).",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The index of the page to retrieve, defaults to 1.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "The number of records to get per page, defaults to 20. Maximum value is 100.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`, `RANDOM`.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A paginated wrapper object containing the proposals and pagination metadata.",
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProposalsIndexResponse"
+                },
+                "example": {
+                  "result": [
+                    {
+                      "id": 789,
+                      "project_id": "technology.new-project",
+                      "name": "New Eclipse Project Proposal",
+                      "parent": "technology",
+                      "top_level_project": "technology",
+                      "industry_collaborations": [],
+                      "state": "Active",
+                      "summary": "A short plain-text summary of the proposal.",
+                      "scope": "",
+                      "background": "",
+                      "date": "2023-06-01",
+                      "url": "https://projects.eclipse.org/proposals/new-project",
+                      "project_url": "",
+                      "spec_project": [],
+                      "committers": [],
+                      "project_leads": [],
+                      "patent_license": "",
+                      "licenses": [
+                        "Eclipse Public License 2.0"
+                      ],
+                      "repo_type": "Git",
+                      "repos": [
+                        "https://github.com/eclipse/new-project"
+                      ]
+                    }
+                  ],
+                  "pagination": {
+                    "page": 1,
+                    "pagesize": 20,
+                    "result_start": 1,
+                    "result_end": 1,
+                    "result_size": 1,
+                    "total_result_size": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/proposals/{nid}": {
+      "get": {
+        "tags": [
+          "Proposals"
+        ],
+        "summary": "Retrieve a Proposal",
+        "description": "### Overview\n\nRetrieve a single Eclipse project proposal by its Drupal node ID.",
+        "operationId": "RetrieveAProposal",
+        "parameters": [
+          {
+            "name": "nid",
+            "in": "path",
+            "description": "The Drupal node ID of the proposal.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array containing the matching proposal.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Proposal"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 789,
+                    "project_id": "technology.new-project",
+                    "name": "New Eclipse Project Proposal",
+                    "parent": "technology",
+                    "top_level_project": "technology",
+                    "industry_collaborations": [],
+                    "state": "Active",
+                    "summary": "A short plain-text summary of the proposal.",
+                    "scope": "",
+                    "background": "",
+                    "date": "2023-06-01",
+                    "url": "https://projects.eclipse.org/proposals/new-project",
+                    "project_url": "",
+                    "spec_project": [],
+                    "committers": [],
+                    "project_leads": [],
+                    "patent_license": "",
+                    "licenses": [
+                      "Eclipse Public License 2.0"
+                    ],
+                    "repo_type": "Git",
+                    "repos": [
+                      "https://github.com/eclipse/new-project"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/interest-groups": {
+      "get": {
+        "tags": [
+          "Interest Groups"
+        ],
+        "summary": "Fetch Interest Groups",
+        "description": "### Overview\n\nRetrieve a paginated list of Eclipse Interest Groups.",
+        "operationId": "FetchInterestGroups",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "description": "Filter interest groups by their Foundation DB project ID (the `field_ig_foundationdb_id` field value).",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The index of the page to retrieve, defaults to 1.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "The number of records to get per page, defaults to 20. Maximum value is 100.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "description": "The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of interest groups matching the query.",
+            "headers": {
+              "Link": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InterestGroup"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1001,
+                    "title": "Some Interest Group",
+                    "description": {
+                      "summary": "Short description.",
+                      "full": "<p>Full description.</p>"
+                    },
+                    "logo": "",
+                    "scope": {
+                      "summary": "",
+                      "full": ""
+                    },
+                    "leads": [],
+                    "participants": [],
+                    "project_id": "foundation-internal.ig.some-group",
+                    "short_project_id": "some-group",
+                    "state": "active",
+                    "gitlab": {
+                      "project_group": "eclipse-ig/some-group",
+                      "ignored_sub_groups": []
+                    },
+                    "resources": {
+                      "website": "",
+                      "members": ""
+                    },
+                    "mailing_list": ""
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/interest-groups/{nid}": {
+      "get": {
+        "tags": [
+          "Interest Groups"
+        ],
+        "summary": "Retrieve an Interest Group",
+        "description": "### Overview\n\nRetrieve a single Eclipse Interest Group by its Drupal node ID.",
+        "operationId": "RetrieveAnInterestGroup",
+        "parameters": [
+          {
+            "name": "nid",
+            "in": "path",
+            "description": "The Drupal node ID of the interest group.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The matching interest group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterestGroup"
+                },
+                "example": {
+                  "id": 1001,
+                  "title": "Some Interest Group",
+                  "description": {
+                    "summary": "Short description.",
+                    "full": "<p>Full description.</p>"
+                  },
+                  "logo": "",
+                  "scope": {
+                    "summary": "",
+                    "full": ""
+                  },
+                  "leads": [],
+                  "participants": [],
+                  "project_id": "foundation-internal.ig.some-group",
+                  "short_project_id": "some-group",
+                  "state": "active",
+                  "gitlab": {
+                    "project_group": "eclipse-ig/some-group",
+                    "ignored_sub_groups": []
+                  },
+                  "resources": {
+                    "website": "",
+                    "members": ""
+                  },
+                  "mailing_list": ""
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/github": {
+      "get": {
+        "tags": [
+          "GitHub"
+        ],
+        "summary": "Fetch GitHub Repositories for all Projects",
+        "description": "### Overview\n\nReturns a map of Eclipse project IDs to their associated GitHub repositories. Optionally filter by a specific repository name substring.",
+        "operationId": "FetchGithubRepos",
+        "parameters": [
+          {
+            "name": "repo",
+            "in": "query",
+            "description": "Filter by repository path (org/repo, e.g. `eclipse-ee4j/batch-api`). A `LIKE '%<value>'` pattern is applied, so a partial trailing match is sufficient.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A map of project IDs to their GitHub repository data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GithubIndexResponse"
+                },
+                "example": {
+                  "ee4j.batch": {
+                    "repos": [
+                      "eclipse-ee4j/batch-api",
+                      "eclipse-ee4j/batch-tck"
+                    ],
+                    "specification_project": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/github/{project_id}": {
+      "get": {
+        "tags": [
+          "GitHub"
+        ],
+        "summary": "Fetch GitHub Repositories for a Project",
+        "description": "### Overview\n\nReturns the GitHub repositories for a specific Eclipse project. Underscores in `project_id` are treated as dots.",
+        "operationId": "FetchGithubReposByProject",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID of the project. Underscores are treated as dots.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A map containing the GitHub repositories for the given project (empty map if not found).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GithubIndexResponse"
+                },
+                "example": {
+                  "ee4j.batch": {
+                    "repos": [
+                      "eclipse-ee4j/batch-api",
+                      "eclipse-ee4j/batch-tck"
+                    ],
+                    "specification_project": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simultaneous_release": {
+      "get": {
+        "tags": [
+          "Simultaneous Releases"
+        ],
+        "summary": "Fetch all Simultaneous Releases",
+        "description": "### Overview\n\nReturns a map of all simultaneous releases (Eclipse release trains), keyed by the release URL slug (e.g. `2023-12`).",
+        "operationId": "FetchSimultaneousReleases",
+        "responses": {
+          "200": {
+            "description": "A map of simultaneous release slugs to their release data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimultaneousReleasesMap"
+                },
+                "example": {
+                  "2023-12": {
+                    "release_date": 1701388800,
+                    "previous_release": {
+                      "release_name": "2023-09",
+                      "release_url": "https://projects.eclipse.org/api/simultaneous_release/2023-09"
+                    },
+                    "projects": {
+                      "eclipse.platform": {
+                        "project_name": "Eclipse Platform",
+                        "new_and_noteworthy_url": "https://eclipse.dev/platform/noteworthy/4.29/"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/simultaneous_release/{simrel}": {
+      "get": {
+        "tags": [
+          "Simultaneous Releases"
+        ],
+        "summary": "Retrieve a Simultaneous Release",
+        "description": "### Overview\n\nReturns a specific simultaneous release (Eclipse release train) by its URL slug.",
+        "operationId": "RetrieveSimultaneousRelease",
+        "parameters": [
+          {
+            "name": "simrel",
+            "in": "path",
+            "description": "The URL slug of the simultaneous release (e.g. `2023-12`).",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A map containing the requested simultaneous release.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimultaneousReleasesMap"
+                },
+                "example": {
+                  "2023-12": {
+                    "release_date": 1701388800,
+                    "previous_release": {
+                      "release_name": "2023-09",
+                      "release_url": "https://projects.eclipse.org/api/simultaneous_release/2023-09"
+                    },
+                    "projects": {
+                      "eclipse.platform": {
+                        "project_name": "Eclipse Platform",
+                        "new_and_noteworthy_url": "https://eclipse.dev/platform/noteworthy/4.29/"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "deprecated": true
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "NotFound": {
+        "description": "Resource not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Committer": {
+        "title": "Committer",
+        "type": "object",
+        "description": "A person with a role on an Eclipse project (committer, contributor, or project lead).",
+        "required": [
+          "username",
+          "url"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Eclipse account username (may be null for proposals where the person has no account yet).",
+            "nullable": true
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Display name of the person."
+          },
+          "url": {
+            "type": "string",
+            "description": "Absolute URL to the person's profile on api.eclipse.org."
+          }
+        },
+        "example": {
+          "username": "acommitter",
+          "full_name": "A Committer",
+          "url": "https://api.eclipse.org/account/profile/acommitter"
+        }
+      },
+      "GithubRepo": {
+        "title": "GithubRepo",
+        "required": [
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Full GitHub repository URL."
+          }
+        },
+        "example": {
+          "url": "https://github.com/eclipse-ee4j/batch-api"
+        }
+      },
+      "WorkingGroup": {
+        "title": "WorkingGroup",
+        "required": [
+          "name",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "name": "Jakarta EE",
+          "id": "jakarta-ee"
+        }
+      },
+      "SpecProjectWorkingGroup": {
+        "title": "SpecProjectWorkingGroup",
+        "required": [
+          "name",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "name": "Jakarta EE",
+          "id": "jakarta-ee"
+        }
+      },
+      "License": {
+        "title": "License",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full license name."
+          },
+          "short_name": {
+            "type": "string",
+            "description": "Abbreviated license identifier (e.g. `EPL-2.0`)."
+          },
+          "url": {
+            "type": "string",
+            "description": "URL to the license text."
+          }
+        },
+        "example": {
+          "name": "Eclipse Public License 2.0",
+          "short_name": "EPL-2.0",
+          "url": "https://www.eclipse.org/legal/epl-2.0/"
+        }
+      },
+      "GithubInfo": {
+        "title": "GithubInfo",
+        "type": "object",
+        "properties": {
+          "org": {
+            "type": "string",
+            "description": "GitHub organisation name for the project (may be empty)."
+          },
+          "ignored_repos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "GitHub repository names excluded from project tooling."
+          }
+        },
+        "example": {
+          "org": "eclipse-ee4j",
+          "ignored_repos": []
+        }
+      },
+      "GitlabInfo": {
+        "title": "GitlabInfo",
+        "type": "object",
+        "properties": {
+          "project_group": {
+            "type": "string",
+            "description": "GitLab project group namespace (may be empty)."
+          },
+          "ignored_sub_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "GitLab sub-group names excluded from project tooling."
+          }
+        },
+        "example": {
+          "project_group": "",
+          "ignored_sub_groups": []
+        }
+      },
+      "DevList": {
+        "title": "DevList",
+        "type": "object",
+        "description": "A project mailing list.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Mailing list name (also the local part of the email address)."
+          },
+          "email": {
+            "type": "string",
+            "description": "Full mailing list e-mail address."
+          },
+          "url": {
+            "type": "string",
+            "description": "URL to the mailing list archive on accounts.eclipse.org."
+          }
+        },
+        "example": {
+          "name": "ee4j-batch-dev",
+          "email": "ee4j-batch-dev@eclipse.org",
+          "url": "https://accounts.eclipse.org/mailing-list/ee4j-batch-dev"
+        }
+      },
+      "SlsaInfo": {
+        "title": "SlsaInfo",
+        "type": "object",
+        "properties": {
+          "build_level": {
+            "type": "string",
+            "description": "SLSA build level achieved by the project (empty string if not set)."
+          }
+        },
+        "example": {
+          "build_level": "2"
+        }
+      },
+      "SecurityTeamGroups": {
+        "title": "SecurityTeamGroups",
+        "type": "object",
+        "description": "Flags indicating which standard project roles are automatically included in the security team.",
+        "properties": {
+          "include_committers": {
+            "type": "boolean"
+          },
+          "include_project_leads": {
+            "type": "boolean"
+          }
+        },
+        "example": {
+          "include_committers": true,
+          "include_project_leads": false
+        }
+      },
+      "SecurityTeam": {
+        "title": "SecurityTeam",
+        "type": "object",
+        "properties": {
+          "individual_members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Committer"
+            },
+            "description": "Individually named security team members who are not already covered by the group roles."
+          },
+          "groups": {
+            "$ref": "#/components/schemas/SecurityTeamGroups"
+          }
+        },
+        "example": {
+          "individual_members": [],
+          "groups": {
+            "include_committers": true,
+            "include_project_leads": false
+          }
+        }
+      },
+      "Pagination": {
+        "title": "Pagination",
+        "type": "object",
+        "description": "Pagination metadata included in some list responses.",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "description": "Current page number (1-based)."
+          },
+          "pagesize": {
+            "type": "integer",
+            "description": "Maximum number of results per page."
+          },
+          "result_start": {
+            "type": "integer",
+            "description": "One-based index of the first result on this page."
+          },
+          "result_end": {
+            "type": "integer",
+            "description": "One-based index of the last result on this page. -1 when the page is empty."
+          },
+          "result_size": {
+            "type": "integer",
+            "description": "Number of results on this page."
+          },
+          "total_result_size": {
+            "type": "integer",
+            "description": "Total number of results across all pages."
+          }
+        },
+        "example": {
+          "page": 1,
+          "pagesize": 20,
+          "result_start": 1,
+          "result_end": 20,
+          "result_size": 20,
+          "total_result_size": 150
+        }
+      },
+      "FetchProjectsresponse": {
+        "title": "FetchProjectsresponse",
+        "type": "object",
+        "description": "Project data returned by the projects list endpoint (without the full HTML description field).",
+        "properties": {
+          "nid": {
+            "type": "integer",
+            "description": "Drupal node ID."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Fully-qualified Eclipse project identifier (e.g. `ee4j.batch`)."
+          },
+          "short_project_id": {
+            "type": "string",
+            "description": "Last segment of the project ID (e.g. `batch`)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Project name."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Short plain-text summary of the project."
+          },
+          "url": {
+            "type": "string",
+            "description": "URL of the project page on projects.eclipse.org."
+          },
+          "website_url": {
+            "type": "string",
+            "description": "Project's external website URL (falls back to the PMI URL when not set)."
+          },
+          "website_repo": {
+            "type": "string",
+            "description": "Repository URL for the project's website source code."
+          },
+          "logo": {
+            "type": "string",
+            "description": "URL of the project logo image, or empty string."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Taxonomy tag labels assigned to the project."
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/License"
+            },
+            "description": "Licenses declared for the project."
+          },
+          "github_repos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GithubRepo"
+            },
+            "description": "Explicitly listed GitHub repository URLs."
+          },
+          "github": {
+            "$ref": "#/components/schemas/GithubInfo"
+          },
+          "gitlab_repos": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "GitLab repository entries. Currently always an empty array; reserved for future use."
+          },
+          "gitlab": {
+            "$ref": "#/components/schemas/GitlabInfo"
+          },
+          "gerrit_repos": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Gerrit repository entries. Currently always an empty array; reserved for future use."
+          },
+          "contributors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Committer"
+            },
+            "description": "External contributors (non-committer participants)."
+          },
+          "committers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Committer"
+            },
+            "description": "Active committers on the project."
+          },
+          "project_leads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Committer"
+            },
+            "description": "Project leads."
+          },
+          "working_groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkingGroup"
+            },
+            "description": "Industry collaborations / working groups the project participates in."
+          },
+          "industry_collaborations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkingGroup"
+            },
+            "description": "Alias for `working_groups`; always contains the same data."
+          },
+          "technology_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Technology type taxonomy term labels."
+          },
+          "spec_project_working_group": {
+            "description": "The specification working group this project produces a specification for. Returns an empty object `{}` when the project is not a specification project, or an object with `name` and `id` when it is. TODO: the PHP implementation overwrites the value in a loop and returns the last matched term only; consumers should handle both empty-object and WorkingGroup-shaped values.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpecProjectWorkingGroup"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          },
+          "state": {
+            "type": "string",
+            "description": "Project lifecycle state. Known values: `Regular`, `Archived`, `Incubating`."
+          },
+          "provisioned": {
+            "type": "boolean",
+            "description": "Whether the project's infrastructure has been provisioned (project is active)."
+          },
+          "latest_release_name": {
+            "type": "string",
+            "description": "Title of the most recent release, or empty string if none exist."
+          },
+          "releases": {
+            "type": "string",
+            "description": "Absolute URL to this project's releases API endpoint."
+          },
+          "top_level_project": {
+            "type": "string",
+            "description": "Project ID of the top-level project, or empty string for top-level projects."
+          },
+          "slsa": {
+            "$ref": "#/components/schemas/SlsaInfo"
+          },
+          "dev_list": {
+            "description": "Primary development mailing list. Returns an empty array `[]` when no dev list is configured, or a DevList object when one is set.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DevList"
+              },
+              {
+                "type": "array",
+                "maxItems": 0,
+                "items": {
+                  "$ref": "#/components/schemas/DevList"
+                }
+              }
+            ]
+          },
+          "mailing_lists": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DevList"
+            },
+            "description": "Additional mailing lists for the project."
+          },
+          "reviews": {
+            "type": "string",
+            "description": "Absolute URL to this project's reviews API endpoint."
+          },
+          "documentation_url": {
+            "type": "string",
+            "description": "URL to the project's documentation."
+          },
+          "gettingstarted_url": {
+            "type": "string",
+            "description": "URL to the project's getting-started guide."
+          },
+          "download_url": {
+            "type": "string",
+            "description": "URL to the project's download page."
+          },
+          "scope": {
+            "type": "string",
+            "description": "HTML-formatted project scope description."
+          },
+          "security_team": {
+            "$ref": "#/components/schemas/SecurityTeam"
+          }
+        },
+        "example": {
+          "nid": 123,
+          "project_id": "ee4j.batch",
+          "short_project_id": "batch",
+          "name": "Jakarta Batch",
+          "summary": "The Jakarta Batch project defines and maintains the Jakarta Batch specification.",
+          "url": "https://projects.eclipse.org/projects/ee4j.batch",
+          "website_url": "https://projects.eclipse.org/projects/ee4j.batch",
+          "website_repo": "",
+          "logo": "",
+          "tags": [],
+          "licenses": [
+            {
+              "name": "Eclipse Public License 2.0",
+              "short_name": "EPL-2.0",
+              "url": "https://www.eclipse.org/legal/epl-2.0/"
+            }
+          ],
+          "github_repos": [
+            {
+              "url": "https://github.com/eclipse-ee4j/batch-api"
+            },
+            {
+              "url": "https://github.com/eclipse-ee4j/batch-tck"
+            }
+          ],
+          "github": {
+            "org": "eclipse-ee4j",
+            "ignored_repos": []
+          },
+          "gitlab_repos": [],
+          "gitlab": {
+            "project_group": "",
+            "ignored_sub_groups": []
+          },
+          "gerrit_repos": [],
+          "contributors": [],
+          "committers": [
+            {
+              "username": "acommitter",
+              "full_name": "A Committer",
+              "url": "https://api.eclipse.org/account/profile/acommitter"
+            }
+          ],
+          "project_leads": [
+            {
+              "username": "aprojectlead",
+              "full_name": "A Project Lead",
+              "url": "https://api.eclipse.org/account/profile/aprojectlead"
+            }
+          ],
+          "working_groups": [
+            {
+              "name": "Jakarta EE",
+              "id": "jakarta-ee"
+            }
+          ],
+          "industry_collaborations": [
+            {
+              "name": "Jakarta EE",
+              "id": "jakarta-ee"
+            }
+          ],
+          "technology_types": [],
+          "spec_project_working_group": {
+            "name": "Jakarta EE",
+            "id": "jakarta-ee"
+          },
+          "state": "Regular",
+          "provisioned": true,
+          "latest_release_name": "3.0",
+          "releases": "https://projects.eclipse.org/api/projects/ee4j.batch/releases",
+          "top_level_project": "ee4j",
+          "slsa": {
+            "build_level": ""
+          },
+          "dev_list": {
+            "name": "ee4j-batch-dev",
+            "email": "ee4j-batch-dev@eclipse.org",
+            "url": "https://accounts.eclipse.org/mailing-list/ee4j-batch-dev"
+          },
+          "mailing_lists": [],
+          "reviews": "https://projects.eclipse.org/api/projects/ee4j.batch/reviews",
+          "documentation_url": "",
+          "gettingstarted_url": "",
+          "download_url": "",
+          "scope": "<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>\n\n",
+          "security_team": {
+            "individual_members": [],
+            "groups": {
+              "include_committers": true,
+              "include_project_leads": false
+            }
+          }
+        }
+      },
+      "RetrieveaProjectresponse": {
+        "title": "RetrieveaProjectresponse",
+        "description": "Full project data returned by the single-project endpoint. Identical to FetchProjectsresponse but also includes the `description` field containing the full HTML-rendered project description.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FetchProjectsresponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "Full HTML-rendered project description body."
+              }
+            }
+          }
+        ]
+      },
+      "ReleaseDownloads": {
+        "title": "ReleaseDownloads",
+        "type": "object",
+        "properties": {
+          "tracked": {
+            "type": "boolean",
+            "description": "Whether download statistics are tracked for this release."
+          },
+          "associated_files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Values from `field_release_download_files` associated with this release."
+          }
+        },
+        "example": {
+          "tracked": false,
+          "associated_files": []
+        }
+      },
+      "Release": {
+        "title": "Release",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Release name / version label."
+          },
+          "url": {
+            "type": "string",
+            "description": "Absolute URL of the release page on projects.eclipse.org."
+          },
+          "date": {
+            "type": "string",
+            "description": "Release date formatted as `Y-m-d`, or empty string if not set."
+          },
+          "type": {
+            "type": "integer",
+            "description": "Numeric release type identifier from `field_release_type`."
+          },
+          "downloads": {
+            "$ref": "#/components/schemas/ReleaseDownloads"
+          }
+        },
+        "example": {
+          "name": "3.0",
+          "url": "https://projects.eclipse.org/projects/ee4j.batch/releases/3.0",
+          "date": "2022-05-31",
+          "type": 1,
+          "downloads": {
+            "tracked": false,
+            "associated_files": []
+          }
+        }
+      },
+      "ReleasesResponse": {
+        "title": "ReleasesResponse",
+        "type": "object",
+        "properties": {
+          "releases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Release"
+            },
+            "description": "Paginated list of releases for the project."
+          }
+        },
+        "example": {
+          "releases": [
+            {
+              "name": "3.0",
+              "url": "https://projects.eclipse.org/projects/ee4j.batch/releases/3.0",
+              "date": "2022-05-31",
+              "type": 1,
+              "downloads": {
+                "tracked": false,
+                "associated_files": []
+              }
+            }
+          ]
+        }
+      },
+      "Review": {
+        "title": "Review",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Drupal node ID of the review."
+          },
+          "slides_url": {
+            "type": "string",
+            "description": "Absolute URL of the review page on projects.eclipse.org."
+          },
+          "review_date": {
+            "type": "string",
+            "description": "Review end date value from `field_review_end_date`."
+          },
+          "review_name": {
+            "type": "string",
+            "description": "Human-readable review name with the trailing ` Review` suffix stripped."
+          },
+          "status": {
+            "type": "string",
+            "description": "Review outcome. Known values: `fail`, `success`, `withdrawn`, `ongoing`. Any unrecognised stored value is normalised to `unknown_state`.",
+            "enum": [
+              "fail",
+              "success",
+              "withdrawn",
+              "ongoing",
+              "unknown_state"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "description": "Alias for `review_date`."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Body summary field value, or the full body text if no summary is available."
+          }
+        },
+        "example": {
+          "id": 456,
+          "slides_url": "https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0",
+          "review_date": "2022-04-13",
+          "review_name": "Release 3.0",
+          "status": "success",
+          "date": "2022-04-13",
+          "summary": "The committer team proposes releasing Jakarta Batch 3.0."
+        }
+      },
+      "ReviewsResponse": {
+        "title": "ReviewsResponse",
+        "type": "object",
+        "properties": {
+          "reviews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Review"
+            },
+            "description": "Paginated list of reviews for the project."
+          }
+        },
+        "example": {
+          "reviews": [
+            {
+              "id": 456,
+              "slides_url": "https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0",
+              "review_date": "2022-04-13",
+              "review_name": "Release 3.0",
+              "status": "success",
+              "date": "2022-04-13",
+              "summary": "The committer team proposes releasing Jakarta Batch 3.0."
+            }
+          ]
+        }
+      },
+      "Proposal": {
+        "title": "Proposal",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Drupal node ID of the proposal."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Proposed Eclipse project identifier."
+          },
+          "name": {
+            "type": "string",
+            "description": "Proposal title."
+          },
+          "parent": {
+            "type": "string",
+            "description": "Project ID of the parent project, or empty string."
+          },
+          "top_level_project": {
+            "type": "string",
+            "description": "Project ID of the top-level project, or empty string."
+          },
+          "industry_collaborations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkingGroup"
+            },
+            "description": "Working groups / industry collaborations associated with this proposal."
+          },
+          "state": {
+            "type": "string",
+            "description": "Current proposal state (e.g. `Active`, `Draft`, `Withdrawn`)."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Plain-text summary truncated to 200 characters (HTML stripped)."
+          },
+          "scope": {
+            "type": "string",
+            "description": "Raw scope field text."
+          },
+          "background": {
+            "type": "string",
+            "description": "Raw background field text."
+          },
+          "date": {
+            "type": "string",
+            "description": "Proposal creation date in `Y-m-d` format."
+          },
+          "url": {
+            "type": "string",
+            "description": "Absolute URL to the proposal page."
+          },
+          "project_url": {
+            "type": "string",
+            "description": "Absolute URL to the resulting project page if the project already exists, otherwise empty string."
+          },
+          "spec_project": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpecProjectWorkingGroup"
+            },
+            "description": "Specification working group(s) associated with this proposal (at most one entry)."
+          },
+          "committers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Committer"
+            },
+            "description": "Initial committers listed in the proposal. The `username` field may be null when a committer does not yet have an Eclipse account."
+          },
+          "project_leads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Committer"
+            },
+            "description": "Proposed project leads."
+          },
+          "patent_license": {
+            "type": "string",
+            "description": "Patent license selected for this proposal."
+          },
+          "licenses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "License term labels selected for this proposal."
+          },
+          "repo_type": {
+            "type": "string",
+            "description": "Source repository type (e.g. `Git`)."
+          },
+          "repos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Source repository URIs."
+          }
+        },
+        "example": {
+          "id": 789,
+          "project_id": "technology.new-project",
+          "name": "New Eclipse Project Proposal",
+          "parent": "technology",
+          "top_level_project": "technology",
+          "industry_collaborations": [],
+          "state": "Active",
+          "summary": "A short plain-text summary of the proposal.",
+          "scope": "",
+          "background": "",
+          "date": "2023-06-01",
+          "url": "https://projects.eclipse.org/proposals/new-project",
+          "project_url": "",
+          "spec_project": [],
+          "committers": [],
+          "project_leads": [],
+          "patent_license": "",
+          "licenses": [
+            "Eclipse Public License 2.0"
+          ],
+          "repo_type": "Git",
+          "repos": [
+            "https://github.com/eclipse/new-project"
+          ]
+        }
+      },
+      "ProposalsIndexResponse": {
+        "title": "ProposalsIndexResponse",
+        "type": "object",
+        "description": "Paginated proposals list. Unlike the projects index, this endpoint preserves the pagination metadata in the response body alongside the `result` array.",
+        "properties": {
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Proposal"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          }
+        },
+        "example": {
+          "result": [
+            {
+              "id": 789,
+              "project_id": "technology.new-project",
+              "name": "New Eclipse Project Proposal"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pagesize": 20,
+            "result_start": 1,
+            "result_end": 1,
+            "result_size": 1,
+            "total_result_size": 1
+          }
+        }
+      },
+      "TextContent": {
+        "title": "TextContent",
+        "type": "object",
+        "description": "A long-text field with a plain-text summary and an HTML-rendered full version.",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "Plain-text summary (may be empty)."
+          },
+          "full": {
+            "type": "string",
+            "description": "Full content rendered as HTML."
+          }
+        },
+        "example": {
+          "summary": "Short summary.",
+          "full": "<p>Full HTML content.</p>"
+        }
+      },
+      "InterestGroupResources": {
+        "title": "InterestGroupResources",
+        "type": "object",
+        "properties": {
+          "website": {
+            "type": "string",
+            "description": "URL to the interest group's website, or empty string."
+          },
+          "members": {
+            "type": "string",
+            "description": "URL to the interest group's members page, or empty string."
+          }
+        },
+        "example": {
+          "website": "",
+          "members": ""
+        }
+      },
+      "InterestGroupGitlabInfo": {
+        "title": "InterestGroupGitlabInfo",
+        "type": "object",
+        "description": "GitLab group information derived from the interest group's Foundation DB project ID.",
+        "properties": {
+          "project_group": {
+            "type": "string",
+            "description": "GitLab project group namespace (e.g. `eclipse-ig/some-group`)."
+          },
+          "ignored_sub_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Currently always empty for interest groups."
+          }
+        },
+        "example": {
+          "project_group": "eclipse-ig/some-group",
+          "ignored_sub_groups": []
+        }
+      },
+      "InterestGroupUser": {
+        "title": "InterestGroupUser",
+        "type": "object",
+        "description": "A user associated with an interest group.",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "description": "Absolute URL to the person's profile on api.eclipse.org."
+          },
+          "organization": {
+            "type": "object",
+            "description": "TODO - structure depends on FoundationDB organisation data; treat as opaque object."
+          }
+        },
+        "example": {
+          "username": "aigmember",
+          "full_name": "An IG Member",
+          "url": "https://api.eclipse.org/account/profile/aigmember",
+          "organization": {}
+        }
+      },
+      "InterestGroup": {
+        "title": "InterestGroup",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Drupal node ID."
+          },
+          "title": {
+            "type": "string",
+            "description": "Interest group title."
+          },
+          "description": {
+            "$ref": "#/components/schemas/TextContent"
+          },
+          "logo": {
+            "type": "string",
+            "description": "Absolute URL to the interest group logo image, or empty string."
+          },
+          "scope": {
+            "$ref": "#/components/schemas/TextContent"
+          },
+          "leads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterestGroupUser"
+            },
+            "description": "Interest Group Leads (IGLs)."
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterestGroupUser"
+            },
+            "description": "Interest Group Participants (IGPs)."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Foundation DB project ID for this interest group (e.g. `foundation-internal.ig.some-group`)."
+          },
+          "short_project_id": {
+            "type": "string",
+            "description": "Last segment of the project ID with the `foundation-internal.ig.` prefix removed."
+          },
+          "state": {
+            "type": "string",
+            "description": "Interest group lifecycle state."
+          },
+          "gitlab": {
+            "$ref": "#/components/schemas/InterestGroupGitlabInfo"
+          },
+          "resources": {
+            "$ref": "#/components/schemas/InterestGroupResources"
+          },
+          "mailing_list": {
+            "type": "string",
+            "description": "Mailing list e-mail address from `field_ig_mailing_list`, or empty string."
+          }
+        },
+        "example": {
+          "id": 1001,
+          "title": "Some Interest Group",
+          "description": {
+            "summary": "Short description.",
+            "full": "<p>Full description.</p>"
+          },
+          "logo": "",
+          "scope": {
+            "summary": "",
+            "full": ""
+          },
+          "leads": [],
+          "participants": [],
+          "project_id": "foundation-internal.ig.some-group",
+          "short_project_id": "some-group",
+          "state": "active",
+          "gitlab": {
+            "project_group": "eclipse-ig/some-group",
+            "ignored_sub_groups": []
+          },
+          "resources": {
+            "website": "",
+            "members": ""
+          },
+          "mailing_list": ""
+        }
+      },
+      "GithubProjectEntry": {
+        "title": "GithubProjectEntry",
+        "type": "object",
+        "description": "GitHub repository data for a single Eclipse project.",
+        "properties": {
+          "repos": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "GitHub repository paths in `org/repo` format (the `https://github.com/` prefix is stripped)."
+          },
+          "specification_project": {
+            "type": "boolean",
+            "description": "Whether this project has a specification working group configured."
+          }
+        },
+        "example": {
+          "repos": [
+            "eclipse-ee4j/batch-api",
+            "eclipse-ee4j/batch-tck"
+          ],
+          "specification_project": true
+        }
+      },
+      "GithubIndexResponse": {
+        "title": "GithubIndexResponse",
+        "type": "object",
+        "description": "A map of Eclipse project IDs to their GitHub repository data. Keys are project IDs (e.g. `ee4j.batch`).",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/GithubProjectEntry"
+        },
+        "example": {
+          "ee4j.batch": {
+            "repos": [
+              "eclipse-ee4j/batch-api",
+              "eclipse-ee4j/batch-tck"
+            ],
+            "specification_project": true
+          }
+        }
+      },
+      "SimultaneousReleaseProject": {
+        "title": "SimultaneousReleaseProject",
+        "type": "object",
+        "description": "A project's contribution to a simultaneous release.",
+        "properties": {
+          "project_name": {
+            "type": "string",
+            "description": "Project node title."
+          },
+          "new_and_noteworthy_url": {
+            "type": "string",
+            "description": "URL to the project's New and Noteworthy page for this release. May be null or empty if not configured.",
+            "nullable": true
+          }
+        },
+        "example": {
+          "project_name": "Eclipse Platform",
+          "new_and_noteworthy_url": "https://eclipse.dev/platform/noteworthy/4.29/"
+        }
+      },
+      "SimultaneousReleaseEntry": {
+        "title": "SimultaneousReleaseEntry",
+        "type": "object",
+        "description": "Data for a single simultaneous release (Eclipse release train).",
+        "properties": {
+          "release_date": {
+            "type": "integer",
+            "description": "Unix timestamp of the release date."
+          },
+          "previous_release": {
+            "type": "object",
+            "description": "Link to the preceding simultaneous release. TODO: the `previous_name` SQL alias in the implementation has a trailing comma which may cause the `release_name` value to be empty in practice — verify against live data.",
+            "properties": {
+              "release_name": {
+                "type": "string",
+                "description": "URL slug of the previous simultaneous release."
+              },
+              "release_url": {
+                "type": "string",
+                "description": "Absolute URL to the previous release's API endpoint."
+              }
+            }
+          },
+          "projects": {
+            "type": "object",
+            "description": "Map of Eclipse project IDs to their release data within this simultaneous release.",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SimultaneousReleaseProject"
+            }
+          }
+        },
+        "example": {
+          "release_date": 1701388800,
+          "previous_release": {
+            "release_name": "2023-09",
+            "release_url": "https://projects.eclipse.org/api/simultaneous_release/2023-09"
+          },
+          "projects": {
+            "eclipse.platform": {
+              "project_name": "Eclipse Platform",
+              "new_and_noteworthy_url": "https://eclipse.dev/platform/noteworthy/4.29/"
+            }
+          }
+        }
+      },
+      "SimultaneousReleasesMap": {
+        "title": "SimultaneousReleasesMap",
+        "type": "object",
+        "description": "A map of simultaneous release URL slugs (e.g. `2023-12`) to their release data.",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/SimultaneousReleaseEntry"
+        },
+        "example": {
+          "2023-12": {
+            "release_date": 1701388800,
+            "previous_release": {
+              "release_name": "2023-09",
+              "release_url": "https://projects.eclipse.org/api/simultaneous_release/2023-09"
+            },
+            "projects": {
+              "eclipse.platform": {
+                "project_name": "Eclipse Platform",
+                "new_and_noteworthy_url": "https://eclipse.dev/platform/noteworthy/4.29/"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Projects",
+      "description": "Eclipse Projects are available through this resource. Note that it is available through the https://projects.eclipse.org domain."
+    },
+    {
+      "name": "Proposals",
+      "description": "Eclipse project proposals submitted for community review."
+    },
+    {
+      "name": "Interest Groups",
+      "description": "Eclipse Interest Groups (IGs) facilitated by the Eclipse Foundation."
+    },
+    {
+      "name": "GitHub",
+      "description": "GitHub repository index for Eclipse projects."
+    },
+    {
+      "name": "Simultaneous Releases",
+      "description": "Eclipse simultaneous release trains (e.g. the annual Eclipse IDE release)."
+    }
+  ]
+}

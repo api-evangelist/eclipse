@@ -1,0 +1,1102 @@
+openapi: 3.0.0
+info:
+  title: Eclipse Newsroom REST API
+  version: '1.0'
+  description: REST API for interacting with newsroom different endpoints.
+servers:
+- url: https://newsroom.eclipse.org
+  description: The production API server
+paths:
+  /api/edition:
+    get:
+      tags:
+      - Editions
+      summary: Get Editions
+      description: Retrieve metadata for all Editions.
+      operationId: FetchEditions
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - editions
+                - pager
+                properties:
+                  editions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Edition'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                editions:
+                - title: Example Community Newsletter
+                  id: '12345'
+                  date: 2025-01
+                  type: Community
+                  featured_committer:
+                    name: Example Contributor
+                    body: Example text.
+                    picture: https://newsroom.eclipse.org/images/picture.jpg
+                    url: https://newsroom.eclipse.org/url
+                  featured_project:
+                    id: eclipse.project
+                    body: |
+                      This project provides an open source platform for building and managing distributed systems using standardized approaches.
+                    logo: https://newsroom.eclipse.org/example-logo.png
+                  ads: ''
+                pager:
+                  current_page: 0
+                  total_items: '99'
+                  total_pages: 99
+                  items_per_page: '20'
+      deprecated: false
+  /api/news:
+    get:
+      tags:
+      - News
+      summary: List news items
+      description: Retrieve news items with optional filtering.
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PublishToFilter'
+      - name: parameters[is_press_release]
+        in: query
+        description: |
+          Filter by press release flag. Use 1 for press releases, 0 for non-press releases.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          enum:
+          - 0
+          - 1
+        example: 0
+      - name: parameters[news_type]
+        in: query
+        description: Filter news items by news type.
+        required: false
+        schema:
+          type: string
+          enum:
+          - announcements
+          - community_news
+        example: announcements
+      - name: parameters[tags]
+        in: query
+        description: |
+          Filter news items by one or more tags. Multiple values may be provided in a comma separated string.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: Eclipse,Newsroom
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - news
+                - pager
+                properties:
+                  news:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/News'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                news:
+                - id: '00001'
+                  title: Example News Article Title
+                  date: '2026-01-01T12:00:00Z'
+                  body: This is an anonymised example summary describing the content of a news article.
+                  link: https://newsroom.eclipse.org/blogs/2026/01/01/example-article
+                  is_press_release: false
+                  image: https://newsroom.eclipse.org/images/news/example-thumbnail.png
+                  news_type: community_news
+                  author:
+                  - full_name: Example Author
+                    username: example_user
+                    picture: https://newsroom.eclipse.org/users/example_user/picture
+                  tags:
+                  - AI
+                  - Cloud
+                  publish_to:
+                  - eclipse_org
+                  - sdv
+                pager:
+                  current_page: 0
+                  total_items: '3607'
+                  total_pages: 361
+                  items_per_page: '20'
+  /api/featured-story:
+    get:
+      tags:
+      - Featured Story
+      summary: List featured stories
+      description: Retrieve featured stories.
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PublishToFilter'
+      - name: parameters[type]
+        in: query
+        description: Filter featured story by type
+        required: false
+        schema:
+          type: string
+          enum:
+          - story
+          - footer
+          - both
+          - toolbar
+          - popup
+        example: story
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - featured_story
+                - pager
+                properties:
+                  featured_story:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FeaturedStory'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                featured_story:
+                - id: '00001'
+                  title: Example Featured Story Title
+                  start-date: '2026-01-01T12:00:00'
+                  end-date: '2026-01-31T22:00:00'
+                  links:
+                  - url: https://newsroom.eclipse.org/resources/example-report
+                    title: Download the Example Report
+                    original_url: https://newsroom.eclipse.org/resources/example-report
+                    original_title: Download the Example Report
+                  layout: light
+                  type: story
+                  body: ''
+                  image: ''
+                  publish_to:
+                  - eclipse_org
+                pager:
+                  current_page: 0
+                  total_items: '12'
+                  total_pages: 1
+                  items_per_page: '20'
+  /api/resources:
+    get:
+      tags:
+      - Resources
+      summary: List resources
+      description: Retrieve resources.
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PublishToFilter'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - resources
+                - pager
+                properties:
+                  resources:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Resource'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                resources:
+                - id: '00001'
+                  title: Example Resource Title
+                  date: 2025-12-10T09:10:07-0500
+                  body: This is an anonymised description of a downloadable resource.
+                  direct_link: https://newsroom.eclipse.org/resources/example-resource.pdf
+                  landing_link: https://newsroom.eclipse.org/resources/example-landing
+                  image: https://newsroom.eclipse.org/images/resources/example-image.png
+                  resource_type: white_paper
+                  author:
+                    name: Example Author
+                    full_name: Example Author
+                  publish_to:
+                  - eclipse_org
+                pager:
+                  current_page: 0
+                  total_items: '98'
+                  total_pages: 5
+                  items_per_page: '20'
+  /api/events:
+    get:
+      tags:
+      - Events
+      summary: Get events
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PublishToFilter'
+      - name: parameters[type]
+        in: query
+        description: Filter events by event type
+        required: false
+        schema:
+          type: string
+          enum:
+          - mefe
+          - ocm
+          - webinar
+          - ec
+          - ve
+          - et
+          - dc
+          - ed
+          - wg
+          - ee
+          - unknown
+          - conference
+        example: mefe
+      - name: parameters[search]
+        in: query
+        description: Filter events by doing a search
+        required: false
+        schema:
+          type: string
+        example: something
+      - name: parameters[ef_participation]
+        in: query
+        description: Filter events by participation
+        required: false
+        schema:
+          type: string
+          enum:
+          - ef_speaking
+          - ef_exhibiting
+          - ef_event
+          - ef_attending
+          - member_org_participating
+          - other
+        example: ef_speaking
+      - name: parameters[attendance_type]
+        in: query
+        description: Filter events by attendance type
+        required: false
+        schema:
+          type: string
+          enum:
+          - virtual
+          - in_person
+          - hybrid
+        example: virtual
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - events
+                - pager
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Events'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                events:
+                - id: '00001'
+                  type: webinar
+                  image: ''
+                  attendance_type: virtual
+                  ef_participation: ef_exhibiting
+                  title: Example Technical Webinar
+                  date: '2026-01-01T14:00:00Z'
+                  end-date: '2026-01-01T15:00:00Z'
+                  locationName: ''
+                  description: |
+                    This session covers general best practices and techniques for building reliable software systems.
+                  infoLink: false
+                  registration: https://eclipse.org/example-registration
+                  address:
+                    street: ''
+                    country: null
+                    city: null
+                    zip: null
+                    geoLoc:
+                      lat: ''
+                      lon: ''
+                  field_content_publish_to:
+                  - eclipse_org
+                pager:
+                  current_page: 0
+                  total_items: '1060'
+                  total_pages: 53
+                  items_per_page: '20'
+  /api/ads:
+    post:
+      tags:
+      - Ads
+      summary: Fetch random ads.
+      description: |
+        Returns a list of randomly-selected ads based on requested formats and publish target, and records an impression for each returned ad (host, source, client IP).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdsRequest'
+            example:
+              host: www.eclipse.org
+              source: /downloads/download.php
+              publish_to: eclipse_org_downloads
+              format:
+                ads_square: 1
+                ads_top_leaderboard: 1
+                ads_leaderboard: 1
+                ads_download: 1
+      responses:
+        '200':
+          description: Successfully returned ads and recorded impressions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateAdsResponse'
+              example:
+              - id: '00001'
+                campaign_name: '00001'
+                url: https://newsroom.eclipse.org/ads/campaign
+                image: https://newsroom.eclipse.org/images/ads/example-banner.jpg
+                member_organization_id: ''
+                type: internal
+                format: ads_square
+                weight: '100'
+                groups: ''
+                publish_to: eclipse_org_home
+        '406':
+          description: Invalid request or no ads could be retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAdsError'
+              examples:
+                missing_host:
+                  summary: Missing host
+                  value:
+                    message: Invalid "host" value.
+                    status: 406
+                missing_source:
+                  summary: Missing source
+                  value:
+                    message: Invalid "source" value.
+                    status: 406
+                missing_publish_to:
+                  summary: Missing publish_to
+                  value:
+                    message: Invalid "publish_to" value.
+                    status: 406
+                missing_format:
+                  summary: Missing format
+                  value:
+                    message: Invalid "format" value.
+                    status: 406
+                no_ads:
+                  summary: No ads found
+                  value:
+                    message: Could not retrieve ads.
+                    status: 406
+    get:
+      tags:
+      - Ads
+      summary: List ads
+      description: Retrieve ads.
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: p[publish_to]
+        in: query
+        description: Filter ads by publication channel.
+        required: false
+        schema:
+          type: string
+          enum:
+          - eclipse_org_home
+          - eclipse_org_downloads
+        example: eclipse_org_home
+      - name: p[format]
+        in: query
+        description: Filter ads by format.
+        required: false
+        schema:
+          type: string
+          enum:
+          - ads_square
+          - ads_top_leaderboard
+          - ads_leaderboard
+          - ads_download
+        example: ads_top_leaderboard
+      - name: p[campaign_name]
+        in: query
+        description: Filter ads by campaign name (nid).
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 1234
+      - name: p[member_name]
+        in: query
+        description: Filter ads by member organization name.
+        required: false
+        schema:
+          type: string
+        example: IBM
+      - name: p[type]
+        in: query
+        description: Filter ads by type.
+        required: false
+        schema:
+          type: string
+          enum:
+          - strat_ad
+          - paid
+          - internal
+          - newsletter
+        example: internal
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - ads
+                - pager
+                properties:
+                  ads:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RetrieveAdsResponse'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                ads:
+                - id: '1234'
+                  campaign_name: Example Campaign
+                  url: https://newsroom.eclipse.org/ads/campaign
+                  image: https://newsroom.eclipse.org/images/ads/example-banner.jpg
+                  member_organization_id: ''
+                  type: internal
+                  format: ads_top_leaderboard
+                  weight: '100'
+                  groups: ''
+                  publish_to:
+                  - eclipse_org_home
+                pager:
+                  current_page: 0
+                  total_items: '29'
+                  total_pages: 2
+                  items_per_page: '20'
+  /api/sponsorship-campaign:
+    get:
+      tags:
+      - Sponsorship Campaigns
+      summary: List sponsorship campaigns
+      description: Retrieve all published sponsorship campaigns.
+      operationId: FetchSponsorshipCampaigns
+      parameters:
+      - name: publish_to
+        in: query
+        required: false
+        description: |
+          Return only campaigns published to the given page. Repeat the parameter (publish_to[]=ide&publish_to[]=adoptium) to match any of several pages.
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - ide
+          - adoptium
+          - openvsx
+          - jakartaee
+          - ecdtools
+        example: ide
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SponsorshipCampaign'
+              example:
+              - nid: 1234
+                title: Example Sponsorship Campaign
+                updated_date: '2026-08-05T13:14:28Z'
+                campaign:
+                  start: '2026-01-01T00:00:00Z'
+                  end: '2026-03-31T23:59:59Z'
+                current_amount: '50000'
+                goal: '100000'
+                individual_sponsor_count: '42'
+                publish_to:
+                - ide
+                - adoptium
+      deprecated: false
+  /api/sponsorship-campaign/{id}:
+    get:
+      tags:
+      - Sponsorship Campaigns
+      summary: Get a sponsorship campaign by node ID
+      description: |
+        Retrieve a single published sponsorship campaign by its node ID. Returns an array containing the single matching campaign.
+      operationId: FetchSponsorshipCampaign
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The node ID of the sponsorship campaign.
+        schema:
+          type: integer
+          format: int32
+        example: 1234
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SponsorshipCampaign'
+              example:
+              - nid: 1234
+                title: Example Sponsorship Campaign
+                updated_date: '2026-08-05T13:14:28Z'
+                campaign:
+                  start: '2026-01-01T00:00:00Z'
+                  end: '2026-03-31T23:59:59Z'
+                current_amount: '50000'
+                goal: '100000'
+                individual_sponsor_count: '42'
+                publish_to:
+                - ide
+                - adoptium
+        '404':
+          description: No published sponsorship campaign has the given ID.
+      deprecated: false
+components:
+  parameters:
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    PublishToFilter:
+      name: parameters[publish_to]
+      in: query
+      description: Filter events by publication target
+      required: false
+      schema:
+        type: string
+        enum:
+        - eclipse_org
+        - aice
+        - adoptium
+        - asciidoc
+        - ecd_tools
+        - dataspace
+        - eclipse_events
+        - edge_native
+        - eclipse_ide
+        - eclipse_iot
+        - orc
+        - research
+        - security
+        - sdv
+        - sparkplug
+        - jakarta_ee
+        - oniro
+        - openadx
+        - opengenesis
+        - openhwgroup
+        - openmdm
+        - openmobility
+        - open_vsx
+        - openpass
+        - osgi
+        - ospo_zone
+        - science
+        - tangle_ee
+      example: eclipse_org
+  schemas:
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string
+    Edition:
+      type: object
+      required:
+      - title
+      - date
+      - type
+      - featured_committer
+      - featured_project
+      properties:
+        title:
+          type: string
+        id:
+          type: string
+        date:
+          type: string
+          description: Year and month (YYYY-MM)
+          example: 2025-12
+        type:
+          type: string
+        featured_committer:
+          $ref: '#/components/schemas/EditionFeaturedCommitter'
+        featured_project:
+          $ref: '#/components/schemas/EditionFeaturedProject'
+        ads:
+          type: string
+          format: uri
+          nullable: true
+    EditionFeaturedCommitter:
+      type: object
+      required:
+      - body
+      properties:
+        name:
+          type: string
+        body:
+          type: string
+        picture:
+          type: string
+          format: uri
+        url:
+          type: string
+          format: uri
+    EditionFeaturedProject:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        body:
+          type: string
+        logo:
+          type: string
+          format: uri
+    News:
+      type: object
+      required:
+      - title
+      - news_type
+      - publish_to
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+          format: date-time
+        body:
+          type: string
+        link:
+          type: string
+          format: uri
+        is_press_release:
+          type: boolean
+        image:
+          type: string
+          format: uri
+        news_type:
+          type: string
+        author:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewsAuthor'
+        tags:
+          type: array
+          items:
+            type: string
+        publish_to:
+          type: array
+          items:
+            type: string
+    NewsAuthor:
+      type: object
+      properties:
+        full_name:
+          type: string
+        username:
+          type: string
+        picture:
+          type: string
+          format: uri
+    FeaturedStory:
+      type: object
+      required:
+      - title
+      - type
+      - layout
+      - start-date
+      - end-date
+      - publish_to
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        start-date:
+          type: string
+          format: date-time
+        end-date:
+          type: string
+          format: date-time
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeaturedStoryLink'
+        layout:
+          type: string
+        type:
+          type: string
+        body:
+          type: string
+        image:
+          type: string
+          format: uri
+        publish_to:
+          type: array
+          items:
+            type: string
+    FeaturedStoryLink:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        title:
+          type: string
+        original_url:
+          type: string
+          format: uri
+        original_title:
+          type: string
+    Resource:
+      type: object
+      required:
+      - title
+      - image
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+        body:
+          type: string
+        direct_link:
+          type: string
+          format: uri
+        landing_link:
+          type: string
+          format: uri
+        image:
+          type: string
+          format: uri
+        resource_type:
+          type: string
+        author:
+          $ref: '#/components/schemas/ResourceAuthor'
+        publish_to:
+          type: array
+          items:
+            type: string
+    ResourceAuthor:
+      type: object
+      properties:
+        name:
+          type: string
+        full_name:
+          type: string
+    Events:
+      type: object
+      required:
+      - title
+      - type
+      - attendance_type
+      - ef_participation
+      - date
+      - end-date
+      - field_content_publish_to
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        image:
+          type: string
+          format: uri
+        attendance_type:
+          type: string
+        ef_participation:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+          format: date-time
+        end-date:
+          type: string
+          format: date-time
+        locationName:
+          type: string
+        description:
+          type: string
+        infoLink:
+          type: boolean
+        registration:
+          type: string
+          format: uri
+        address:
+          $ref: '#/components/schemas/EventsAddress'
+        field_content_publish_to:
+          type: array
+          items:
+            type: string
+    EventsAddress:
+      type: object
+      properties:
+        street:
+          type: string
+        country:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        zip:
+          type: string
+          nullable: true
+        geoLoc:
+          $ref: '#/components/schemas/EventsGeoLoc'
+    EventsGeoLoc:
+      type: object
+      properties:
+        lat:
+          type: string
+        lon:
+          type: string
+    RetrieveAdsResponse:
+      type: object
+      required:
+      - campaign_name
+      - url
+      - image
+      - format
+      - type
+      - weight
+      properties:
+        id:
+          type: string
+        campaign_name:
+          type: string
+        url:
+          type: string
+          format: uri
+        image:
+          type: string
+          format: uri
+        member_organization_id:
+          type: string
+        type:
+          type: string
+        format:
+          type: string
+        weight:
+          type: string
+        groups:
+          type: string
+        publish_to:
+          type: array
+          items:
+            type: string
+    CreateAdsRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - host
+      - source
+      - publish_to
+      - format
+      properties:
+        host:
+          type: string
+        source:
+          type: string
+        publish_to:
+          type: string
+        format:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 1
+    CreateAdsResponse:
+      type: object
+      required:
+      - id
+      - campaign_name
+      - url
+      - image
+      - format
+      - type
+      - weight
+      - publish_to
+      properties:
+        id:
+          type: string
+        campaign_name:
+          type: string
+          description: In the current implementation this mirrors `id`.
+        url:
+          type: string
+          format: uri
+        image:
+          type: string
+          format: uri
+        member_organization_id:
+          type: string
+        type:
+          type: string
+        format:
+          type: string
+        weight:
+          type: string
+        groups:
+          type: string
+        publish_to:
+          type: string
+    CreateAdsError:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+    SponsorshipCampaign:
+      type: object
+      required:
+      - nid
+      - title
+      - updated_date
+      - campaign
+      - current_amount
+      - goal
+      - individual_sponsor_count
+      - publish_to
+      properties:
+        nid:
+          type: integer
+          format: int32
+        title:
+          type: string
+        updated_date:
+          type: string
+          format: date-time
+          description: Node last updated date and time (ISO 8601, UTC).
+          example: '2026-08-05T13:14:28Z'
+        campaign:
+          $ref: '#/components/schemas/SponsorshipCampaignDates'
+        current_amount:
+          type: string
+        goal:
+          type: string
+        individual_sponsor_count:
+          type: string
+        publish_to:
+          type: array
+          description: Pages the campaign is published to.
+          items:
+            type: string
+            enum:
+            - ide
+            - adoptium
+            - openvsx
+            - jakartaee
+            - ecdtools
+    SponsorshipCampaignDates:
+      type: object
+      required:
+      - start
+      - end
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: Campaign start date and time (ISO 8601, UTC).
+          example: '2026-01-01T00:00:00Z'
+        end:
+          type: string
+          format: date-time
+          description: Campaign end date and time (ISO 8601, UTC).
+          example: '2026-03-31T23:59:59Z'

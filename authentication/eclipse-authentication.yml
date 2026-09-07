@@ -1,0 +1,101 @@
+generated: '2026-09-07'
+method: searched
+source: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration, https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration,
+  https://webdev.eclipse.org/docs/api/ (18 harvested first-party OpenAPIs)
+summary:
+  types:
+  - oauth2
+  - openIdConnect
+  oauth2_flows:
+  - authorizationCode
+  - clientCredentials
+  auth_required_operations: null
+schemes:
+- name: openId
+  type: openIdConnect
+  openIdConnectUrl: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration
+  sources:
+  - openapi/eclipse-committer-paperwork-api-openapi.yml
+  - openapi/eclipse-hellosign-api-openapi.yml
+  - openapi/eclipse-mailing-lists-api-openapi.yml
+  - openapi/eclipse-membership-application-api-openapi.yml
+  - openapi/eclipse-membership-portal-api-openapi.yml
+  - openapi/eclipse-working-groups-api-openapi.yml
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://accounts.eclipse.org/oauth2/authorize
+    tokenUrl: https://accounts.eclipse.org/oauth2/token
+    scopes: 4
+  sources:
+  - openapi/eclipse-openvsx-api-openapi.yml
+  - openapi/eclipse-restful-api-openapi.yml
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://accounts.eclipse.org/oauth2/token
+    scopes: 1
+  sources:
+  - openapi/eclipse-profile-api-openapi.yml
+docs: https://webdev.eclipse.org/docs/api/
+note: 'Upgraded from derived to searched: both openIdConnect issuers named by the harvested securitySchemes were
+  fetched live and their OpenID Provider Metadata is saved under well-known/. Scheme rows below stay as the specs
+  declare them.'
+discovery:
+- issuer: https://auth.eclipse.org/auth/realms/foundation
+  realm: foundation
+  software: Keycloak
+  metadata_url: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+  http_status: 200
+  file: well-known/eclipse-auth-foundation-openid-configuration.json
+  jwks_uri: https://auth.eclipse.org/auth/realms/foundation/protocol/openid-connect/certs
+  grant_types:
+  - authorization_code
+  - client_credentials
+  - implicit
+  - password
+  - refresh_token
+  - urn:ietf:params:oauth:grant-type:device_code
+  - urn:ietf:params:oauth:grant-type:token-exchange
+  - urn:ietf:params:oauth:grant-type:uma-ticket
+  - urn:openid:params:grant-type:ciba
+  pkce:
+  - plain
+  - S256
+  used_by:
+  - Mailing Lists API
+  - Membership Portal API
+  - Membership Application API
+  - Working Groups API
+- issuer: https://auth.eclipse.org/auth/realms/document-signature
+  realm: document-signature
+  software: Keycloak
+  metadata_url: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration
+  http_status: 200
+  file: well-known/eclipse-auth-document-signature-openid-configuration.json
+  jwks_uri: https://auth.eclipse.org/auth/realms/document-signature/protocol/openid-connect/certs
+  pkce:
+  - plain
+  - S256
+  used_by:
+  - Committer Paperwork API
+  - HelloSign API
+gaps:
+- accounts.eclipse.org is the authorizationUrl and tokenUrl host for the Open VSX, Profile and Eclipse RESTful API
+  oauth2 schemes, but serves no /.well-known/openid-configuration or /.well-known/oauth-authorization-server (both
+  404 on 2026-09-07). Those three schemes cannot be auto-configured.
+- The published Eclipse RESTful API spec (webdev.eclipse.org/docs/api/additional-api-docs) declares its oauth2 authorizationUrl
+  and tokenUrl as https://accounts.php55.dev.docker/oauth2/* — an internal Docker development hostname that is not
+  resolvable on the public internet. Recorded verbatim as published; not corrected here. A client following that
+  spec cannot obtain a token.
+- No mutualTLS, apiKey or http-bearer securityScheme is declared anywhere in the 18 harvested specs. Open VSX personal
+  access tokens are passed as a `token` query parameter on publish/verify operations rather than as a declared securityScheme.
+token_conventions:
+- api: Open VSX Registry API
+  mechanism: personal access token
+  transport: '`token` query parameter on /api/user/publish, /api/{namespace}/verify-pat and related write operations'
+  issued_at: https://open-vsx.org/user-settings/tokens
+  env_var: OVSX_PAT
+  note: Documented by the ovsx CLI; not modelled as an OpenAPI securityScheme.

@@ -6,6 +6,18 @@ artifacts:
   agentic-access/eclipse-agentic-access.yml:
     method: generated
     evidence: declared in the artifact
+  asyncapi/eclipse-webhooks.yml:
+    method: derived
+    evidence: declared in the artifact
+  authentication/eclipse-authentication.yml:
+    method: searched
+    evidence: declared in the artifact
+  changelog/eclipse-changelog.yml:
+    method: searched
+    evidence: declared in the artifact
+  cli/eclipse-cli.yml:
+    method: searched
+    evidence: declared in the artifact
   collections/eclipse-eclipse-marketplace-rest-api-api.opencollection.json:
     method: derived
     evidence: openapi/eclipse-eclipse-marketplace-rest-api-api
@@ -60,76 +72,25 @@ artifacts:
   collections/eclipse.postman_collection.json:
     method: derived
     evidence: openapi/eclipse
+  components/eclipse-components.yml:
+    method: searched
+    evidence: declared in the artifact
+  conformance/eclipse-conformance.yml:
+    method: searched
+    evidence: declared in the artifact
+  conventions/eclipse-conventions.yml:
+    method: derived
+    evidence: declared in the artifact
+  data-model/eclipse-data-model.yml:
+    method: derived
+    evidence: declared in the artifact
+  errors/eclipse-problem-types.yml:
+    method: derived
+    evidence: declared in the artifact
   finops/eclipse-finops.yml:
     method: generated
     evidence: declared in the artifact
-  kin/checks-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-23T094130.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-23T182523.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-26T223651.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-27T083119.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-27T190208.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T115055.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T170848.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T172558.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T192327.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T200725.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T133250.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T151044.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T162206.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T202106.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-01T163141.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-01T163302.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-01T171935.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-03T113057.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-03T161012.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-04T083143.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-05T153418.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-06T210741.yml:
+  kin/checks-2026-09-06T224210.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-08-07T135032.yml:
@@ -210,35 +171,284 @@ artifacts:
   kin/score-2026-08-28T221322.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-29T213958.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-29T230545.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-30T203505.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-30T220315.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-31T223420.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-01T063623.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-01T210448.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-01T222808.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-02T211804.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-02T224043.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-03T161828.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-03T174231.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-04T062714.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-04T212454.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-04T224856.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-05T055819.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-05T072335.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-05T144739.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-05T195450.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-05T211839.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-06T011047.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-06T211804.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-06T224210.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  lifecycle/eclipse-lifecycle.yml:
+    method: searched
+    evidence: declared in the artifact
+  llms/eclipse-llms.txt:
+    method: unknown
+    evidence: no authorship recorded
+  mcp/eclipse-mcp.yml:
+    method: derived
+    evidence: declared in the artifact
+  openapi/_original/eclipse-committer-paperwork-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-downloads-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-geoip-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-git-eca-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-hellosign-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-info-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-mailing-lists-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-marketplace-rest-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-membership-application-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-membership-portal-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-newsroom-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-open-vsx-registry-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-openapi.yml:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-openvsx-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-profile-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-project-adopters-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-projects-pmi-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-restful-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/_original/eclipse-working-groups-api-openapi.json:
+    method: harvested
+    evidence: fetched from the provider as-is; byte-identical to the source
+  openapi/eclipse-committer-paperwork-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-downloads-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-eclipse-marketplace-rest-api-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-favorites-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-featured-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-geoip-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-git-eca-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-hellosign-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-info-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-mailing-lists-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-marketplace-rest-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-membership-application-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-membership-portal-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-newsroom-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-node-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-open-vsx-registry-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-openvsx-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-popular-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-profile-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-project-adopters-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-projects-pmi-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-recent-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-restful-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-search-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/eclipse-taxonomy-api-openapi.yml:
-    method: unknown
-    evidence: no authorship recorded
-  plans/eclipse-plans-pricing.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/eclipse-working-groups-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  overlays/eclipse-committer-paperwork-api-overlay.yaml:
     method: generated
     evidence: declared in the artifact
-  rate-limits/eclipse-rate-limits.yml:
+  overlays/eclipse-downloads-api-overlay.yaml:
     method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-geoip-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-git-eca-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-hellosign-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-info-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-mailing-lists-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-marketplace-rest-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-membership-application-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-membership-portal-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-newsroom-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-open-vsx-registry-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-openvsx-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-profile-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-project-adopters-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-projects-pmi-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-restful-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/eclipse-working-groups-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  packages/eclipse-packages.yml:
+    method: searched
+    evidence: declared in the artifact
+  plans/eclipse-plans-pricing.yml:
+    method: searched
+    evidence: declared in the artifact
+  rate-limits/eclipse-rate-limits.yml:
+    method: searched
+    evidence: declared in the artifact
+  scopes/eclipse-scopes.yml:
+    method: searched
     evidence: declared in the artifact
   security/eclipse-domain-security.yml:
     method: unknown
@@ -246,3 +456,33 @@ artifacts:
   security/eclipse-vulnerability-disclosure.yml:
     method: searched
     evidence: declared in the artifact
+  skills/_index.yml:
+    method: generated
+    evidence: declared in the artifact
+  skills/eclipse-check-contributor-agreement.md:
+    method: unknown
+    evidence: no authorship recorded
+  skills/eclipse-discover-projects.md:
+    method: unknown
+    evidence: no authorship recorded
+  skills/eclipse-publish-to-open-vsx.md:
+    method: unknown
+    evidence: no authorship recorded
+  skills/eclipse-search-open-vsx.md:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/eclipse-auth-document-signature-openid-configuration.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/eclipse-auth-foundation-openid-configuration.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/eclipse-open-vsx-security.txt:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/eclipse-security.txt:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/eclipse-well-known.yml:
+    method: unknown
+    evidence: no authorship recorded

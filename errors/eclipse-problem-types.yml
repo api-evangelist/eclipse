@@ -1,0 +1,140 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/ — 445 declared 4xx/5xx responses across the 18 first-party OpenAPIs harvested
+  2026-09-07 from https://webdev.eclipse.org/docs/api/ and https://open-vsx.org/v3/api-docs.
+provider: Eclipse Foundation
+providerId: eclipse
+format: proprietary
+rfc9457: false
+description: >-
+  Error catalog for the Eclipse Foundation API surface, derived from the status codes and error
+  schemas the published contracts actually declare. The Foundation publishes no prose error
+  reference; there is no numeric or symbolic error-code registry anywhere on the surface, so every
+  entry below is keyed on the HTTP status alone.
+envelope:
+  media_type: application/json
+  schema_name: Error
+  problem_json: false
+  fields:
+    status_code: HTTP response code, repeated in the body (integer, required)
+    message: Message containing error information (string, required)
+    url: The URL (string or null, optional)
+    friendly_message: Optional client-friendly message (string or null, optional; Info API only)
+  example:
+    status_code: 404
+    message: 'Unable to find public CVE with id: 999'
+    url: null
+  note: >-
+    Published verbatim as the `example` on the Info API Error schema. The schema is redefined
+    independently in 8 specifications; the Membership Portal copy drops `friendly_message` and
+    declares no `required` list at all.
+summary:
+  declared_error_responses: 445
+  distinct_status_codes: 9
+  specs_with_a_shared_Error_schema: 8
+  machine_readable_error_codes: 0
+gaps:
+  - >-
+    No error code taxonomy. Every failure is distinguishable only by HTTP status plus a
+    free-text English `message`, so an agent cannot branch on cause — a 400 from a malformed
+    filter and a 400 from a business-rule violation are identical in the contract.
+  - >-
+    Open VSX does not use the Error envelope. Its failures return HTTP 200 or 4xx carrying the
+    ordinary success schema with an `error` string field populated (e.g. Result, QueryResult,
+    Extension), so a client must inspect the body of an apparently-successful response.
+  - Not RFC 9457. No `type` URI, no `title`/`detail` split, no problem+json media type anywhere.
+problem_types:
+  - status: 400
+    title: Bad Request
+    occurrences: 42
+    type: about:blank
+    media_type: application/json
+    schema: Error
+    meaning: >-
+      Malformed or invalid request — bad query parameter, unparseable body, or a failed bean
+      validation. The Membership Application API additionally returns a `ConstraintViolations`
+      schema here, the only structured field-level validation payload on the surface.
+    remediation: Read `message`; it names the offending parameter in most Quarkus-backed APIs.
+    apis: [Downloads, GeoIP, Git ECA, HelloSign, Info, Membership Application, Membership Portal, Open VSX Registry, Open VSX Agreement, Profile, Working Groups]
+  - status: 401
+    title: Unauthorized
+    occurrences: 22
+    media_type: application/json
+    schema: Error
+    meaning: No credential presented, or the OIDC access token is missing, expired or not accepted by the realm.
+    remediation: >-
+      Obtain a token from the issuer named in the operation's securityScheme —
+      auth.eclipse.org realm `foundation` or `document-signature`. See
+      authentication/eclipse-authentication.yml.
+    apis: [Git ECA, HelloSign, Membership Portal, Open VSX Registry, Eclipse RESTful API]
+  - status: 403
+    title: Forbidden
+    occurrences: 68
+    media_type: application/json
+    schema: Error
+    meaning: >-
+      Authenticated but not entitled — the token lacks the required scope, or the caller is not a
+      member of the namespace/organization being addressed.
+    remediation: >-
+      Check the scope on the operation against scopes/eclipse-scopes.yml. Open VSX namespace
+      writes additionally require namespace membership, which no scope can substitute for.
+    apis: [Git ECA, HelloSign, Info, Membership Application, Membership Portal, Open VSX Registry, Open VSX Agreement, Profile]
+  - status: 404
+    title: Not Found
+    occurrences: 94
+    media_type: application/json
+    schema: Error
+    meaning: The addressed resource does not exist. The single most common declared failure on the surface.
+    remediation: >-
+      Not distinguishable from "exists but not visible to you" in the contract; several APIs
+      return 404 rather than 403 for unauthorized reads.
+    apis: [Committer Paperwork, Downloads, Git ECA, HelloSign, Info, Mailing Lists, Membership Application, Membership Portal, Newsroom, Open VSX Registry, Open VSX Agreement, Profile, Projects PMI, Working Groups]
+  - status: 406
+    title: Not Acceptable
+    occurrences: 1
+    meaning: The Newsroom API cannot satisfy the requested Accept media type.
+    remediation: Request application/json.
+    apis: [Newsroom]
+  - status: 409
+    title: Conflict
+    occurrences: 2
+    media_type: application/json
+    schema: Error
+    meaning: >-
+      The resource already exists in the requested state — a publisher agreement already on file,
+      or a duplicate profile record.
+    remediation: >-
+      Treat as a soft success for create-if-absent flows. This is the closest the surface comes to
+      a replay signal, and it covers 2 of 83 write operations.
+    apis: [Open VSX Agreement, Profile]
+  - status: 429
+    title: Too Many Requests
+    occurrences: 89
+    meaning: A client has sent too many requests in a given amount of time.
+    headers:
+      X-RateLimit-Limit: Number of requests that can be made in a given amount of time
+      X-RateLimit-Remaining: Number of remaining requests in the current window
+      X-RateLimit-Reset: Number of seconds left in the current window
+      Retry-After: Number of seconds to wait after receiving a 429 response
+    remediation: Honour Retry-After. See rate-limits/eclipse-rate-limits.yml.
+    apis: [Open VSX Registry]
+    note: >-
+      Declared only by Open VSX. No Eclipse Foundation IT API declares a 429 anywhere, despite 31
+      responses declaring X-Rate-Limit-* headers.
+  - status: 500
+    title: Internal Server Error
+    occurrences: 124
+    media_type: application/json
+    schema: Error
+    meaning: Unhandled server-side failure.
+    remediation: Retry with backoff. Note that no write operation is idempotent, so a retry after a 500 may duplicate the effect.
+    apis: [Committer Paperwork, Downloads, GeoIP, Git ECA, HelloSign, Info, Mailing Lists, Membership Application, Membership Portal, Open VSX Agreement, Profile, Project Adopters, Working Groups]
+  - status: 503
+    title: Service Unavailable
+    occurrences: 3
+    meaning: >-
+      Declared by the Downloads API when the upstream mirror/file index is unreachable, and by the
+      Membership Portal when a downstream system relation is unavailable.
+    remediation: Retry with backoff.
+    apis: [Downloads, Membership Portal]

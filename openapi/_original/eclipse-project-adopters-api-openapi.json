@@ -1,0 +1,174 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "PROJECT ADOPTERS API",
+    "description": "Access information on Eclipse Foundation project adopters",
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org/adopters",
+      "description": "Production endpoint for foundation project adopters data"
+    }
+  ],
+  "paths": {
+    "/projects": {
+      "parameters": [
+        {
+          "name": "working_group",
+          "in": "query",
+          "description": "The name of the working group that would contain project adopters",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Project Adopters"
+        ],
+        "summary": "Project adopters list",
+        "description": "Returns a list of all project adopters",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdoptedProjects"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        }
+      }
+    },
+    "/projects/{projectId}": {
+      "parameters": [
+        {
+          "name": "projectId",
+          "in": "path",
+          "description": "The id of the project to retreive",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Adopters of single project",
+        "description": "All project adopters under a specific project",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdoptedProject"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdoptedProjects": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AdoptedProject"
+        }
+      },
+      "AdoptedProject": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "adopters",
+          "logo",
+          "name",
+          "project_id",
+          "url"
+        ],
+        "properties": {
+          "adopters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Adopter"
+            }
+          },
+          "logo": {
+            "type": "string",
+            "description": "The URL containing the project logo."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the project."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "The id of the project."
+          },
+          "url": {
+            "type": "string",
+            "description": "The project URL under projects.eclipse.org."
+          }
+        }
+      },
+      "Adopters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Adopter"
+        }
+      },
+      "Adopter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projects",
+          "homepage_url",
+          "logo",
+          "logo_white",
+          "name"
+        ],
+        "properties": {
+          "projects": {
+            "type": "array",
+            "description": "List of projects by their ID that the company adopts within a product",
+            "items": {
+              "type": "string"
+            }
+          },
+          "homepage_url": {
+            "type": "string",
+            "description": "The URL containing the adopter's homepage."
+          },
+          "logo": {
+            "type": "string",
+            "description": "The adopter's color logo."
+          },
+          "logo_white": {
+            "type": "string",
+            "description": "The adopter's white logo."
+          },
+          "name": {
+            "type": "string",
+            "description": "The adopter's company name."
+          }
+        }
+      }
+    }
+  }
+}

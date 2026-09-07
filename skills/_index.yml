@@ -1,0 +1,55 @@
+generated: '2026-09-07'
+method: generated
+source: >-
+  Generated from the 18 first-party OpenAPIs harvested 2026-09-07 plus
+  conventions/eclipse-conventions.yml, errors/eclipse-problem-types.yml,
+  rate-limits/eclipse-rate-limits.yml and cli/eclipse-cli.yml. Every operationId referenced in
+  every skill was verified against the published specifications; operations whose specification
+  declares no operationId are referenced by METHOD + path instead.
+provider: Eclipse Foundation
+providerId: eclipse
+description: >-
+  Packaged Agent Skills for the Eclipse Foundation API surface. The Eclipse Foundation publishes no
+  skills or AGENTS.md of its own (searched 2026-09-07); these are generated from its published
+  contracts. Four marquee flows are covered — three read-only, one write with an explicit safety
+  gate.
+skill_count: 4
+skills:
+  - name: eclipse-discover-projects
+    file: eclipse-discover-projects.md
+    api: Eclipse Projects PMI API
+    writes: false
+    auth: none
+    summary: Look up Eclipse projects, lifecycle phase, licences, repositories and release history.
+  - name: eclipse-search-open-vsx
+    file: eclipse-search-open-vsx.md
+    api: Open VSX Registry API
+    writes: false
+    auth: none
+    summary: Search, resolve and version VS Code-compatible extensions on open-vsx.org.
+  - name: eclipse-publish-to-open-vsx
+    file: eclipse-publish-to-open-vsx.md
+    api: Open VSX Registry API
+    writes: true
+    auth: personal-access-token
+    human_in_the_loop: recommended
+    summary: >-
+      Publish an extension to Open VSX. Carries an explicit safety section — the surface has no
+      idempotency key and no stated reversal window, so a timed-out publish is not safely
+      retryable and an unpublish is permanent.
+  - name: eclipse-check-contributor-agreement
+    file: eclipse-check-contributor-agreement.md
+    api: Eclipse Foundation Git ECA API
+    writes: false
+    auth: none
+    summary: Check ECA status for a contributor and validate commits against Eclipse contribution policy.
+not_covered:
+  - >-
+    Membership Portal and Membership Application APIs (66 operations) — OIDC-gated, organisation
+    data, and every write is unguarded. Not appropriate for an unattended agent.
+  - >-
+    Committer Paperwork and HelloSign APIs — document signing against the auth.eclipse.org
+    `document-signature` realm. Legal-effect writes; deliberately excluded.
+  - >-
+    Profile API user deletion flow — the only two-phase destructive flow on the surface, and the
+    interval between request and erasure is not published. Excluded until that window is documented.

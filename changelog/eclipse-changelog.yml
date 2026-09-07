@@ -1,0 +1,188 @@
+generated: '2026-09-07'
+method: searched
+source: https://github.com/eclipse-openvsx/openvsx/releases (GitHub Releases API)
+provider: Eclipse Foundation
+providerId: eclipse
+description: Dated release history for the Eclipse Foundation API surface. Only one of the two estates publishes
+  one. Eclipse Open VSX ships tagged, dated, semver releases across three separately versioned lines (server, webui,
+  cli); the Eclipse Foundation IT APIs on api.eclipse.org and membership.eclipse.org publish no changelog, no release
+  feed and no dated notes of any kind, so 205 of the 294 published operations have no change history a consumer
+  can read.
+scheme: semver
+coverage:
+  estate_with_changelog: Eclipse Open VSX (open-vsx.org)
+  estate_without_changelog: Eclipse Foundation IT APIs (api.eclipse.org, membership.eclipse.org, marketplace, newsroom,
+    projects)
+  operations_covered: 89
+  operations_uncovered: 205
+current:
+  server: v1.1.2 (2026-08-20)
+  webui: webui-1.1.2 (2026-08-20)
+  cli: cli-1.1.1 (2026-08-09)
+lines:
+- name: server
+  artifact: Open VSX registry server
+  releases_url: https://github.com/eclipse-openvsx/openvsx/releases
+- name: webui
+  artifact: openvsx-webui npm package
+  registry: https://www.npmjs.com/package/openvsx-webui
+- name: cli
+  artifact: ovsx npm package
+  registry: https://www.npmjs.com/package/ovsx
+breaking_change_notice: 'None. Releases are tagged and dated but carry no breaking-change marker, and the unversioned
+  REST paths give a consumer no independent signal. The one deprecation visible anywhere is the `deprecated: true`
+  flag on POST /api/-/query in the specification itself.'
+entries:
+- version: v1.1.2
+  date: '2026-08-20'
+  name: v1.1.2
+  line: server
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/v1.1.2
+  highlights:
+  - '[ovsx CLI](https://www.npmjs.com/package/ovsx/v/1.1.1)'
+  - '[openvsx-webui frontend library](https://www.npmjs.com/package/openvsx-webui/v/1.1.2)'
+  - '[openvsx-server Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-server/1152591230?tag=v1.1.2)'
+  - '[openvsx-webui Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-webui/1152558328?tag=v1.1.2)'
+- version: webui-1.1.2
+  date: '2026-08-20'
+  name: Frontend Library v1.1.2
+  line: webui
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/webui-1.1.2
+  highlights:
+  - Add a "Forget user" action to the admin dashboard's publisher details, calling the GDPR erasure endpoint
+  - 'Fix the extension overview sidebar overlapping the readme content at narrower ("tablet") window widths: there
+    are now only mobile and desktop layouts, with tablet widths using the desktop layout ([#2068](https://github.com/eclipse-openvsx/openvsx/issues/2068))'
+- version: v1.1.1
+  date: '2026-08-09'
+  name: v1.1.1
+  line: server
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/v1.1.1
+  highlights:
+  - '[ovsx CLI](https://www.npmjs.com/package/ovsx/v/1.1.1)'
+  - '[openvsx-webui frontend library](https://www.npmjs.com/package/openvsx-webui/v/1.1.1)'
+  - '[openvsx-server Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-server/1114004976?tag=v1.1.1)'
+  - '[openvsx-webui Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-webui/1113989048?tag=v1.1.1)'
+- version: webui-1.1.1
+  date: '2026-08-09'
+  name: Frontend Library v1.1.1
+  line: webui
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/webui-1.1.1
+  highlights:
+  - 'Fix the WebUI build failing on s390x and ppc64le: use postcss instead of lightningcss (no ppc64le binary) for
+    CSS, and bump vite for the Rolldown big-endian sourcemap fix ([#2051](https://github.com/eclipse-openvsx/openvsx/issues/2051))'
+  - Fix the admin publisher revoke dialog prompting for an Eclipse login even when the target publisher's agreement
+    status is `none` or could not be determined (nothing confirmed to revoke)
+  - Remove the unused `@mui/base` dependency; it is deprecated upstream (replaced by `@base-ui/react`) and nothing
+    in the codebase imports from it
+  - Bump socks from `2.8.3` to `2.8.9`
+- version: cli-1.1.1
+  date: '2026-08-09'
+  name: CLI v1.1.1
+  line: cli
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/cli-1.1.1
+  highlights:
+  - Bump ip-address from `10.2.0` to `10.4.0`
+  - Bump fast-uri from `3.1.4` to `3.1.5`
+  - Bump js-yaml from `4.3.0` to `4.3.1`
+- version: v1.1.0
+  date: '2026-08-02'
+  name: v1.1.0
+  line: server
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/v1.1.0
+  highlights:
+  - Upgrade to use Spring Boot 4
+  - Upgrade to use Vite 8 to build the frontend
+  - Redesign of the Web UI
+  - Support for immutable extension versions
+- version: webui-1.1.0
+  date: '2026-08-02'
+  name: Frontend Library v1.1.0
+  line: webui
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/webui-1.1.0
+  highlights:
+  - Add a home page with hero search, popular searches, a category browser, curated extension rows and get-involved
+    cards
+  - Add a dedicated search page under `/search` with query, category, sort field and sort order synced to the URL
+  - Add global keyboard shortcuts
+  - 'Add keyboard navigation of search results: `↑`/`↓`'
+- version: cli-1.1.0
+  date: '2026-08-02'
+  name: CLI v1.1.0
+  line: cli
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/cli-1.1.0
+  highlights:
+  - Add an encrypted filestore as fallback to the system keychain if it cant be accessed ([#1950](https://github.com/eclipse/openvsx/pull/1950))
+  - Add `--allow-missing-repository` option to the `publish` command, passed on to `vsce` to package an extension
+    whose `package.json` has no `repository` field without asking for confirmation ([#1735](https://github.com/eclipse-openvsx/openvsx/issues/1735))
+  - Replace `keytar` with `cross-keychain` to store credentials in the system keychain ([#1950](https://github.com/eclipse/openvsx/pull/1950))
+  - Mask token input when using `login` command ([#1966](https://github.com/eclipse-openvsx/openvsx/pull/1966)
+- version: v1.0.2
+  date: '2026-06-23'
+  name: v1.0.2
+  line: server
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/v1.0.2
+  highlights:
+  - '[ovsx CLI](https://www.npmjs.com/package/ovsx/v/1.0.2)'
+  - '[openvsx-webui frontend library](https://www.npmjs.com/package/openvsx-webui/v/1.0.2)'
+  - '[openvsx-server Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-server/968738237?tag=v1.0.2)'
+  - '[openvsx-webui Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-webui/968722775?tag=v1.0.2)'
+- version: webui-1.0.2
+  date: '2026-06-23'
+  name: Frontend Library v1.0.2
+  line: webui
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/webui-1.0.2
+  highlights:
+  - Migrate unit test framework from mocha to vitest
+  - Bump tar from `7.5.11` to `7.5.16` ([#1907](https://github.com/eclipse-openvsx/openvsx/pull/1907))
+  - Bump js-yaml from `4.1.1` to `4.2.0` ([#1908](https://github.com/eclipse-openvsx/openvsx/pull/1908))
+  - Bump vite from `7.3.2` to `7.3.5` ([#1905](https://github.com/eclipse-openvsx/openvsx/pull/1905))
+- version: cli-1.0.2
+  date: '2026-06-23'
+  name: CLI v1.0.2
+  line: cli
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/cli-1.0.2
+  highlights:
+  - Bump tmp from `0.2.6` to `0.2.7` ([#1903](https://github.com/eclipse/openvsx/pull/1903))
+  - Bump tar from `7.5.11` to `7.5.16` ([#1911](https://github.com/eclipse/openvsx/pull/1911))
+  - Bump form-data from `4.0.4` to `4.0.6` ([#1910](https://github.com/eclipse/openvsx/pull/1910))
+  - Bump js-yaml from `4.1.1` to `4.2.0` ([#1912](https://github.com/eclipse/openvsx/pull/1912))
+- version: v1.0.1
+  date: '2026-06-11'
+  name: v1.0.1
+  line: server
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/v1.0.1
+  highlights:
+  - '[ovsx CLI](https://www.npmjs.com/package/ovsx/v/1.0.1)'
+  - '[openvsx-webui frontend library](https://www.npmjs.com/package/openvsx-webui/v/1.0.1)'
+  - '[openvsx-server Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-server/935307880?tag=v1.0.1)'
+  - '[openvsx-webui Docker image](https://github.com/eclipse-openvsx/openvsx/pkgs/container/openvsx-webui/935290570?tag=v1.0.1)'
+- version: webui-1.0.1
+  date: '2026-06-11'
+  name: Frontend Library v1.0.1
+  line: webui
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/webui-1.0.1
+  highlights:
+  - Bump qs from `6.15.1` to `6.15.2` ([#1897](https://github.com/eclipse-openvsx/openvsx/pull/1897))
+  - Bump react-router and react-router-dom from `6.30.3` to `6.30.4` ([#1897](https://github.com/eclipse-openvsx/openvsx/pull/1897))
+- version: cli-1.0.1
+  date: '2026-06-11'
+  name: CLI v1.0.1
+  line: cli
+  breaking: false
+  url: https://github.com/eclipse-openvsx/openvsx/releases/tag/cli-1.0.1
+  highlights:
+  - Properly encode path segments in `getUrl` method ([#1893](https://github.com/eclipse/openvsx/pull/1893))
+window: Most recent 14 releases as of 2026-09-07.

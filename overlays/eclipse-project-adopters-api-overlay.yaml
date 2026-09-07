@@ -1,0 +1,28 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for PROJECT ADOPTERS API
+  version: 1.0.0
+extends: openapi/eclipse-project-adopters-api-openapi.yml
+x-generated: '2026-09-07'
+x-method: generated
+x-source: Enhancements over the verbatim specification harvested from https://webdev.eclipse.org/docs/api/eclipsefdn-project-adopters
+  on 2026-09-07. Grounded in apis.yml and the Eclipse Foundation's own published legal/contact pages. The original specification
+  in openapi/ is never mutated.
+actions:
+- target: $.info
+  description: Add a contact the Eclipse Foundation publishes elsewhere; this specification declares none.
+  update:
+    contact:
+      name: Eclipse Foundation
+      url: https://www.eclipse.org/org/foundation/contact.php
+      email: webmaster@eclipse.org
+- target: $.info
+  description: Add the Eclipse.org Terms of Use that govern this API.
+  update:
+    termsOfService: https://www.eclipse.org/legal/termsofuse.php
+- target: $.info
+  description: 'NOTE ONLY — 2 of 2 operations in this specification declare no operationId, which prevents deterministic
+    tool and SDK generation. No operationId is invented here; naming them is the provider''s call. Affected: GET /projects,
+    GET /projects/{projectId}'
+  update:
+    x-api-evangelist-note-missing-operation-ids: 2

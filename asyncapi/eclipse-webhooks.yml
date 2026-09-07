@@ -1,0 +1,87 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/ — webhook and callback operations declared in the 18 first-party OpenAPIs harvested
+  2026-09-07 from https://webdev.eclipse.org/docs/api/.
+provider: Eclipse Foundation
+providerId: eclipse
+asyncapi_published: false
+description: >-
+  Event surface for the Eclipse Foundation API estate. The Foundation publishes NO AsyncAPI
+  document and NO outbound event or subscription surface — there is no way for a consumer to
+  subscribe to Eclipse events, and no webhook a third party can register a URL against. What it
+  does publish, in its own OpenAPI contracts, is a set of INBOUND webhook receivers: endpoints
+  Eclipse operates so that GitHub, GitLab and Dropbox Sign can push events INTO Eclipse systems.
+  This is a real, documented event surface, and the direction matters — it is Eclipse consuming
+  events, not Eclipse emitting them.
+direction: inbound-only
+outbound_events:
+  available: false
+  detail: >-
+    No event catalog, no subscription API, no webhook registration endpoint, no SSE or WebSocket
+    stream, and no message broker binding anywhere across the 294 published operations. An
+    integrator who wants to know when an Eclipse project ships a release, when a marketplace
+    listing changes, or when an extension is published to Open VSX must poll.
+  polling_alternatives:
+    - 'GET /api/-/version-changes (getChanges) — Open VSX version-change feed, the closest thing to a change stream on the surface.'
+    - 'GET https://open-vsx.org/api/version (getRegistryVersion) — cheap registry version probe.'
+    - 'GET /api/events (Eclipse Newsroom REST API) — dated events data, not system events.'
+inbound_webhooks:
+  count: 5
+  receivers:
+    - name: GitHub webhook receiver
+      operation: 'POST /webhooks/github (processGithubWebhook)'
+      api: Eclipse Foundation Git ECA API
+      spec: openapi/eclipse-git-eca-api-openapi.yml
+      base: https://api.eclipse.org/git
+      producer: GitHub
+      headers_consumed: [X-GitHub-Delivery, X-GitHub-Event, X-GitHub-Hook-ID]
+      purpose: >-
+        Receives GitHub push and pull-request events so Eclipse can validate contributions against
+        the Eclipse Contributor Agreement.
+      security: Signature verification per GitHub webhook convention; not modelled as a securityScheme.
+    - name: GitHub revalidation trigger
+      operation: 'POST /webhooks/github/revalidate/{fingerprint} (revalidateWebhookRequest)'
+      api: Eclipse Foundation Git ECA API
+      spec: openapi/eclipse-git-eca-api-openapi.yml
+      purpose: Replays a previously received webhook by fingerprint to re-run ECA validation.
+      note: >-
+        The only replay affordance anywhere on the Eclipse API surface. It is scoped to inbound
+        webhook processing and does not generalise to the REST write operations.
+    - name: GitLab system hook receiver
+      operation: 'POST /webhooks/gitlab/system (processGitlabHook)'
+      api: Eclipse Foundation Git ECA API
+      spec: openapi/eclipse-git-eca-api-openapi.yml
+      producer: GitLab (gitlab.eclipse.org)
+      purpose: Receives GitLab system hook events for the Foundation's own GitLab instance.
+    - name: Dropbox Sign (HelloSign) event callback
+      operation: 'POST /callback (hellosignRequestEventsCallback)'
+      api: Eclipse HelloSign API
+      spec: openapi/eclipse-hellosign-api-openapi.yml
+      base: https://api.eclipse.org/foundation/hellosign
+      producer: Dropbox Sign / HelloSign
+      purpose: >-
+        Receives signature-request lifecycle events for Eclipse document signing (committer
+        paperwork, membership and working-group agreements).
+    - name: Slack membership webhook
+      operation: 'POST /webhook/slack/m (slackMembershipWebhook)'
+      api: Eclipse Foundation Info API
+      spec: openapi/eclipse-info-api-openapi.yml
+      producer: Slack
+      purpose: Receives Slack slash-command / interaction payloads for membership lookups.
+    - name: Slack profile webhook
+      operation: 'POST /slack/profile (SlackProfileWebhook)'
+      api: Eclipse Profile API
+      spec: openapi/eclipse-profile-api-openapi.yml
+      producer: Slack
+      purpose: Receives Slack interaction payloads for Eclipse account profile lookups.
+gaps:
+  - No AsyncAPI document is published for any Eclipse Foundation API.
+  - >-
+    No outbound event surface exists. This is the single largest agent-readiness gap on the
+    estate: every one of the 294 operations is request/response, so an agent tracking Eclipse
+    state must poll and cannot be notified.
+  - >-
+    The inbound receivers are documented as operations but their event payload schemas are mostly
+    unmodelled — the GitHub and GitLab receivers accept an untyped body, so the event vocabulary
+    they consume is GitHub's and GitLab's, not Eclipse's.

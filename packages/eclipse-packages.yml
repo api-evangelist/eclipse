@@ -1,0 +1,77 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  https://registry.npmjs.org/ovsx, https://registry.npmjs.org/openvsx-webui,
+  https://registry.npmjs.org/@theia/ovsx-client, https://github.com/eclipse-openvsx/openvsx
+provider: Eclipse Foundation
+providerId: eclipse
+description: >-
+  First-party client packages for the Eclipse Foundation API surface. The Eclipse Foundation
+  publishes no client SDK for the api.eclipse.org Foundation Web APIs (Downloads, GeoIP, Git ECA,
+  Info, Mailing Lists, Profile, Working Groups, Membership Portal, Committer Paperwork) or for the
+  Marketplace / Newsroom / Projects PMI REST APIs — those are consumed over plain HTTP. Every
+  published client library on this list belongs to the Eclipse Open VSX registry API.
+summary:
+  package_count: 3
+  official_count: 3
+  registries:
+    - npm
+  gaps:
+    - >-
+      No first-party client library exists for api.eclipse.org, marketplace.eclipse.org,
+      newsroom.eclipse.org, projects.eclipse.org or membership.eclipse.org — 205 of the 294
+      published operations have no packaged SDK in any registry.
+    - No PyPI, Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist or crates.io client was found.
+packages:
+  - name: ovsx
+    registry: npm
+    url: https://www.npmjs.com/package/ovsx
+    official: true
+    kind: cli
+    language: typescript
+    api: Open VSX Registry API
+    version: 1.1.1
+    published: '2026-08-09'
+    license: EPL-2.0
+    repository: https://github.com/eclipse-openvsx/openvsx
+    source_directory: cli
+    description: >-
+      Command line interface for Eclipse Open VSX. Publishes, downloads and manages extensions and
+      namespaces against the Open VSX Registry API. Also usable as a Node library.
+    note: >-
+      Current with the registry it wraps — the server released v1.1.2 on 2026-08-20 and the CLI
+      line was last cut as cli-1.1.1 on 2026-08-09, one minor release behind by 11 days.
+  - name: openvsx-webui
+    registry: npm
+    url: https://www.npmjs.com/package/openvsx-webui
+    official: true
+    kind: ui-component-library
+    language: typescript
+    api: Open VSX Registry API
+    version: 1.1.2
+    published: '2026-08-20'
+    license: EPL-2.0
+    repository: https://github.com/eclipse-openvsx/openvsx
+    source_directory: webui
+    description: >-
+      React user interface for Eclipse Open VSX, published as an embeddable component library so a
+      downstream registry deployment can reuse the open-vsx.org front end against its own server.
+    note: Tracks the server release line exactly; 1.1.2 shipped the same day as server v1.1.2.
+  - name: '@theia/ovsx-client'
+    registry: npm
+    url: https://www.npmjs.com/package/@theia/ovsx-client
+    official: true
+    kind: client-library
+    language: typescript
+    api: Open VSX Registry API
+    version: 1.75.0
+    published: '2026-08-27'
+    license: EPL-2.0
+    repository: https://github.com/eclipse-theia/theia
+    description: >-
+      Typed Open VSX registry client used by the Eclipse Theia IDE to search, resolve and download
+      VS Code-compatible extensions.
+    note: >-
+      First-party by Eclipse Foundation project ownership rather than by team — it is published by
+      Eclipse Theia (an Eclipse Foundation top-level project) and versioned on Theia's release
+      train, not on the Open VSX registry's.

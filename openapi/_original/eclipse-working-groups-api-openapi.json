@@ -1,0 +1,1001 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Working Groups API",
+    "description": "Access information on Eclipse Foundation Working Groups.",
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org/working-groups",
+      "description": "Production endpoint for Eclipse Foundation working group data"
+    }
+  ],
+  "paths": {
+    "/": {
+      "parameters": [
+        {
+          "name": "status",
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "description": "The project status"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Working Groups"
+        ],
+        "summary": "Working Group List",
+        "description": "Returns a list of working groups that have the desired status",
+        "operationId": "getWorkingGroups",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkingGroups"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{alias}": {
+      "parameters": [
+        {
+          "name": "alias",
+          "in": "path",
+          "description": "The name of the working group to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Working Groups"
+        ],
+        "summary": "Working Group",
+        "description": "Returns a working group entry that has a matching alias",
+        "operationId": "getWorkingGroupByAlias",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkingGroup"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{alias}/resources": {
+      "parameters": [
+        {
+          "name": "alias",
+          "in": "path",
+          "description": "The name of the working group to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Working Groups"
+        ],
+        "summary": "Working Group resources",
+        "description": "Returns the resources info for the WG with the specified alias",
+        "operationId": "getWorkingGroupResourcesByAlias",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkingGroupResources"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{alias}/levels": {
+      "parameters": [
+        {
+          "name": "alias",
+          "in": "path",
+          "description": "The name of the working group to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Working Groups"
+        ],
+        "summary": "Working Group levels",
+        "description": "Returns the levels info for the WG with the specified alias",
+        "operationId": "getWorkingGroupLevelsByAlias",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkingGroupLevels"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{alias}/agreements": {
+      "parameters": [
+        {
+          "name": "alias",
+          "in": "path",
+          "description": "The name of the working group to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Working Groups"
+        ],
+        "summary": "Working Group agreements",
+        "description": "Returns the participation agreements info for the WG with the specified alias",
+        "operationId": "getWorkingGroupParticipationAgreementsByAlias",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkingGroupParticipationAgreements"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{alias}/committees/{relationType}": {
+      "parameters": [
+        {
+          "name": "alias",
+          "in": "path",
+          "description": "The name of the working group to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "relationType",
+          "in": "path",
+          "description": "The prefix of the WG committee relation codes",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Working Groups"
+        ],
+        "summary": "Working Group Committee",
+        "description": "Returns the WG Committee info for the WG with the specified alias and group prefix",
+        "operationId": "getWorkingGroupCommitteesByCommitteePrefix",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkingGroupCommittee"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid alias or relation type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{alias}/special-interest-groups": {
+      "parameters": [
+        {
+          "name": "alias",
+          "in": "path",
+          "description": "The name of the working group to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Special Interest Groups"
+        ],
+        "summary": "Special Interest Group for Working Group",
+        "description": "Returns a list of all known special interest groups for the given Working Group",
+        "operationId": "getSpecialInterestGroupsByWorkingGroup",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecialInterestGroups"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/organization/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The ID of the organization to retrieve working groups for",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Working Groups"
+        ],
+        "summary": "Working Group by Organization ID",
+        "description": "Returns working groups that the target organization is a member of",
+        "operationId": "getWorkingGroupsByOrganizationId",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkingGroups"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/special-interest-groups": {
+      "get": {
+        "tags": [
+          "Special Interest Groups"
+        ],
+        "summary": "Special Interest Group list",
+        "description": "Returns a list of all known special interest groups",
+        "operationId": "getSpecialInterestGroups",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecialInterestGroups"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/special-interest-groups/{sigAlias}": {
+      "parameters": [
+        {
+          "name": "sigAlias",
+          "in": "path",
+          "description": "The alias of the special interest group to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Special Interest Groups"
+        ],
+        "summary": "Special Interest Group",
+        "description": "Returns a special interest group",
+        "operationId": "getSpecialInterestGroupByAlias",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecialInterestGroups"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "openId": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration"
+      }
+    },
+    "schemas": {
+      "ObjectID": {
+        "description": "Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minimum": 1
+      },
+      "WorkingGroups": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/WorkingGroup"
+        }
+      },
+      "WorkingGroup": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "alias",
+          "title",
+          "status",
+          "logo",
+          "description",
+          "resources",
+          "levels"
+        ],
+        "properties": {
+          "alias": {
+            "type": "string",
+            "description": "internal alias for the working group"
+          },
+          "title": {
+            "type": "string",
+            "description": "Public-facing or official name of the working group"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the working group (e.g. incubating, active, archived)"
+          },
+          "logo": {
+            "type": "string",
+            "description": "image link for the working groups logo"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the working group"
+          },
+          "resources": {
+            "$ref": "#/components/schemas/WorkingGroupResources"
+          },
+          "levels": {
+            "$ref": "#/components/schemas/WorkingGroupLevels"
+          },
+          "committee_mailing_lists": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/WorkingGroupMailingLists"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "WorkingGroupResources": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "charter",
+          "contact_form",
+          "members",
+          "participation_agreements",
+          "sponsorship",
+          "website"
+        ],
+        "properties": {
+          "charter": {
+            "type": "string",
+            "description": "Link to the charter for the current working group"
+          },
+          "contact_form": {
+            "type": "string",
+            "description": "URL link to the contact form"
+          },
+          "members": {
+            "type": "string",
+            "description": "URL to the members list for the given working group"
+          },
+          "sponsorship_document": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The ID of the sponsorship document for this working group"
+          },
+          "participation_agreements": {
+            "$ref": "#/components/schemas/WorkingGroupParticipationAgreements"
+          },
+          "sponsorship": {
+            "type": "string",
+            "description": "link to the sponsorship agreement document"
+          },
+          "website": {
+            "type": "string",
+            "description": "the URL for the homepage of this working group"
+          },
+          "sustainer_commitment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "the URL for the sustainer commitment for the working group, optional"
+          },
+          "resource_display": {
+            "description": "List of resources to be displayed for this Working Group in relation to associated resources, including references\nto existing fields and custom fields. Will retain order of the list when displaying.\n",
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "description": "Label to override reference field, or when using custom links",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "link": {
+                      "description": "Custom link to use when defining an item, required if not using a reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "ref": {
+                      "description": "Defines one of the existing resources to be substituted in with their label and link.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "WorkingGroupParticipationAgreements": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "individual": {
+            "$ref": "#/components/schemas/WorkingGroupParticipationAgreement"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/WorkingGroupParticipationAgreement"
+          }
+        }
+      },
+      "WorkingGroupParticipationAgreement": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "document_id": {
+            "$ref": "#/components/schemas/ObjectID"
+          },
+          "pdf": {
+            "type": "string",
+            "description": "Link to the PDF version of the participation agreement"
+          }
+        }
+      },
+      "WorkingGroupLevels": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/WorkingGroupLevel"
+        }
+      },
+      "WorkingGroupLevel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "relation",
+          "description"
+        ],
+        "description": "Definition of the participation level for the working group, including its relation code",
+        "properties": {
+          "relation": {
+            "type": "string",
+            "description": "code representing the relation, used internally when using common relation types"
+          },
+          "description": {
+            "type": "string",
+            "description": "the label for the participation level"
+          }
+        }
+      },
+      "WorkingGroupMailingLists": {
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "SpecialInterestGroups": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SpecialInterestGroup"
+        }
+      },
+      "SpecialInterestGroup": {
+        "type": "object",
+        "properties": {
+          "alias": {
+            "type": "string",
+            "description": "The name of the Special Interest Group"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the Special Interest Group"
+          },
+          "logo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "url",
+            "description": "URL for the Special Interest Group logo if one exists"
+          },
+          "resources": {
+            "type": "object",
+            "properties": {
+              "membership_document": {
+                "type": "string",
+                "description": "The document ID for the associative membership document in the Foundation"
+              },
+              "links": {
+                "type": "array",
+                "description": "List of links associated with the Special Interest Group",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "url",
+                      "description": "The URL of the link"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "The title of the link to be displayed"
+                    },
+                    "order": {
+                      "type": "number",
+                      "description": "Used to order the links explicitly"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "associated_working_group": {
+            "type": "string",
+            "description": "The alias of the associated Working Group"
+          }
+        }
+      },
+      "WorkingGroupCommittee": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "group_prefix",
+          "working_group"
+        ],
+        "description": "Definition of the WG committee",
+        "properties": {
+          "group_prefix": {
+            "type": "string",
+            "description": "Prefix of the code representing the relation, used internally when using common relation types."
+          },
+          "working_group": {
+            "type": "string",
+            "description": "The WG alias."
+          },
+          "appointed_primary": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "appointed_alternate": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "elected_primary": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "elected_alternate": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "committer_representative": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "invited_guest": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "foundation_staff": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "pmc_representatives": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          },
+          "planning_council_representatives": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CommitteeRole"
+              }
+            ]
+          }
+        }
+      },
+      "CommitteeRole": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "description",
+          "members"
+        ],
+        "description": "The committee position.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The code representing the relation. Used internally when using common relation types."
+          },
+          "description": {
+            "type": "string",
+            "description": "The relation description."
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommitteeMember"
+            }
+          }
+        }
+      },
+      "CommitteeMember": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "username"
+        ],
+        "description": "A committee member representative.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the representative."
+          },
+          "username": {
+            "type": "string",
+            "description": "The representative's EF username."
+          },
+          "organization": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/MemberOrganization"
+              }
+            ]
+          }
+        }
+      },
+      "MemberOrganizations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/MemberOrganization"
+        }
+      },
+      "MemberOrganization": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "organization_id",
+          "logos",
+          "is_active_member"
+        ],
+        "description": "A member representative's organization info.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The organization name."
+          },
+          "organization_id": {
+            "type": "integer",
+            "description": "The organization id."
+          },
+          "logos": {
+            "$ref": "#/components/schemas/MemberOrganizationLogos"
+          },
+          "is_active_member": {
+            "type": "boolean",
+            "description": "Whether the organization is an active member of the Eclipse Foundation."
+          }
+        }
+      },
+      "MemberOrganizationLogos": {
+        "type": "object",
+        "description": "A member organization's logo data",
+        "properties": {
+          "print": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The print logo URL."
+          },
+          "web": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The web logo URL."
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status_code",
+          "message"
+        ],
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "description": "HTTP response code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message containing error information"
+          },
+          "url": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The URL"
+          },
+          "friendly_message": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The friendly message for the error"
+          }
+        }
+      }
+    }
+  }
+}

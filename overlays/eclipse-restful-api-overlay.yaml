@@ -1,0 +1,29 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Eclipse RESTful API
+  version: 1.0.0
+extends: openapi/eclipse-restful-api-openapi.yml
+x-generated: '2026-09-07'
+x-method: generated
+x-source: Enhancements over the verbatim specification harvested from https://webdev.eclipse.org/docs/api/additional-api-docs
+  on 2026-09-07. Grounded in apis.yml and the Eclipse Foundation's own published legal/contact pages. The original specification
+  in openapi/ is never mutated.
+actions:
+- target: $.info
+  description: Add a contact the Eclipse Foundation publishes elsewhere; this specification declares none.
+  update:
+    contact:
+      name: Eclipse Foundation
+      url: https://www.eclipse.org/org/foundation/contact.php
+      email: webmaster@eclipse.org
+- target: $.info
+  description: Add the Eclipse Public License 2.0 identifier the Foundation applies to its published specifications.
+  update:
+    license:
+      name: Eclipse Public License 2.0
+      identifier: EPL-2.0
+      url: https://www.eclipse.org/legal/epl-2.0/
+- target: $.info
+  description: Add the Eclipse.org Terms of Use that govern this API.
+  update:
+    termsOfService: https://www.eclipse.org/legal/termsofuse.php

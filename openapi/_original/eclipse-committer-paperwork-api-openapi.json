@@ -1,0 +1,665 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Committer Paperwork API",
+    "description": "Access information on Eclipse committer paperwork.",
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org/foundation/paperwork",
+      "description": "Production endpoint for Eclipse committer paperwork data."
+    }
+  ],
+  "paths": {
+    "": {
+      "parameters": [
+        {
+          "name": "username",
+          "in": "query",
+          "description": "The LDAP uid of the user.",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "forge",
+          "in": "query",
+          "description": "The forge filter.",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "project_id",
+          "in": "query",
+          "description": "Project id filter.",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "uid",
+          "in": "query",
+          "description": "User id filter.",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "election_nid",
+          "in": "query",
+          "description": "Election id filter.",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "election_status",
+          "in": "query",
+          "description": "Election status filter.",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "committer_paperwork_nid",
+          "in": "query",
+          "description": "Committer paperwork id filter.",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "committer_paperwork_status",
+          "in": "query",
+          "description": "Committer paperwork status filter.",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "spec_project_working_group",
+          "in": "query",
+          "description": "Project working group filter.",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Paperwork list.",
+        "description": "Returns a list of committer paperwork filtered using various properties.",
+        "security": [
+          {
+            "openId": [
+              "committer_paperwork_retrieve"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaperworkList"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{username}": {
+      "parameters": [
+        {
+          "name": "username",
+          "in": "path",
+          "description": "The LDAP uid of the user.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Create a new committer paperwork entry",
+        "security": [
+          {
+            "openId": [
+              "committer_paperwork_update"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Committer paperwork data to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProspectivePaperwork"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUrl"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while updating data."
+          }
+        }
+      }
+    },
+    "/{username}/{id}": {
+      "parameters": [
+        {
+          "name": "username",
+          "in": "path",
+          "description": "The LDAP uid of the user.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "Unique identifier of the committer paperwork record.",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Paperwork list.",
+        "security": [
+          {
+            "openId": [
+              "committer_paperwork_retrieve"
+            ]
+          }
+        ],
+        "description": "Returns a list of committer paperwork for the given username and id.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paperwork"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      },
+      "post": {
+        "summary": "Update paperwork.",
+        "description": "Update a paperwork entry given the username and paperwork id.",
+        "security": [
+          {
+            "openId": [
+              "committer_paperwork_update"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Committer paperwork fields to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaperworkUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultUrl"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while updating data."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete paperwork.",
+        "description": "Delete a paperwork entry for a given username and paperwork id.",
+        "security": [
+          {
+            "openId": [
+              "committer_paperwork_delete"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success - No Content"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while updating data."
+          }
+        }
+      }
+    },
+    "/{username}/retire": {
+      "parameters": [
+        {
+          "name": "username",
+          "in": "path",
+          "description": "The LDAP uid of the user.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Retire paperwork",
+        "description": "Retires a user form being a committer on a specific project.",
+        "security": [
+          {
+            "openId": [
+              "committer_paperwork_delete"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Committer paperwork used to validate request and update role.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetirementRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while updating data."
+          }
+        }
+      }
+    },
+    "/{username}/provisioning/{id}": {
+      "parameters": [
+        {
+          "name": "username",
+          "in": "path",
+          "description": "The LDAP uid of the user.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "Unique identifier of the committer paperwork record.",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Committer provisioning",
+        "description": "Start the committer provisioning process on a specific project.",
+        "security": [
+          {
+            "openId": [
+              "committer_paperwork_delete"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "List of org ids to start the provisioning process.",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProvisioningRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaperworkResults"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while updating data."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "openId": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration"
+      }
+    },
+    "schemas": {
+      "PaperworkList": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Paperwork"
+              }
+            }
+          }
+        }
+      },
+      "Paperwork": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "forge",
+          "project_id",
+          "uid",
+          "election_status",
+          "committer_paperwork_status",
+          "etag",
+          "created",
+          "changed",
+          "spec_project_working_group_tid"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the committer paperwork record."
+          },
+          "forge": {
+            "type": "string",
+            "description": "The forge of the paperwork."
+          },
+          "project_id": {
+            "type": "string",
+            "description": "The unique identifier for the project."
+          },
+          "uid": {
+            "type": "string",
+            "description": "The node ID for the user for the paperwork."
+          },
+          "election_nid": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Election id."
+          },
+          "election_status": {
+            "type": "integer",
+            "description": "The current election status."
+          },
+          "committer_paperwork_nid": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Committer paperwork numerical id."
+          },
+          "committer_paperwork_status": {
+            "type": "integer",
+            "description": "The current committer paperwork status."
+          },
+          "etag": {
+            "type": "string",
+            "description": "The response etag."
+          },
+          "created": {
+            "type": "integer",
+            "description": "The paperwork's creation date."
+          },
+          "changed": {
+            "type": "integer",
+            "description": "The date the paperwork was last updated."
+          },
+          "spec_project_working_group_tid": {
+            "type": "integer",
+            "description": "Working group id."
+          }
+        }
+      },
+      "ProspectivePaperwork": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "parameters"
+        ],
+        "properties": {
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "project_id",
+              "election_nid",
+              "forge",
+              "election_status",
+              "spec_project_working_group"
+            ],
+            "properties": {
+              "project_id": {
+                "type": "string",
+                "description": "The project id for the prospective paperwork."
+              },
+              "election_nid": {
+                "type": "integer",
+                "description": "Election id"
+              },
+              "forge": {
+                "type": "string",
+                "description": "The paperwork forge."
+              },
+              "election_status": {
+                "type": "integer",
+                "description": "The current election status. 2 is approved"
+              },
+              "spec_project_working_group": {
+                "type": "integer",
+                "description": "Working groupd id."
+              }
+            }
+          }
+        }
+      },
+      "ResultUrl": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL containing the result of the paperwork creation/update."
+          }
+        }
+      },
+      "PaperworkUpdate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "parameters"
+        ],
+        "properties": {
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "committer_paperwork_nid",
+              "committer_paperwork_status"
+            ],
+            "properties": {
+              "committer_paperwork_nid": {
+                "type": "integer",
+                "description": "Committer paperwork numerical id."
+              },
+              "committer_paperwork_status": {
+                "type": "integer",
+                "description": "The paperwork status"
+              }
+            }
+          }
+        }
+      },
+      "ProvisioningRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization"
+        ],
+        "properties": {
+          "organization": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "The organization id."
+              }
+            }
+          }
+        }
+      },
+      "RetirementRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "info"
+        ],
+        "properties": {
+          "info": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "requestor",
+              "project_id",
+              "project_role"
+            ],
+            "properties": {
+              "requestor": {
+                "type": "string",
+                "description": "User id of the requestor."
+              },
+              "project_id": {
+                "type": "string",
+                "description": "The project id."
+              },
+              "project_role": {
+                "type": "string",
+                "description": "The role on the project the retiree will lose."
+              }
+            }
+          }
+        }
+      },
+      "PaperworkResults": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PaperworkResult"
+        }
+      },
+      "PaperworkResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "result",
+          "body"
+        ],
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "description": "Result of role change"
+          },
+          "body": {
+            "type": "string",
+            "description": "Message indicating the project retired from, and the date."
+          }
+        }
+      }
+    }
+  }
+}

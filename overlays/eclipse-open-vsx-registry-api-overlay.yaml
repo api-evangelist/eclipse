@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for eclipse-open-vsx-registry-api
+  version: 1.0.0
+extends: openapi/eclipse-open-vsx-registry-api-openapi.yml
+x-generated: '2026-09-07'
+x-method: generated
+x-source: Enhancements over the verbatim specification harvested from https://open-vsx.org/v3/api-docs on 2026-09-07.
+  Grounded in apis.yml and the Eclipse Foundation's own published legal/contact pages. The original specification in
+  openapi/ is never mutated.
+actions:
+- target: $.info
+  description: Add a contact the Eclipse Foundation publishes elsewhere; this specification declares none.
+  update:
+    contact:
+      name: Eclipse Foundation
+      url: https://www.eclipse.org/org/foundation/contact.php
+      email: webmaster@eclipse.org
+- target: $.info
+  description: Add a description; the published specification has none.
+  update:
+    description: eclipse-open-vsx-registry-api — a first-party Eclipse Foundation REST API. Harvested from https://open-vsx.org/v3/api-docs
+      on 2026-09-07. See https://webdev.eclipse.org/docs/api/ for the full Eclipse Foundation API index.

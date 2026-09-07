@@ -1,0 +1,171 @@
+generated: '2026-09-07'
+method: probed
+source: >-
+  Live GET probes of /.well-known/{security.txt,openid-configuration,oauth-authorization-server,
+  oauth-protected-resource,api-catalog,ai-plugin.json} across every host in apis.yml, every
+  OpenAPI servers[] host, the docs host, and the two Keycloak issuers named by the harvested
+  securitySchemes.
+provider: Eclipse Foundation
+providerId: eclipse
+summary:
+  hosts_probed: 12
+  documents_served: 4
+  served:
+    - /.well-known/security.txt on eclipse.org / www.eclipse.org (RFC 9116)
+    - /.well-known/security.txt on open-vsx.org (RFC 9116)
+    - /.well-known/openid-configuration on auth.eclipse.org realm `foundation`
+    - /.well-known/openid-configuration on auth.eclipse.org realm `document-signature`
+  notes:
+    - >-
+      The two OpenID Provider Metadata documents were NOT found by probing an apis.yml host. They
+      were found because the harvested OpenAPI securitySchemes name them directly
+      (openIdConnectUrl), and auth.eclipse.org is a third host that serves neither the APIs nor the
+      docs. Probing only the primary domain would have recorded zero discovery documents.
+    - >-
+      api.eclipse.org, membership.eclipse.org and status.eclipse.org answer HTTP 200 with an HTML
+      shell for EVERY /.well-known/* path. Those 200s are catch-alls, not documents, and are
+      recorded below as misses.
+    - No /.well-known/api-catalog, /ai-plugin.json, /agent-card.json, /agent.json or /llms.txt is served on any host.
+hosts:
+  - host: www.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: eclipse-security.txt
+        content_type: text/plain
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: eclipse-security.txt
+        content_type: text/plain
+        note: Identical body to www.eclipse.org; the file declares www.eclipse.org as one of its Canonical URIs.
+  - host: open-vsx.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: eclipse-open-vsx-security.txt
+        content_type: text/plain
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: auth.eclipse.org
+    documents:
+      - path: /auth/realms/foundation/.well-known/openid-configuration
+        status: 200
+        file: eclipse-auth-foundation-openid-configuration.json
+        content_type: application/json
+        note: >-
+          Keycloak OpenID Provider Metadata for the `foundation` realm — the issuer named by the
+          openIdConnect securityScheme in the Mailing Lists, Membership Portal, Membership
+          Application and Working Groups OpenAPIs.
+      - path: /auth/realms/document-signature/.well-known/openid-configuration
+        status: 200
+        file: eclipse-auth-document-signature-openid-configuration.json
+        content_type: application/json
+        note: >-
+          Keycloak OpenID Provider Metadata for the `document-signature` realm — the issuer named by
+          the Committer Paperwork and HelloSign OpenAPIs. Publishes four Eclipse-specific scopes the
+          OpenAPI documents omit.
+      - path: /.well-known/openid-configuration
+        status: 404
+        note: Root path is not an issuer; discovery is per realm.
+      - path: /.well-known/security.txt
+        status: 404
+  - host: api.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        note: SOFT MISS — 200 returns the 12,173-byte docs-site HTML shell, not a security.txt.
+      - path: /.well-known/openid-configuration
+        status: 200
+        note: SOFT MISS — same HTML shell.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        note: SOFT MISS — same HTML shell.
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        note: SOFT MISS — same HTML shell.
+      - path: /.well-known/api-catalog
+        status: 200
+        note: SOFT MISS — same HTML shell. No RFC 9727 catalog is served.
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        note: SOFT MISS — same HTML shell.
+  - host: accounts.eclipse.org
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 404
+        note: >-
+          Notable gap. accounts.eclipse.org is the authorizationUrl/tokenUrl host in the Open VSX,
+          Profile and Eclipse RESTful API oauth2 schemes, but it publishes no discovery document,
+          so a client cannot auto-configure against it.
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+  - host: marketplace.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+  - host: projects.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+  - host: newsroom.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+  - host: membership.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        note: SOFT MISS — 3,465-byte SPA shell returned for every /.well-known/* path.
+      - path: /.well-known/openid-configuration
+        status: 200
+        note: SOFT MISS — SPA shell.
+      - path: /.well-known/api-catalog
+        status: 200
+        note: SOFT MISS — SPA shell.
+  - host: webdev.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+        note: Edge policy rejects direct path requests; the docs pages themselves serve fine.
+      - path: /.well-known/api-catalog
+        status: 403
+  - host: status.eclipse.org
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        note: SOFT MISS — status page SPA returns a 1.9 MB HTML shell for every path.
+      - path: /.well-known/api-catalog
+        status: 200
+        note: SOFT MISS — SPA shell.

@@ -1,0 +1,79 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  https://github.com/eclipse-openvsx/openvsx/blob/main/cli/README.md,
+  https://www.npmjs.com/package/ovsx, https://github.com/eclipse-openvsx/openvsx/wiki/Publishing-Extensions
+provider: Eclipse Foundation
+providerId: eclipse
+description: >-
+  The Eclipse Foundation publishes one first-party command line interface for its API surface:
+  `ovsx`, the Eclipse Open VSX CLI. It is the officially documented way to publish to the Open VSX
+  Registry. No CLI exists for the Eclipse Foundation IT APIs (api.eclipse.org), the Marketplace,
+  Newsroom, Projects PMI or Membership Portal APIs.
+clis:
+  - name: ovsx
+    title: Eclipse Open VSX CLI
+    official: true
+    api: Open VSX Registry API
+    api_base: https://open-vsx.org
+    version: 1.1.1
+    published: '2026-08-09'
+    license: EPL-2.0
+    repository: https://github.com/eclipse-openvsx/openvsx
+    source_directory: cli
+    docs: https://github.com/eclipse-openvsx/openvsx/blob/main/cli/README.md
+    package: packages/eclipse-packages.yml
+    language: typescript
+    runtime: node
+    also_a_library: true
+    install:
+      - method: npx
+        command: npx ovsx <command>
+        note: Documented as the preferred form; always runs the latest published version.
+      - method: npm-global
+        command: npm i -g ovsx
+    authentication:
+      mechanism: personal access token
+      flags: ['--pat <token>', '-p <token>']
+      env: OVSX_PAT
+      obtain_at: https://open-vsx.org/user-settings/tokens
+    registry_targeting:
+      flags: ['--registryUrl <url>', '-r <url>']
+      env: OVSX_REGISTRY_URL
+      default: https://open-vsx.org
+      note: >-
+        A real portability affordance — the same CLI drives any self-hosted Open VSX deployment,
+        not only open-vsx.org.
+    commands:
+      - group: publishing
+        commands:
+          - name: publish
+            summary: Publish an extension to the registry, packaging it first if no .vsix is given.
+            backing_operation: 'POST /api/user/publish (publish)'
+          - name: create-namespace
+            summary: Create a namespace matching the publisher name in the extension's package.json.
+            backing_operation: 'POST /api/user/namespace/create (createNamespace)'
+            note: Must be run before the first publish under a new publisher name.
+          - name: verify-pat
+            summary: Check that a personal access token is valid for a namespace.
+            backing_operation: 'GET /api/{namespace}/verify-pat (verifyToken)'
+      - group: consumption
+        commands:
+          - name: get
+            summary: Download an extension, or print metadata about it, from the registry.
+            backing_operation: 'GET /api/{namespace}/{extension}/{version} (getExtension_1)'
+    typical_flow:
+      - npx ovsx create-namespace <publisher> --pat $OVSX_PAT
+      - npx ovsx publish --pat $OVSX_PAT
+    caveats:
+      - >-
+        The CLI line trails the server line. Server v1.1.2 shipped 2026-08-20; the CLI was last
+        cut as cli-1.1.1 on 2026-08-09.
+      - >-
+        Publishing is not reversible on a timer. There is no undo and no stated window — see the
+        reversibility block in conventions/eclipse-conventions.yml.
+gaps:
+  - >-
+    No CLI for api.eclipse.org. The Downloads, GeoIP, Git ECA, Info, Mailing Lists, Profile,
+    Working Groups, Committer Paperwork, Membership Portal and Membership Application APIs — 205
+    operations — are HTTP-only, with no packaged command surface.

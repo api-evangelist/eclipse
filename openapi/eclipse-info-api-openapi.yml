@@ -1,0 +1,503 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Eclipse Foundation Info API
+  description: Access information on the Eclipse Foundation, such as trademarks, councils, and board members.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  contact:
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/eclipsefdn-info-api/-/issues
+servers:
+- url: https://api.eclipse.org/foundation/info
+  description: Production endpoint for the Eclipse Foundation information
+tags:
+- name: Trademarks
+  description: Eclipse Foundation Trademarks
+- name: Board Members
+  description: Eclipse Foundation board members
+paths:
+  /trademarks:
+    parameters:
+    - name: type
+      in: query
+      description: The type of trademark to include
+      schema:
+        type: string
+        enum:
+        - R
+        - T
+    get:
+      tags:
+      - Trademarks
+      summary: Trademarks List
+      description: Fetches all public Trademarks data.
+      operationId: getTrademarks
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trademarks'
+        '500':
+          description: Error while retrieving data
+  /trademarks/{category}:
+    parameters:
+    - name: category
+      in: path
+      description: The category grouping to filter trademarks to
+      required: true
+      schema:
+        type: string
+    - name: type
+      in: query
+      description: The type of trademark to include
+      schema:
+        type: string
+        enum:
+        - R
+        - T
+    get:
+      tags:
+      - Trademarks
+      summary: Trademarks List by category
+      description: Fetches all public Trademarks data for the given category.
+      operationId: getTrademarksByCategory
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trademarks'
+        '500':
+          description: Error while retrieving data
+  /board-members:
+    get:
+      tags:
+      - Board Members
+      summary: Board of Directors list
+      description: Returns a list of members on the board of directors
+      operationId: getBoardMembers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardMembers'
+        '500':
+          description: Error while retrieving data
+  /cve:
+    get:
+      tags:
+      - CVE
+      summary: CVE List
+      description: Fetches all public CVE data.
+      operationId: CveList
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cves'
+        '500':
+          description: Error while retrieving data
+  /cve/{id}:
+    parameters:
+    - name: id
+      in: path
+      description: The id of the CVE to retrieve
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - CVE
+      summary: CVE
+      description: Returns a CVE entry that has a matching id
+      operationId: Cve
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cve'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data
+  /cve/rss.xml:
+    get:
+      tags:
+      - CVE
+      summary: CVE RSS feed
+      description: Returns an RSS feed for the known and public vulnerabilities
+      operationId: getCveRSSFeed
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <rdf:RDF
+                    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                    xmlns="http://purl.org/rss/1.0/"
+                    xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <channel rdf:about="https://eclipse.org/security/known/rss.xml">
+                        <title>Eclipse Foundation Project CVE database</title>
+                        <link>https://eclipse.org/security/known/rss.xml</link>
+                        <description>Disclosed CVE records pertaining to Eclipse Foundation projects.</description>
+                        <items>
+                            <rdf:Seq>
+                                <rdf:li />
+                                <rdf:li />
+                                <rdf:li />
+                            </rdf:Seq>
+                        </items>
+                        <dc:creator>Eclipse Foundation WebDev</dc:creator>
+                        <dc:date>2024-03-28T19:45:02Z</dc:date>
+                        <dc:language>en-gb</dc:language>
+                    </channel>
+                    <item rdf:about="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7649">
+                        <title>CVE-2017-7649</title>
+                        <link>https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7649</link>
+                        <description>The network enabled distribution of Kura before 2.1.0 takes control over the device's firewall setup but does not allow IPv6 firewall rules to be configured. Still the Equinox console port 5002 is left open, allowing to log into Kura without any user credentials over unencrypted telnet and executing commands using the Equinox "exec" command. As the process is running as "root" full control over the device can be acquired. IPv6 is also left in auto-configuration mode, accepting router advertisements automatically and assigns a MAC address based IPv6 address.</description>
+                        <dc:date>2017-04-14T04:00:00Z</dc:date>
+                    </item>
+                    <item rdf:about="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7650">
+                        <title>CVE-2017-7650</title>
+                        <link>https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7650</link>
+                        <description>In Mosquitto before 1.4.12, pattern based ACLs can be bypassed by clients that set their username/client id to '#' or '+'. This allows locally or remotely connected clients to access MQTT topics that they do have the rights to. The same issue may be present in third party authentication/access control plugins for Mosquitto.</description>
+                        <dc:date>2017-05-17T04:00:00Z</dc:date>
+                    </item>
+                    <item rdf:about="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7651">
+                        <title>CVE-2017-7651</title>
+                        <link>https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7651</link>
+                        <description>In Eclipse Mosquitto 1.4.14, a user can shutdown the Mosquitto server simply by filling the RAM memory with a lot of connections with large payload. This can be done without authentications if occur in connection phase of MQTT protocol.</description>
+                        <dc:date>2018-02-27T05:00:00Z</dc:date>
+                    </item>
+                </rdf:RDF>
+        '500':
+          description: Error while retrieving data
+  /webhook/slack/m:
+    post:
+      tags:
+      - Slack Webhook
+      summary: Retrieve basic member and contact data via org name search.
+      description: Retrieve  member and contact data via partial name matching.
+      operationId: slackMembershipWebhook
+      requestBody:
+        description: The Slack profile search request
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SlackRequest'
+      responses:
+        '200':
+          description: Success - Org found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackResponse'
+        '400':
+          description: Bad search param
+        '403':
+          description: Invalid authentication
+        '404':
+          description: No matching org found
+        '500':
+          description: Error while retrieving data.
+components:
+  schemas:
+    Trademarks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Trademark'
+    Trademark:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - category
+      properties:
+        id:
+          type: string
+          description: Machine ID to represent the trademark internally
+          example: technology.asciidoc
+        name:
+          type: string
+          description: Display name of the trademark
+          example: Asciidoc
+        category:
+          type: string
+          description: The grouping for the trademark in question
+          example: wg
+        demarcation:
+          type:
+          - string
+          - 'null'
+          description: Raw encoded character for the mark character
+          example: null
+        type:
+          type:
+          - string
+          - 'null'
+          description: The type of trademark this is, either R for registered or T for trademarked
+          enum:
+          - R
+          - T
+          example: R
+    BoardMembers:
+      type: array
+      items:
+        $ref: '#/components/schemas/BoardMember'
+    BoardMember:
+      type: object
+      additionalProperties: false
+      required:
+      - first_name
+      - last_name
+      - relation
+      properties:
+        first_name:
+          type: string
+          description: First name of the board member
+          example: Sample
+        last_name:
+          type: string
+          description: The last name of the board member
+          example: Eclipser
+        org_name:
+          type:
+          - string
+          - 'null'
+          description: The name of the organisation this board member represents, if appointed
+          example: Test co.
+        org_id:
+          type:
+          - number
+          - 'null'
+          description: Numeric ID of the organisation the board member belongs to
+          example: 9999
+        relation:
+          type: object
+          required:
+          - code
+          - description
+          properties:
+            code:
+              type: string
+              description: The relation code for the board member
+              example: BRBE
+            description:
+              type: string
+              description: The human readable name for the relation
+              example: Board Representative - Belgium
+    CouncilMembers:
+      type: array
+      items:
+        $ref: '#/components/schemas/CouncilMember'
+    CouncilMember:
+      type: object
+      required:
+      - first_name
+      - last_name
+      - relation
+      - person_id
+      - comment
+      - mentor_for_projects
+      - is_chair
+      properties:
+        person_id:
+          type: string
+          description: Username of the council member
+        first_name:
+          type: string
+          description: First name of the council member
+        last_name:
+          type: string
+          description: The last name of the council member
+        org_name:
+          type:
+          - string
+          - 'null'
+          description: The name of the organisation this council member represents, if set
+        org_id:
+          type:
+          - number
+          - 'null'
+          description: Numeric ID of the organisation the council member belongs to
+        comment:
+          type: string
+          description: The comment associated with the relationship, such as appointed year or relation to the council.
+        mentor_for_projects:
+          type: array
+          description: List of projects that the council member is a mentor for, if any
+          items:
+            type: string
+        is_chair:
+          type: boolean
+          description: True if the member in question is a chair for the current council.
+        relation:
+          type: object
+          properties:
+            code:
+              type: string
+              description: The relation code for the board member
+            description:
+              type: string
+              description: The human readable name for the relation
+    cves:
+      type: array
+      items:
+        $ref: '#/components/schemas/cve'
+      example:
+      - id: CVE-2020-12345
+        date_published: '2020-03-17'
+        project: eclipse.platform
+        request_link: https://bugs.eclipse.org/bugs/show_bug.cgi?id=12345
+        cve_pull_request: https://github.com/CVEProject/cvelist/pull/1111
+        status: PUBLIC
+        summary: This is the summary of the horrific security flaw that we fixed
+        cvss: 9.9
+      - id: CVE-2022-54321
+        date_published: '2022-06-01'
+        project: technology.dash
+        request_link: https://bugs.eclipse.org/bugs/show_bug.cgi?id=54321
+        cve_pull_request: ''
+        status: PUBLIC
+        summary: This is the summary of the minor vulnerablity
+        cvss: 2
+    cve:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - date_published
+      - project
+      - request_link
+      - cve_pull_request
+      - live_link
+      - status
+      properties:
+        id:
+          type: string
+          description: CVE id containing year
+        date_published:
+          type: string
+          description: The date of the report
+        project:
+          type: string
+          description: The project where the vulerability exists
+        request_link:
+          type: string
+          description: Link to the request where the vulnerability was tracked
+        cve_pull_request:
+          type: string
+          description: Link to pull request that includes the vulnerability
+        live_link:
+          type: string
+          description: Link to the cve.mitre.org page for the vulnerability
+        status:
+          type: string
+          description: The current status of the vulerability (eg, PUBLIC, PRIVATE, CANCELED)
+        summary:
+          oneOf:
+          - type: object
+          - type: 'null'
+          properties:
+            content:
+              type: string
+              description: The summary of the vulnerablility pulled from the CVE details source
+            source:
+              type: string
+              description: The URL of the pulled summary data
+        cvss:
+          oneOf:
+          - type: number
+          - type: 'null'
+          description: The CVSS score pulled from the CVE details source
+      example:
+        id: CVE-2020-12345
+        date_published: '2020-03-17'
+        project: eclipse.platform
+        request_link: https://bugs.eclipse.org/bugs/show_bug.cgi?id=12345
+        cve_pull_request: https://github.com/CVEProject/cvelist/pull/1111
+        status: PUBLIC
+        summary: This is the summary of the horrific security flaw that we fixed
+        cvss: 9.9
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          type:
+          - string
+          - 'null'
+          description: The optional client-friendly message for the error
+      example:
+        status_code: 404
+        message: 'Unable to find public CVE with id: 999'
+        url: null
+    SlackRequest:
+      type: string
+      description: A string containing encoded key-value tuples.
+      example: token=test-token&team_id=T123&team_domain=eclipsefoundation&channel_id=CHAN123&channel_name=webdev&user_id=USER123&user_name=tester&command=%2Fm
+    SlackResponse:
+      type: object
+      properties:
+        response_type:
+          type: string
+          description: Visibilty control used by slack. Used to post response in channel
+        text:
+          type: string
+          description: The response message
+        attachments:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SlackAttachment'
+            - type: 'null'
+      example:
+        response_type: ephemeral
+        text: '*1* member org(s) found matching *sample*'
+        attachments:
+        - title: '*Sample Org* (Strategic Developer)'
+          title_link: sample-org.com
+          text: |
+            *Company Representative:* Test User
+    SlackAttachment:
+      type: object
+      properties:
+        title:
+          type: string
+          description: the attachment title
+        title_link:
+          type: string
+          description: A URL to embed in the title
+        text:
+          type: string
+          description: The content of the attachment. A markdown formatted string in this case

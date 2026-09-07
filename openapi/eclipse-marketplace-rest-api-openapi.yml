@@ -1,0 +1,1304 @@
+openapi: 3.0.0
+info:
+  title: Eclipse Marketplace REST API
+  version: '1.0'
+  description: REST API for interacting with marketplace listings, catalogs, and versions.
+servers:
+- url: https://marketplace.eclipse.org
+  description: The production API server
+paths:
+  /catalogs/api/p:
+    get:
+      tags:
+      - Catalogs
+      summary: List catalogs
+      description: |
+        This will return a listing of all catalogs that are browsable with the MPC. It also includes basic branding parameters, like title and icon and strategies resolving dependencies. If you want to override this url (e.g. in your RCP application) you have to set the following system-property:
+        ```
+        -Dorg.eclipse.epp.internal.mpc.core.service.DefaultCatalogService.url=http://mydomain.tld
+        ```
+      operationId: getCatalogs
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <catalogs>
+                    <catalog id="38413" title="Eclipse Marketplace" url="http://mydomain.tld" selfContained="0" icon="http://marketplace.eclipse.org/sites/default/files/default_1_0.png">
+                      <description>Eclipse Marketplace (MP) is a place to find and keep track of Eclipse-based solutions.</description>
+                      <dependenciesRepository></dependenciesRepository>
+                      <wizard title="">
+                        <icon>http://marketplace.eclipse.org/sites/default/files/default_1.png</icon>
+                        <searchtab enabled="1">Search</searchtab>
+                        <populartab enabled="1">Popular</populartab>
+                        <recenttab enabled="1">Recent</recenttab>
+                        <news shorttitle="January 01/27" timestamp="1422334800">https://www.eclipse.org/community/eclipse_newsletter/2015/january/</news>
+                      </wizard>
+                    </catalog>
+                  </catalogs>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/Catalogs'
+  /api/p:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/client'
+      tags:
+      - Markets
+      summary: Retreive Markets with categories
+      description: This will return a listing of Markets and Categories, it includes URLs for each category, as well number
+        of listings in each category.
+      operationId: getMarketsWithCategories
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <market name="Tools" id="31" url="http://marketplace.eclipse.org/category/markets/tools">
+                    <category id="1964" count="158" url="http://marketplace.eclipse.org/taxonomy/term/1964%2C31" name="Application Development Frameworks" />
+                  </market>
+                  <market name="Long Term Support" id="3429" url="http://marketplace.eclipse.org/category/markets/long-term-support" />
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/Markets'
+  /taxonomy/term/{categoryId},{marketId}/api/p:
+    get:
+      parameters:
+      - name: categoryId
+        in: path
+        description: The ID of the category to retieve listings for. Interchangable with the marketId parameter
+        required: true
+        schema:
+          type: string
+      - name: marketId
+        in: path
+        description: The ID of the market to retieve listings for. Interchangable with the categoryId parameter
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Retreive Listings for a Market and category
+      description: "This call returns a set of listings that correspond to the category / market specified.\n\nhttp://marketplace.eclipse.org/taxonomy/term/4,31/api/p\n\
+        \nAnd paginate through the results using the page_num parameter until there are no more results returned:\n\nhttp://marketplace.eclipse.org/taxonomy/term/4,31/api/p?page_num=2\n\
+        \nhttp://marketplace.eclipse.org/taxonomy/term/4,31/api/p?page_num=3\n\nThese urls are easily obtained from using\
+        \ the http://marketplace.eclipse.org/api/p call. \n"
+      operationId: getListingForMarketCategory
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <category id="4" marketid="31" name="Build and Deploy" url="http://marketplace.eclipse.org/taxonomy/term/4%2C31">
+                    <node id="69" name="MyEclipse Enterprise Workbench" url="http://marketplace.eclipse.org/content/myeclipse-enterprise-workbench">
+                      <favorited>34</favorited>
+                      <installstotal>5394</installstotal>
+                      <installsrecent>0</installsrecent>
+                    </node>
+                  </category>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/CategoryWithListings'
+  /taxonomy/term/{nodeId}/api/p:
+    get: null
+    parameters:
+    - name: nodeId
+      in: path
+      description: The ID of the category or market to retieve listings for
+      required: true
+      schema:
+        type: string
+    - $ref: '#/components/parameters/client'
+    - $ref: '#/components/parameters/product'
+    - $ref: '#/components/parameters/os'
+    - $ref: '#/components/parameters/ws'
+    - $ref: '#/components/parameters/client-version'
+    - $ref: '#/components/parameters/product-version'
+    - $ref: '#/components/parameters/runtime-version'
+    - $ref: '#/components/parameters/platform-version'
+    - $ref: '#/components/parameters/java-version'
+    - $ref: '#/components/parameters/nl'
+    - $ref: '#/components/parameters/page-number'
+    - $ref: '#/components/parameters/limit'
+    tags:
+    - Listings
+    summary: Retreive Listings for a Market or category
+    description: "This call returns a set of listings that correspond to the category or market specified.\n\nhttp://marketplace.eclipse.org/taxonomy/term/4/api/p\n\
+      \nAnd paginate through the results using the page_num parameter until there are no more results returned:\n\nhttp://marketplace.eclipse.org/taxonomy/term/4/api/p?page_num=2\n\
+      \nhttp://marketplace.eclipse.org/taxonomy/term/4/api/p?page_num=3\n\nThese urls are easily obtained from using the http://marketplace.eclipse.org/api/p\
+      \ call. \n"
+    operationId: getListingForMarketOrCategory
+    responses:
+      '200':
+        description: Success
+        content:
+          application/xml:
+            example: |
+              <marketplace>
+                <category id="4" marketid="31" name="Build and Deploy" url="http://marketplace.eclipse.org/taxonomy/term/4%2C31">
+                  <node id="69" name="MyEclipse Enterprise Workbench" url="http://marketplace.eclipse.org/content/myeclipse-enterprise-workbench">
+                    <favorited>34</favorited>
+                    <installstotal>5394</installstotal>
+                    <installsrecent>0</installsrecent>
+                  </node>
+                </category>
+              </marketplace>
+            schema:
+              $ref: '#/components/schemas/CategoryWithListings'
+  /content/{listingTitle}/api/p:
+    get:
+      parameters:
+      - name: listingTitle
+        in: path
+        description: The title of the listing to be retrieved
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Retreive Listing
+      description: Will return a listing of contents of a node.
+      operationId: getSingleListing
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <node id="29591" name="JRebel for Eclipse" url="http://mydomain.tld/content/example">
+                    <type>resource</type>
+                    <categories>
+                      <category id="4" name="Build and Deploy" url="http://mydomain.tld/category/categories/build-and-deploy" />
+                      <category id="24" name="IDE" url="http://mydomain.tld/category/categories/ide" />
+                      <category id="9" name="J2EE Development Platform" url="http://mydomain.tld/category/categories/j2ee-development-platform" />
+                      <category id="17" name="Tools" url="http://mydomain.tld/category/categories/tools" />
+                      <category id="20" name="Web" url="http://mydomain.tld/category/categories/web" />
+                    </categories>
+                    <tags>
+                      <tag id="134" name="J2EE" url="http://mydomain.tld/category/free-tagging/j2ee" />
+                      <tag id="327" name="eclipse" url="http://mydomain.tld/category/free-tagging/eclipse" />
+                      <tag id="422" name="java ee" url="http://mydomain.tld/category/free-tagging/java-ee" />
+                      <tag id="573" name="tools" url="http://mydomain.tld/category/free-tagging/tools" />
+                      <tag id="614" name="productivity" url="http://mydomain.tld/category/free-tagging/productivity" />
+                    </tags>
+                    <owner>Oliver White</owner>
+                    <favorited>66</favorited>
+                    <installstotal>0</installstotal>
+                    <installsrecent>140372</installsrecent>
+                    <shortdescription>SHORT DESCRIPTION</shortdescription>
+                    <body>LONG DESCRIPTION</body>
+                    <created>1295963961</created>
+                    <changed>1424896414</changed>
+                    <foundationmember>1</foundationmember>
+                    <homepageurl>http://www.zeroturnaround.com/software/jrebel/</homepageurl>
+                    <image>http://mydomain.tld/sites/all/themes/solstice/_themes/solstice_marketplace/public/images/default.png</image>
+                    <license>Commercial</license>
+                    <companyname>ZeroTurnaround</companyname>
+                    <status>Mature</status>
+                    <supporturl>http://www.zeroturnaround.com/jrebel/documentation/</supporturl>
+                    <version />
+                    <eclipseversion>4.5, 4.4, 4.3, 4.2, 4.1</eclipseversion>
+                    <updateurl>http://update.zeroturnaround.com/update-site</updateurl>
+                    <ius>
+                      <iu selected="TRUE">org.zeroturnaround.eclipse.feature</iu>
+                      <iu selected="TRUE">org.zeroturnaround.eclipse.wtp.feature</iu>
+                      <iu selected="TRUE">org.zeroturnaround.eclipse.m2e.feature</iu>
+                    </ius>
+                    <platforms>
+                      <platform>Windows</platform>
+                      <platform>Mac</platform>
+                      <platform>Linux/GTK</platform>
+                    </platforms>
+                  </node>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/Listing'
+  /node/{nodeId}/api/p:
+    get:
+      parameters:
+      - name: nodeId
+        in: path
+        description: The ID of the listing node to be retrieved
+        required: true
+        schema:
+          type: integer
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Retreive Listing by node ID
+      description: Will return contents of a listing node.
+      operationId: getSingleListingByNodeId
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <node id="29591" name="JRebel for Eclipse" url="http://mydomain.tld/content/example">
+                    <type>resource</type>
+                    <categories>
+                      <category id="4" name="Build and Deploy" url="http://mydomain.tld/category/categories/build-and-deploy" />
+                      <category id="24" name="IDE" url="http://mydomain.tld/category/categories/ide" />
+                      <category id="9" name="J2EE Development Platform" url="http://mydomain.tld/category/categories/j2ee-development-platform" />
+                      <category id="17" name="Tools" url="http://mydomain.tld/category/categories/tools" />
+                      <category id="20" name="Web" url="http://mydomain.tld/category/categories/web" />
+                    </categories>
+                    <tags>
+                      <tag id="134" name="J2EE" url="http://mydomain.tld/category/free-tagging/j2ee" />
+                      <tag id="327" name="eclipse" url="http://mydomain.tld/category/free-tagging/eclipse" />
+                      <tag id="422" name="java ee" url="http://mydomain.tld/category/free-tagging/java-ee" />
+                      <tag id="573" name="tools" url="http://mydomain.tld/category/free-tagging/tools" />
+                      <tag id="614" name="productivity" url="http://mydomain.tld/category/free-tagging/productivity" />
+                    </tags>
+                    <owner>Oliver White</owner>
+                    <favorited>66</favorited>
+                    <installstotal>0</installstotal>
+                    <installsrecent>140372</installsrecent>
+                    <shortdescription>SHORT DESCRIPTION</shortdescription>
+                    <body>LONG DESCRIPTION</body>
+                    <created>1295963961</created>
+                    <changed>1424896414</changed>
+                    <foundationmember>1</foundationmember>
+                    <homepageurl>http://www.zeroturnaround.com/software/jrebel/</homepageurl>
+                    <image>http://mydomain.tld/sites/all/themes/solstice/_themes/solstice_marketplace/public/images/default.png</image>
+                    <license>Commercial</license>
+                    <companyname>ZeroTurnaround</companyname>
+                    <status>Mature</status>
+                    <supporturl>http://www.zeroturnaround.com/jrebel/documentation/</supporturl>
+                    <version />
+                    <eclipseversion>4.5, 4.4, 4.3, 4.2, 4.1</eclipseversion>
+                    <updateurl>http://update.zeroturnaround.com/update-site</updateurl>
+                    <ius>
+                      <iu selected="TRUE">org.zeroturnaround.eclipse.feature</iu>
+                      <iu selected="TRUE">org.zeroturnaround.eclipse.wtp.feature</iu>
+                      <iu selected="TRUE">org.zeroturnaround.eclipse.m2e.feature</iu>
+                    </ius>
+                    <platforms>
+                      <platform>Windows</platform>
+                      <platform>Mac</platform>
+                      <platform>Linux/GTK</platform>
+                    </platforms>
+                  </node>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/Listing'
+  /api/p/search/apachesolr_search/{query}:
+    get:
+      parameters:
+      - name: query
+        in: path
+        description: This is the string you wish to query the database with
+        required: true
+        schema:
+          type: string
+      - name: filters
+        in: query
+        schema:
+          type: string
+        description: |
+          There are 3 different filters used by the Apache Solr search database that can be used to constrain (Facet) your searches. If you plan to use more then one filter they must be SPACE separated.
+          - tid: This field is the database equivalent of category IDs.
+             - Example: `http://marketplace.eclipse.org/api/p/search/apachesolr_search/enterprise?filters=tid:9 tid:31` This query would search for 'Enterprise' in the J2EE category of the Tools Market.
+          - sm_field_status: this filter is the equivalent of the <status> tag in a listings XML result.
+             - Example: `http://marketplace.eclipse.org/api/p/search/apachesolr_search/enterprise?filters=sm_field_status:Production%2FStable` This query would search for 'Enterprise' listings that have a Status matching 'Production/Stable'
+          - sm_field_licensetype: this filter is the equivalent of the <license> tag in the listings XML result.
+             - Example: `http://marketplace.eclipse.org/api/p/search/apachesolr_search/enterprise?filters=sm_field_licensetype:Free EPL` This query would search for 'Enterprise' listings that have a License Type matching "Free EPL".
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Search listings
+      description: Will return a list of results filtered by the search query
+      operationId: getListingSearchResults
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <search count="3" term="enterprise" url="https://marketplace.eclipse.org/search/enterprise">
+                    <node id="5514766" name="MyEclipse" url="https://marketplace.eclipse.org/content/myeclipse">
+                      <type>resource</type>
+                      <categories>
+                        <category id="1973" name="Business Intelligence, Reporting and Charting" url="https://marketplace.eclipse.org/listings/category/business-intelligence-reporting-and-charting"/>
+                        <category id="1970" name="Database Development" url="https://marketplace.eclipse.org/listings/category/database-development"/>
+                        <category id="24" name="IDE" url="https://marketplace.eclipse.org/listings/category/ide"/>
+                        <category id="9" name="J2EE Development Platform" url="https://marketplace.eclipse.org/listings/category/j2ee-development-platform"/>
+                        <category id="1967" name="Web, XML, Java EE and OSGi Enterprise Development" url="https://marketplace.eclipse.org/listings/category/web-xml-java-ee-and-osgi-enterprise-development"/>
+                      </categories>
+                      <tags>
+                        <tag id="398" name="enterprise" url="https://marketplace.eclipse.org/free-tagging/enterprise"/>
+                        <tag id="8119" name="Jakarta EE" url="https://marketplace.eclipse.org/free-tagging/jakarta-ee"/>
+                        <tag id="422" name="java ee" url="https://marketplace.eclipse.org/free-tagging/java-ee"/>
+                        <tag id="158" name="spring" url="https://marketplace.eclipse.org/free-tagging/spring"/>
+                        <tag id="190" name="database" url="https://marketplace.eclipse.org/free-tagging/database"/>
+                      </tags>
+                      <owner>Todd Williams</owner>
+                      <favorited>1</favorited>
+                      <installstotal>0</installstotal>
+                      <installsrecent>0</installsrecent>
+                      <shortdescription><![CDATA[MyEclipse is the Java IDE for Enterprise development
+                Premium toolset. Fair pricing.
+
+                Free 30-day trial, starts at $35/year
+                Enterprise-grade Java development
+                Rich framework...]]></shortdescription>
+                      <body><![CDATA[<h3><strong>MyEclipse is the Java IDE for Enterprise development</strong><br>
+                Premium toolset. Fair pricing.</h3>
+                <ul>
+                <li>Free 30-day trial, starts at $35/year</li>
+                <li>Enterprise-grade Java development</li>
+                <li>Rich framework assistance</li>
+                <li>Rapid application development</li>
+                <li>Continuous iterations with live reload</li>
+                <li>So much more than Eclipse</li>
+                </ul>
+                <h3><strong>A Unique IDE</strong></h3>
+                <h4>Eclipse might be in the name, but MyEclipse offers much more than its namesake. MyEclipse takes the best of open source and adds unique high-value features to take your productivity to new heights.</h4>
+                <h4>Unique Developer Benefits</h4>
+                <ul>
+                <li>Latest modern web and enterprise technologies</li>
+                <li>Massively optimized interaction with app servers</li>
+                <li>Finely tuned developer experience</li>
+                <li>Live share code with integrated collaboration</li>
+                <li>No plug-ins required, just download and code!</li>
+                </ul>
+                <h4>Unique Business Benefits</h4>
+                <ul>
+                <li>Backward compatibility, maintain legacy apps</li>
+                <li>No vendor lock-in, just your favorite technologies</li>
+                <li>No open source worries and supported by an experienced team</li>
+                <li>No legal hassles, we handle open source licensing</li>
+                <li>Fair pricing with free upgrades to the latest release</li>
+                </ul>
+                <h3><strong>Key Technologies—One IDE</strong></h3>
+                <h4>MyEclipse is a feature rich IDE, perfect for full-stack development.</h4>
+                <p><em>JAVA EE &amp; JAKARTA EE</em> -&nbsp;JSP, EJB, EAR, WAR, JSTL, JSP EL, JAX-RS, JAX-WS, JAX-RPC, JSF, JCA, ACP, JAXB, REST, Struts</p>
+                <p><em>APPLICATION SERVERS</em> -&nbsp;WebSphere, Portal Server, Open Liberty,&nbsp;Apache Tomcat, tc Server, TomEE, JBoss, Wildfly, Glassfish, Jetty, WebLogic, Payara, Geronimo</p>
+                <p><em>SPRING</em> -&nbsp;Spring Boot, Spring Web Flow, Spring Security, Spring MVC, Spring Annotator, CRUD Scaffolding &amp; DSL, Bootstrapping</p>
+                <p><em>MODERN WEB</em> -&nbsp;JavaScript, Typescript, Angular, Vue, React, Webpack, Node.js, Bootstrap, jQuery</p>
+                <p><em>PERSISTENCE</em> -&nbsp;JPA, EclipseLink, OpenJPA, Hibernate</p>
+                <p><em>CONTAINERS</em> -&nbsp;Docker, OpenShift</p>
+                <h4><strong>Free 30-day trial and detailed information at <a href="https://www.genuitec.com/products/myeclipse/" rel="nofollow">https://www.genuitec.com/products/myeclipse/</a></strong></h4>]]></body>
+                      <created>1648591198</created>
+                      <changed>1648652683</changed>
+                      <foundationmember>1</foundationmember>
+                      <homepageurl>https://genuitec.com/products/myeclipse/</homepageurl>
+                      <image><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/badge_logo/public/myeclipse.png?itok=skfWfYTc]]></image>
+                      <screenshot><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/medium/public/me-homepage.png?itok=5AF1mMD8]]></screenshot>
+                      <license>Commercial</license>
+                      <companyname><![CDATA[Genuitec, LLC]]></companyname>
+                      <status>Production/Stable</status>
+                      <supporturl><![CDATA[https://www.genuitec.com/forums/topics/myeclipse/]]></supporturl>
+                    </node>
+                  </search>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+  /featured/api/p:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Featured listings
+      description: "This call will return a list of Featured Listings. By default this returns 6 listings. The default is\
+        \ configured on the server.  \n\nIf available, it can insert up-to two promoted downloads at the top of the list.\
+        \ It is possible to see a commercial listing here. \n"
+      operationId: getFeaturedListings
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <featured count="10">
+                    <node id="3672636" name="Minishift Support" url="https://marketplace.eclipse.org/content/minishift-support/promo">
+                      <type>resource</type>
+                      <categories>
+                        <category id="24" name="IDE" url="https://marketplace.eclipse.org/listings/category/ide"/>
+                        <category id="1969" name="Linux Tools" url="https://marketplace.eclipse.org/listings/category/linux-tools"/>
+                        <category id="12" name="Network" url="https://marketplace.eclipse.org/listings/category/network"/>
+                      </categories>
+                      <tags>
+                        <tag id="3267" name="openshift" url="https://marketplace.eclipse.org/free-tagging/openshift"/>
+                        <tag id="6215" name="minishift" url="https://marketplace.eclipse.org/free-tagging/minishift"/>
+                        <tag id="6216" name="kubernetes" url="https://marketplace.eclipse.org/free-tagging/kubernetes"/>
+                        <tag id="2421" name="variable" url="https://marketplace.eclipse.org/free-tagging/variable"/>
+                      </tags>
+                      <owner>Jens Reimann</owner>
+                      <favorited>2</favorited>
+                      <installstotal>491</installstotal>
+                      <installsrecent>1</installsrecent>
+                      <shortdescription><![CDATA[**Promoted**  This is a plugin offering a bit of minishift integration.
+
+                  Getting the Minishift IP
+                In order to get the IP of the minishift instance use:
+                ${minishift_ip}Which will get replaced...]]></shortdescription>
+                      <body><![CDATA[<p>This is a plugin offering a bit of minishift integration.</p>
+                <h3>
+                  Getting the Minishift IP</h3>
+                <p>In order to get the IP of the minishift instance use:</p>
+                <pre>${minishift_ip}</pre><p>Which will get replaced with the IP address of the minishift instance: e.g.: <code>172.10.5.1</code></p>
+                <h3>
+                  Getting a service URL</h3>
+                <p>To get the URL of a service use:</p>
+                <pre>${minishift_service:http://service-name.namespace}</pre><p>This will retrieve the service's URL: e.g. <code>http://hono-adapter-rest-vertx-hono.192.168.42.43.nip.io</code></p>
+                <p>It is also possible to retrieve the HTTPS based URL:</p>
+                <pre>
+                ${minishift_service:https://service-name.namespace}</pre><p>The service name must be prefixed with http:// or https://.</p>]]></body>
+                      <created>1506350354</created>
+                      <changed>1610723525</changed>
+                      <foundationmember>0</foundationmember>
+                      <homepageurl>https://github.com/ctron/eclipse-minishift</homepageurl>
+                      <image><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/badge_logo/public/default_images/default_2.png?itok=534YF60k]]></image>
+                      <screenshot><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/medium/public/eclipse_minishift.png?itok=QU2RxRKc]]></screenshot>
+                      <license>EPL</license>
+                      <companyname><![CDATA[]]></companyname>
+                      <status>Production/Stable</status>
+                      <supporturl><![CDATA[https://github.com/ctron/eclipse-minishift/issues]]></supporturl>
+                      <version>1.1.0</version>
+                      <eclipseversion>4.7, 4.8, 4.9, 4.10, 4.11, 4.12, 4.13, 4.14, 4.15, 4.16, 4.17, 4.18, 4.19</eclipseversion>
+                      <min_java_version>java_8</min_java_version>
+                      <updateurl>https://ctron.github.io/eclipse-minishift</updateurl>
+                      <ius>
+                        <iu required="TRUE">de.dentrassi.eclipse.minishift</iu>
+                      </ius>
+                      <platforms>
+                        <platform>Windows</platform>
+                        <platform>Mac</platform>
+                        <platform>Linux/GTK</platform>
+                      </platforms>
+                    </node>
+                  </featured>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/FeaturedListings'
+  /featured/{featuredSectionCoordinates}/api/p:
+    get:
+      parameters:
+      - name: featuredSectionCoordinates
+        in: path
+        description: Indicates either a category, a market, or a combination of both. Targeting a single section requires
+          just the ID of the target, or a comma separated value if looking for featured listings in a certain category and
+          market, e.g. `2,31`.
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Featured listings by section
+      description: |
+        This call will return a list of featured listings constrained by a category / market id (or both). By default this returns 10 listings. The default is configured on the server. It is possible to use page_num to paginate through the results.
+
+        Example:
+        - http://marketplace.eclipse.org/featured/2/api/p - This call will return featured items from the Code Management (ID = 2) Category.
+        - http://marketplace.eclipse.org/featured/31/api/p - This call will return featured items from the Tools (ID = 31) Market.
+        - http://marketplace.eclipse.org/featured/2,31/api/p - This call will return featured items that are contained in both the Code Management and Tools categories.
+      operationId: getFeaturedListingsBySection
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: "<marketplace>\n  <featured count=\"10\">\n    <node id=\"8048\" name=\"SEA-QL: Java Code Search Engine\"\
+                \ url=\"https://marketplace.eclipse.org/content/sea-ql-java-code-search-engine\">\n      <type>resource</type>\n\
+                \      <categories>\n        <category id=\"2\" name=\"Code Management\" url=\"https://marketplace.eclipse.org/listings/category/code-management\"\
+                />\n        <category id=\"14\" name=\"Source Code Analyzer\" url=\"https://marketplace.eclipse.org/listings/category/source-code-analyzer\"\
+                />\n        <category id=\"17\" name=\"Tools\" url=\"https://marketplace.eclipse.org/listings/category/tools\"\
+                />\n        <category id=\"40\" name=\"Search\" url=\"https://marketplace.eclipse.org/listings/category/search\"\
+                />\n      </categories>\n      <tags>\n        <tag id=\"784\" name=\"reuse\" url=\"https://marketplace.eclipse.org/free-tagging/reuse\"\
+                />\n        <tag id=\"1143\" name=\"Source code search\" url=\"https://marketplace.eclipse.org/free-tagging/source-code-search\"\
+                />\n        <tag id=\"1146\" name=\"maintenance\" url=\"https://marketplace.eclipse.org/free-tagging/maintenance\"\
+                />\n      </tags>\n      <owner>Missing name Mising name</owner>\n      <favorited>0</favorited>\n      <installstotal>0</installstotal>\n\
+                \      <installsrecent>0</installsrecent>\n      <shortdescription><![CDATA[The primary function of the SEA-QL\
+                \ is the fast and accurate search of Java-related software engineering artifacts using their properties and\
+                \ relations. \nSEA-QL’s unparalleled...]]></shortdescription>\n      <body><![CDATA[<p>The primary function\
+                \ of the SEA-QL is the fast and accurate search of Java-related software engineering artifacts using their\
+                \ properties and relations. </p>\n<p>SEA-QL’s unparalleled artifact search capability allows developers to\
+                \ save time and resources when searching through source code.</p>\n<p>* Quick: Find lists artifacts in seconds,\
+                \ not hours or days.<br>\n* Precise: Find exactly what you are looking for by defining search scope as generally\
+                \ or as detailed as you like.<br>\n* Flexible: Whether you are searching for a list of literals or projects,\
+                \ SEA-QL is the right tool to use.<br>\n* Scalable: SEA-QL can be used easily on programs with thousands or\
+                \ millions of lines of code. </p>]]></body>\n      <created>1283156211</created>\n      <changed>1336088269</changed>\n\
+                \      <foundationmember>0</foundationmember>\n      <homepageurl>http://www.seambase.com/products.htm</homepageurl>\n\
+                \      <image><![CDATA[https://marketplace.eclipse.org/modules/custom/eclipsefdn/eclipsefdn_marketplace/images/default-listing-img.png]]></image>\n\
+                \      <license>Commercial - Free</license>\n      <companyname><![CDATA[Seambase]]></companyname>\n     \
+                \ <status>Beta</status>\n      <supporturl><![CDATA[http://groups.google.com/group/seaql-beta]]></supporturl>\n\
+                \    </node>\n  </featured>\n</marketplace>\n"
+              schema:
+                $ref: '#/components/schemas/FeaturedListings'
+  /recent/api/p:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Recently Updated listings
+      description: This call will return a list of Recently Updated or Added Listings. By default this returns 6 listings.
+        The default is configured on the server. It is possible to use `page_num` to paginate through the results.
+      operationId: getRecentlyUpdatedListings
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <recent count="10">
+                    <node id="5293076" name="OpenAPI (Swagger) Editor" url="https://marketplace.eclipse.org/content/openapi-swagger-editor">
+                      <type>resource</type>
+                      <categories>
+                        <category id="6" name="Editor" url="https://marketplace.eclipse.org/listings/category/editor"/>
+                      </categories>
+                      <owner>42Crunch Platform</owner>
+                      <favorited>67</favorited>
+                      <installstotal>9741</installstotal>
+                      <installsrecent>274</installsrecent>
+                      <shortdescription><![CDATA[Provides support for editing the OpenAPI files (formerly known as Swagger). See documentation for more details.
+                Features
+
+                Supports versions 2.x and 3.x of OpenAPI.
+                Supports both...]]></shortdescription>
+                      <body><![CDATA[<p>Provides support for editing the <a href="https://github.com/OAI/OpenAPI-Specification" rel="nofollow">OpenAPI</a> files (formerly known as Swagger). See <a href="https://github.com/42Crunch/eclipse-openapi/blob/master/README.md" rel="nofollow">documentation</a> for more details.</p>
+                <h2>Features</h2>
+                <ul>
+                <li>Supports versions 2.x and 3.x of OpenAPI.</li>
+                <li>Supports both YAML and JSON formats.</li>
+                <li>Outline view</li>
+                <li>Go to Definition for $refs</li>
+                <li>Integrates with <a href="https://docs.42crunch.com/latest/content/concepts/api_contract_security_audit.htm" rel="nofollow">API Contract Security Audit</a> by 42Crunch, to check the quality of API definition.</li>
+                <li>Code snippets to add paths, operations, components, security</li>
+                </ul>]]></body>
+                      <created>1605123473</created>
+                      <changed>1709302035</changed>
+                      <foundationmember>0</foundationmember>
+                      <homepageurl>https://github.com/42Crunch/eclipse-openapi</homepageurl>
+                      <image><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/badge_logo/public/OpenAPIEditor_Symbol_110x80px.png?itok=UbiIf7CO]]></image>
+                      <screenshot><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/medium/public/Screenshot%202020-11-11%20at%2019.32.34.png?itok=f2qLCGDm]]></screenshot>
+                      <license>Other Open Source</license>
+                      <companyname><![CDATA[42Crunch]]></companyname>
+                      <status>Production/Stable</status>
+                      <supporturl><![CDATA[https://github.com/42Crunch/eclipse-openapi-editor/issues]]></supporturl>
+                      <version>1.0.66</version>
+                      <eclipseversion>4.31, 4.30, 4.29, 4.28, 4.27, 4.26, 4.25, 4.24, 4.23, 4.22, 4.21, 4.20, 4.19, 4.18, 4.17, 4.16</eclipseversion>
+                      <min_java_version>java_11</min_java_version>
+                      <updateurl>https://eclipse.42crunch.com/updatesite-1.0.66/</updateurl>
+                      <ius>
+                        <iu required="TRUE">com.xliic.openapi</iu>
+                        <iu required="TRUE">com.equo.chromium.feature</iu>
+                        <iu required="TRUE">com.equo.chromium.cef.feature</iu>
+                        <iu required="TRUE">com.equo.chromium.cef.arm.feature</iu>
+                      </ius>
+                      <platforms>
+                        <platform>Windows</platform>
+                        <platform>Mac</platform>
+                        <platform>Linux/GTK</platform>
+                      </platforms>
+                    </node>
+                  </recent>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/RecentListings'
+  /favorites/api/p:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Most Favorited listings
+      description: This call will return a list of the Most Favorited Listings. By default this returns 6 listings. The default
+        is configured on the server. It is possible to use `page_num` to paginate through the results.
+      operationId: getMostFavoritedListings
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <favorites count="10">
+                    <node id="3274405" name="Darkest Dark Theme with DevStyle" url="https://marketplace.eclipse.org/content/darkest-dark-theme-devstyle">
+                      <type>resource</type>
+                      <categories>
+                        <category id="24" name="IDE" url="https://marketplace.eclipse.org/listings/category/ide"/>
+                        <category id="18" name="UI" url="https://marketplace.eclipse.org/listings/category/ui"/>
+                      </categories>
+                      <tags>
+                        <tag id="3377" name="dark" url="https://marketplace.eclipse.org/free-tagging/dark"/>
+                        <tag id="121" name="theme" url="https://marketplace.eclipse.org/free-tagging/theme"/>
+                        <tag id="5117" name="Darkest Dark" url="https://marketplace.eclipse.org/free-tagging/darkest-dark"/>
+                        <tag id="3254" name="Genuitec" url="https://marketplace.eclipse.org/free-tagging/genuitec"/>
+                      </tags>
+                      <owner>Tim Webb</owner>
+                      <favorited>5352</favorited>
+                      <installstotal>2295102</installstotal>
+                      <installsrecent>12531</installsrecent>
+                      <shortdescription><![CDATA[Darkest Dark theme from DevStyle&nbsp;- a&nbsp;free plugin providing an enhanced set of experiences for Eclipse. Included:
+
+                Darkest Dark theme - #1 in the Marketplace:True dark theme with...]]></shortdescription>
+                      <body><![CDATA[<p><a href="https://www.genuitec.com/tech/darkest-dark/" rel="nofollow">Darkest Dark</a> theme from <a href="https://www.genuitec.com/products/devstyle/" rel="nofollow">DevStyle</a>&nbsp;- a&nbsp;free plugin providing an enhanced set of experiences for Eclipse. Included:</p>
+                <ul>
+                <li><strong>Darkest Dark theme - #1 in the Marketplace:</strong><br>True dark theme with flat replacement icons<br>A great experience over Windows, Mac and Linux<br>&nbsp;</li>
+                <li><strong>Included with&nbsp;</strong><a href="https://www.genuitec.com/products/devstyle/" rel="nofollow"><strong>DevStyle</strong></a><strong>:</strong><br>New light and dark color themes<br>All new startup experience for Eclipse<br>Inline search for text editors</li>
+                </ul>
+                <p><strong>​Entirely free to use! &nbsp;Get DevStyle today.</strong></p>]]></body>
+                      <created>1485885113</created>
+                      <changed>1706737859</changed>
+                      <foundationmember>1</foundationmember>
+                      <homepageurl>https://www.genuitec.com/products/devstyle/</homepageurl>
+                      <image><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/badge_logo/public/DARKESTdark-theme.png?itok=kfCOa7qw]]></image>
+                      <screenshot><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/medium/public/angulardarkest.png?itok=UBji1HP0]]></screenshot>
+                      <license>Commercial - Free</license>
+                      <companyname><![CDATA[CodeTogether Inc.]]></companyname>
+                      <status>Production/Stable</status>
+                      <supporturl><![CDATA[https://www.genuitec.com/forums/topics/darkest-dark/]]></supporturl>
+                      <version>2024.1.0</version>
+                      <eclipseversion>4.31, 4.30, 4.29, 4.28, 4.27, 4.26, 4.25, 4.24, 4.23, 4.22, 4.21, 4.20, 4.19, 4.18, 4.17, 4.16, 4.15, 4.14, 4.13, 4.12, 4.11, 4.10, 4.9, 4.8, 4.7</eclipseversion>
+                      <min_java_version>java_8</min_java_version>
+                      <updateurl>https://devstyle.codetogether.io</updateurl>
+                      <ius>
+                        <iu required="TRUE">com.genuitec.eclipse.theming.core.feature.feature.group</iu>
+                        <iu selected="TRUE">com.genuitec.eclipse.theming.feature.feature.group</iu>
+                        <iu selected="FALSE">com.genuitec.eclipse.theming.designer.feature.feature.group</iu>
+                      </ius>
+                      <platforms>
+                        <platform>Windows</platform>
+                        <platform>Mac</platform>
+                        <platform>Linux/GTK</platform>
+                      </platforms>
+                    </node>
+                  </favorites>
+                </marketplace>
+              schema:
+                $ref: '#/components/schemas/FavoritedListings'
+  /popular/api/p:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/client'
+      - $ref: '#/components/parameters/product'
+      - $ref: '#/components/parameters/os'
+      - $ref: '#/components/parameters/ws'
+      - $ref: '#/components/parameters/client-version'
+      - $ref: '#/components/parameters/product-version'
+      - $ref: '#/components/parameters/runtime-version'
+      - $ref: '#/components/parameters/platform-version'
+      - $ref: '#/components/parameters/java-version'
+      - $ref: '#/components/parameters/nl'
+      - $ref: '#/components/parameters/page-number'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Listings
+      summary: Popular listings
+      description: This call will return a list of Most Popular listing by activity. By default this returns 6 listings. The
+        default is configured on the server. It is possible to use `page_num` to paginate through the results.
+      operationId: getPopularListings
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: |
+                <marketplace>
+                  <popular count="10">
+                    <node id="1549" name="TestNG for Eclipse" url="https://marketplace.eclipse.org/content/testng-eclipse">
+                      <type>resource</type>
+                      <categories>
+                        <category id="16" name="Testing" url="https://marketplace.eclipse.org/listings/category/testing"/>
+                      </categories>
+                      <tags>
+                        <tag id="909" name="testng junit testing unit integration functional selenium" url="https://marketplace.eclipse.org/free-tagging/testng-junit-testing-unit-integration-functional-selenium"/>
+                      </tags>
+                      <owner>Cedric Beust</owner>
+                      <favorited>757</favorited>
+                      <installstotal>1970516</installstotal>
+                      <installsrecent>25471</installsrecent>
+                      <shortdescription><![CDATA[This plug-in lets you run your TestNG tests from Eclipse. You can run suites, groups or individual methods. Errors are reported in a separate tab that lets you jump to failing...]]></shortdescription>
+                      <body><![CDATA[<p>This plug-in lets you run your TestNG tests from Eclipse. You can run suites, groups or individual methods. Errors are reported in a separate tab that lets you jump to failing tests efficiently. The plug-in also contains several templates to create tests easily.</p>]]></body>
+                      <created>1277387503</created>
+                      <changed>1685424526</changed>
+                      <foundationmember>0</foundationmember>
+                      <homepageurl>https://testng.org</homepageurl>
+                      <image><![CDATA[https://marketplace.eclipse.org/modules/custom/eclipsefdn/eclipsefdn_marketplace/images/default-listing-img.png]]></image>
+                      <screenshot><![CDATA[https://marketplace.eclipse.org/sites/default/files/styles/medium/public/testng-eclipse.png?itok=S9juKoXo]]></screenshot>
+                      <license>Apache 2.0</license>
+                      <companyname><![CDATA[Cédric Beust]]></companyname>
+                      <status>Production/Stable</status>
+                      <supporturl><![CDATA[https://groups.google.com/group/testng-users/]]></supporturl>
+                      <version></version>
+                      <eclipseversion>4.9, 4.8, 4.7, 4.6, 4.5, 4.4, 4.3, 4.2, 4.1</eclipseversion>
+                      <min_java_version>java_6</min_java_version>
+                      <updateurl>https://testng.org/testng-eclipse-update-site</updateurl>
+                      <ius>
+                        <iu required="TRUE">org.testng.eclipse</iu>
+                        <iu selected="TRUE">org.testng.eclipse.maven.feature</iu>
+                      </ius>
+                      <platforms>
+                        <platform>Windows</platform>
+                        <platform>Mac</platform>
+                        <platform>Linux/GTK</platform>
+                      </platforms>
+                    </node>
+              schema:
+                $ref: '#/components/schemas/PopularListings'
+components:
+  parameters:
+    client:
+      name: client
+      in: query
+      description: This variable is usually sent from MPC to alter the default list. It's available for the Most Popular Listings,
+        Top Favorited Listings, Recently Updated Listings and Featured Listings. Only installable listings owned by an Eclipse
+        member company will be returned.
+      schema:
+        type: string
+        enum:
+        - org.eclipse.epp.mpc.core
+        - org.eclipse.smarthome
+        - org.eclipse.kura
+    product:
+      name: product
+      in: query
+      description: The product id of the target Eclipse, e.g. org.eclipse.sdk.ide or epp.package.java
+      schema:
+        type: string
+    os:
+      name: os
+      in: query
+      description: Operating system of the user.
+      schema:
+        type: string
+        enum:
+        - linux
+        - freebsd
+        - solaris
+        - win32
+        - win64
+        - windows
+        - macosx
+    ws:
+      name: ws
+      in: query
+      description: Window system of the user.
+      schema:
+        type: string
+        enum:
+        - gtk
+        - win32
+        - cocoa
+    product-version:
+      name: product_version
+      in: query
+      description: The version of the running product of the target Eclipse, identical to the version of the product's branding
+        plugin
+      schema:
+        type: string
+    runtime-version:
+      name: runtime_version
+      in: query
+      description: The version of the org.eclipse.core.runtime bundle of the target Eclipse
+      schema:
+        type: string
+    platform-version:
+      name: platform_version
+      in: query
+      description: (since Kepler/MPC 1.2) The version of the org.eclipse.platform bundle of the target Eclipse
+      schema:
+        type: string
+    page-number:
+      name: page_num
+      in: query
+      description: used for pagination to access additional results in a listing, the index start at 1. To get the second
+        page of results use page_num=2
+      schema:
+        type: integer
+    limit:
+      name: limit
+      in: query
+      description: The number of result returned for a listing (favorites, recent, search, etc.) integer between 0 and 20,
+        default to 10.
+      schema:
+        type: integer
+  schemas:
+    BaseNode:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier
+          xml:
+            attribute: true
+        url:
+          type: string
+          description: URL
+          xml:
+            attribute: true
+        name:
+          type: string
+          description: Title
+          xml:
+            attribute: true
+    BaseCategory:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: category
+        properties:
+          count:
+            type: integer
+            xml:
+              attribute: true
+    BaseTag:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: tag
+    PseudoBool:
+      type: integer
+      description: Boolean value represented by a 1 for true, 0 for false
+      enum:
+      - 1
+      - 0
+    Catalogs:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        catalogs:
+          type: array
+          xml:
+            name: catalogs
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Catalog'
+    Catalog:
+      type: object
+      properties:
+        selfContained:
+          allOf:
+          - $ref: '#/components/schemas/PseudoBool'
+          - xml:
+              attribute: true
+        icon:
+          type: string
+          format: url
+          description: Absolute URL of icon for catalog
+          xml:
+            attribute: true
+        description:
+          type: string
+          description: Short description
+        dependenciesRepository:
+          type: string
+          description: Location of dependencies repository
+        wizard:
+          type: object
+          properties:
+            icon:
+              type: string
+              format: url
+              description: Absolute URL of icon image for wizard
+              xml:
+                attribute: true
+            searchtab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+            populartab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+            recenttab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+            favoritestab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+                apiserver:
+                  type: string
+                  format: url
+                  xml:
+                    attribute: true
+            news:
+              type: object
+              properties:
+                shorttitle:
+                  type: string
+                  description: Title to include in tab for this section
+                  xml:
+                    attribute: true
+                timestamp:
+                  type: integer
+                  description: Seconds since epoch timestamp for when news source was updated
+                  xml:
+                    attribute: true
+    Markets:
+      type: array
+      xml:
+        name: marketplace
+        wrapped: true
+      items:
+        $ref: '#/components/schemas/Market'
+    Market:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: market
+        properties:
+          category:
+            $ref: '#/components/schemas/BaseCategory'
+    CategoryWithListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        category:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/BaseCategory'
+          - type: object
+            properties:
+              marketId:
+                type: integer
+                xml:
+                  attribute: true
+              node:
+                $ref: '#/components/schemas/Listing'
+    SearchResults:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        search:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            term:
+              type: string
+              description: Search keyword
+              xml:
+                attribute: true
+            url:
+              type: string
+              format: url
+              description: URL for site search page with term filled
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    FeaturedListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        featured:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    RecentListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        recent:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    FavoritedListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        favorites:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    PopularListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        popular:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    Listing:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: node
+        properties:
+          type:
+            type: string
+            description: This is the type of listing being returned. 'training' is for a Training and Consulting Listing,
+              'resource' is for a solutions listing.
+            enum:
+            - resource
+            - training
+          categories:
+            type: array
+            xml:
+              wrapped: true
+            items:
+              $ref: '#/components/schemas/BaseCategory'
+          tags:
+            type: array
+            xml:
+              wrapped: true
+            items:
+              $ref: '#/components/schemas/BaseTag'
+          owner:
+            type: string
+            description: Name of owner
+          favorited:
+            type: integer
+            description: Number of times a listing was favorited
+          installstotal:
+            type: integer
+            description: Install count
+          installsrecent:
+            type: integer
+            description: Install count for the last month
+          shortdescription:
+            type: string
+            description: Listing teaser
+          body:
+            type: string
+            description: Full description
+          created:
+            type: integer
+            description: Millis since epoch timestamp of creation time
+          changed:
+            type: integer
+            description: Millis since epoch timestamp of changed time
+          foundationmember:
+            type: integer
+            description: Boolean of whether owning company is a Foundation member
+            enum:
+            - 1
+            - 0
+          homepageurl:
+            type: string
+            description: Listing URL website
+          image:
+            type: string
+            format: url
+            description: Logo absolute URL
+          license:
+            type: string
+            description: Listing license
+          companyname:
+            type: string
+            description: Company name
+          status:
+            type: string
+            description: Release status
+          supporturl:
+            type: string
+            format: url
+            description: Support/documentation URL
+          version:
+            type: string
+            description: Version name
+          eclipseversion:
+            type: string
+            description: Eclipse release number (4.5, 4.4...)
+          updateurl:
+            type: string
+            format: url
+            description: Update site URL
+          ius:
+            type: array
+            description: |
+              Feature ID's are used by the Eclipse Marketplace Client (MPC) to determine which features to install for your listing https://marketplace-staging.eclipse.org/feature-how-to
+
+              This field additionally contains text data that cannot be represented in XML by the OpenAPI specification. The inner data of the node will contain the feature ID, like below:
+
+              \<iu selected="TRUE"\>org.zeroturnaround.eclipse.feature\</iu\>
+            xml:
+              wrapped: true
+            items:
+              type: object
+              xml:
+                name: iu
+              properties:
+                selected:
+                  type: boolean
+                  xml:
+                    attribute: true
+                required:
+                  type: boolean
+                  xml:
+                    attribute: true
+          platforms:
+            type: array
+            description: Compatible OS (Windows, Mac, Linux/GTK)
+            xml:
+              wrapped: true
+            items:
+              type: string
+              enum:
+              - Windows
+              - Mac
+              - Linux/GTK
+              xml:
+                name: platform

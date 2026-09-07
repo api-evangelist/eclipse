@@ -1,0 +1,328 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Eclipse Foundation Mailing List API",
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org/foundation/mailing-list",
+      "description": "Production endpoint for the membership portal data"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Mailing Lists",
+      "description": "Definitions in relation to retrieval of mailing lists"
+    }
+  ],
+  "paths": {
+    "": {
+      "parameters": [
+        {
+          "name": "username",
+          "in": "query",
+          "description": "The user id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Mailing Lists"
+        ],
+        "summary": "Mailing Lists",
+        "description": "Returns a list of organizations from the Eclipse API",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailingLists"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/available": {
+      "get": {
+        "tags": [
+          "Mailing Lists"
+        ],
+        "summary": "Available Mailing Lists",
+        "description": "Returns a list of mailing lists available for subscription",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailingLists"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/{listName}": {
+      "parameters": [
+        {
+          "name": "listName",
+          "in": "path",
+          "description": "The name of the mailing list to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Mailing Lists"
+        ],
+        "summary": "Mailing List",
+        "description": "Returns a list of organizations from the Eclipse API",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailingLists"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/projects": {
+      "get": {
+        "tags": [
+          "Mailing Lists"
+        ],
+        "summary": "Projects Mailing Lists",
+        "description": "Returns a list of mailing lists mapped to project IDs",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailingListMapping"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/projects/available": {
+      "get": {
+        "tags": [
+          "Mailing Lists"
+        ],
+        "summary": "Available Projects Mailing Lists",
+        "description": "Returns a list of mailing lists available for subscription mapped to project IDs",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailingListMapping"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}": {
+      "parameters": [
+        {
+          "name": "projectID",
+          "in": "path",
+          "description": "The ID of the project to retrieve mailing lists for",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Mailing Lists"
+        ],
+        "summary": "Project Mailing Lists",
+        "description": "Returns a list of organizations from the Eclipse API",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailingLists"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "openId": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration"
+      }
+    },
+    "schemas": {
+      "NullableString": {
+        "description": "A nullable String type value",
+        "type": [
+          "null",
+          "string"
+        ]
+      },
+      "DateTime": {
+        "type": "string",
+        "format": "datetime",
+        "description": "Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.\n\nMore on this standard can be read at https://tools.ietf.org/html/rfc3339.\n"
+      },
+      "MailingLists": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/MailingList"
+        }
+      },
+      "MailingList": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "list_name",
+          "project_id",
+          "create_archives",
+          "is_for_news_archives",
+          "is_deleted",
+          "is_disabled",
+          "is_private",
+          "is_subscribable"
+        ],
+        "properties": {
+          "list_name": {
+            "type": "string",
+            "description": "Name of the mailing list"
+          },
+          "list_description": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "Description of the purpose of the mailing list"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the mailing list"
+          },
+          "url": {
+            "type": "string",
+            "description": "Public URL containing records of communication on the mailing list"
+          },
+          "project_id": {
+            "type": "string",
+            "description": "Project that the mailing list is associated with, if any"
+          },
+          "list_short_description": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "placeholder"
+          },
+          "create_archives": {
+            "type": "boolean",
+            "description": "placeholder"
+          },
+          "is_for_news_archives": {
+            "type": "boolean",
+            "description": "placeholder"
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "description": "Whether the mailbox has been removed and this represents a historical list."
+          },
+          "is_disabled": {
+            "type": "boolean",
+            "description": "Whether the mailing list in question is currently active, or has been disabled from distributing messages"
+          },
+          "is_private": {
+            "type": "boolean",
+            "description": "placeholder"
+          },
+          "is_subscribable": {
+            "type": "boolean",
+            "description": "Whether users can currently subscribe to this mailing list"
+          },
+          "create_date": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "created_by": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "placeholder"
+          },
+          "provision_status": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "placeholder"
+          },
+          "count": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "The number of subscribers for the given list. Only included on singular calls."
+          }
+        }
+      },
+      "MailingListMapping": {
+        "type": "object",
+        "propertyNames": {
+          "pattern": "^\\d+$",
+          "description": "Project IDs the mailing lists are mapped to"
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/MailingLists"
+        }
+      }
+    }
+  }
+}

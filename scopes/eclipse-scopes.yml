@@ -1,0 +1,141 @@
+generated: '2026-09-07'
+method: searched
+source: openapi/ (18 harvested first-party OpenAPIs) + live OpenID Provider Metadata from the two auth.eclipse.org
+  Keycloak realms
+schemes:
+- name: OAuth2
+  source: openapi/eclipse-openvsx-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://accounts.eclipse.org/oauth2/authorize
+    tokenUrl: https://accounts.eclipse.org/oauth2/token
+- name: OAuth2
+  source: openapi/eclipse-profile-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://accounts.eclipse.org/oauth2/token
+- name: oauth2
+  source: openapi/eclipse-restful-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://accounts.php55.dev.docker/oauth2/authorize
+    tokenUrl: https://accounts.php55.dev.docker/oauth2/token
+  description: 'Get access to data while protecting your account credentials.
+
+    OAuth2 is also a safer and more secure way to give you access.'
+scopes:
+- scope: eclipsefdn_view_all_profiles
+  description: Access private profile information
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/eclipse-profile-api-openapi.yml
+- scope: email
+  description: View your email address.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/eclipse-openvsx-api-openapi.yml
+- scope: openid
+  description: Know who you are on accounts.eclipse.org.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/eclipse-openvsx-api-openapi.yml
+- scope: openvsx_publisher_agreement
+  description: Submit and revoke your open-vsx.org publisher agreement.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/eclipse-openvsx-api-openapi.yml
+- scope: profile
+  description: View basic information about your account.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/eclipse-openvsx-api-openapi.yml
+- scope: read
+  description: Grants read access
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/eclipse-restful-api-openapi.yml
+- scope: write
+  description: Grants write access
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/eclipse-restful-api-openapi.yml
+- scope: committer_paperwork_retrieve
+  description: Read a committer's paperwork records.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - well-known/eclipse-auth-document-signature-openid-configuration.json
+  issuer: https://auth.eclipse.org/auth/realms/document-signature
+  method: searched
+- scope: committer_paperwork_update
+  description: Create or update a committer's paperwork records.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - well-known/eclipse-auth-document-signature-openid-configuration.json
+  issuer: https://auth.eclipse.org/auth/realms/document-signature
+  method: searched
+- scope: committer_paperwork_delete
+  description: Delete a committer's paperwork records.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - well-known/eclipse-auth-document-signature-openid-configuration.json
+  issuer: https://auth.eclipse.org/auth/realms/document-signature
+  method: searched
+- scope: eclipsefdn_create_documents
+  description: Create Eclipse Foundation documents for signature.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - well-known/eclipse-auth-document-signature-openid-configuration.json
+  issuer: https://auth.eclipse.org/auth/realms/document-signature
+  method: searched
+docs: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration
+note: 'Upgraded from derived to searched. The OpenAPI securitySchemes name only 7 scopes; the Keycloak discovery
+  documents publish the authoritative scopes_supported for each realm, including four Eclipse-specific paperwork/document
+  scopes that appear in NO OpenAPI. Those are added below with source: openid-configuration.'
+standard_scopes:
+  note: Standard OIDC scopes both realms support, listed for completeness; not Eclipse-specific.
+  foundation:
+  - openid
+  - profile
+  - email
+  - phone
+  - address
+  - roles
+  - offline_access
+  - acr
+  - basic
+  - web-origins
+  - service_account
+  - microprofile-jwt
+  document-signature:
+  - openid
+  - profile
+  - email
+  - phone
+  - address
+  - roles
+  - offline_access
+  - acr
+  - basic
+  - web-origins
+  - service_account
+  - microprofile-jwt
+summary:
+  eclipse_specific_scopes: 7
+  declared_in_openapi: 7
+  discovered_only_in_openid_configuration: 4
+  total_documented: 11

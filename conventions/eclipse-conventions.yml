@@ -1,0 +1,224 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  openapi/ (18 first-party OpenAPIs harvested 2026-09-07 from https://webdev.eclipse.org/docs/api/
+  and https://open-vsx.org/v3/api-docs), cross-linked to authentication/, scopes/, errors/,
+  lifecycle/ and rate-limits/ in this repo.
+provider: Eclipse Foundation
+providerId: eclipse
+description: >-
+  Cross-cutting runtime semantics for the Eclipse Foundation API surface. There is no single
+  published "API conventions" document; this profile is computed from the 294 operations the
+  Foundation actually publishes across 18 specifications and two distinct engineering estates —
+  the Eclipse Foundation IT APIs (api.eclipse.org, membership.eclipse.org, Quarkus/Java) and the
+  Eclipse Open VSX registry (open-vsx.org, Spring Boot) — which do NOT share conventions.
+
+auth_style:
+  summary: >-
+    Three coexisting models. Most read operations are fully anonymous. Foundation write operations
+    use OpenID Connect against one of two Keycloak realms on auth.eclipse.org. Open VSX writes use
+    a personal access token passed as a query parameter.
+  models:
+    - model: anonymous
+      applies_to: Marketplace, Newsroom, Projects PMI, Downloads, GeoIP, Project Adopters, and all Open VSX read operations
+    - model: openIdConnect
+      issuers:
+        - https://auth.eclipse.org/auth/realms/foundation
+        - https://auth.eclipse.org/auth/realms/document-signature
+      applies_to: Mailing Lists, Membership Portal, Membership Application, Working Groups, Committer Paperwork, HelloSign
+    - model: oauth2
+      applies_to: Open VSX publisher agreement, Profile API (clientCredentials), Eclipse RESTful API
+      note: authorizationUrl/tokenUrl on accounts.eclipse.org, which publishes no discovery document.
+    - model: personal-access-token
+      applies_to: Open VSX publish / namespace / verify-pat operations
+      transport: '`token` query parameter (env var OVSX_PAT for the ovsx CLI)'
+  see: authentication/eclipse-authentication.yml
+
+idempotency:
+  coverage: partial
+  scope:
+    - 'Update/createBlobs — PUT /uss/blob/{application_token}/{blob_key} (Eclipse RESTful API, USS blob store) — guarded by If-Match'
+    - 'DeleteBlobs — DELETE /uss/blob/{application_token}/{blob_key} (Eclipse RESTful API, USS blob store) — guarded by If-None-Match'
+  mechanism: >-
+    RFC 7232 conditional requests (If-Match / If-None-Match against an Etag), NOT an
+    Idempotency-Key header. The mechanism gives optimistic-concurrency safety on the two USS blob
+    operations only; it is a lost-update guard, not a replay guard.
+  idempotency_key_header: null
+  replay_protection: none
+  detail: >-
+    The string "idempoten" appears nowhere in any of the 18 published specifications. Of 83
+    mutating operations across the surface, 2 (2.4%) carry any concurrency or replay control. The
+    remaining 81 POST/PUT/PATCH/DELETE operations — including Open VSX `publish`, `createNamespace`
+    and `deleteExtension`, and every Membership Portal and Membership Application write — offer an
+    agent no way to distinguish a retry from a second intent. Retrying a timed-out
+    `POST /api/user/publish` is not safe.
+  evidence:
+    - openapi/eclipse-restful-api-openapi.yml
+    - openapi/eclipse-open-vsx-registry-api-openapi.yml
+
+reversibility:
+  grade: documented
+  detail: >-
+    Reversal operations exist and are published in the contract for most destructive actions, but
+    the Eclipse Foundation states no time window for any of them. Nothing in the specifications or
+    the docs site defines a retention period, a restore path, or a point after which a delete
+    becomes permanent — so an agent can see that an action is reversible in principle without
+    knowing for how long. Graded `documented` (reversal path present, window absent) rather than
+    `verified`.
+  surfaces:
+    - write: 'Open VSX publish — POST /api/user/publish (publish)'
+      reversal: 'POST /user/extension/{namespaceName}/{extensionName}/delete (deleteExtension)'
+      window: null
+      window_source: null
+      note: >-
+        Unpublishing removes the extension version; the specification states no cooling-off period
+        and no restore operation. There is no undelete.
+    - write: 'Open VSX namespace creation — POST /api/user/namespace/create (createNamespace)'
+      reversal: null
+      window: null
+      note: No delete-namespace operation is published for a non-admin user. Namespace creation is not user-reversible.
+    - write: 'Open VSX publisher contributions — POST /admin/api/publisher/bulk-revoke (revokeBulkPublishers)'
+      reversal: null
+      window: null
+      note: Admin-only. Bulk revocation has no published inverse.
+    - write: 'Open VSX access token — POST /user/token/create (createAccessToken)'
+      reversal: 'POST /user/token/delete/{id} (deleteAccessToken)'
+      window: null
+      note: Immediate and permanent; a deleted token cannot be restored.
+    - write: 'Committer paperwork — POST/PUT on /{username} (create/update paperwork)'
+      reversal: 'DELETE /{username}/{id}'
+      window: null
+      note: Requires the committer_paperwork_delete scope.
+    - write: 'Membership application form — POST /form (Membership form create)'
+      reversal: 'DELETE /form/{id} (Membership form delete)'
+      window: null
+      note: >-
+        Child resources (contacts, organizations, working_groups) each have their own DELETE. No
+        window and no soft-delete/undo is documented.
+    - write: 'Open VSX publisher agreement — POST /publisher_agreement'
+      reversal: 'DELETE /publisher_agreement/{ef_username}'
+      window: null
+      scope_required: openvsx_publisher_agreement
+    - write: 'Profile deletion request — POST /account/profile/{name}/user_delete_request (CreateDeleteRequests)'
+      reversal: 'DELETE /account/user_delete_request/{request_id} (DeleteDeleteRequest)'
+      window: null
+      note: >-
+        The only two-phase destructive flow on the surface — a deletion REQUEST is created, and can
+        itself be withdrawn, before the account is erased. The interval between request and
+        erasure is exactly the reversibility window an agent needs, and it is not published.
+  summary:
+    write_operations: 83
+    with_published_reversal: 24
+    with_stated_window: 0
+
+pagination:
+  styles:
+    - style: page-number
+      params: [page, pagesize]
+      applies_to: >-
+        Eclipse Foundation IT APIs — Membership Portal, Membership Application, Working Groups,
+        Info, Mailing Lists, Profile (16 operations)
+      response_signal: 'RFC 8288 `Link` header with rel=next/prev/first/last (18 responses declare it)'
+      envelope: 'Bare JSON array in the body; pagination lives entirely in the Link header.'
+    - style: offset-limit
+      params: [offset, size]
+      applies_to: Open VSX Registry API search and query operations (`/api/-/search`, `/api/v2/-/query`)
+      response_signal: 'Envelope fields `offset`, `totalSize` on QueryResult / SearchResult'
+    - style: page-number
+      params: [page, pagesize]
+      applies_to: Marketplace REST API listing endpoints
+      response_signal: XML attributes on the returned <marketplace> document
+  note: >-
+    The two estates disagree. A client that paginates Eclipse Foundation IT APIs by Link header
+    cannot reuse that code against Open VSX, which paginates by offset/size in the body envelope
+    and emits no Link header.
+  sort_params: [order_by, sortBy, sortOrder]
+
+error_envelope:
+  shape: Eclipse Error object (proprietary)
+  format: application/json
+  rfc9457: false
+  fields:
+    - name: status_code
+      type: integer
+      required: true
+      description: HTTP response code, repeated in the body.
+    - name: message
+      type: string
+      required: true
+      description: Message containing error information.
+    - name: url
+      type: string|null
+      required: false
+    - name: friendly_message
+      type: string|null
+      required: false
+      description: Optional client-friendly message. Present on the Info API Error schema; absent from the Membership Portal one.
+  detail: >-
+    The same schema name `Error` is defined independently in 8 specifications with two different
+    field sets and two different `required` lists, and neither is RFC 9457 problem+json. Open VSX
+    does not use it at all — its failures return the ordinary success schema with an `error` string
+    field populated.
+  see: errors/eclipse-problem-types.yml
+
+rate_limit_signaling:
+  headers_declared: true
+  detail: >-
+    Rate-limit headers are declared in the contract on 256 responses, but under two spellings that
+    are not interchangeable.
+  variants:
+    - headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After]
+      responses: 256
+      applies_to: Open VSX Registry API
+      exhaustion_status: 429
+    - headers: [X-Rate-Limit-Limit, X-Rate-Limit-Remaining, X-Rate-Limit-Reset]
+      responses: 31
+      applies_to: Eclipse Foundation IT APIs
+      exhaustion_status: not declared
+      note: >-
+        Hyphenated `X-Rate-Limit-*`. A client parsing `X-RateLimit-Remaining` reads nothing here,
+        and vice versa. Neither variant is the RFC 9331 `RateLimit-*` form.
+  see: rate-limits/eclipse-rate-limits.yml
+
+caching_and_concurrency:
+  etag: true
+  headers: [Etag, Last-Modified, If-None-Match, If-Modified-Since, If-Match]
+  detail: >-
+    Etag is emitted on 3 responses and Last-Modified on 1, all in the Eclipse RESTful API USS blob
+    store. Conditional request headers are accepted on 4 operations there. No other API on the
+    surface supports conditional GET.
+
+versioning:
+  scheme: none-in-path
+  detail: >-
+    No API on the surface carries a version segment in its base path, with one exception: Open VSX
+    ships `/api/v2/-/query` alongside `/api/-/query` and marks the v1 POST form deprecated. Version
+    is otherwise carried only in `info.version` of each specification (1.0, 1.0.0 and 1.1.0 are all
+    in use) and, for Open VSX, is readable at runtime from `GET /api/version` (getRegistryVersion).
+  runtime_version_endpoint: 'GET https://open-vsx.org/api/version'
+  see: lifecycle/eclipse-lifecycle.yml
+
+request_id_tracing:
+  supported: false
+  detail: >-
+    No correlation, request-id or trace header is declared on any request or response across the
+    294 operations. Inbound GitHub webhooks carry X-GitHub-Delivery, but that is GitHub's
+    identifier for GitHub's delivery, not an Eclipse request id a caller can quote in support.
+
+field_expansion:
+  supported: false
+  detail: >-
+    No sparse-fieldset, `fields=` or `expand=` parameter exists on the surface. Open VSX offers
+    `includeAllVersions` and `targetPlatform` as response-shaping switches on extension reads,
+    which is the closest thing to expansion the surface provides.
+
+content_negotiation:
+  detail: >-
+    Mixed. Marketplace REST returns application/xml only. Newsroom returns JSON and declares a 406
+    for unacceptable Accept values. Everything else is JSON. Open VSX additionally serves
+    application/octet-stream for extension file downloads and image/png|jpeg for logos, including
+    on some error paths.
+
+dry_run_mode:
+  supported: false
+  detail: No operation accepts a dry-run, preview, validate-only or simulate parameter.

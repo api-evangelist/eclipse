@@ -1,0 +1,60 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  https://www.npmjs.com/package/openvsx-webui, https://github.com/eclipse-openvsx/openvsx (webui/),
+  https://github.com/eclipse-theia/theia
+provider: Eclipse Foundation
+providerId: eclipse
+description: >-
+  Embeddable client-side components the Eclipse Foundation publishes against its own API surface.
+  These are distinct from the SDKs in packages/: each one is a rendering surface a downstream
+  deployment mounts, not a request wrapper. Both belong to Eclipse Open VSX; the Foundation IT APIs
+  ship no component library.
+families:
+  - family: Open VSX Registry UI
+    api: Open VSX Registry API
+    description: >-
+      The complete open-vsx.org front end, published as a reusable React library so any
+      organisation running its own Open VSX deployment can mount the same marketplace UI against
+      its own registry server rather than rebuilding one.
+    loader:
+      package: openvsx-webui
+      registry: npm
+      url: https://www.npmjs.com/package/openvsx-webui
+      version: 1.1.2
+      published: '2026-08-20'
+      license: EPL-2.0
+      type: react-component-library
+      note: Not a script tag or CDN bundle — it is consumed as a build-time dependency.
+    components:
+      - name: Extension list / search results
+        description: Paginated, faceted extension browse and search view backed by GET /api/-/search.
+      - name: Extension detail page
+        description: Version selector, target-platform picker, README/changelog tabs and download action.
+      - name: Namespace detail page
+        description: Namespace ownership, membership and published-extension views.
+      - name: User settings
+        description: Personal access token management and publisher agreement surfaces.
+    hosted_reference: https://open-vsx.org
+  - family: Theia VS Extension registry widget
+    api: Open VSX Registry API
+    description: >-
+      The extension-marketplace panel inside the Eclipse Theia IDE — an embeddable IDE-side
+      component that searches, installs and updates extensions from Open VSX.
+    loader:
+      package: '@theia/vsx-registry'
+      registry: npm
+      url: https://www.npmjs.com/package/@theia/vsx-registry
+      version: 1.75.0
+      published: '2026-08-27'
+      type: theia-extension
+      note: >-
+        First-party by Eclipse Foundation project ownership (Eclipse Theia), not by the Open VSX
+        team; it versions on Theia's release train. Pairs with the @theia/ovsx-client library
+        recorded in packages/.
+gaps:
+  - >-
+    No embeddable component exists for any Eclipse Foundation IT API. There is no widget, web
+    component or embed for the Marketplace, Newsroom, Projects PMI or Membership APIs — the
+    marketplace.eclipse.org and projects.eclipse.org front ends are server-rendered Drupal and are
+    not published as libraries.

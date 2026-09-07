@@ -23,6 +23,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "eclipse-eclipse-marketplace-rest-api-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "eclipse-favorites-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "eclipse-featured-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "eclipse-node-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "eclipse-popular-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "eclipse-recent-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "eclipse-search-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "eclipse-taxonomy-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }

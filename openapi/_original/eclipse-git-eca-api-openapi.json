@@ -1,0 +1,1010 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.1.0",
+    "title": "Eclipse Foundation Git ECA API",
+    "description": "Collection of API endpoints used in the validation and management of external Git services, such as Gitlab and Github.",
+    "contact": {
+      "name": "IT support",
+      "url": "https://gitlab.eclipse.org/eclipsefdn/it/api/git-eca-rest-api/-/issues"
+    },
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org/git",
+      "description": "Production endpoint for the Git ECA validation API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ECA Validation",
+      "description": "Definitions in relation to the validation of Git commits through ECA signage"
+    },
+    {
+      "name": "Contributions",
+      "description": "Definitions in relation to contributions tracked through ECA validation"
+    },
+    {
+      "name": "Reports",
+      "description": "Reports on metadata associated with Git systems managed by the Eclipse Foundation"
+    },
+    {
+      "name": "Integration Webhooks",
+      "description": "Endpoints related to binding to external Git services through a webhook"
+    }
+  ],
+  "paths": {
+    "/eca": {
+      "post": {
+        "operationId": "validate",
+        "tags": [
+          "ECA Validation"
+        ],
+        "summary": "ECA validation",
+        "description": "Validates a list of commits for a merge request.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/eca/status/{fingerprint}": {
+      "parameters": [
+        {
+          "name": "fingerprint",
+          "in": "path",
+          "description": "Unique ID for the request group",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getCommitValidation",
+        "tags": [
+          "ECA Validation"
+        ],
+        "summary": "Historic ECA validation status",
+        "description": "Returns a set of validation messages for the given unique fingerprint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommitValidationStatuses"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/eca/status/{fingerprint}/ui": {
+      "parameters": [
+        {
+          "name": "fingerprint",
+          "in": "path",
+          "description": "Unique ID for the request group",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getCommitValidationUI",
+        "tags": [
+          "ECA Validation"
+        ],
+        "summary": "Historic ECA validation status in a HTML format",
+        "description": "Returns an HTMl page containing validation messages",
+        "responses": {
+          "200": {
+            "description": "Success. An HTML page containing status info"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/eca/lookup": {
+      "parameters": [
+        {
+          "name": "q",
+          "in": "query",
+          "description": "Query string containing either email or username. Email is only valid for logged in committers/project leads",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "email",
+          "in": "query",
+          "deprecated": true,
+          "description": "Email is only valid for logged in committers/project leads. For removal at the end of 2024.",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getUserStatus",
+        "tags": [
+          "ECA Validation"
+        ],
+        "summary": "User status lookup",
+        "description": "Returns wether or not the user has a signed ECA",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "403": {
+            "description": "User exists with no ECA"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/eca/contributions/{username}/latest-contribution": {
+      "parameters": [
+        {
+          "name": "username",
+          "in": "path",
+          "description": "The Eclipse Foundation account username to retrieve the latest contribution for",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getLatestContributionForUser",
+        "tags": [
+          "Contributions"
+        ],
+        "summary": "Latest known contribution for a user",
+        "description": "Returns the most recent contribution validated by the ECA for the given user, as determined by the validation creation date.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommitValidationStatus"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - no user exists for the given username, the user is blocked, or the user has no tracked contributions"
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/webhooks/github": {
+      "post": {
+        "operationId": "processGithubWebhook",
+        "tags": [
+          "Integration Webhooks"
+        ],
+        "summary": "Github incoming hook event processing",
+        "description": "Process incoming pull request hook events from Github",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-GitHub-Delivery",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "X-GitHub-Event",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "X-GitHub-Hook-ID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GithubWebhookEvent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error while processing data"
+          }
+        }
+      }
+    },
+    "/webhooks/github/revalidate/{fingerprint}": {
+      "parameters": [
+        {
+          "name": "fingerprint",
+          "in": "path",
+          "description": "Unique ID for the request group",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "revalidateWebhookRequest",
+        "tags": [
+          "Integration Webhooks"
+        ],
+        "summary": "Gitlab webhook revalidation request",
+        "description": "Process incoming system hooks from GitLab",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/RevalidationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/webhooks/gitlab/system": {
+      "post": {
+        "operationId": "processGitlabHook",
+        "tags": [
+          "Integration Webhooks"
+        ],
+        "summary": "Gitlab event processing",
+        "description": "Process incoming system hooks from GitLab",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Gitlab-Event",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemHook"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error while processing data"
+          }
+        }
+      }
+    },
+    "/reports/gitlab/private-projects": {
+      "parameters": [
+        {
+          "name": "key",
+          "in": "query",
+          "description": "The endpoint access key",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "description": "the project's current status - active/deleted",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "since",
+          "in": "query",
+          "description": "Starting date range for project creation date - yyyy-MM-dd",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "until",
+          "in": "query",
+          "description": "Ending date range for project creation date - yyyy-MM-dd",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getPrivateProjectEvents",
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Gitlab private project event report",
+        "description": "Returns list of private project events using desired filters",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateProjectEvents"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - invalid non-null prams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - invalid key"
+          },
+          "500": {
+            "description": "Error while processing request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NullableString": {
+        "description": "A nullable String type value",
+        "type": [
+          "null",
+          "string"
+        ]
+      },
+      "DateTime": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.\n\nMore on this standard can be read at https://tools.ietf.org/html/rfc3339.\n"
+      },
+      "NullableDateTime": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.\n\nMore on this standard can be read at https://tools.ietf.org/html/rfc3339.\n"
+      },
+      "ValidationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "provider",
+          "repoUrl",
+          "strictMode",
+          "commits"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "description": "The provider for which the commit is being validated for",
+            "enum": [
+              "github",
+              "gitlab",
+              "gerrit"
+            ]
+          },
+          "repoUrl": {
+            "type": "string",
+            "description": "the outward facing URL of the repo the commit belongs to."
+          },
+          "strictMode": {
+            "type": "boolean",
+            "description": "Whether to strictly apply validation regardless of project matching"
+          },
+          "estimatedLoc": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The estimated LOC changed by the set of commits sent for validation."
+          },
+          "commits": {
+            "type": "array",
+            "minimum": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "hash",
+                "author",
+                "committer",
+                "parents"
+              ],
+              "properties": {
+                "hash": {
+                  "type": "string",
+                  "description": "The hash of the commit. Used for messaging and logging."
+                },
+                "body": {
+                  "$ref": "#/components/schemas/NullableString",
+                  "description": "The body message of the commit if available"
+                },
+                "subject": {
+                  "$ref": "#/components/schemas/NullableString",
+                  "description": "The subject of the commit"
+                },
+                "author": {
+                  "$ref": "#/components/schemas/GitUser",
+                  "description": "The author of the Git commit"
+                },
+                "committer": {
+                  "$ref": "#/components/schemas/GitUser",
+                  "description": "The committer of the Git commit"
+                },
+                "last_modification_date": {
+                  "$ref": "#/components/schemas/NullableDateTime",
+                  "description": "Last time that the commit was updated"
+                },
+                "head": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
+                  "description": "True if the current commit is the head commit, false otherwise"
+                },
+                "parents": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Parent commit hashes, multiple will be present for merge commits"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GitUser": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "mail"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the git user"
+          },
+          "mail": {
+            "type": "string",
+            "description": "the email address of the user"
+          },
+          "external_id": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "the email address of the user"
+          }
+        }
+      },
+      "ValidationResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time",
+          "trackedProject",
+          "strictMode",
+          "fingerprint",
+          "errorCount",
+          "passed",
+          "commits"
+        ],
+        "properties": {
+          "time": {
+            "$ref": "#/components/schemas/DateTime",
+            "description": "Time of the request validation for logging/tracking purposes."
+          },
+          "trackedProject": {
+            "type": "boolean",
+            "description": "Whether the project is tracked in PMI and is an Eclipse project."
+          },
+          "strictMode": {
+            "type": "boolean",
+            "description": "Whether strict mode was enforced for the validation."
+          },
+          "fingerprint": {
+            "type": "string",
+            "description": "The unique fingerprint to use when looking up commit data"
+          },
+          "errorCount": {
+            "type": "integer",
+            "description": "The number of errors encountered while validating the request"
+          },
+          "passed": {
+            "type": "boolean",
+            "description": "Whether the current request is valid in relation to ECA signage."
+          },
+          "commits": {
+            "type": "object",
+            "propertyNames": {
+              "description": "The commit hash of the commit that was validated"
+            },
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Commit"
+            }
+          }
+        }
+      },
+      "Commit": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "errors",
+          "warnings",
+          "messages"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "List of informational messages about the validation of the current commit.",
+            "items": {
+              "$ref": "#/components/schemas/CommitMessage"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "description": "List of non-fatal issues encountered in the validation of the current commit",
+            "items": {
+              "$ref": "#/components/schemas/CommitMessage"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "description": "List of errors encountered in the validation of the current commit",
+            "items": {
+              "$ref": "#/components/schemas/CommitMessage"
+            }
+          }
+        }
+      },
+      "CommitMessage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "the internal status code for the message"
+          },
+          "message": {
+            "type": "string",
+            "description": "Information about the commit message. This can either be information about the validation process to report or the source of an error to be corrected."
+          }
+        }
+      },
+      "CommitValidationStatuses": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/CommitValidationStatus"
+        }
+      },
+      "CommitValidationStatus": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "commit_hash",
+          "project",
+          "repo_url",
+          "provider",
+          "creation_date",
+          "last_modified",
+          "errors"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "internal ID of the commit for tracking"
+          },
+          "commit_hash": {
+            "type": "string",
+            "description": "the SHA of the commit that was validated"
+          },
+          "user_mail": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "the email of the user associated with the status"
+          },
+          "estimated_loc": {
+            "type": "integer",
+            "description": "the estimated number of lines of code changed by commit if available."
+          },
+          "project": {
+            "type": "string",
+            "description": "The short project ID of the project that was detected for the commit, if it exists."
+          },
+          "repo_url": {
+            "type": "string",
+            "description": "the outward facing URL of the repo the commit belongs to."
+          },
+          "provider": {
+            "type": "string",
+            "description": "The provider for which the commit is being validated for",
+            "enum": [
+              "github",
+              "gitlab",
+              "gerrit"
+            ]
+          },
+          "creation_date": {
+            "$ref": "#/components/schemas/DateTime",
+            "description": "Time that the commit was first attempted to be validated"
+          },
+          "last_modified": {
+            "$ref": "#/components/schemas/DateTime",
+            "description": "The latest tracked time of validation."
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommitValidationMessage"
+            }
+          }
+        }
+      },
+      "CommitValidationMessage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status_code",
+          "author_email"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "internal ID of the commit message for tracking"
+          },
+          "status_code": {
+            "type": "integer",
+            "description": "error code associated with the commit"
+          },
+          "eclipse_id": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "the Eclipse Foundation ID of the user"
+          },
+          "author_email": {
+            "type": "string",
+            "description": "Email address of the author of the commit for additional information"
+          },
+          "committer_email": {
+            "type": "string",
+            "description": "Email address of the committer of the commit for additional information"
+          },
+          "provider_id": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "the outward facing URL of the repo the commit belongs to."
+          }
+        }
+      },
+      "SystemHook": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "created_at",
+          "updated_at",
+          "event_name",
+          "name",
+          "owner_email",
+          "owner_name",
+          "owners",
+          "path",
+          "path_with_namespace",
+          "project_id",
+          "project_visibility"
+        ],
+        "properties": {
+          "created_at": {
+            "$ref": "#/components/schemas/DateTime",
+            "description": "Time of the project creation event"
+          },
+          "updated_at": {
+            "$ref": "#/components/schemas/DateTime",
+            "description": "Time indicating the last event occured"
+          },
+          "event_name": {
+            "type": "string",
+            "description": "The event type"
+          },
+          "name": {
+            "type": "string",
+            "description": "The project name"
+          },
+          "owner_email": {
+            "type": "string",
+            "description": "The namespace's email. If not user, will be empty"
+          },
+          "owner_name": {
+            "type": "string",
+            "description": "The namespace name (group, user)"
+          },
+          "owners": {
+            "type": "array",
+            "description": "The project owners",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The project owner user name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The project owner email"
+                }
+              }
+            }
+          },
+          "path": {
+            "type": "string",
+            "description": "The project path"
+          },
+          "path_with_namespace": {
+            "type": "string",
+            "description": "The project path with namespace"
+          },
+          "project_id": {
+            "type": "integer",
+            "description": "The project's gitlab id"
+          },
+          "project_visibility": {
+            "type": "string",
+            "description": "The project's visibility (public, private)"
+          },
+          "old_path_with_namespace": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The old path with namespace, only used in 'project_rename' hooks"
+          }
+        }
+      },
+      "PrivateProjectEvents": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PrivateProjectData"
+        }
+      },
+      "PrivateProjectData": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "user_id",
+          "project_id",
+          "project_path",
+          "ef_username",
+          "creation_date"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "the project creator's GitLab id"
+          },
+          "project_id": {
+            "type": "integer",
+            "description": "The project GitLab id"
+          },
+          "project_path": {
+            "type": "string",
+            "description": "the project's path with namespace"
+          },
+          "ef_username": {
+            "type": "string",
+            "description": "the user's EF account name"
+          },
+          "parent_project": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "the parent project if it exists. Indicates this project is a fork"
+          },
+          "creation_date": {
+            "type": "string",
+            "description": "The project creation date"
+          },
+          "deletion_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "the project deletion date if it was deleted"
+          }
+        }
+      },
+      "GithubWebhookEvent": {
+        "type": "object",
+        "properties": {
+          "installation": {
+            "type": "object",
+            "description": "Information about the Github App installation making this request",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The ID of the app installation that is making the validation request on behalf of the repository/user."
+              }
+            }
+          },
+          "repository": {
+            "type": "object",
+            "description": "Information about the repository that triggered this request",
+            "properties": {
+              "full_name": {
+                "type": "string",
+                "description": "The full name of the repository, including organization."
+              },
+              "html_url": {
+                "type": "string",
+                "description": "The link to the repository the event was triggered by"
+              }
+            }
+          },
+          "pull_request": {
+            "type": "object",
+            "description": "Information on the pull request that triggered this workflow.",
+            "properties": {
+              "number": {
+                "type": "int",
+                "description": "The numeric ID of the pull request that triggered the flow"
+              },
+              "head": {
+                "type": "object",
+                "properties": {
+                  "sha": {
+                    "type": "string",
+                    "description": "The SHA hash of the head of the pull request."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RevalidationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "h-form-captcha-response"
+        ],
+        "properties": {
+          "h-form-captcha-response": {
+            "type": "string",
+            "description": "the hCaptcha challenge response."
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status_code",
+          "message"
+        ],
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "description": "HTTP response code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message containing error information"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The URL"
+          },
+          "friendly_message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional friendly message for the error"
+          }
+        }
+      }
+    }
+  }
+}

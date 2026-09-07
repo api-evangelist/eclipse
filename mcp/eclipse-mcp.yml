@@ -1,0 +1,180 @@
+generated: '2026-09-07'
+method: derived
+source: 'Searched for an Eclipse Foundation hosted or packaged MCP server for the Eclipse Web APIs (2026-09-07): no
+  such server exists. Candidate tools below are DERIVED from openapi/ — the 18 first-party OpenAPIs harvested the
+  same day.'
+provider: Eclipse Foundation
+providerId: eclipse
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+description: The Eclipse Foundation ships no MCP server for its own API surface. An agent that wants to read Eclipse
+  project, marketplace, newsroom or Open VSX registry data must call the REST APIs directly. The tool list below is
+  a CANDIDATE derivation from published operationIds, offered as a starting point for anyone building such a server
+  — it is not a server that exists, and no endpoint may be inferred from it.
+search_findings:
+- No hosted MCP endpoint is published on any Eclipse host. mcp.eclipse.org does not exist, and no /mcp path is served
+  on api.eclipse.org, open-vsx.org, marketplace.eclipse.org or projects.eclipse.org.
+- No npm, PyPI or other registry package provides an MCP server for the Eclipse Web APIs.
+- IMPORTANT DISAMBIGUATION. Several Eclipse Foundation PROJECTS implement MCP, and none of them is an MCP surface
+  onto the Foundation's own APIs. Eclipse GLSP lets a graphical language server act as an MCP server for diagram editing;
+  Eclipse LMOS (Arc Framework) both consumes MCP tools and can act as an MCP server for agent workflows; eclipse-agents
+  runs an MCP server inside the Eclipse IDE JVM; the Eclipse IDE supports connecting GitHub Copilot to MCP servers.
+  All four are software the Foundation stewards for other people to run, not an agent door onto api.eclipse.org. Treating
+  any of them as this provider's MCP server would be wrong.
+- A third-party "AssistAI" listing on marketplace.eclipse.org exposes the Eclipse IDE as an MCP server. It is a community
+  plugin, not a Foundation-operated service.
+candidate_tools:
+  note: 'Derived tool sketches only. Each names the real published operation it would wrap, by operationId where the
+    specification declares one and by METHOD + path where it does not. The input schema of each tool would be that
+    operation''s parameters. No tool below has ever been served. NOTE: 4 of the 18 published specifications (Newsroom,
+    Downloads, GeoIP, Project Adopters) declare NO operationId on any operation, so those tools can only be bound
+    positionally — which is itself a barrier to generating an MCP server from these contracts.'
+  tools:
+  - tool: eclipse_list_projects
+    category: projects
+    rest:
+    - FetchProjects
+    path: GET /api/projects
+    api: Eclipse Projects PMI API
+    description: List Eclipse Foundation projects with metadata, licences, repositories and lifecycle phase.
+  - tool: eclipse_get_project
+    category: projects
+    rest:
+    - RetrieveAProject
+    path: GET /api/projects/{project_id}
+    api: Eclipse Projects PMI API
+    description: Retrieve one project by project_id, e.g. `technology.openvsx`.
+  - tool: eclipse_list_project_releases
+    category: projects
+    rest:
+    - FetchProjectReleases
+    path: GET /api/projects/{project_id}/releases
+    api: Eclipse Projects PMI API
+    description: List the release records a project has filed under the Eclipse Project Handbook process.
+  - tool: eclipse_list_project_adopters
+    category: projects
+    rest: []
+    path: GET /projects (https://api.eclipse.org/adopters)
+    api: Project Adopters API
+    description: List organisations that have declared adoption of an Eclipse project.
+    note: No operationId declared in the specification.
+  - tool: eclipse_search_marketplace
+    category: marketplace
+    rest:
+    - getListingSearchResults
+    path: GET /api/p/search/apachesolr_search/{query}
+    api: Eclipse Marketplace REST API
+    description: Search Eclipse Marketplace listings. Returns XML.
+  - tool: eclipse_get_marketplace_listing
+    category: marketplace
+    rest:
+    - getSingleListingByNodeId
+    - getSingleListing
+    path: GET /node/{nodeId}/api/p
+    api: Eclipse Marketplace REST API
+    description: Retrieve one marketplace listing by numeric node id or by listing title.
+  - tool: eclipse_list_marketplace_markets
+    category: marketplace
+    rest:
+    - getMarketsWithCategories
+    - getCatalogs
+    path: GET /api/p
+    api: Eclipse Marketplace REST API
+    description: List marketplace catalogs, markets and their categories.
+  - tool: eclipse_search_extensions
+    category: open-vsx
+    rest:
+    - search
+    - getQueryV2
+    path: GET /api/-/search
+    api: Open VSX Registry API
+    description: Search the Open VSX registry for VS Code-compatible extensions.
+  - tool: eclipse_get_extension
+    category: open-vsx
+    rest:
+    - getExtension
+    - getExtension_1
+    path: GET /api/{namespace}/{extension}
+    api: Open VSX Registry API
+    description: Retrieve an extension, optionally pinned to a version and target platform.
+  - tool: eclipse_list_extension_versions
+    category: open-vsx
+    rest:
+    - getVersions_1
+    - getVersions
+    path: GET /api/{namespace}/{extension}/versions
+    api: Open VSX Registry API
+    description: List published versions of an extension.
+  - tool: eclipse_get_registry_changes
+    category: open-vsx
+    rest:
+    - getChanges
+    path: GET /api/-/version-changes
+    api: Open VSX Registry API
+    description: Read the registry version-change feed — the only change stream on the surface.
+  - tool: eclipse_get_namespace
+    category: open-vsx
+    rest:
+    - getNamespace
+    - getNamespaceDetails
+    path: GET /api/{namespace}
+    api: Open VSX Registry API
+    description: Retrieve an Open VSX namespace and its published extensions.
+  - tool: eclipse_list_news
+    category: newsroom
+    rest: []
+    path: GET /api/news
+    api: Eclipse Newsroom REST API
+    description: List Eclipse Foundation news items.
+    note: No operationId declared in the specification.
+  - tool: eclipse_list_events
+    category: newsroom
+    rest: []
+    path: GET /api/events
+    api: Eclipse Newsroom REST API
+    description: List Eclipse Foundation events.
+    note: No operationId declared in the specification.
+  - tool: eclipse_list_working_groups
+    category: foundation
+    rest:
+    - getWorkingGroups
+    - getWorkingGroupByAlias
+    path: GET / (https://api.eclipse.org/working-groups)
+    api: Eclipse Working Groups API
+    description: List Eclipse working groups, or fetch one by alias with its levels, resources and agreements.
+  - tool: eclipse_list_active_releases
+    category: foundation
+    rest: []
+    path: GET /releases/active (https://api.eclipse.org/download)
+    api: Eclipse Foundation Downloads API
+    description: List active Eclipse release trains and their downloadable versions.
+    note: No operationId declared in the specification.
+  - tool: eclipse_lookup_geoip
+    category: foundation
+    rest: []
+    path: GET /countries/{ipAddr} (https://api.eclipse.org/geoip)
+    api: Eclipse GeoIP REST API
+    description: Resolve a client IP to a country or city, used for download mirror selection.
+    note: No operationId declared in the specification.
+  - tool: eclipse_check_eca_status
+    category: governance
+    rest:
+    - getUserStatus
+    - getCommitValidation
+    path: GET /eca/lookup (https://api.eclipse.org/git)
+    api: Eclipse Foundation Git ECA API
+    description: Look up whether a contributor has a signed Eclipse Contributor Agreement on file.
+  write_operations_excluded: Deliberately none of the 83 mutating operations is sketched as a tool. Only 2 of them
+    carry any replay or concurrency control and none publishes a reversal window, so an unattended agent should not
+    be given a write tool against this surface until that changes. See the idempotency and reversibility blocks in
+    conventions/eclipse-conventions.yml.
+recommendation_to_provider: A read-only MCP server over the Projects PMI, Open VSX registry and Newsroom APIs would
+  be inexpensive to build — all three are anonymous, JSON, and already specified in OpenAPI — and would make the Foundation's
+  own project and extension data directly addressable by agents. The contracts to generate it from are already published;
+  only the server is missing.

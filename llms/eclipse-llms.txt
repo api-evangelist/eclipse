@@ -1,0 +1,107 @@
+# Eclipse Foundation
+
+> The Eclipse Foundation is a non-profit (Belgian AISBL) that hosts open source projects and
+> operates the developer infrastructure around them. It publishes 294 REST operations across 18
+> first-party OpenAPI specifications, spanning two distinct engineering estates: the Eclipse
+> Foundation IT APIs (api.eclipse.org, membership.eclipse.org, marketplace, newsroom, projects) and
+> the Eclipse Open VSX registry (open-vsx.org). Read access is anonymous, unmetered and free. There
+> are no plans, no tiers and no API pricing.
+
+Generated: 2026-09-07 · method: generated · source: apis.yml plus the artifacts in this repository.
+This file is written by API Evangelist from the Eclipse Foundation's own published contracts. The
+Eclipse Foundation does not serve an llms.txt of its own (probed 2026-09-07: 404/soft-404 on every
+host).
+
+## Start here
+
+- [API specification index](https://webdev.eclipse.org/docs/api/): every published Eclipse Foundation OpenAPI, rendered. `https://api.eclipse.org/` redirects here.
+- [Eclipse Foundation](https://www.eclipse.org/): the organisation.
+- [Status page](https://status.eclipse.org): human-readable only; no JSON status endpoint.
+
+## APIs (base URL — what it does)
+
+- Eclipse Projects PMI API (https://projects.eclipse.org) — projects, releases, reviews, proposals, interest groups, committers, repositories. 12 operations. Anonymous.
+- Open VSX Registry API (https://open-vsx.org) — VS Code-compatible extension registry: search, resolve, version, download, publish, namespaces, reviews. 89 operations, the largest on the surface. Also implements the Microsoft VS Code Gallery wire protocol under /vscode/*.
+- Eclipse Membership Portal API (https://membership.eclipse.org/api) — member organisations, contacts, products, working-group participation. 37 operations. OIDC.
+- Eclipse Membership Application API (https://membership.eclipse.org/application_api) — membership application forms. 29 operations. OIDC.
+- Eclipse RESTful API (https://api.eclipse.org) — legacy aggregate: user profiles, forums, mailing lists, marketplace favorites, USS blob store, downloads. 32 operations.
+- Eclipse Profile API (https://api.eclipse.org) — Eclipse account profiles, metadata, user deletion requests. 15 operations. OAuth2 client credentials.
+- Eclipse Marketplace REST API (https://marketplace.eclipse.org) — Eclipse IDE plugin marketplace: catalogs, markets, listings, search, featured, popular, recent. 11 operations. Returns XML.
+- Eclipse Working Groups API (https://api.eclipse.org/working-groups) — working groups, levels, resources, participation agreements, special interest groups. 10 operations.
+- Eclipse Foundation Git ECA API (https://api.eclipse.org/git) — Eclipse Contributor Agreement validation, plus GitHub/GitLab webhook receivers. 9 operations.
+- Eclipse Newsroom REST API (https://newsroom.eclipse.org) — news, events, resources, editions, featured stories, sponsorship campaigns. 9 operations.
+- Committer Paperwork API (https://api.eclipse.org/foundation/paperwork) — committer paperwork records. 7 operations. OIDC.
+- Eclipse Foundation Info API (https://api.eclipse.org/foundation/info) — board members, trademarks, CVE data. 7 operations.
+- Eclipse HelloSign API (https://api.eclipse.org/foundation/hellosign) — document signature requests and callbacks. 6 operations. OIDC.
+- Eclipse Foundation Mailing List API (https://api.eclipse.org/foundation/mailing-list) — mailing list metadata. 6 operations. OIDC.
+- Eclipse Foundation Downloads API (https://api.eclipse.org/download) — release trains, versions and file metadata. 5 operations.
+- Open VSX Agreement API (https://api.eclipse.org/openvsx) — Open VSX publisher agreement submit/revoke. 5 operations. OAuth2.
+- Eclipse GeoIP REST API (https://api.eclipse.org/geoip) — IP to country/city, used for download mirror selection. 3 operations.
+- Project Adopters API (https://api.eclipse.org/adopters) — organisations adopting an Eclipse project. 2 operations.
+
+## Authentication
+
+- Most reads are fully anonymous — no key, no account, no signup.
+- OIDC (Keycloak) for Foundation writes, against two realms on auth.eclipse.org:
+  - https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+  - https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration
+  Both support PKCE (S256), device code and token exchange.
+- OAuth2 (authorization code / client credentials) against accounts.eclipse.org for the Open VSX
+  agreement, Profile and legacy RESTful APIs. Note: accounts.eclipse.org publishes NO discovery
+  document, so those three schemes cannot be auto-configured.
+- Open VSX publishing uses a personal access token passed as the `token` query parameter, issued at
+  https://open-vsx.org/user-settings/tokens (env var OVSX_PAT).
+
+## Client libraries
+
+- ovsx (npm, 1.1.1, 2026-08-09) — official Open VSX CLI and library. `npx ovsx publish`.
+- openvsx-webui (npm, 1.1.2, 2026-08-20) — the open-vsx.org front end as a React library.
+- @theia/ovsx-client (npm, 1.75.0, 2026-08-27) — Eclipse Theia's Open VSX client.
+- No client library exists for any api.eclipse.org, marketplace, newsroom, projects or membership
+  API. Those 205 operations are plain HTTP only.
+
+## What an agent needs to know before acting
+
+- No idempotency key exists anywhere. Only 2 of 83 write operations carry any replay or
+  concurrency control (If-Match/If-None-Match on the USS blob store). A timed-out write is not
+  safely retryable.
+- Reversal operations are published for 24 write operations, but NO time window is stated for any
+  of them. Unpublishing an extension is immediate and permanent.
+- No outbound events, webhooks or subscriptions exist. To track Eclipse state you must poll. The
+  closest thing to a change feed is GET https://open-vsx.org/api/-/version-changes.
+- Rate-limit headers are published under two incompatible spellings: X-RateLimit-* on Open VSX,
+  X-Rate-Limit-* on the Foundation IT APIs. Only Open VSX declares a 429. No numeric quota is
+  published anywhere.
+- Errors use a proprietary envelope (status_code, message, url, friendly_message), not RFC 9457
+  problem+json, and there is no error code registry. Open VSX may return a failure inside a 200
+  with an `error` string field populated.
+- Pagination differs by estate: page/pagesize with an RFC 8288 Link header on the Foundation IT
+  APIs; offset/size with a body envelope on Open VSX.
+- No dry-run, preview or validate-only mode exists on any operation.
+- 5 operations are flagged deprecated in the specifications; no Sunset or Deprecation header is
+  ever sent.
+
+## Legal and security
+
+- [Terms of Use](https://www.eclipse.org/legal/termsofuse.php)
+- [Privacy Policy](https://www.eclipse.org/legal/privacy.php)
+- [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
+- [Security](https://www.eclipse.org/security/) · [Vulnerability Reporting Policy](https://www.eclipse.org/security/policy/) · [Known vulnerabilities](https://www.eclipse.org/security/known/)
+- security.txt (RFC 9116): https://www.eclipse.org/.well-known/security.txt and https://open-vsx.org/.well-known/security.txt
+
+## Source and support
+
+- [GitHub organization](https://github.com/eclipse) · [Eclipse Foundation GitLab](https://gitlab.eclipse.org/eclipsefdn)
+- [Open VSX source](https://github.com/eclipse-openvsx/openvsx) · [releases](https://github.com/eclipse-openvsx/openvsx/releases)
+- [Contact](https://www.eclipse.org/org/foundation/contact.php)
+- [Blog](https://blogs.eclipse.org/) · [Newsroom](https://newsroom.eclipse.org/)
+
+## Not available
+
+- No MCP server for the Eclipse Web APIs. (Several Eclipse PROJECTS implement MCP — GLSP, LMOS,
+  eclipse-agents — but none is an agent door onto api.eclipse.org.)
+- No A2A agent card on any Eclipse host.
+- No AsyncAPI, no GraphQL, no gRPC/Protobuf, no SOAP/WSDL.
+- No /.well-known/api-catalog, no ai-plugin.json, no llms.txt served by the provider.
+- No sandbox, test mode or test credentials.
+- No trust center and no published SOC 2 / ISO 27001 / PCI / HIPAA / FedRAMP certification.

@@ -1,0 +1,379 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Openvsx API
+  description: Access information on Eclipse Foundation publisher agreements.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/openvsx
+  description: Production endpoint for Eclipse Foundation publisher agreement data
+paths:
+  /publisher_agreement:
+    get:
+      tags:
+      - Publisher Agreement
+      summary: Publisher Agreement
+      description: Fetch the open-vsx.org publisher agreement for the current user.
+      security:
+      - OAuth2:
+        - openvsx_publisher_agreement
+        - openid
+        - profile
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublisherAgreement'
+        '404':
+          description: Agreement not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data
+    post:
+      tags:
+      - Publisher Agreement
+      summary: Create a Publisher Agreement
+      description: Create an open-vsx.org publisher agreement for the current user.
+      security:
+      - OAuth2:
+        - openvsx_publisher_agreement
+        - openid
+        - profile
+      requestBody:
+        description: Required information to sign an open-vsx.org publisher agreement.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgreementSigningRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublisherAgreement'
+        '400':
+          description: Invalid data
+        '409':
+          description: Conflict
+        '500':
+          description: Error while processing data
+  /publisher_agreement/{ef_username}:
+    parameters:
+    - in: path
+      name: ef_username
+      required: true
+      description: The Eclipse username.
+      schema:
+        type: string
+    get:
+      tags:
+      - Publisher Agreement
+      summary: Publisher Agreement for specific user
+      description: Retrieve the open-vsx.org publisher agreement of a user. The current user can retrieve his own Publisher
+        Agreement but only an admin can retrieve a Publisher Agreement of another user.
+      security:
+      - OAuth2:
+        - openvsx_publisher_agreement
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublisherAgreement'
+        '404':
+          description: No agreement found for given user.
+        '500':
+          description: Error while retrieving data
+    delete:
+      tags:
+      - Publisher Agreement
+      summary: Delete Publisher Agreement for specific user
+      description: Delete the open-vsx.org publisher agreement of a user.
+      security:
+      - OAuth2:
+        - openvsx_publisher_agreement
+      responses:
+        '204':
+          description: Accepted
+        '404':
+          description: No agreement found for given user.
+        '500':
+          description: Error while retrieving data
+  /profile:
+    get:
+      tags:
+      - Profile
+      summary: User profile
+      description: Fetch the profile data for the current user.
+      security:
+      - OAuth2:
+        - openvsx_publisher_agreement
+        - openid
+        - profile
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EfUsers'
+        '403':
+          description: Invalid credentials
+        '500':
+          description: Error while retrieving data
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.eclipse.org/oauth2/authorize
+          tokenUrl: https://accounts.eclipse.org/oauth2/token
+          scopes:
+            openvsx_publisher_agreement: Submit and revoke your open-vsx.org publisher agreement.
+            openid: Know who you are on accounts.eclipse.org.
+            email: View your email address.
+            profile: View basic information about your account.
+  schemas:
+    PublisherAgreement:
+      type: object
+      additionalProperties: false
+      required:
+      - PersonID
+      - DocumentID
+      - Version
+      - EffectiveDate
+      - ReceivedDate
+      - ScannedDocumentBLOB
+      - ScannedDocumentMime
+      - ScannedDocumentFileName
+      - Comments
+      properties:
+        PersonID:
+          type: string
+          description: The id of the user tied to the publisher agreement.
+        DocumentID:
+          type: string
+          description: The document id.
+        Version:
+          type: string
+          description: The agreement version.
+        EffectiveDate:
+          type: string
+          description: The effective date of the agreement.
+        ReceivedDate:
+          type: string
+          description: The date the agreement was received.
+        ScannedDocumentBLOB:
+          type: string
+          description: The scanned document byte blob.
+        ScannedDocumentMime:
+          type: string
+          description: The scanned document mime type.
+        ScannedDocumentFileName:
+          type: string
+          description: The scanned document file name.
+        ScannedDocumentBytes:
+          type: string
+          description: The number of bytes in the BLOB for the document
+        Comments:
+          type: string
+          description: Comments on the agreement.
+    AgreementSigningRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - version
+      - github_handle
+      properties:
+        version:
+          type: string
+          description: The version number of the document/agreement.
+        github_handle:
+          type: string
+          description: The GitHub username of the user. This must match what the Eclipse Foundation has on file for the user
+            to successfully sign the puglisher agreement.
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The URL
+        friendly_message:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The optional client-friendly error message
+    EfUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfUser'
+    EfUser:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: The unique user id.
+        name:
+          type: string
+          description: The user's ef username name.
+        picture:
+          type: string
+          description: URL of the user's picture.
+        mail:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's email.
+        eca:
+          oneOf:
+          - $ref: '#/components/schemas/Eca'
+          - type: 'null'
+        is_committer:
+          oneOf:
+          - type: boolean
+          - type: 'null'
+          description: User's committer status.
+        first_name:
+          type: string
+          description: The user's first name.
+        last_name:
+          type: string
+          description: The user's last name.
+        publisher_agreements:
+          type: object
+          propertyNames:
+            description: The publisher agreement name.
+          additionalProperties:
+            $ref: '#/components/schemas/ProfilePublisherAgreement'
+        github_handle:
+          type: string
+          description: The user's Github handle.
+        twitter_handle:
+          type: string
+          description: The user's Twitter handle.
+        org:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's organization.
+        org_id:
+          oneOf:
+          - type: integer
+          - type: 'null'
+          description: The user's organization id.
+        job_title:
+          type: string
+          description: The user's job title at the organization.
+        website:
+          type: string
+          description: The user's website.
+        country:
+          $ref: '#/components/schemas/Country'
+        bio:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's account bio
+        interests:
+          type: array
+          items:
+            type: string
+          description: A list of the user's interests.
+        working_groups_interests:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's working group interests.
+        public_fields:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's public fields.
+        mail_history:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's email history.
+        mail_alternate:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's alternate emails.
+        gerrit_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's Gerrit URL.
+        projects_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's projects URL.
+        mailinglist_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's mailing list URL.
+        mpc_favorites_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's Marketplace favorites URL.
+    Eca:
+      type: object
+      properties:
+        signed:
+          type: boolean
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
+      example:
+        signed: true
+        can_contribute_spec_project: true
+    Country:
+      type: object
+      properties:
+        code:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The country code.
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      example:
+        code: CA
+        name: Canada
+    ProfilePublisherAgreement:
+      type: object
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'

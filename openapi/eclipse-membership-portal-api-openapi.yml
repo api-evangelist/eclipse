@@ -1,0 +1,1779 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Membership portal
+  description: API used for reading and updating information about member organizations and it's associated metadata.
+  contact:
+    name: Software Development Team
+    url: https://gitlab.eclipse.org/eclipsefdn/software-dev
+    email: software-dev@eclipse-foundation.org
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Organizations
+  description: Definitions related to Eclipse Foundation organizations
+- name: Organization Contacts
+  description: Definitions related to Eclipse Foundation organization contacts
+- name: Organization Products
+  description: Definitions related to Eclipse Foundation organization products
+- name: Organization Activity
+  description: Definitions related to Eclipse Foundation organization committer/contributor activity
+- name: Working Groups
+  description: Definitions related to Eclipse Foundation working group entities
+- name: Projects
+  description: Definitions related to Eclipse Foundation projects entities in relation to organizations
+- name: Slack Webhook
+  description: Slack Webhook processing
+- name: Industry Collaboration Organizations
+  description: Definitions related to collaborations with regard to organizations
+- name: System relations
+  description: Definitions related to Eclipse Foundation relation code entities
+- name: User Info
+  description: Internal user info endpoints for logged in user
+paths:
+  /organizations:
+    get:
+      tags:
+      - Organizations
+      summary: Organizations List
+      description: Returns a list of organizations from the Eclipse API
+      operationId: listOrganizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        '500':
+          description: Error while retrieving data
+  /organizations/slim:
+    get:
+      tags:
+      - Organizations
+      summary: Slim Organizations List
+      description: Returns a list of paired down organizations from the Eclipse API, returning just critical data
+      operationId: listOrganizationsSlim
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlimOrganizations'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Organizations
+      summary: Organization
+      description: Returns an organization that has a matching ID
+      operationId: getOrganization
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '500':
+          description: Error while retrieving data
+    post:
+      tags:
+      - Organizations
+      summary: Organization Info update
+      description: Updates an organization information and returns the updated entity
+      operationId: updateOrganization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationInfoUpdateRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+        '503':
+          description: Error while retrieving data
+  /organizations/{organizationID}/cbi:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Organizations
+      summary: Organization CBI
+      description: Returns the CBI information for the current organization
+      operationId: getOrganizationCBI
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationCBI'
+        '404':
+          description: No CBI information found for given organization
+  /organizations/{organizationID}/contacts:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Contacts
+      summary: Organization
+      description: Returns a list of contacts for the given organization with additional data such as name and email
+      operationId: getOrganizationContacts
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnhancedPersons'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/contacts/{contactID}:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    - name: contactID
+      in: path
+      description: The contact ID/username of the contact to retrieve
+      required: true
+      schema:
+        type: string
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Contacts
+      summary: Organization
+      description: Returns a list of contact relations for the given user in the passed organization
+      operationId: getOrganizationContactRelations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationContacts'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+    delete:
+      security:
+      - openId: []
+      tags:
+      - Organization Contacts
+      summary: Request Organization contact removal
+      description: Fires a request for a organization contact to be removed.
+      operationId: requestOrganizationContactRemoval
+      requestBody:
+        description: The working group to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRemovalRequest'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while sending request
+  /organizations/{organizationID}/logos:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    post:
+      security:
+      - openId: []
+      tags:
+      - Organizations
+      summary: Organization logo update
+      description: Updates an organization logo and returns the updated entity
+      operationId: updateOrganizationLogos
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrganizationLogoUpdateRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+    delete:
+      parameters:
+      - name: type
+        in: query
+        description: The type of logo format to remove, e.g. WEB or PRINT. Defaults to WEB when not provided
+        schema:
+          type: string
+      security:
+      - openId: []
+      tags:
+      - Organizations
+      summary: Organization logo delete
+      description: Removes an organization logo if one exists
+      operationId: deleteOrganizationLogo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrganizationLogoUpdateRequest'
+      responses:
+        '204':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/contacts/{contactID}/{relation}:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    - name: contactID
+      in: path
+      description: The contact ID/username of the contact to retrieve
+      required: true
+      schema:
+        type: string
+    - name: relation
+      in: path
+      description: The relation code of the relation type to retrieve/check for/update.
+      required: true
+      schema:
+        type: string
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Contacts
+      summary: Organization
+      description: Returns a contact relations for the given user and relation/position in the passed organization if it exists
+      operationId: getOrganizationContactRelation
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationContact'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+    post:
+      security:
+      - openId: []
+      tags:
+      - Organization Contacts
+      summary: Organization
+      description: Updates an organization contact and returns the updated entity
+      operationId: updateOrganizationContactRelation
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationContact'
+        '400':
+          description: Bad Request - Invalid relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+    delete:
+      security:
+      - openId: []
+      tags:
+      - Organization Contacts
+      summary: Organization
+      description: Removes a single organization contact relation. Works for all relations except EMPLY and CR, which must
+        be done manually through the membership team.
+      operationId: removeOrganizationContactRelation
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request - Invalid relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/products:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Products list
+      description: Returns a contact relations for the given user and relation/position in the passed organization if it exists
+      operationId: getOrganizationProducts
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationProducts'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+    post:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product create
+      description: Creates an organization product/link using the body
+      operationId: createOrganizationProduct
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/products/{productID}:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization product to retrieve
+      required: true
+      schema:
+        type: number
+    - name: productID
+      in: path
+      description: The product ID for the organization product to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product
+      description: Returns a organization product/link if it exists
+      operationId: getOrganizationProduct
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationProduct'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+    put:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product create
+      description: Updates an organization product/link using the body
+      operationId: updateOrganizationProduct
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationProduct'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+    delete:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product delete
+      description: Remove the organization product that matches the given path parameters
+      operationId: deleteOrganizationProduct
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/projects:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the associated entities to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      tags:
+      - Organizations
+      summary: Organization Projects
+      description: Returns projects associated with the organization
+      operationId: getOrganizationProjects
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Projects'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/committers:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the associated entities to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organizations
+      summary: Organization Committers
+      description: Returns committers associated with the organization
+      operationId: getOrganizationCommitters
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnhancedPersons'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/committers/activity:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the associated entities to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Activity
+      summary: Organization Committers activity
+      description: Returns activity of an organizations commiters
+      operationId: getOrganizationCommitterActivity
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/committers/yearly:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the associated entities to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Activity
+      summary: Organization Committers yearly activity
+      description: Returns yearly activity of an organizations commiters
+      operationId: getOrganizationCommitterActivityForYear
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/contributors:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the associated entities to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organizations
+      summary: Organization Contributors
+      description: Returns contributors associated with the organization
+      operationId: getOrganizationContributors
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnhancedPersons'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/representatives:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Contacts
+      summary: Organization
+      description: Returns a list of contacts with elevated roles for the given organization with their name.
+      operationId: getOrganizationRepresentatives
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnhancedPersonData'
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/activity:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      tags:
+      - Organization Activity
+      summary: Organization Activity
+      description: Gets the organization activity for a given period
+      operationId: getOrganizationActivity
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '404':
+          description: Activity not found
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/web-logo:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Organizations
+      summary: Organization web-logo
+      description: Generic URL for fetching the web logo of an organization via redirect
+      operationId: getOrganizationWebLogo
+      responses:
+        '302':
+          description: Success, redirect to web logo
+        '404':
+          description: No logo found
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/working_groups:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Organizations
+      summary: Organization working groups
+      description: Gets working groups the organization is member to
+      operationId: getOrganizationWorkingGroups
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroups'
+        '404':
+          description: No organization found
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/working_group/representatives:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve representatives for
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Working Groups
+      summary: Organization Working Group representatives
+      description: Gets working group representatives grouped by the alias of the Working Group they are part of
+      operationId: getOrganizationWorkingGroupRepresentatives
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationWorkingGroupRepresentatives'
+        '404':
+          description: No organization found
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/activity/overview:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      tags:
+      - Organization Activity
+      summary: Organization Activity overview
+      description: Gets the organization activity overview for a given period
+      operationId: getOrganizationActivityOverview
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/activity/yearly:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Organization Activity
+      summary: Organization yearly activity
+      description: Gets the organization activity for a year
+      operationId: getOrganizationActivityForYear
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationYearlyActivity'
+        '500':
+          description: Error while retrieving data
+  /projects/{projectId}/organizations:
+    parameters:
+    - name: projectId
+      in: path
+      description: The project ID to retrieve active projects for
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Projects
+      summary: Project Organizations
+      description: Returns a list of active and participating organizations from the Eclipse API for the given project
+      operationId: getProjectOrganizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        '404':
+          description: No project with ID found
+        '500':
+          description: Error while retrieving data
+  /working_groups:
+    get:
+      deprecated: true
+      tags:
+      - Working Groups
+      summary: Working Group List
+      description: Returns a working group entry that has a matching ID
+      operationId: getWorkingGroups
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroups'
+        '500':
+          description: Error while retrieving data
+  /working_groups/{documentID}:
+    parameters:
+    - name: documentID
+      in: path
+      description: The document ID for the working group to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      deprecated: true
+      tags:
+      - Working Groups
+      summary: Working Group
+      description: Returns a working group entry that has a matching ID
+      operationId: getWorkingGroup
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroup'
+        '500':
+          description: Error while retrieving data
+  /interest-groups/{id}/organizations:
+    parameters:
+    - name: id
+      in: path
+      description: ID of the interest group to retrieve associated organizations for
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Industry Collaboration Organizations
+      summary: Organizations for Interest Group
+      description: returns list of organizations with participants for the given Interest Group
+      operationId: getInterestGroupOrganizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        '404':
+          description: No Interest Group found for given ID
+        '500':
+          description: Error while retrieving data
+  /special-interest-groups/{id}/organizations:
+    parameters:
+    - name: id
+      in: path
+      description: alias of the special interest group to retrieve associated organizations for
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Industry Collaboration Organizations
+      summary: Organizations for Special Interest Group
+      description: returns list of organizations with participants for the given Special Interest Group
+      operationId: getSpecialInterestGroupOrganizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        '404':
+          description: No Special Interest Group found for given ID
+        '500':
+          description: Error while retrieving data
+  /sys/relations:
+    parameters:
+    - name: type
+      in: query
+      description: The type of relation
+      required: false
+      schema:
+        type: string
+    get:
+      tags:
+      - System relations
+      summary: List of relations by type
+      description: Returns a list of system relations by the given type
+      operationId: getRelations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysRelations'
+  /userinfo:
+    get:
+      tags:
+      - User Info
+      summary: Info on currently logged in user
+      description: Returns information about the currently logged in user
+      operationId: getLoggedInUser
+      parameters:
+      - name: organization_id
+        in: query
+        description: The id of the organization to impersonate.
+        required: false
+        schema:
+          type: integer
+      - name: role
+        in: query
+        description: The organizational role to impersonate.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoWrapper'
+        '204':
+          description: No Content - anonymous user
+        '500':
+          description: Error while retrieving data
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+  schemas:
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in
+        the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    DateTime:
+      type: string
+      format: datetime
+      description: |
+        Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+    Organizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organization'
+    Organization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - description
+      - website
+      - logos
+      - levels
+      - wgpas
+      - member_since
+      - renewal_date
+      - is_active_member
+      properties:
+        organization_id:
+          type: integer
+        name:
+          type: string
+        renewal_date:
+          type: string
+        member_since:
+          type: string
+        is_active_member:
+          type: boolean
+          description: True if the organization is an active member
+        levels:
+          type: array
+          items:
+            type: object
+            properties:
+              level:
+                type: string
+              description:
+                type: string
+        description:
+          type:
+          - object
+          - 'null'
+          properties:
+            short:
+              type: string
+            full:
+              type: string
+        website:
+          type:
+          - string
+          - 'null'
+        logos:
+          type:
+          - object
+          - 'null'
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+        wgpas:
+          type: array
+          items:
+            type: object
+            properties:
+              document_id:
+                $ref: '#/components/schemas/ObjectID'
+              level:
+                type: string
+              working_group:
+                type: string
+              description:
+                type: string
+    EnhancedOrganizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnhancedOrganization'
+    EnhancedOrganization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - description
+      - website
+      - logos
+      - levels
+      - wgpas
+      - member_since
+      - is_active_member
+      properties:
+        organization_id:
+          type: integer
+        name:
+          type: string
+        renewal_date:
+          description: Contains the best estimate at a renewal date. This uses the invoice month on the membership when available,
+            falling back to 1 year from membership start if not available.
+          type:
+          - string
+          - 'null'
+        expiration_date:
+          description: Contains the last date of membership for inactive members. Null if member is active or was never a
+            member.
+          type:
+          - string
+          - 'null'
+        member_since:
+          type: string
+        is_active_member:
+          type: boolean
+          description: True if the organization is an active member
+        levels:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - level
+            - description
+            - dues_amount
+            - dues_tier
+            - sort_order
+            properties:
+              level:
+                type: string
+              description:
+                type: string
+              dues_amount:
+                type: integer
+              dues_tier:
+                type: integer
+              sort_order:
+                type: string
+        description:
+          type:
+          - object
+          - 'null'
+          properties:
+            short:
+              type: string
+            full:
+              type: string
+        website:
+          type:
+          - string
+          - 'null'
+        logos:
+          type:
+          - object
+          - 'null'
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+        wgpas:
+          type: array
+          items:
+            type: object
+            properties:
+              document_id:
+                $ref: '#/components/schemas/ObjectID'
+              level:
+                type: string
+              working_group:
+                type: string
+              description:
+                type: string
+              dues_amount:
+                type: integer
+    OrganizationWorkingGroupRepresentatives:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/BasicPersons'
+    OrganizationActivity:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: the activity count
+        period:
+          type:
+          - string
+          - 'null'
+          description: The activity period
+    OrganizationYearlyActivity:
+      type: object
+      properties:
+        activity:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationActivity'
+    SlimOrganizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/SlimOrganization'
+    SlimOrganization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - logos
+      - is_active_member
+      - website
+      properties:
+        organization_id:
+          type: integer
+          description: The unique ID for the given organization
+        name:
+          type: string
+          description: The display name of the organization
+        website:
+          type:
+          - string
+          - 'null'
+          description: The website for the given organization, used for linking back to the member
+        is_active_member:
+          type: boolean
+          description: Whether the organization is an active or historic member.
+        logos:
+          type: object
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+    WorkingGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroup'
+    WorkingGroup:
+      type: object
+      properties:
+        alias:
+          type: string
+          description: internal alias for the working group
+        title:
+          type: string
+          description: Public-facing or official name of the working group
+        status:
+          type: string
+          description: Current status of the working group (e.g. incubating, active, archived)
+        logo:
+          type: string
+          description: image link for the working groups logo
+        description:
+          type: string
+          description: Short description of the working group
+        resources:
+          type: object
+          properties:
+            charter:
+              type: string
+              description: Link to the charter for the current working group
+            contact_form:
+              type: string
+              description: URL link to the contact form
+            members:
+              type: string
+              description: URL to the members list for the given working group
+            participation_agreements:
+              type: object
+              properties:
+                individual:
+                  anyOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                organization:
+                  anyOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                sponsorship:
+                  type: string
+                  description: link to the sponsorship agreement document
+                sponsorship_document:
+                  type:
+                  - string
+                  - 'null'
+                  description: Sponsorship agreement document in Foundation for formalized sponsorship
+            website:
+              type: string
+              description: the URL for the homepage of this working group
+        levels:
+          type: array
+          items:
+            type: object
+            description: Definition of the participation level for the working group, including its relation code
+            properties:
+              relation:
+                type: string
+                description: code representing the relation, used internally when using common relation types
+              description:
+                type: string
+                description: the label for the participation level
+    WorkingGroupParticipationAgreement:
+      type: object
+      properties:
+        document_id:
+          $ref: '#/components/schemas/ObjectID'
+        pdf:
+          type: string
+          description: Link to the PDF version of the participation agreement
+    OrganizationCBI:
+      type: object
+      properties:
+        memberOrganizationsBenefits:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                description: The numeric ID of the organization that granted the following resources
+              displayName:
+                type: string
+                description: the display name of the Organization that granted the following resources to the project from
+                  its allotment
+              resourcePacks:
+                type: number
+                description: the number of resource packs granted to the member as part of their membership
+              dedicatedAgents:
+                type: number
+                description: the number of dedicated agents granted to the member as part of their membership
+              ghLargeRunners:
+                type: number
+                description: the number of large Github job runners granted to the member as part of their membership
+              resourcePacks_used:
+                type: number
+                description: the number of resource packs allocated by the member to projects
+              dedicatedAgents_used:
+                type: number
+                description: the number of dedicated agents allocated by the member to projects
+              ghLargeRunners_used:
+                type: number
+                description: the number of large Github job runners allocated by the member to projects
+              membership:
+                type: string
+                description: The organization in which the organization has a membership with (e.g. Eclipse or OpenHardware)
+        sponsoredProjects:
+          type: array
+          items:
+            type: object
+            properties:
+              project:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Name of the project that has sponsored CBI packs
+              sponsoringOrganizations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      description: The numeric ID of the organization that granted the following resources
+                    displayName:
+                      type: string
+                      description: the display name of the Organization that granted the following resources to the project
+                        from its allotment
+                    resourcePacks:
+                      type: number
+                      description: the number of resource packs granted to the project
+                    dedicatedAgents:
+                      type: number
+                      description: the number of dedicated agents granted to the project
+                    ghLargeRunners:
+                      type: number
+                      description: the number of large Github job runners granted to the project
+                    comment:
+                      type: string
+                      description: Comments associated with the granted resources
+                    requestTickets:
+                      type: array
+                      items:
+                        type: string
+                        description: Ticket linking to the request from the organization to add the resources/agents to this
+                          project.
+    CommitterActivityList:
+      type: array
+      description: Encompases global committer activity for an organization
+      items:
+        $ref: '#/components/schemas/CommitterActivity'
+    CommitterActivity:
+      type: object
+      description: Describes committer activity for an organization by country
+      properties:
+        login:
+          type: string
+          description: The users login
+        project:
+          type: string
+          description: The project ID in which this activity was recorded
+        period:
+          type: string
+          description: Period of time in which sample was taken, in format of 'YYYYmm'.
+        count:
+          type: integer
+          description: Number of commits in the given project for the user
+    People:
+      type: array
+      items:
+        $ref: '#/components/schemas/Person'
+    Person:
+      type: object
+      properties:
+        person_id:
+          $ref: '#/components/schemas/ObjectID'
+        fname:
+          type: string
+          description: Placeholder
+        lname:
+          type: string
+          description: Placeholder
+        type:
+          type: string
+          description: Placeholder
+        is_member:
+          type: boolean
+          description: Placeholder
+        email:
+          type: string
+          description: Placeholder
+        phone:
+          type: string
+          description: Placeholder
+        fax:
+          type: string
+          description: Placeholder
+        mobile:
+          type: string
+          description: Placeholder
+        comments:
+          type: string
+          description: Placeholder
+        provisioning:
+          type: string
+          description: Placeholder
+        is_unix_acct_created:
+          type: boolean
+          description: Placeholder
+        member_since:
+          type: boolean
+          description: Placeholder
+        issues_pending:
+          type: array
+          items:
+            type: string
+            description: placeholder
+        member_passwd:
+          type: string
+          description: Placeholder
+        latitude:
+          type: string
+          description: Placeholder
+        longitude:
+          type: string
+          description: Placeholder
+        blog:
+          type: string
+          description: Placeholder
+        picture_mime:
+          type: string
+          description: Placeholder
+        picture:
+          type: string
+          description: Placeholder
+        SCRM_GUID:
+          $ref: '#/components/schemas/ObjectID'
+        ts:
+          $ref: '#/components/schemas/DateTime'
+    OrganizationContacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationContact'
+    OrganizationContact:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the target organization id
+        person_id:
+          $ref: '#/components/schemas/ObjectID'
+        relation:
+          type: string
+          description: the relation of the contact to the organization
+        comments:
+          type: string
+          description: System comments about the entry
+        title:
+          type:
+          - string
+          - 'null'
+          description: Placeholder
+    ContactRemovalRequest:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the target organization to remove user from
+        username:
+          type: string
+          description: the user that should be removed from the organization
+        reason:
+          type: string
+          description: the reason the user should be removed from the organization
+    Projects:
+      type: array
+      items:
+        $ref: '#/components/schemas/Project'
+    Project:
+      type: object
+      properties:
+        project_id:
+          $ref: '#/components/schemas/ObjectID'
+        parent_project_id:
+          $ref: '#/components/schemas/ObjectID'
+        name:
+          type: string
+          description: Placeholder
+        level:
+          type: string
+          description: Placeholder
+        description:
+          type: string
+          description: Placeholder
+        url_download:
+          type: string
+          description: Placeholder
+        url_index:
+          type: string
+          description: Placeholder
+        date_active:
+          $ref: '#/components/schemas/DateTime'
+        sort_order:
+          type: string
+          description: Placeholder
+        bugs_name:
+          type: string
+          description: Placeholder
+        project_phase:
+          type: string
+          description: Placeholder
+        disk_quota_gb:
+          type: integer
+          description: Placeholder
+        is_active:
+          type: boolean
+          description: Placeholder
+        is_component:
+          type: boolean
+          description: Placeholder
+        is_standard:
+          type: boolean
+          description: Placeholder
+    OrganizationProducts:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationProduct'
+    OrganizationProduct:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the ID of the organization
+        product_id:
+          type:
+          - integer
+          - 'null'
+          description: the ID of the product/url. Null is only valid when sending a new product to be saved
+        name:
+          type: string
+          description: Human-legible label for the product
+        description:
+          type: string
+          description: Description of the stored URL/product
+        product_url:
+          type: string
+          description: URL for the produtc
+    OrganizationInfoUpdateRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of the stored URL/product
+        company_url:
+          type: string
+          description: URL for the product
+    OrganizationLogoUpdateRequest:
+      type: object
+      properties:
+        image:
+          type: object
+          description: The image file. Should be included as a file would naturally be included in a form without encoding
+        image_mime:
+          type: string
+          description: The mime type for the image
+        image_format:
+          type: string
+          description: the format of logo image to be updated
+          enum:
+          - SMALL
+          - LARGE
+          - PRINT
+    EnhancedPersons:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnhancedPersonData'
+    EnhancedPersonData:
+      type: object
+      required:
+      - id
+      - first_name
+      - last_name
+      - relations
+      properties:
+        id:
+          type: string
+          description: Description of the stored URL/product
+        first_name:
+          type: string
+          description: First name of the user
+        last_name:
+          type: string
+          description: Last name of the user
+        email:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Email of the user. Only included if the current user has elevated permissions for the current organization.
+        relations:
+          type: array
+          description: list of relation codes that are active for the current user
+          items:
+            type: string
+    BasicPersons:
+      type: array
+      items:
+        $ref: '#/components/schemas/BasicPersonData'
+    BasicPersonData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Description of the stored URL/product
+        first_name:
+          type: string
+          description: First name of the user
+        last_name:
+          type: string
+          description: Last name of the user
+        relations:
+          type: array
+          description: list of relation codes that are active for the current user
+          items:
+            type: string
+    InfoWrapper:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User name
+        given_name:
+          type: string
+          description: First name of the user
+        family_name:
+          type: string
+          description: Family name of the user
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email of the user.
+        organizational_roles:
+          description: A map containing the user's organizational roles
+          properties:
+            organization_id:
+              type: integer
+              description: the organization id
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    Error:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+    SysRelations:
+      type: array
+      items:
+        $ref: '#/components/schemas/SysRelation'
+    SysRelation:
+      type: object
+      properties:
+        relation:
+          type: string
+          description: the relation abbreviation
+        description:
+          type: string
+          description: The relation description
+        active:
+          type: boolean
+          description: the active flag
+        type:
+          type: string
+          description: The relation type abbreviation

@@ -1,49 +1,67 @@
 aid: eclipse
 name: Eclipse Foundation
 description: >-
-  The Eclipse Foundation provides a global community of individuals and organizations
-  with a mature, scalable, and business-friendly environment for open source software
-  collaboration and innovation. This index aggregates the developer-facing APIs and
-  services published by the Eclipse Foundation and its working groups.
+  The Eclipse Foundation is a non-profit (Belgian AISBL) that provides a global community of individuals and organizations with a mature, scalable and business-friendly environment for open source software collaboration and innovation. It is also a substantial API provider in its own right: it publishes 294 REST operations across 18 first-party OpenAPI specifications, covering Eclipse project and release metadata (Projects PMI), the Eclipse Marketplace, the Eclipse Newsroom, Foundation downloads and GeoIP, Eclipse Contributor Agreement validation, committer paperwork and document signing, mailing lists, member organizations and working groups, Eclipse account profiles, and the Eclipse Open VSX Registry — the vendor-neutral marketplace for VS Code-compatible extensions, which also implements the Microsoft VS Code Extension Gallery wire protocol. Read access across the entire surface is anonymous, unmetered and free; writes authenticate against Keycloak OpenID Connect on auth.eclipse.org or, for Open VSX publishing, a personal access token.
 type: Index
 deliveryModel:
   model: saas
-  open_source: false
-  commercial: true
+  open_source: true
+  commercial: false
   callable_host: true
-  label: Hosted service · you call their endpoint
+  label: Hosted service · open source · you call their endpoint
   confidence: high
   source:
   - openapi
   - pricing
-  generated: '2026-08-28'
-  method: derived
+  - license
+  generated: '2026-09-07'
+  method: searched
+  note: Corrected 2026-09-07. The Eclipse Foundation is a non-profit AISBL, not a commercial vendor; the APIs are free and their implementations are published under EPL-2.0 on gitlab.eclipse.org/eclipsefdn and github.com/eclipse-openvsx. Open VSX is additionally self-hostable, and its own CLI targets any deployment via OVSX_REGISTRY_URL.
 accessModel:
-  pricing: freemium
-  onboarding: unknown
+  pricing: free
+  onboarding: self-service
   trial: false
-  try_now: false
-  public: false
-  label: Freemium
-  confidence: medium
+  try_now: true
+  public: true
+  label: Free · anonymous public read access
+  confidence: high
   source:
   - plans
-  generated: '2026-07-22'
-  method: derived
+  - openapi
+  - pricing
+  generated: '2026-09-07'
+  method: searched
+  note: 'Corrected 2026-09-07 from a derived "freemium / public: false" reading. Every read operation across the 294 published operations is anonymous — no account, no key, no signup, no meter — and the Eclipse Foundation publishes no API plans or prices at all (plan_count 0). Writes require a free eclipse.org account.'
 image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 url: https://raw.githubusercontent.com/api-evangelist/eclipse/refs/heads/main/apis.yml
 tags:
-  - Eclipse Foundation
-  - Foundation
-  - Open-Source
-  - Standards
+- Eclipse Foundation
+- Foundation
+- Open-Source
+- Standards
+- Developer-Tools
+- Extensions
+- Marketplace
+- Registry
+- Governance
+- Java
+- IDE
+- Project-Metadata
 tags_raw:
-  - Eclipse Foundation
-  - Foundation
-  - Open Source
-  - Standards
+- Eclipse Foundation
+- Foundation
+- Open Source
+- Standards
+- Developer Tools
+- Extensions
+- Marketplace
+- Registry
+- Governance
+- Java
+- IDE
+- Project Metadata
 created: '2024-01-01'
-modified: '2026-04-28'
+modified: '2026-09-07'
 specificationVersion: '0.23'
 apis:
 - aid: eclipse:marketplace-api
@@ -54,17 +72,21 @@ apis:
   image: >-
     https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
   humanURL: https://marketplace.eclipse.org/
-  baseURL: https://marketplace.eclipse.org/api/p
+  baseURL: https://marketplace.eclipse.org
   tags:
   - Extensions
   - IDE
   - Marketplace
   - Plugins
   properties:
+  - type: OpenAPI
+    url: openapi/eclipse-marketplace-rest-api-openapi.yml
   - type: Documentation
-    url: https://wiki.eclipse.org/Marketplace/REST
+    url: https://webdev.eclipse.org/docs/api/marketplace-rest-api
+  - type: Overlay
+    url: overlays/eclipse-marketplace-rest-api-overlay.yaml
   - type: Authentication
-    url: https://wiki.eclipse.org/Marketplace/REST#Authentication
+    url: authentication/eclipse-authentication.yml
 - aid: eclipse:foundation-web-api
   name: Eclipse Foundation Web API
   description: >-
@@ -72,7 +94,7 @@ apis:
     mailing lists, profiles, working groups, and other Eclipse Foundation services. Index of available
     APIs at webdev.eclipse.org/docs/api.
   humanURL: https://api.eclipse.org/
-  baseURL: https://api.eclipse.org/
+  baseURL: https://api.eclipse.org
   tags:
   - Foundation
   - Metadata
@@ -88,13 +110,20 @@ apis:
     url: https://webdev.eclipse.org/docs/api/
   - type: Portal
     url: https://api.eclipse.org/
+  - type: OpenAPI
+    url: openapi/eclipse-restful-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/additional-api-docs
+  - type: Overlay
+    url: overlays/eclipse-restful-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:projects-api
   name: Eclipse Projects API
   description: >-
     REST API exposing Eclipse Foundation project metadata, releases, committers, and project lifecycle
     data.
   humanURL: https://projects.eclipse.org/
-  baseURL: https://projects.eclipse.org/api/
+  baseURL: https://projects.eclipse.org
   tags:
   - Metadata
   - Project
@@ -106,13 +135,22 @@ apis:
   properties:
   - type: Documentation
     url: https://www.eclipse.org/projects/handbook/
+  - type: OpenAPI
+    url: openapi/eclipse-projects-pmi-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipse-projects-api
+  - type: Overlay
+    url: overlays/eclipse-projects-pmi-api-overlay.yaml
+  - type: AgentSkill
+    url: skills/eclipse-discover-projects.md
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:open-vsx-api
   name: Open VSX Registry API
   description: >-
     REST API for the Eclipse Open VSX Registry, an open-source alternative to the Visual Studio Marketplace
     for distributing VS Code-compatible extensions.
   humanURL: https://open-vsx.org/
-  baseURL: https://open-vsx.org/api
+  baseURL: https://open-vsx.org
   tags:
   - Extensions
   - Open-Source
@@ -128,12 +166,27 @@ apis:
     url: https://github.com/eclipse/openvsx/wiki/Publishing-Extensions
   - type: GitHub
     url: https://github.com/eclipse/openvsx
+  - type: OpenAPI
+    url: openapi/eclipse-open-vsx-registry-api-openapi.yml
+  - type: APIReference
+    url: https://open-vsx.org/swagger-ui/index.html
+  - type: Overlay
+    url: overlays/eclipse-open-vsx-registry-api-overlay.yaml
+  - type: AgentSkill
+    url: skills/eclipse-search-open-vsx.md
+  - type: CLI
+    url: cli/eclipse-cli.yml
+  - type: SDKs
+    url: packages/eclipse-packages.yml
+  - type: ChangeLog
+    url: changelog/eclipse-changelog.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:newsroom-api
   name: Eclipse Newsroom REST API
   description: >-
     REST API providing access to news, events, and announcements from the Eclipse Foundation newsroom.
   humanURL: https://newsroom.eclipse.org/
-  baseURL: https://newsroom.eclipse.org/api/
+  baseURL: https://newsroom.eclipse.org
   tags:
   - Event
   - News
@@ -145,6 +198,13 @@ apis:
   properties:
   - type: Documentation
     url: https://webdev.eclipse.org/docs/api/
+  - type: OpenAPI
+    url: openapi/eclipse-newsroom-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/newsroom-api
+  - type: Overlay
+    url: overlays/eclipse-newsroom-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-eclipse-marketplace-rest-api-api
   name: Eclipse Foundation Eclipse Marketplace REST API API
   description: >-
@@ -157,6 +217,7 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-eclipse-marketplace-rest-api-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-favorites-api
   name: Eclipse Foundation Favorites API
   description: The Favorites API from Eclipse Foundation — 1 operation(s) for favorites.
@@ -167,6 +228,7 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-favorites-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-featured-api
   name: Eclipse Foundation Featured API
   description: The Featured API from Eclipse Foundation — 1 operation(s) for featured.
@@ -177,6 +239,7 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-featured-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-node-api
   name: Eclipse Foundation Node API
   description: The Node API from Eclipse Foundation — 1 operation(s) for node.
@@ -187,6 +250,7 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-node-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-popular-api
   name: Eclipse Foundation Popular API
   description: The Popular API from Eclipse Foundation — 1 operation(s) for popular.
@@ -197,6 +261,7 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-popular-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-recent-api
   name: Eclipse Foundation Recent API
   description: The Recent API from Eclipse Foundation — 1 operation(s) for recent.
@@ -207,6 +272,7 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-recent-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-search-api
   name: Eclipse Foundation Search API
   description: The Search API from Eclipse Foundation — 1 operation(s) for search.
@@ -217,6 +283,7 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-search-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-taxonomy-api
   name: Eclipse Foundation Taxonomy API
   description: The Taxonomy API from Eclipse Foundation — 1 operation(s) for taxonomy.
@@ -227,32 +294,375 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/eclipse-taxonomy-api-openapi.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:downloads-api
+  name: Eclipse Foundation Downloads API
+  description: REST API for Eclipse Foundation release and download metadata — active release trains, release versions and individual file records used to drive the eclipse.org download pages and mirror selection.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-downloads-api
+  baseURL: https://api.eclipse.org/download
+  tags:
+  - Downloads
+  - Files
+  - Foundation
+  - Releases
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-downloads-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-downloads-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-downloads-api
+  - type: Overlay
+    url: overlays/eclipse-downloads-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:geoip-api
+  name: Eclipse GeoIP REST API
+  description: REST API resolving a client IP address to a country, city or country IP-range set. Used by the Eclipse Foundation to select download mirrors and regionalise content.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-geoip-api
+  baseURL: https://api.eclipse.org/geoip
+  tags:
+  - Foundation
+  - GeoIP
+  - Geolocation
+  - Infrastructure
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-geoip-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-geoip-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-geoip-api
+  - type: Overlay
+    url: overlays/eclipse-geoip-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:git-eca-api
+  name: Eclipse Foundation Git ECA API
+  description: REST API that validates Git contributions against the Eclipse Contributor Agreement. Exposes ECA lookup and commit validation as a callable service, plus inbound GitHub and GitLab webhook receivers used by the Foundation’s own forge checks.
+  humanURL: https://webdev.eclipse.org/docs/api/git-eca-rest-api
+  baseURL: https://api.eclipse.org/git
+  tags:
+  - Compliance
+  - ECA
+  - Git
+  - Governance
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-git-eca-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/git-eca-rest-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/git-eca-rest-api
+  - type: Overlay
+    url: overlays/eclipse-git-eca-api-overlay.yaml
+  - type: AgentSkill
+    url: skills/eclipse-check-contributor-agreement.md
+  - type: Webhooks
+    url: asyncapi/eclipse-webhooks.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:info-api
+  name: Eclipse Foundation Info API
+  description: REST API exposing Eclipse Foundation reference data — board members, registered trademarks and CVE records — plus a Slack membership webhook receiver.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-info-api
+  baseURL: https://api.eclipse.org/foundation/info
+  tags:
+  - CVE
+  - Foundation
+  - Metadata
+  - Security
+  - Trademarks
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-info-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-info-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-info-api
+  - type: Overlay
+    url: overlays/eclipse-info-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:mailing-lists-api
+  name: Eclipse Foundation Mailing List API
+  description: REST API for Eclipse Foundation mailing list metadata and subscription records, authenticated against the auth.eclipse.org foundation realm.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-mailing-lists-api
+  baseURL: https://api.eclipse.org/foundation/mailing-list
+  tags:
+  - Community
+  - Foundation
+  - Mailing Lists
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-mailing-lists-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-mailing-lists-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-mailing-lists-api
+  - type: Overlay
+    url: overlays/eclipse-mailing-lists-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:profile-api
+  name: Eclipse Profile API
+  description: REST API for Eclipse account profiles and user metadata, including the two-phase user deletion request flow the Foundation operates for data-protection erasure requests.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-profile-api
+  baseURL: https://api.eclipse.org
+  tags:
+  - Accounts
+  - Identity
+  - Privacy
+  - Profile
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-profile-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-profile-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-profile-api
+  - type: Overlay
+    url: overlays/eclipse-profile-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:working-groups-api
+  name: Eclipse Working Groups API
+  description: REST API for Eclipse working groups and special interest groups — participation levels, resources, participation agreements and committee membership.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-working-groups-api
+  baseURL: https://api.eclipse.org/working-groups
+  tags:
+  - Foundation
+  - Governance
+  - Membership
+  - Working Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-working-groups-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-working-groups-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-working-groups-api
+  - type: Overlay
+    url: overlays/eclipse-working-groups-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:committer-paperwork-api
+  name: Eclipse Committer Paperwork API
+  description: REST API for Eclipse committer paperwork records, authenticated against the auth.eclipse.org document-signature realm with dedicated committer_paperwork_retrieve, _update and _delete scopes.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-committer-paperwork-api
+  baseURL: https://api.eclipse.org/foundation/paperwork
+  tags:
+  - Committers
+  - Documents
+  - Governance
+  - Paperwork
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-committer-paperwork-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-committer-paperwork-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-committer-paperwork-api
+  - type: Overlay
+    url: overlays/eclipse-committer-paperwork-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:hellosign-api
+  name: Eclipse HelloSign API
+  description: REST API wrapping Dropbox Sign (HelloSign) for Eclipse Foundation document signing — signature requests for committer paperwork, membership and working-group agreements — plus the inbound signature event callback.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-hellosign-api
+  baseURL: https://api.eclipse.org/foundation/hellosign
+  tags:
+  - Documents
+  - Foundation
+  - Signatures
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-hellosign-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-hellosign-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-hellosign-api
+  - type: Overlay
+    url: overlays/eclipse-hellosign-api-overlay.yaml
+  - type: Webhooks
+    url: asyncapi/eclipse-webhooks.yml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:membership-portal-api
+  name: Eclipse Membership Portal API
+  description: REST API for the Eclipse Foundation membership portal — member organisations, contacts, products, yearly activity, industry collaborations, project and working-group relations. The largest OIDC-protected surface the Foundation publishes.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-portal-api
+  baseURL: https://membership.eclipse.org/api
+  tags:
+  - Foundation
+  - Governance
+  - Membership
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-membership-portal-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-portal-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-portal-api
+  - type: Overlay
+    url: overlays/eclipse-membership-portal-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:membership-application-api
+  name: Eclipse Membership Application API
+  description: REST API backing the Eclipse Foundation membership application forms — form creation, contacts, organizations, working-group selections and submission.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-application-api
+  baseURL: https://membership.eclipse.org/application_api
+  tags:
+  - Applications
+  - Forms
+  - Foundation
+  - Membership
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-membership-application-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-application-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-application-api
+  - type: Overlay
+    url: overlays/eclipse-membership-application-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:openvsx-agreement-api
+  name: Eclipse Open VSX Publisher Agreement API
+  description: REST API for submitting and revoking the Eclipse Open VSX publisher agreement against an Eclipse account, gated by the openvsx_publisher_agreement OAuth scope.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipse-openvsx-api
+  baseURL: https://api.eclipse.org/openvsx
+  tags:
+  - Agreements
+  - Legal
+  - Open VSX
+  - Publishing
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-openvsx-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipse-openvsx-api
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipse-openvsx-api
+  - type: Overlay
+    url: overlays/eclipse-openvsx-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+- aid: eclipse:project-adopters-api
+  name: Eclipse Project Adopters API
+  description: REST API listing the organisations that have declared adoption of an Eclipse Foundation project, per project or across the whole estate.
+  humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-project-adopters
+  baseURL: https://api.eclipse.org/adopters
+  tags:
+  - Adopters
+  - Foundation
+  - Metadata
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-project-adopters-api-openapi.yml
+  - type: APIReference
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-project-adopters
+  - type: Documentation
+    url: https://webdev.eclipse.org/docs/api/eclipsefdn-project-adopters
+  - type: Overlay
+    url: overlays/eclipse-project-adopters-api-overlay.yaml
+  image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 common:
-  - type: AgenticAccess
-    url: agentic-access/eclipse-agentic-access.yml
-  - type: VulnerabilityDisclosure
-    url: security/eclipse-vulnerability-disclosure.yml
-  - type: DomainSecurity
-    url: security/eclipse-domain-security.yml
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/eclipse-foundation
-  - type: Portal
-    url: https://www.eclipse.org/
-  - type: API Documentation Index
-    url: https://webdev.eclipse.org/docs/api/
-  - type: Blog
-    url: https://blogs.eclipse.org/
-  - type: News
-    url: https://newsroom.eclipse.org/
-  - type: GitHubOrganization
-    url: https://github.com/eclipse
-  - type: TermsOfService
-    url: https://www.eclipse.org/legal/termsofuse.php
-  - type: PrivacyPolicy
-    url: https://www.eclipse.org/legal/privacy.php
-  - type: License
-    url: https://www.eclipse.org/legal/epl-2.0/
+- type: OAuthScopes
+  url: scopes/eclipse-scopes.yml
+- type: Authentication
+  url: authentication/eclipse-authentication.yml
+- type: Website
+  url: https://www.eclipse.org/
+- type: AgenticAccess
+  url: agentic-access/eclipse-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/eclipse-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/eclipse-domain-security.yml
+- type: LinkedIn
+  url: https://www.linkedin.com/company/eclipse-foundation
+- type: Portal
+  url: https://www.eclipse.org/
+- type: API Documentation Index
+  url: https://webdev.eclipse.org/docs/api/
+- type: Blog
+  url: https://blogs.eclipse.org/
+- type: News
+  url: https://newsroom.eclipse.org/
+- type: GitHubOrganization
+  url: https://github.com/eclipse
+- type: TermsOfService
+  url: https://www.eclipse.org/legal/termsofuse.php
+- type: PrivacyPolicy
+  url: https://www.eclipse.org/legal/privacy.php
+- type: License
+  url: https://www.eclipse.org/legal/epl-2.0/
+- type: Packages
+  url: packages/eclipse-packages.yml
+- type: SDKs
+  url: packages/eclipse-packages.yml
+- type: CLI
+  url: cli/eclipse-cli.yml
+- type: Components
+  url: components/eclipse-components.yml
+- type: WellKnown
+  url: well-known/eclipse-well-known.yml
+- type: SecurityTxt
+  url: well-known/eclipse-security.txt
+- type: LLMsTxt
+  url: llms/eclipse-llms.txt
+- type: Conformance
+  url: conformance/eclipse-conformance.yml
+- type: ErrorCatalog
+  url: errors/eclipse-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/eclipse-lifecycle.yml
+- type: StatusPage
+  url: https://status.eclipse.org
+- type: Deprecation
+  url: lifecycle/eclipse-lifecycle.yml
+- type: OpenIDConnect
+  url: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+- type: Security
+  url: https://www.eclipse.org/security/policy/
+- type: Conventions
+  url: conventions/eclipse-conventions.yml
+- type: Idempotency
+  url: conventions/eclipse-conventions.yml
+- type: ChangeLog
+  url: changelog/eclipse-changelog.yml
+- type: DataModel
+  url: data-model/eclipse-data-model.yml
+- type: Webhooks
+  url: asyncapi/eclipse-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Plans
+  url: plans/eclipse-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/eclipse-rate-limits.yml
+- type: FinOps
+  url: finops/eclipse-finops.yml
+- type: DeveloperPortal
+  url: https://webdev.eclipse.org/docs/api/
+- type: Documentation
+  url: https://webdev.eclipse.org/docs/api/
+- type: APIReference
+  url: https://webdev.eclipse.org/docs/api/
+- type: GettingStarted
+  url: https://www.eclipse.org/projects/handbook/
+- type: Support
+  url: https://www.eclipse.org/org/foundation/contact.php
+- type: SignUp
+  url: https://accounts.eclipse.org/user/register
+- type: Login
+  url: https://accounts.eclipse.org/user/login
+- type: Pricing
+  url: https://www.eclipse.org/membership/
+- type: SourceCode
+  url: https://github.com/eclipse-openvsx/openvsx
 maintainers:
-  - FN: Eclipse Foundation
-    email: webmaster@eclipse.org
-    url: https://www.eclipse.org/org/foundation/contact.php
+- FN: Eclipse Foundation
+  email: webmaster@eclipse.org
+  url: https://www.eclipse.org/org/foundation/contact.php
+x-enrichment:
+  date: '2026-09-07'
+  status: enriched
+  artifacts_added: 79
+  pass: local-v3

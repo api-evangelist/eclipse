@@ -3,110 +3,85 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Eclipse Foundation
 providerId: eclipse
+generated: '2026-09-07'
+method: searched
+source: >-
+  https://open-vsx.org/v3/api-docs (89 declared 429 responses with headers), the 17 Eclipse
+  Foundation OpenAPIs at https://webdev.eclipse.org/docs/api/ (31 responses declaring
+  X-Rate-Limit-* headers), and the Open VSX admin rate-limit API surface.
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+modified: '2026-09-07'
 tags:
   - Eclipse Foundation
-  - Foundation
-  - Open Source
-  - Standards
   - Rate Limiting
   - Quotas
   - Throttling
-description: Machine-readable rate limit definitions for the Eclipse Foundation API surface. Captures
-  per-tier quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values
-  to be replaced with published provider limits.
+description: >-
+  Rate-limit signaling for the Eclipse Foundation API surface, read from the response-header and
+  status-code contracts the Foundation publishes in its own OpenAPI documents. This artifact
+  replaces a 2026-05-04 scaffold whose header names and numeric limits (10 rpm free, 20 burst,
+  X-RateLimit-* on every host) were bulk-generated defaults, not Eclipse values. No numeric limit
+  is published by the Eclipse Foundation anywhere; what IS published is the signaling contract, and
+  that is what is recorded here.
+limit_count: 0
+limit_count_note: >-
+  Zero published numeric limits. The Foundation documents no requests-per-second, per-minute,
+  per-day or per-account quota for any of its 294 operations, on any tier, in any specification or
+  docs page. An honest zero — the signaling below is real, the numbers behind it are not disclosed.
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  note: >-
+    Two incompatible spellings coexist on the surface. They are different HTTP header names; a
+    client parsing one reads nothing from the other. Neither is the RFC 9331 `RateLimit-*` form.
+  variants:
+    - name: Open VSX (camel-run)
+      limit: X-RateLimit-Limit
+      remaining: X-RateLimit-Remaining
+      reset: X-RateLimit-Reset
+      retryAfter: Retry-After
+      declared_on_responses: 256
+      applies_to: https://open-vsx.org
+    - name: Eclipse Foundation IT (hyphenated)
+      limit: X-Rate-Limit-Limit
+      remaining: X-Rate-Limit-Remaining
+      reset: X-Rate-Limit-Reset
+      retryAfter: null
+      declared_on_responses: 31
+      applies_to: https://api.eclipse.org, https://membership.eclipse.org
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Eclipse Marketplace API
-      - Eclipse Foundation Web API
-      - Eclipse Projects API
-      - Open VSX Registry API
-      - Eclipse Newsroom REST API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Eclipse Marketplace API
-      - Eclipse Foundation Web API
-      - Eclipse Projects API
-      - Open VSX Registry API
-      - Eclipse Newsroom REST API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Eclipse Marketplace API
-      - Eclipse Foundation Web API
-      - Eclipse Projects API
-      - Open VSX Registry API
-      - Eclipse Newsroom REST API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Eclipse Marketplace API
-      - Eclipse Foundation Web API
-      - Eclipse Projects API
-      - Open VSX Registry API
-      - Eclipse Newsroom REST API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Eclipse Marketplace API
-      - Eclipse Foundation Web API
-      - Eclipse Projects API
-      - Open VSX Registry API
-      - Eclipse Newsroom REST API
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers:
-  - FN: Eclipse Foundation
-    email: webmaster@eclipse.org
-    url: https://www.eclipse.org/org/foundation/contact.php
+  throttled_declared_by: Open VSX Registry API only (89 operations)
+  note: >-
+    No Eclipse Foundation IT API declares a 429 response anywhere, even on the 31 responses that
+    declare X-Rate-Limit-* headers. A caller cannot tell from the contract what status those APIs
+    return on exhaustion.
+header_semantics:
+  X-RateLimit-Limit: Number of requests that can be made in a given amount of time
+  X-RateLimit-Remaining: Number of remaining requests in the current time window
+  X-RateLimit-Reset: Number of seconds left in the current time window
+  Retry-After: Number of seconds to wait after receiving a 429 response
+  source: Verbatim from the header descriptions in https://open-vsx.org/v3/api-docs
+limits: []
+administration:
+  detail: >-
+    Open VSX exposes a first-party administrative API for its own rate-limit configuration, which
+    confirms the limits are tiered and per-customer even though the tiers themselves are not
+    published. These operations are admin-scoped and not callable by an ordinary consumer.
+  operations:
+    - 'GET /admin/ratelimit/tiers (listTiers)'
+    - 'PUT /admin/ratelimit/tiers/{name} (updateTier)'
+    - 'DELETE /admin/ratelimit/tiers/{name} (deleteTier)'
+    - 'GET /admin/ratelimit/customers/{name} (getCustomer)'
+    - 'PUT /admin/ratelimit/customers/{name} (updateCustomer)'
+    - 'DELETE /admin/ratelimit/customers/{name} (deleteCustomer)'
+    - 'POST /admin/ratelimit/customers/{name}/add-member (addCustomerMember)'
+    - 'POST /admin/ratelimit/customers/{name}/remove-member (removeCustomerMember)'
+  spec: openapi/eclipse-open-vsx-registry-api-openapi.yml
+guidance_for_agents:
+  - Read X-RateLimit-Remaining on every Open VSX response and back off before it reaches zero.
+  - Honour Retry-After on a 429; it is the only recovery signal published anywhere on the surface.
+  - >-
+    On api.eclipse.org and membership.eclipse.org, budget conservatively — headers may appear but
+    no exhaustion status, no window and no quota is documented, so the failure mode is unknown.
+  - >-
+    Do not retry a failed write blindly. Only 2 of 83 mutating operations carry any replay or
+    concurrency control (see conventions/eclipse-conventions.yml).

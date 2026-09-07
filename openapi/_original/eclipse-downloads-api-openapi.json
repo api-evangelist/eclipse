@@ -1,0 +1,614 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Eclipse Foundation Downloads API",
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org/download",
+      "description": "Production endpoint for the download information"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Files",
+      "description": "Definitions in relation to retrieval of mailing lists"
+    },
+    {
+      "name": "Releases",
+      "description": "Definitions in relation to retrieval of mailing lists"
+    }
+  ],
+  "paths": {
+    "/file/{file_id}": {
+      "parameters": [
+        {
+          "name": "file_id",
+          "in": "path",
+          "description": "The ID of the file to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "summary": "File by ID",
+        "description": "Returns a file indexes metadata by its file ID",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/release/{releaseType}": {
+      "parameters": [
+        {
+          "name": "releaseType",
+          "in": "path",
+          "description": "The type of release to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "release_name",
+          "in": "query",
+          "description": "The name of the release to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "release_version",
+          "in": "query",
+          "description": "The version of the release to retrieve",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Releases"
+        ],
+        "summary": "Releases by release type",
+        "description": "Returns a list of releases, or a single release, applicable to the query parameters",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Release"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid release type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/releases/active": {
+      "get": {
+        "tags": [
+          "Releases"
+        ],
+        "summary": "Active releases",
+        "description": "Returns a list of active releases",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Releases"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          }
+        }
+      }
+    },
+    "/releases/{releaseType}/{releaseName}": {
+      "parameters": [
+        {
+          "name": "releaseType",
+          "in": "path",
+          "description": "The type of release to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "releaseName",
+          "in": "path",
+          "description": "The name of the release to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Releases"
+        ],
+        "summary": "Release Versions",
+        "description": "Returns a list of versions available for the given release",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Releases"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid release type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Release name not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/releases/{releaseType}/{releaseName}/{releaseVersion}": {
+      "parameters": [
+        {
+          "name": "releaseType",
+          "in": "path",
+          "description": "The type of release to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "releaseName",
+          "in": "path",
+          "description": "The name of the release to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "releaseVersion",
+          "in": "path",
+          "description": "The version of the release to retrieve",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Releases"
+        ],
+        "summary": "Release Version",
+        "description": "Returns a given version for the named release",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Release"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid release type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Release name/version not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data"
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NullableString": {
+        "description": "A nullable String type value",
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "DateTime": {
+        "type": "string",
+        "format": "datetime",
+        "description": "Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.\n\nMore on this standard can be read at https://tools.ietf.org/html/rfc3339.\n"
+      },
+      "Files": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/File"
+        }
+      },
+      "File": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file_id",
+          "file_name",
+          "download_count",
+          "size_disk_bytes",
+          "timestamp_disk"
+        ],
+        "properties": {
+          "file_id": {
+            "type": "integer",
+            "description": "placeholder"
+          },
+          "file_name": {
+            "type": "string",
+            "description": "placeholder"
+          },
+          "download_count": {
+            "type": "integer",
+            "description": "placeholder"
+          },
+          "size_disk_bytes": {
+            "type": "integer",
+            "description": "placeholder"
+          },
+          "timestamp_disk": {
+            "type": "integer",
+            "description": "placeholder"
+          },
+          "md5sum": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "placeholder"
+          },
+          "sha1sum": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "placeholder"
+          },
+          "sha512sum": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "placeholder"
+          }
+        }
+      },
+      "Releases": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Release"
+        }
+      },
+      "Release": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "release_name",
+          "release_version",
+          "packages"
+        ],
+        "properties": {
+          "release_name": {
+            "type": "string",
+            "description": "The name of the release for the packages"
+          },
+          "release_version": {
+            "type": "string",
+            "description": "The version of the release for the packages"
+          },
+          "packages": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ReleasePackage"
+            }
+          }
+        }
+      },
+      "ReleasePackage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "package_bugzilla_id",
+          "download_count",
+          "website_url",
+          "incubating",
+          "class",
+          "body",
+          "features",
+          "files"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the release package"
+          },
+          "package_bugzilla_id": {
+            "type": "string",
+            "description": "Placeholder"
+          },
+          "download_count": {
+            "type": "string",
+            "description": "Number of times this package has been downloaded"
+          },
+          "website_url": {
+            "type": "string",
+            "description": "The public URL for the package that includes more information about the release."
+          },
+          "incubating": {
+            "type": "boolean",
+            "description": "placeholder"
+          },
+          "class": {
+            "type": "string",
+            "description": "placeholder"
+          },
+          "body": {
+            "type": "string",
+            "description": "Description of the release package"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "files": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "required": [
+              "mac",
+              "windows",
+              "linux"
+            ],
+            "properties": {
+              "mac": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ReleaseFiles"
+                  }
+                ]
+              },
+              "windows": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ReleaseFiles"
+                  }
+                ]
+              },
+              "linux": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ReleaseFiles"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "ReleaseFiles": {
+        "type": "object",
+        "properties": {
+          "32": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReleaseFile"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "64": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReleaseFile"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "ReleaseFile": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "size",
+          "file_url",
+          "checksum"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The publicly available URL for the package"
+          },
+          "size": {
+            "type": "string",
+            "description": "the size of the file in bytes"
+          },
+          "file_id": {
+            "$ref": "#/components/schemas/NullableString",
+            "description": "The internal ID of the file"
+          },
+          "file_url": {
+            "type": "string",
+            "description": "the public facing URL for the file (no mirror)"
+          },
+          "download_count": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The number of times this file has been downloaded"
+          },
+          "checksum": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "sha1": {
+                "$ref": "#/components/schemas/NullableString",
+                "description": "the sha1 checksum for the release file"
+              },
+              "md5": {
+                "$ref": "#/components/schemas/NullableString",
+                "description": "the md5 checksum for the release file"
+              },
+              "sha512": {
+                "$ref": "#/components/schemas/NullableString",
+                "description": "the sha512 checksum for the release file"
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status_code",
+          "message"
+        ],
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "description": "HTTP response code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message containing error information"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The URL"
+          },
+          "friendly_message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The optional client-friendly message for the error"
+          }
+        }
+      }
+    }
+  }
+}

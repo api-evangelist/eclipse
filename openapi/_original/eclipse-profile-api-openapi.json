@@ -1,0 +1,1913 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Profile API",
+    "description": "Access information on Eclipse Foundation profiles.",
+    "license": {
+      "name": "Eclipse Public License - 2.0",
+      "url": "https://www.eclipse.org/legal/epl-2.0/"
+    },
+    "contact": {
+      "url": "https://gitlab.eclipse.org/eclipsefdn/it/api/eclipsefdn-profile-api/-/issues"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.eclipse.org",
+      "description": "Production endpoints for Eclipse Foundation profile data"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User Profile",
+      "description": "Profile data for a user"
+    },
+    {
+      "name": "User Metadata",
+      "description": "Additional user metadata"
+    },
+    {
+      "name": "User Delete Request",
+      "description": "User delete request processing"
+    },
+    {
+      "name": "Slack Webhook",
+      "description": "Slack Webhook processing"
+    }
+  ],
+  "paths": {
+    "/account/profile": {
+      "get": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Search for user or get current user",
+        "description": "Retrieve information about a user with given params, or the user making the request.",
+        "operationId": "UserSearch",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "query",
+            "description": "A user uid.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "An EF username.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mail",
+            "in": "query",
+            "description": "A user email.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDatas"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid authentication"
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        }
+      }
+    },
+    "/account/profile/{name}": {
+      "get": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Retrieve user via Ef Username",
+        "description": "Retrieve profile information about a specified user.",
+        "operationId": "RetrieveUserEf",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "A valid Eclipse username.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/github/profile/{handle}": {
+      "get": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Retrieve user via Github handle",
+        "description": "Retrieve profile information about a specified user.",
+        "operationId": "RetrieveUserGh",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "handle",
+            "in": "path",
+            "description": "A valid Github handle.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/account/profile/{name}/cache": {
+      "delete": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Clear user profile cache",
+        "description": "Clear the cache data for specified user.",
+        "operationId": "clearCacheForUser",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "An ef username.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/account/profile/{name}/eca": {
+      "get": {
+        "tags": [
+          "User Metadata"
+        ],
+        "summary": "Retrieve user eca status via username",
+        "description": "Retrieve eca status about a specified user.",
+        "operationId": "RetrieveEca",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "An ef username.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Eca"
+                },
+                "example": {
+                  "signed": true,
+                  "can_contribute_spec_project": true
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/account/profile/{name}/employment-history": {
+      "get": {
+        "tags": [
+          "User Metadata"
+        ],
+        "summary": "Retrieve user employment history via username",
+        "description": "Retrieve employment history for a specified user.",
+        "operationId": "getUserEmploymentHistory",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "An ef username.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmploymentHistories"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/account/profile/{name}/mailing-list": {
+      "get": {
+        "tags": [
+          "User Metadata"
+        ],
+        "summary": "Retrieve user mailing-list subscriptions via username",
+        "description": "Retrieve mailing-list subscriptions for a specified user.",
+        "operationId": "RetrieveMailingList",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "An ef username.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subscriptions"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/account/profile/{name}/projects": {
+      "get": {
+        "tags": [
+          "User Metadata"
+        ],
+        "summary": "Retrieve user projects via username",
+        "description": "Retrieve projects for a specified user.",
+        "operationId": "RetrieveProjects",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "An ef username.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeopleProjectMap"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/account/profile/{name}/user_delete_request": {
+      "post": {
+        "tags": [
+          "User Delete Request"
+        ],
+        "summary": "Initialize the user deletion process via username",
+        "description": "Initialize the user deletion process for a specified user.",
+        "operationId": "CreateDeleteRequests",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "An ef username.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedUserDeleteRequests"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid authentication"
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Records already exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/account/user_delete_request": {
+      "get": {
+        "tags": [
+          "User Delete Request"
+        ],
+        "summary": "Retrieve list of user delete requests via params",
+        "description": "Retrieve a list of user delete requests filtered by desired parameters",
+        "operationId": "RetrieveDeleteRequests",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "query",
+            "description": "A user uid.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "An EF username.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mail",
+            "in": "query",
+            "description": "A user email.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "host",
+            "in": "query",
+            "description": "A host name.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Current request status.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "A starting date range.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "description": "An ending date range.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedUserDeleteRequests"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        }
+      }
+    },
+    "/account/user_delete_request/ready": {
+      "get": {
+        "tags": [
+          "User Delete Request"
+        ],
+        "summary": "Retrieve list of final-stage user delete requests",
+        "description": "Retrieve a list of user delete requests ready to be handled by accounts.e.o",
+        "operationId": "RetrieveFinalStageDeleteRequests",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeleteRequests"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        }
+      }
+    },
+    "/account/user_delete_request/{request_id}": {
+      "get": {
+        "tags": [
+          "User Delete Request"
+        ],
+        "summary": "Retrieve a user delete request by id",
+        "description": "Retrieve a user delete request by id",
+        "operationId": "RetrieveDeleteRequest",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "description": "The desired request id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeleteRequest"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid authentication"
+          },
+          "404": {
+            "description": "Delete Request not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User Delete Request"
+        ],
+        "summary": "Update a user delete request by id",
+        "description": "Update a user delete request by id",
+        "operationId": "UpdateDeleteRequest",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "description": "The desired request id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The new status to set the request.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestStatusUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success - No content"
+          },
+          "400": {
+            "description": "Bad Request - invalid request body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid authentication"
+          },
+          "404": {
+            "description": "Delete Request not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while modifying data."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User Delete Request"
+        ],
+        "summary": "Delete a user delete request by id",
+        "description": "Delete a user delete request by id",
+        "operationId": "DeleteDeleteRequest",
+        "security": [
+          {
+            "OAuth2": [
+              "eclipsefdn_view_all_profiles"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "description": "The desired request id.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success - No content"
+          },
+          "403": {
+            "description": "Invalid authentication"
+          },
+          "404": {
+            "description": "Delete Request not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while modifying data."
+          }
+        }
+      }
+    },
+    "/slack/profile": {
+      "post": {
+        "tags": [
+          "Slack Webhook"
+        ],
+        "summary": "Retrieve a user profile by username or email.",
+        "description": "Retrieve profile information by email or username.",
+        "operationId": "SlackProfileWebhook",
+        "requestBody": {
+          "description": "The Slack profile search request",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlackRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success - Profile found/not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlackResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid authentication"
+          },
+          "500": {
+            "description": "Error while retrieving data."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://accounts.eclipse.org/oauth2/token",
+            "scopes": {
+              "eclipsefdn_view_all_profiles": "Access private profile information"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "UserDatas": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserData"
+        },
+        "example": [
+          {
+            "uid": "606609",
+            "name": "zacharysabourin",
+            "mail": "zachary.sabourin@eclipse-foundation.org",
+            "picture": "https://secure.gravatar.com/avatar/fbbbb03860062596a5cf11105dcc7d47.jpg?d=mm&s=185&r=G",
+            "eca": {
+              "signed": true,
+              "can_contribute_spec_project": true
+            },
+            "is_committer": true,
+            "first_name": "Zachary",
+            "last_name": "Sabourin",
+            "github_handle": "zacharysabourin",
+            "twitter_handle": "sometwitteruser",
+            "publisher_agreements": {
+              "open-vsx": {
+                "version": "1"
+              }
+            },
+            "org": "Eclipse Foundation",
+            "org_id": null,
+            "job_title": "Web Developer",
+            "website": "https://google.com",
+            "country": {
+              "code": "CA",
+              "name": "Canada"
+            },
+            "bio": "This is my bio. Hello!",
+            "interests": [
+              "MTG",
+              "Warhammer",
+              "Bass guitar"
+            ],
+            "working_groups_interests": [
+              "adoptium",
+              "oniro"
+            ],
+            "opt_in": {
+              "copilot": true
+            },
+            "eca_url": "https://api.eclipse.org/account/profile/zacharysabourin/eca",
+            "projects_url": "https://api.eclipse.org/account/profile/zacharysabourin/projects",
+            "gerrit_url": "",
+            "mailinglist_url": "https://api.eclipse.org/account/profile/zacharysabourin/mailing-list",
+            "mpc_favorites_url": "https://marketplace.eclipse.org/user/zacharysabourin/favorites"
+          }
+        ]
+      },
+      "UserData": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "uid",
+          "name",
+          "picture",
+          "first_name",
+          "last_name",
+          "publisher_agreements",
+          "github_handle",
+          "twitter_handle",
+          "job_title",
+          "website",
+          "country",
+          "interests"
+        ],
+        "properties": {
+          "uid": {
+            "type": "string",
+            "description": "The unique user id."
+          },
+          "name": {
+            "type": "string",
+            "description": "The user's ef username name."
+          },
+          "picture": {
+            "type": "string",
+            "description": "URL of the user's picture."
+          },
+          "mail": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's email."
+          },
+          "eca": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Eca"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "is_committer": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User's committer status."
+          },
+          "first_name": {
+            "type": "string",
+            "description": "The user's first name."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The user's last name."
+          },
+          "full_name": {
+            "type": "string",
+            "description": "The user's full name."
+          },
+          "publisher_agreements": {
+            "type": "object",
+            "propertyNames": {
+              "description": "The publisher agreement name."
+            },
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PublisherAgreement"
+            }
+          },
+          "github_handle": {
+            "type": "string",
+            "description": "The user's Github handle."
+          },
+          "github_id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The users GitHub account ID if linked."
+          },
+          "twitter_handle": {
+            "type": "string",
+            "description": "The user's Twitter handle."
+          },
+          "mxid": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's matrix ID, if it exists"
+          },
+          "org": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's organization."
+          },
+          "org_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's organization id."
+          },
+          "job_title": {
+            "type": "string",
+            "description": "The user's job title at the organization."
+          },
+          "website": {
+            "type": "string",
+            "description": "The user's website."
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "bio": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's account bio"
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A list of the user's interests."
+          },
+          "working_groups_interests": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array"
+              }
+            ],
+            "description": "A list of the user's working group interests."
+          },
+          "opt_in": {
+            "description": "Optional features that users have opted into for their account",
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "boolean"
+                }
+              }
+            ]
+          },
+          "public_fields": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array"
+              }
+            ],
+            "description": "A list of the user's public fields."
+          },
+          "mail_history": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array"
+              }
+            ],
+            "description": "A list of the user's email history."
+          },
+          "mail_alternate": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array"
+              }
+            ],
+            "description": "A list of the user's alternate emails."
+          },
+          "gerrit_url": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's Gerrit URL, deprecated and always empty",
+            "deprecated": true
+          },
+          "projects_url": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's projects URL."
+          },
+          "mailinglist_url": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's mailing list URL."
+          },
+          "mpc_favorites_url": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's Marketplace favorites URL."
+          },
+          "eca_url": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's ECA status URL."
+          }
+        },
+        "example": {
+          "uid": "606609",
+          "name": "zacharysabourin",
+          "mail": "zachary.sabourin@eclipse-foundation.org",
+          "picture": "https://secure.gravatar.com/avatar/fbbbb03860062596a5cf11105dcc7d47.jpg?d=mm&s=185&r=G",
+          "eca": {
+            "signed": true,
+            "can_contribute_spec_project": true
+          },
+          "is_committer": true,
+          "first_name": "Zachary",
+          "last_name": "Sabourin",
+          "github_handle": "zacharysabourin",
+          "twitter_handle": "sometwitteruser",
+          "publisher_agreements": {
+            "open-vsx": {
+              "version": "1"
+            }
+          },
+          "org": "Eclipse Foundation",
+          "org_id": null,
+          "job_title": "Web Developer",
+          "website": "https://google.com",
+          "country": {
+            "code": "CA",
+            "name": "Canada"
+          },
+          "bio": "This is my bio. Hello!",
+          "interests": [
+            "MTG",
+            "Warhammer",
+            "Bass guitar"
+          ],
+          "working_groups_interests": [
+            "adoptium",
+            "oniro"
+          ],
+          "opt_in": {
+            "copilot": true
+          },
+          "eca_url": "https://api.eclipse.org/account/profile/zacharysabourin/eca",
+          "projects_url": "https://api.eclipse.org/account/profile/zacharysabourin/projects",
+          "gerrit_url": "",
+          "mailinglist_url": "https://api.eclipse.org/account/profile/zacharysabourin/mailing-list",
+          "mpc_favorites_url": "https://marketplace.eclipse.org/user/zacharysabourin/favorites"
+        }
+      },
+      "Eca": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signed",
+          "can_contribute_spec_project"
+        ],
+        "properties": {
+          "signed": {
+            "type": "boolean",
+            "description": "Flag determining whether user has signed ECA."
+          },
+          "can_contribute_spec_project": {
+            "type": "boolean",
+            "description": "Flag determining whether users can contribute to a spec project."
+          }
+        },
+        "example": {
+          "signed": true,
+          "can_contribute_spec_project": true
+        }
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The country code."
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "code": "CA",
+          "name": "Canada"
+        }
+      },
+      "PublisherAgreement": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version"
+        ],
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "the agreement document version."
+          }
+        },
+        "example": {
+          "version": "1"
+        }
+      },
+      "Error": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "An array containing a single message indicating the error"
+      },
+      "ExtendedError": {
+        "type": "object",
+        "description": "An object with a status code and message denoting an upstream error",
+        "required": [
+          "status_code",
+          "message"
+        ],
+        "properties": {
+          "status_code": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "Subscriptions": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mailing_list_subscriptions"
+        ],
+        "properties": {
+          "mailing_list_subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MailingList"
+            }
+          }
+        },
+        "example": {
+          "mailing_list_subscriptions": [
+            {
+              "list_name": "cross-project-issues-dev",
+              "list_description": "Cross project issues"
+            },
+            {
+              "list_name": "epp",
+              "list_description": "Eclipse Packaging Project"
+            }
+          ]
+        }
+      },
+      "EmploymentHistories": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EmploymentHistory"
+        }
+      },
+      "EmploymentHistory": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id",
+          "organization_name",
+          "start"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "number",
+            "description": "Internal numerical ID of organization"
+          },
+          "organization_name": {
+            "type": "string",
+            "description": "The legal name of the organization"
+          },
+          "start": {
+            "type": "string",
+            "description": "Start or entry date of the user employment"
+          },
+          "end": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Termination or change date for employment"
+          }
+        }
+      },
+      "MailingList": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "list_name",
+          "list_description"
+        ],
+        "properties": {
+          "list_name": {
+            "type": "string",
+            "description": "The mailing list name."
+          },
+          "list_description": {
+            "type": "string",
+            "description": "The mailing list description."
+          }
+        },
+        "example": {
+          "list_name": "cross-project-issues-dev",
+          "list_description": "Cross project issues"
+        }
+      },
+      "PeopleProjectMap": {
+        "type": "object",
+        "propertyNames": {
+          "description": "The project ID"
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/PeopleProjects"
+        },
+        "example": {
+          "technology.usssdk": [
+            {
+              "active_date": "2022-09-21T00:00:00Z",
+              "inactive_date": "",
+              "edit_bugs": "0",
+              "sort_order": "",
+              "project_name": "Eclise USS SDK",
+              "url": "https://projects.eclipse.org/projects/technology.usssdk",
+              "specification_project": false,
+              "relation": {
+                "relation": "CM",
+                "description": "commiter",
+                "is_active": "1",
+                "type": {
+                  "type": "PR",
+                  "description": "Person - Project"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "PeopleProjects": {
+        "type": "array",
+        "description": "Map of projects that the user is associated with.",
+        "items": {
+          "$ref": "#/components/schemas/PeopleProject"
+        },
+        "example": [
+          {
+            "active_date": "2022-09-21T00:00:00Z",
+            "inactive_date": "",
+            "edit_bugs": "0",
+            "sort_order": "",
+            "project_name": "Eclise USS SDK",
+            "url": "https://projects.eclipse.org/projects/technology.usssdk",
+            "specification_project": false,
+            "relation": {
+              "relation": "CM",
+              "description": "commiter",
+              "is_active": "1",
+              "type": {
+                "type": "PR",
+                "description": "Person - Project"
+              }
+            }
+          }
+        ]
+      },
+      "PeopleProject": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ActiveDate",
+          "EditBugs",
+          "SortOrder",
+          "ProjectName",
+          "Url",
+          "SpecificationProject",
+          "Relation"
+        ],
+        "properties": {
+          "ActiveDate": {
+            "type": "string",
+            "description": "The active date for this record"
+          },
+          "InactiveDate": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The inactive date for this record"
+          },
+          "EditBugs": {
+            "type": "string",
+            "description": "Edit bugs status. 1 for true, 0 for false"
+          },
+          "SortOrder": {
+            "type": "string",
+            "description": "The sort order for this record"
+          },
+          "ProjectName": {
+            "type": "string",
+            "description": "The project's name"
+          },
+          "Url": {
+            "type": "string",
+            "description": "The project URL"
+          },
+          "SpecificationProject": {
+            "type": "boolean",
+            "description": "The active date for tis record"
+          },
+          "Relation": {
+            "$ref": "#/components/schemas/Relation"
+          }
+        }
+      },
+      "Relation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Relation",
+          "Description",
+          "IsActive",
+          "Type"
+        ],
+        "properties": {
+          "Relation": {
+            "type": "string",
+            "description": "The relation code."
+          },
+          "Description": {
+            "type": "string",
+            "description": "The relation description."
+          },
+          "IsActive": {
+            "type": "string",
+            "description": "The active flag for the relation. 1 for true, 0 for false."
+          },
+          "Type": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "Type",
+              "Description"
+            ],
+            "properties": {
+              "Type": {
+                "type": "string",
+                "description": "The type code."
+              },
+              "Description": {
+                "type": "string",
+                "description": "The type description."
+              }
+            }
+          }
+        },
+        "example": {
+          "Relation": "CM",
+          "Description": "commiter",
+          "IsActive": "1",
+          "Type": {
+            "Type": "PR",
+            "Description": "Person - Project"
+          }
+        }
+      },
+      "PaginatedUserDeleteRequests": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "result",
+          "pagination"
+        ],
+        "properties": {
+          "result": {
+            "$ref": "#/components/schemas/UserDeleteRequests"
+          },
+          "pagination": {
+            "type": "object",
+            "description": "The pagination information",
+            "additionalProperties": false,
+            "required": [
+              "page",
+              "page_size",
+              "result_start",
+              "result_end",
+              "result_size",
+              "total_result_size"
+            ],
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "page_size": {
+                "type": "number"
+              },
+              "result_start": {
+                "type": "number"
+              },
+              "result_end": {
+                "type": "number"
+              },
+              "result_size": {
+                "type": "number"
+              },
+              "total_result_size": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": {
+          "result": [
+            {
+              "id": "1",
+              "uid": "606609",
+              "name": "zacharysabourin",
+              "mail": "zachary.sabourin@eclipse-foundation.org",
+              "host": "projects.eclipse.org",
+              "status": "0",
+              "created": "1686086484",
+              "changed": "1686086484",
+              "url": "https://api.eclipse.org/account/user_delete_request/1"
+            },
+            {
+              "id": "2",
+              "uid": "606609",
+              "name": "zacharysabourin",
+              "mail": "zachary.sabourin@eclipse-foundation.org",
+              "host": "marketplace.eclipse.org",
+              "status": "0",
+              "created": "1686086484",
+              "changed": "1686086484",
+              "url": "https://api.eclipse.org/account/user_delete_request/2"
+            },
+            {
+              "id": "3",
+              "uid": "606609",
+              "name": "zacharysabourin",
+              "mail": "zachary.sabourin@eclipse-foundation.org",
+              "host": "eclipse.org/downloads/packages",
+              "status": "0",
+              "created": "1686086484",
+              "changed": "1686086484",
+              "url": "https://api.eclipse.org/account/user_delete_request/3"
+            },
+            {
+              "id": "4",
+              "uid": "606609",
+              "name": "zacharysabourin",
+              "mail": "zachary.sabourin@eclipse-foundation.org",
+              "host": "blogs.eclipse.org",
+              "status": "0",
+              "created": "1686086484",
+              "changed": "1686086484",
+              "url": "https://api.eclipse.org/account/user_delete_request/4"
+            },
+            {
+              "id": "5",
+              "uid": "606609",
+              "name": "zacharysabourin",
+              "mail": "zachary.sabourin@eclipse-foundation.org",
+              "host": "accounts.eclipse.org",
+              "status": "0",
+              "created": "1686086484",
+              "changed": "1686086484",
+              "url": "https://api.eclipse.org/account/user_delete_request/5"
+            },
+            {
+              "id": "6",
+              "uid": "606609",
+              "name": "zacharysabourin",
+              "mail": "zachary.sabourin@eclipse-foundation.org",
+              "host": "eclipsecon.org",
+              "status": "0",
+              "created": "1686086484",
+              "changed": "1686086484",
+              "url": "https://api.eclipse.org/account/user_delete_request/6"
+            },
+            {
+              "id": "7",
+              "uid": "606609",
+              "name": "zacharysabourin",
+              "mail": "zachary.sabourin@eclipse-foundation.org",
+              "host": "newsroom.eclipse.org",
+              "status": "0",
+              "created": "1686086484",
+              "changed": "1686086484",
+              "url": "https://api.eclipse.org/account/user_delete_request/7"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "page_size": 50,
+            "result_start": 1,
+            "result_end": 6,
+            "result_size": 6,
+            "total_result_size": "6"
+          }
+        }
+      },
+      "UserDeleteRequests": {
+        "type": "array",
+        "description": "The list of UserDeleteRequest objects found",
+        "items": {
+          "$ref": "#/components/schemas/UserDeleteRequest"
+        }
+      },
+      "UserDeleteRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "uid",
+          "name",
+          "mail",
+          "host",
+          "status",
+          "created",
+          "changed",
+          "url"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The request id"
+          },
+          "uid": {
+            "type": "string",
+            "description": "The user uid"
+          },
+          "name": {
+            "type": "string",
+            "description": "The user's ef username"
+          },
+          "mail": {
+            "type": "string",
+            "description": "The user email"
+          },
+          "host": {
+            "type": "string",
+            "description": "The request host name"
+          },
+          "status": {
+            "type": "string",
+            "description": "The current request status. Ex, 0, 1, or 2"
+          },
+          "created": {
+            "type": "string",
+            "description": "The epoch time stamp of the creation of the request"
+          },
+          "changed": {
+            "type": "string",
+            "description": "The epoch time stamp of the last change made to the request"
+          },
+          "url": {
+            "type": "string",
+            "description": "The URL pointing to the resource"
+          }
+        },
+        "example": {
+          "id": "1",
+          "uid": "606609",
+          "name": "zacharysabourin",
+          "mail": "zachary.sabourin@eclipse-foundation.org",
+          "host": "projects.eclipse.org",
+          "status": "0",
+          "created": "1686086484",
+          "changed": "1686086484",
+          "url": "https://api.eclipse.org/account/user_delete_request/1"
+        }
+      },
+      "RequestStatusUpdate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "The desired status for updating the delete request."
+          }
+        },
+        "example": {
+          "status": 2
+        }
+      },
+      "SlackRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "token",
+          "text",
+          "team_domain"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The value used to search for a profile"
+          },
+          "token": {
+            "type": "string",
+            "description": "The authentication token"
+          },
+          "team_domain": {
+            "type": "string",
+            "description": "The slack team domain"
+          }
+        },
+        "example": {
+          "text": "zacharysabourin",
+          "token": "auth_token",
+          "team_domain": "my_team"
+        }
+      },
+      "SlackResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "response_type",
+          "text"
+        ],
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "description": "Visibilty control used by slack. Used to post response in channel"
+          },
+          "text": {
+            "type": "string",
+            "description": "The response message"
+          },
+          "attachments": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SlackAttachment"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "example": {
+          "response_type": "in_channel",
+          "text": "An Eclipse account was found with zacharysabourin https://accounts.eclipse.org/user/606609.",
+          "attachments": [
+            {
+              "title": "Zachary Sabourin(Eclipse Foundation)",
+              "title_link": "https://accounts.eclipse.org/user/606609.",
+              "text": "*ECA Status:* Valid\\*Name:* zacharysabourin\\*Mail:* email@test.com\\*Committer:* No\\*Github handle:* https://github.com/zacharysabourin\\*Job title:* Web Developer\\*Bio:* I'm fascinated by the power of technology and I'm always trying to learn new things! When I'm not working or learning, I enjoy exploring my many interests or going on walks. \r\n\r\n\"Be yourself; everyone else is already taken\" -Oscar Wilde\r\n\n*Interests*Video games, bass guitar, Music, Magic: the Gathering, PodCasts"
+            }
+          ]
+        }
+      },
+      "SlackAttachment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "title_link",
+          "text"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "the attachment title"
+          },
+          "title_link": {
+            "type": "string",
+            "description": "A URL to embed in the title"
+          },
+          "text": {
+            "type": "string",
+            "text": "The content of the attachment. A markdown formatted string in this case"
+          }
+        }
+      }
+    }
+  }
+}
