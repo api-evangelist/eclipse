@@ -1,7 +1,16 @@
 aid: eclipse
 name: Eclipse Foundation
-description: >-
-  The Eclipse Foundation is a non-profit (Belgian AISBL) that provides a global community of individuals and organizations with a mature, scalable and business-friendly environment for open source software collaboration and innovation. It is also a substantial API provider in its own right: it publishes 294 REST operations across 18 first-party OpenAPI specifications, covering Eclipse project and release metadata (Projects PMI), the Eclipse Marketplace, the Eclipse Newsroom, Foundation downloads and GeoIP, Eclipse Contributor Agreement validation, committer paperwork and document signing, mailing lists, member organizations and working groups, Eclipse account profiles, and the Eclipse Open VSX Registry — the vendor-neutral marketplace for VS Code-compatible extensions, which also implements the Microsoft VS Code Extension Gallery wire protocol. Read access across the entire surface is anonymous, unmetered and free; writes authenticate against Keycloak OpenID Connect on auth.eclipse.org or, for Open VSX publishing, a personal access token.
+description: 'The Eclipse Foundation is a non-profit (Belgian AISBL) that provides a global community
+  of individuals and organizations with a mature, scalable and business-friendly environment for open
+  source software collaboration and innovation. It is also a substantial API provider in its own right:
+  it publishes 294 REST operations across 18 first-party OpenAPI specifications, covering Eclipse project
+  and release metadata (Projects PMI), the Eclipse Marketplace, the Eclipse Newsroom, Foundation downloads
+  and GeoIP, Eclipse Contributor Agreement validation, committer paperwork and document signing, mailing
+  lists, member organizations and working groups, Eclipse account profiles, and the Eclipse Open VSX Registry
+  — the vendor-neutral marketplace for VS Code-compatible extensions, which also implements the Microsoft
+  VS Code Extension Gallery wire protocol. Read access across the entire surface is anonymous, unmetered
+  and free; writes authenticate against Keycloak OpenID Connect on auth.eclipse.org or, for Open VSX publishing,
+  a personal access token.'
 type: Index
 deliveryModel:
   model: saas
@@ -16,7 +25,10 @@ deliveryModel:
   - license
   generated: '2026-09-07'
   method: searched
-  note: Corrected 2026-09-07. The Eclipse Foundation is a non-profit AISBL, not a commercial vendor; the APIs are free and their implementations are published under EPL-2.0 on gitlab.eclipse.org/eclipsefdn and github.com/eclipse-openvsx. Open VSX is additionally self-hostable, and its own CLI targets any deployment via OVSX_REGISTRY_URL.
+  note: Corrected 2026-09-07. The Eclipse Foundation is a non-profit AISBL, not a commercial vendor; the
+    APIs are free and their implementations are published under EPL-2.0 on gitlab.eclipse.org/eclipsefdn
+    and github.com/eclipse-openvsx. Open VSX is additionally self-hostable, and its own CLI targets any
+    deployment via OVSX_REGISTRY_URL.
 accessModel:
   pricing: free
   onboarding: self-service
@@ -31,7 +43,10 @@ accessModel:
   - pricing
   generated: '2026-09-07'
   method: searched
-  note: 'Corrected 2026-09-07 from a derived "freemium / public: false" reading. Every read operation across the 294 published operations is anonymous — no account, no key, no signup, no meter — and the Eclipse Foundation publishes no API plans or prices at all (plan_count 0). Writes require a free eclipse.org account.'
+  note: 'Corrected 2026-09-07 from a derived "freemium / public: false" reading. Every read operation
+    across the 294 published operations is anonymous — no account, no key, no signup, no meter — and the
+    Eclipse Foundation publishes no API plans or prices at all (plan_count 0). Writes require a free eclipse.org
+    account.'
 image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 url: https://raw.githubusercontent.com/api-evangelist/eclipse/refs/heads/main/apis.yml
 tags:
@@ -39,7 +54,7 @@ tags:
 - Foundation
 - Open-Source
 - Standards
-- Developer-Tools
+- Developer Tools
 - Extensions
 - Marketplace
 - Registry
@@ -61,16 +76,14 @@ tags_raw:
 - IDE
 - Project Metadata
 created: '2024-01-01'
-modified: '2026-09-07'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 apis:
 - aid: eclipse:marketplace-api
   name: Eclipse Marketplace API
-  description: >-
-    REST API for accessing Eclipse Marketplace data including listings, categories, favorites, and installation
-    statistics for plugins, IDEs, and other extensions.
-  image: >-
-    https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
+  description: REST API for accessing Eclipse Marketplace data including listings, categories, favorites,
+    and installation statistics for plugins, IDEs, and other extensions.
+  image: https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
@@ -89,10 +102,9 @@ apis:
     url: authentication/eclipse-authentication.yml
 - aid: eclipse:foundation-web-api
   name: Eclipse Foundation Web API
-  description: >-
-    Foundation-wide REST APIs for accessing project data, releases, committer paperwork, GeoIP, downloads,
-    mailing lists, profiles, working groups, and other Eclipse Foundation services. Index of available
-    APIs at webdev.eclipse.org/docs/api.
+  description: Foundation-wide REST APIs for accessing project data, releases, committer paperwork, GeoIP,
+    downloads, mailing lists, profiles, working groups, and other Eclipse Foundation services. Index of
+    available APIs at webdev.eclipse.org/docs/api.
   humanURL: https://api.eclipse.org/
   baseURL: https://api.eclipse.org
   tags:
@@ -119,9 +131,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:projects-api
   name: Eclipse Projects API
-  description: >-
-    REST API exposing Eclipse Foundation project metadata, releases, committers, and project lifecycle
-    data.
+  description: REST API exposing Eclipse Foundation project metadata, releases, committers, and project
+    lifecycle data.
   humanURL: https://projects.eclipse.org/
   baseURL: https://projects.eclipse.org
   tags:
@@ -146,9 +157,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:open-vsx-api
   name: Open VSX Registry API
-  description: >-
-    REST API for the Eclipse Open VSX Registry, an open-source alternative to the Visual Studio Marketplace
-    for distributing VS Code-compatible extensions.
+  description: REST API for the Eclipse Open VSX Registry, an open-source alternative to the Visual Studio
+    Marketplace for distributing VS Code-compatible extensions.
   humanURL: https://open-vsx.org/
   baseURL: https://open-vsx.org
   tags:
@@ -183,8 +193,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:newsroom-api
   name: Eclipse Newsroom REST API
-  description: >-
-    REST API providing access to news, events, and announcements from the Eclipse Foundation newsroom.
+  description: REST API providing access to news, events, and announcements from the Eclipse Foundation
+    newsroom.
   humanURL: https://newsroom.eclipse.org/
   baseURL: https://newsroom.eclipse.org
   tags:
@@ -206,10 +216,9 @@ apis:
     url: overlays/eclipse-newsroom-api-overlay.yaml
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:eclipse-eclipse-marketplace-rest-api-api
-  name: Eclipse Foundation Eclipse Marketplace REST API API
-  description: >-
-    The Eclipse Marketplace REST API API from Eclipse Foundation — 1 operation(s) for eclipse marketplace
-    rest api.
+  name: Eclipse Foundation Eclipse Marketplace REST API
+  description: The Eclipse Marketplace REST API API from Eclipse Foundation — 1 operation(s) for eclipse
+    marketplace rest api.
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org/api/p
   tags:
@@ -297,10 +306,17 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:downloads-api
   name: Eclipse Foundation Downloads API
-  description: REST API for Eclipse Foundation release and download metadata — active release trains, release versions and individual file records used to drive the eclipse.org download pages and mirror selection.
+  description: REST API for Eclipse Foundation release and download metadata — active release trains,
+    release versions and individual file records used to drive the eclipse.org download pages and mirror
+    selection.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-downloads-api
   baseURL: https://api.eclipse.org/download
   tags:
+  - Downloads
+  - File
+  - Foundation
+  - Releases
+  tags_raw:
   - Downloads
   - Files
   - Foundation
@@ -317,7 +333,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:geoip-api
   name: Eclipse GeoIP REST API
-  description: REST API resolving a client IP address to a country, city or country IP-range set. Used by the Eclipse Foundation to select download mirrors and regionalise content.
+  description: REST API resolving a client IP address to a country, city or country IP-range set. Used
+    by the Eclipse Foundation to select download mirrors and regionalise content.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-geoip-api
   baseURL: https://api.eclipse.org/geoip
   tags:
@@ -337,10 +354,18 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:git-eca-api
   name: Eclipse Foundation Git ECA API
-  description: REST API that validates Git contributions against the Eclipse Contributor Agreement. Exposes ECA lookup and commit validation as a callable service, plus inbound GitHub and GitLab webhook receivers used by the Foundation’s own forge checks.
+  description: REST API that validates Git contributions against the Eclipse Contributor Agreement. Exposes
+    ECA lookup and commit validation as a callable service, plus inbound GitHub and GitLab webhook receivers
+    used by the Foundation’s own forge checks.
   humanURL: https://webdev.eclipse.org/docs/api/git-eca-rest-api
   baseURL: https://api.eclipse.org/git
   tags:
+  - Compliance
+  - ECA
+  - Git
+  - Governance
+  - Webhook
+  tags_raw:
   - Compliance
   - ECA
   - Git
@@ -362,7 +387,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:info-api
   name: Eclipse Foundation Info API
-  description: REST API exposing Eclipse Foundation reference data — board members, registered trademarks and CVE records — plus a Slack membership webhook receiver.
+  description: REST API exposing Eclipse Foundation reference data — board members, registered trademarks
+    and CVE records — plus a Slack membership webhook receiver.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-info-api
   baseURL: https://api.eclipse.org/foundation/info
   tags:
@@ -383,7 +409,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:mailing-lists-api
   name: Eclipse Foundation Mailing List API
-  description: REST API for Eclipse Foundation mailing list metadata and subscription records, authenticated against the auth.eclipse.org foundation realm.
+  description: REST API for Eclipse Foundation mailing list metadata and subscription records, authenticated
+    against the auth.eclipse.org foundation realm.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-mailing-lists-api
   baseURL: https://api.eclipse.org/foundation/mailing-list
   tags:
@@ -402,10 +429,16 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:profile-api
   name: Eclipse Profile API
-  description: REST API for Eclipse account profiles and user metadata, including the two-phase user deletion request flow the Foundation operates for data-protection erasure requests.
+  description: REST API for Eclipse account profiles and user metadata, including the two-phase user deletion
+    request flow the Foundation operates for data-protection erasure requests.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-profile-api
   baseURL: https://api.eclipse.org
   tags:
+  - Account
+  - Identity
+  - Privacy
+  - Profile
+  tags_raw:
   - Accounts
   - Identity
   - Privacy
@@ -422,7 +455,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:working-groups-api
   name: Eclipse Working Groups API
-  description: REST API for Eclipse working groups and special interest groups — participation levels, resources, participation agreements and committee membership.
+  description: REST API for Eclipse working groups and special interest groups — participation levels,
+    resources, participation agreements and committee membership.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-working-groups-api
   baseURL: https://api.eclipse.org/working-groups
   tags:
@@ -442,7 +476,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:committer-paperwork-api
   name: Eclipse Committer Paperwork API
-  description: REST API for Eclipse committer paperwork records, authenticated against the auth.eclipse.org document-signature realm with dedicated committer_paperwork_retrieve, _update and _delete scopes.
+  description: REST API for Eclipse committer paperwork records, authenticated against the auth.eclipse.org
+    document-signature realm with dedicated committer_paperwork_retrieve, _update and _delete scopes.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-committer-paperwork-api
   baseURL: https://api.eclipse.org/foundation/paperwork
   tags:
@@ -462,10 +497,17 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:hellosign-api
   name: Eclipse HelloSign API
-  description: REST API wrapping Dropbox Sign (HelloSign) for Eclipse Foundation document signing — signature requests for committer paperwork, membership and working-group agreements — plus the inbound signature event callback.
+  description: REST API wrapping Dropbox Sign (HelloSign) for Eclipse Foundation document signing — signature
+    requests for committer paperwork, membership and working-group agreements — plus the inbound signature
+    event callback.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-hellosign-api
   baseURL: https://api.eclipse.org/foundation/hellosign
   tags:
+  - Documents
+  - Foundation
+  - Signatures
+  - Webhook
+  tags_raw:
   - Documents
   - Foundation
   - Signatures
@@ -484,10 +526,17 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:membership-portal-api
   name: Eclipse Membership Portal API
-  description: REST API for the Eclipse Foundation membership portal — member organisations, contacts, products, yearly activity, industry collaborations, project and working-group relations. The largest OIDC-protected surface the Foundation publishes.
+  description: REST API for the Eclipse Foundation membership portal — member organisations, contacts,
+    products, yearly activity, industry collaborations, project and working-group relations. The largest
+    OIDC-protected surface the Foundation publishes.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-portal-api
   baseURL: https://membership.eclipse.org/api
   tags:
+  - Foundation
+  - Governance
+  - Membership
+  - Organization
+  tags_raw:
   - Foundation
   - Governance
   - Membership
@@ -504,10 +553,16 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:membership-application-api
   name: Eclipse Membership Application API
-  description: REST API backing the Eclipse Foundation membership application forms — form creation, contacts, organizations, working-group selections and submission.
+  description: REST API backing the Eclipse Foundation membership application forms — form creation, contacts,
+    organizations, working-group selections and submission.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-membership-application-api
   baseURL: https://membership.eclipse.org/application_api
   tags:
+  - Application
+  - Forms
+  - Foundation
+  - Membership
+  tags_raw:
   - Applications
   - Forms
   - Foundation
@@ -524,7 +579,8 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:openvsx-agreement-api
   name: Eclipse Open VSX Publisher Agreement API
-  description: REST API for submitting and revoking the Eclipse Open VSX publisher agreement against an Eclipse account, gated by the openvsx_publisher_agreement OAuth scope.
+  description: REST API for submitting and revoking the Eclipse Open VSX publisher agreement against an
+    Eclipse account, gated by the openvsx_publisher_agreement OAuth scope.
   humanURL: https://webdev.eclipse.org/docs/api/eclipse-openvsx-api
   baseURL: https://api.eclipse.org/openvsx
   tags:
@@ -544,10 +600,16 @@ apis:
   image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-grey-orange.svg
 - aid: eclipse:project-adopters-api
   name: Eclipse Project Adopters API
-  description: REST API listing the organisations that have declared adoption of an Eclipse Foundation project, per project or across the whole estate.
+  description: REST API listing the organisations that have declared adoption of an Eclipse Foundation
+    project, per project or across the whole estate.
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-project-adopters
   baseURL: https://api.eclipse.org/adopters
   tags:
+  - Adopters
+  - Foundation
+  - Metadata
+  - Project
+  tags_raw:
   - Adopters
   - Foundation
   - Metadata
