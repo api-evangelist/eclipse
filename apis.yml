@@ -51,7 +51,7 @@ image: https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/
 url: https://raw.githubusercontent.com/api-evangelist/eclipse/refs/heads/main/apis.yml
 tags:
 - Eclipse Foundation
-- Foundation
+- Foundations
 - Open-Source
 - Standards
 - Developer Tools
@@ -186,6 +186,10 @@ apis:
   baseURL: https://api.eclipse.org/foundation/mailing-list
   tags:
   - Community
+  - Foundations
+  - Mailing Lists
+  tags_raw:
+  - Community
   - Foundation
   - Mailing Lists
   properties:
@@ -210,7 +214,7 @@ apis:
   - Account
   - Identity
   - Privacy
-  - Profile
+  - Profiles
   tags_raw:
   - Accounts
   - Identity
@@ -235,6 +239,11 @@ apis:
   humanURL: https://webdev.eclipse.org/docs/api/eclipsefdn-working-groups-api
   baseURL: https://api.eclipse.org/working-groups
   tags:
+  - Foundations
+  - Governance
+  - Membership
+  - Working Groups
+  tags_raw:
   - Foundation
   - Governance
   - Membership
@@ -259,7 +268,7 @@ apis:
   baseURL: https://api.eclipse.org/adopters
   tags:
   - Adopters
-  - Foundation
+  - Foundations
   - Metadata
   - Project
   tags_raw:
@@ -284,6 +293,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - Admin API
+  tags_raw:
   - admin-api
   properties:
   - type: OpenAPI
@@ -512,6 +523,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - Catalog
+  tags_raw:
   - Catalogs
   properties:
   - type: OpenAPI
@@ -969,6 +982,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - Downloads
+  tags_raw:
   - Download
   properties:
   - type: OpenAPI
@@ -1360,6 +1375,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -1589,6 +1606,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -3113,6 +3132,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -3189,6 +3210,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -4637,6 +4660,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - User API
+  tags_raw:
   - user-api
   properties:
   - type: OpenAPI
@@ -4789,6 +4814,8 @@ apis:
   humanURL: https://marketplace.eclipse.org/
   baseURL: https://marketplace.eclipse.org
   tags:
+  - UserInfo
+  tags_raw:
   - User Info
   properties:
   - type: OpenAPI
