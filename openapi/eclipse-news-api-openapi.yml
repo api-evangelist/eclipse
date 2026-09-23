@@ -1,0 +1,223 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Newsroom REST News API
+  version: '1.0'
+  description: REST API for interacting with newsroom different endpoints.
+servers:
+- url: https://newsroom.eclipse.org
+  description: The production API server
+tags:
+- name: News
+paths:
+  /api/news:
+    get:
+      tags:
+      - News
+      summary: List news items
+      description: Retrieve news items with optional filtering.
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PublishToFilter'
+      - name: parameters[is_press_release]
+        in: query
+        description: 'Filter by press release flag. Use 1 for press releases, 0 for non-press releases.
+
+          '
+        required: false
+        schema:
+          type: integer
+          format: int32
+          enum:
+          - 0
+          - 1
+        example: 0
+      - name: parameters[news_type]
+        in: query
+        description: Filter news items by news type.
+        required: false
+        schema:
+          type: string
+          enum:
+          - announcements
+          - community_news
+        example: announcements
+      - name: parameters[tags]
+        in: query
+        description: 'Filter news items by one or more tags. Multiple values may be provided in a comma separated string.
+
+          '
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: Eclipse,Newsroom
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - news
+                - pager
+                properties:
+                  news:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/News'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                news:
+                - id: '00001'
+                  title: Example News Article Title
+                  date: '2026-01-01T12:00:00Z'
+                  body: This is an anonymised example summary describing the content of a news article.
+                  link: https://newsroom.eclipse.org/blogs/2026/01/01/example-article
+                  is_press_release: false
+                  image: https://newsroom.eclipse.org/images/news/example-thumbnail.png
+                  news_type: community_news
+                  author:
+                  - full_name: Example Author
+                    username: example_user
+                    picture: https://newsroom.eclipse.org/users/example_user/picture
+                  tags:
+                  - AI
+                  - Cloud
+                  publish_to:
+                  - eclipse_org
+                  - sdv
+                pager:
+                  current_page: 0
+                  total_items: '3607'
+                  total_pages: 361
+                  items_per_page: '20'
+      operationId: getApiNews
+      x-operation-id-source: derived
+components:
+  parameters:
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    PublishToFilter:
+      name: parameters[publish_to]
+      in: query
+      description: Filter events by publication target
+      required: false
+      schema:
+        type: string
+        enum:
+        - eclipse_org
+        - aice
+        - adoptium
+        - asciidoc
+        - ecd_tools
+        - dataspace
+        - eclipse_events
+        - edge_native
+        - eclipse_ide
+        - eclipse_iot
+        - orc
+        - research
+        - security
+        - sdv
+        - sparkplug
+        - jakarta_ee
+        - oniro
+        - openadx
+        - opengenesis
+        - openhwgroup
+        - openmdm
+        - openmobility
+        - open_vsx
+        - openpass
+        - osgi
+        - ospo_zone
+        - science
+        - tangle_ee
+      example: eclipse_org
+  schemas:
+    News:
+      type: object
+      required:
+      - title
+      - news_type
+      - publish_to
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+          format: date-time
+        body:
+          type: string
+        link:
+          type: string
+          format: uri
+        is_press_release:
+          type: boolean
+        image:
+          type: string
+          format: uri
+        news_type:
+          type: string
+        author:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewsAuthor'
+        tags:
+          type: array
+          items:
+            type: string
+        publish_to:
+          type: array
+          items:
+            type: string
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string
+    NewsAuthor:
+      type: object
+      properties:
+        full_name:
+          type: string
+        username:
+          type: string
+        picture:
+          type: string
+          format: uri

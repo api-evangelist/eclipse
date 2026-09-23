@@ -1,0 +1,286 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Project Management Infrastructure (PMI) RESTful…
+  description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://projects.eclipse.org
+  description: The production API server
+tags:
+- name: Interest Groups
+  description: Eclipse Interest Groups (IGs) facilitated by the Eclipse Foundation.
+paths:
+  /api/interest-groups:
+    get:
+      tags:
+      - Interest Groups
+      summary: Fetch Interest Groups
+      description: '### Overview
+
+
+        Retrieve a paginated list of Eclipse Interest Groups.'
+      operationId: FetchInterestGroups
+      parameters:
+      - name: project_id
+        in: query
+        description: Filter interest groups by their Foundation DB project ID (the `field_ig_foundationdb_id` field value).
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The index of the page to retrieve, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          minimum: 1
+          maximum: 100
+      - name: order_by
+        in: query
+        description: 'The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`.'
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: ASC
+      responses:
+        '200':
+          description: Array of interest groups matching the query.
+          headers:
+            Link:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterestGroup'
+              example:
+              - id: 1001
+                title: Some Interest Group
+                description:
+                  summary: Short description.
+                  full: <p>Full description.</p>
+                logo: ''
+                scope:
+                  summary: ''
+                  full: ''
+                leads: []
+                participants: []
+                project_id: foundation-internal.ig.some-group
+                short_project_id: some-group
+                state: active
+                gitlab:
+                  project_group: eclipse-ig/some-group
+                  ignored_sub_groups: []
+                resources:
+                  website: ''
+                  members: ''
+                mailing_list: ''
+  /api/interest-groups/{nid}:
+    get:
+      tags:
+      - Interest Groups
+      summary: Retrieve an Interest Group
+      description: '### Overview
+
+
+        Retrieve a single Eclipse Interest Group by its Drupal node ID.'
+      operationId: RetrieveAnInterestGroup
+      parameters:
+      - name: nid
+        in: path
+        description: The Drupal node ID of the interest group.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The matching interest group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterestGroup'
+              example:
+                id: 1001
+                title: Some Interest Group
+                description:
+                  summary: Short description.
+                  full: <p>Full description.</p>
+                logo: ''
+                scope:
+                  summary: ''
+                  full: ''
+                leads: []
+                participants: []
+                project_id: foundation-internal.ig.some-group
+                short_project_id: some-group
+                state: active
+                gitlab:
+                  project_group: eclipse-ig/some-group
+                  ignored_sub_groups: []
+                resources:
+                  website: ''
+                  members: ''
+                mailing_list: ''
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    TextContent:
+      title: TextContent
+      type: object
+      description: A long-text field with a plain-text summary and an HTML-rendered full version.
+      properties:
+        summary:
+          type: string
+          description: Plain-text summary (may be empty).
+        full:
+          type: string
+          description: Full content rendered as HTML.
+      example:
+        summary: Short summary.
+        full: <p>Full HTML content.</p>
+    InterestGroupGitlabInfo:
+      title: InterestGroupGitlabInfo
+      type: object
+      description: GitLab group information derived from the interest group's Foundation DB project ID.
+      properties:
+        project_group:
+          type: string
+          description: GitLab project group namespace (e.g. `eclipse-ig/some-group`).
+        ignored_sub_groups:
+          type: array
+          items:
+            type: string
+          description: Currently always empty for interest groups.
+      example:
+        project_group: eclipse-ig/some-group
+        ignored_sub_groups: []
+    InterestGroupResources:
+      title: InterestGroupResources
+      type: object
+      properties:
+        website:
+          type: string
+          description: URL to the interest group's website, or empty string.
+        members:
+          type: string
+          description: URL to the interest group's members page, or empty string.
+      example:
+        website: ''
+        members: ''
+    InterestGroupUser:
+      title: InterestGroupUser
+      type: object
+      description: A user associated with an interest group.
+      properties:
+        username:
+          type: string
+        full_name:
+          type: string
+        url:
+          type: string
+          description: Absolute URL to the person's profile on api.eclipse.org.
+        organization:
+          type: object
+          description: TODO - structure depends on FoundationDB organisation data; treat as opaque object.
+      example:
+        username: aigmember
+        full_name: An IG Member
+        url: https://api.eclipse.org/account/profile/aigmember
+        organization: {}
+    InterestGroup:
+      title: InterestGroup
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Drupal node ID.
+        title:
+          type: string
+          description: Interest group title.
+        description:
+          $ref: '#/components/schemas/TextContent'
+        logo:
+          type: string
+          description: Absolute URL to the interest group logo image, or empty string.
+        scope:
+          $ref: '#/components/schemas/TextContent'
+        leads:
+          type: array
+          items:
+            $ref: '#/components/schemas/InterestGroupUser'
+          description: Interest Group Leads (IGLs).
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/InterestGroupUser'
+          description: Interest Group Participants (IGPs).
+        project_id:
+          type: string
+          description: Foundation DB project ID for this interest group (e.g. `foundation-internal.ig.some-group`).
+        short_project_id:
+          type: string
+          description: Last segment of the project ID with the `foundation-internal.ig.` prefix removed.
+        state:
+          type: string
+          description: Interest group lifecycle state.
+        gitlab:
+          $ref: '#/components/schemas/InterestGroupGitlabInfo'
+        resources:
+          $ref: '#/components/schemas/InterestGroupResources'
+        mailing_list:
+          type: string
+          description: Mailing list e-mail address from `field_ig_mailing_list`, or empty string.
+      example:
+        id: 1001
+        title: Some Interest Group
+        description:
+          summary: Short description.
+          full: <p>Full description.</p>
+        logo: ''
+        scope:
+          summary: ''
+          full: ''
+        leads: []
+        participants: []
+        project_id: foundation-internal.ig.some-group
+        short_project_id: some-group
+        state: active
+        gitlab:
+          project_group: eclipse-ig/some-group
+          ignored_sub_groups: []
+        resources:
+          website: ''
+          members: ''
+        mailing_list: ''
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

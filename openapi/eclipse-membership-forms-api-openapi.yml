@@ -1,0 +1,52 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Membership forms API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Membership forms
+paths:
+  /form/state/{state}:
+    parameters:
+    - name: state
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/FormState'
+    get:
+      tags:
+      - Membership forms
+      summary: Membership form report
+      description: Returns a CSV report of the current forms with the given state
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv: {}
+        '403':
+          description: Unauthorized
+        '500':
+          description: Error while retrieving data
+      operationId: getFormStateByState
+      x-operation-id-source: derived
+components:
+  schemas:
+    FormState:
+      type: string
+      description: the current form state
+      enum:
+      - SUBMITTED
+      - INPROGRESS
+      - COMPLETE
+      - CONFIRMED
+      - REJECTED
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

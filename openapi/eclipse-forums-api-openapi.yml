@@ -1,0 +1,1574 @@
+openapi: 3.2.0
+info:
+  title: Eclipse RESTful Forums API
+  description: This describes the resources that make up the official Eclipse Foundation REST API.
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://api.eclipse.org
+  description: The production API server
+tags:
+- name: Forums
+  description: Eclipse Forums are available through this resource.
+paths:
+  /forums/category:
+    get:
+      tags:
+      - Forums
+      summary: Fetch Categories
+      description: '### Overview
+
+
+        Retrieve information for **all the categories** from the Eclipse Forums website.
+
+
+        ### What is a category?
+
+
+        A category is a group of forums.
+
+
+        Forums are associated to a category by category id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the category
+
+
+        + **name:** name of the category
+
+
+        + **description:** description of the category
+
+
+        + **url:** url that will return information of a specific category on the Eclipse Forums website *(Note: the trailing slash is important)*
+
+
+        + **forum_url:** url that will return information for all the forums associated with a specific category id'
+      operationId: FetchCategories
+      parameters:
+      - name: page
+        in: query
+        description: The index of the page to get, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: order_by
+        in: query
+        description: The order by ID in which the results will be returned. DESC by default
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: <https://api.eclipse.org/forums/category?page=1&amp;pagesize=20>; rel="next", <https://api.eclipse.org/forums/category?page=99&amp;pagesize=5>; rel="last", <https://api.eclipse.org/forums/category?page=1&amp;pagesize=5>; rel="first", <https://api.eclipse.org/forums/category?page=1&amp;pagesize=5>; rel="self"
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchCategoriesresponse'
+              example:
+                pagination:
+                  page: 1
+                  pagesize: 2
+                  result_start: 1
+                  result_end: 2
+                  result_size: 2
+                  total_result_size: 9
+                result:
+                - id: 1
+                  name: Eclipse Projects
+                  description: ' - Eclipse Project Forums - click +/- to expand/collapse'
+                  html_url: https://www.eclipse.org/forums/index.php/i/1/
+                  forums_url: https://api.eclipse.org/forums/forum?category_id=1
+                - id: 2
+                  name: Newcomers
+                  description: ' - General Newcomer discussions'
+                  html_url: https://www.eclipse.org/forums/index.php/i/2/
+                  forums_url: https://api.eclipse.org/forums/forum?category_id=2
+      deprecated: false
+  /forums/category/{category_id}:
+    get:
+      tags:
+      - Forums
+      summary: Retrieve Category
+      description: '### Overview
+
+
+        Retrieve information for **a specific category** from the Eclipse Forums website.
+
+
+        ### What is a category?
+
+
+        A category is a group of forums.
+
+
+        Forums are associated to a category by category id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the category
+
+
+        + **name:** name of the category
+
+
+        + **description:** description of the category
+
+
+        + **url:** url that will return information of a specific category on the Eclipse Forums website *(Note: the trailing slash is important)*
+
+
+        + **forum_url:** url that will return information for all the forums associated with a specific category id'
+      operationId: RetrieveCategory
+      parameters:
+      - name: category_id
+        in: path
+        description: Unique identifier for category
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveCategoryresponse'
+              example:
+                id: 1
+                name: Eclipse Projects
+                description: ' - Eclipse Project Forums - click +/- to expand/collapse'
+                html_url: https://www.eclipse.org/forums/index.php/i/1/
+                forums_url: https://api.eclipse.org/forums/forum?category_id=1
+      deprecated: false
+  /forums/forum:
+    get:
+      tags:
+      - Forums
+      summary: Fetch Forums
+      description: '### Overview
+
+
+        Retrieve information for **all the forums** from the Eclipse Forums website.
+
+
+        Optionally, you can retrieve information for all the forums associated to a specific category by using the category_id parameter.
+
+        You can also retrieve forums that have been created between dates using the since and until parameters.
+
+
+        ### What is a forum?
+
+
+        A forum is a group of topics.
+
+
+        Topics are associated to a forum by forum id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the forum
+
+
+        + **name:** name of the forum
+
+
+        + **category_id:** id of the category associated to this forum
+
+
+        + **url:** url of a specific forum on the Eclipse Forums website *(Note: the trailing slash is important)*
+
+
+        + **description:** description of the forum
+
+
+        + **created_date:** date when the forum has been created (timestamp)
+
+
+        + **topic_count:** number of topics in this forum
+
+
+        + **post_count:** number of posts in this forum
+
+
+        + **last_post_id:** id of the last post in this forum
+
+
+        + **category_url:** url that will return information about a category
+
+
+        + **topics_url:** url that will return all the topics associated with a specific forum id'
+      operationId: FetchForums
+      parameters:
+      - name: category_id
+        in: query
+        description: Unique identifier for a category
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: The index of the page to get, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: order_by
+        in: query
+        description: The order created date in which the results will be returned. DESC by default
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: since
+        in: query
+        description: The results since a timestamp onward
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: until
+        in: query
+        description: The results until a timestamp
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            Link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: <https://api.eclipse.org/forums/forum?category_id=1&amp;page=1&amp;pagesize=20>; rel="last", <https://api.eclipse.org/forums/forum?category_id=1&amp;page=99&amp;pagesize=20>; rel="first", <https://api.eclipse.org/forums/forum?category_id=1&amp;page=1&amp;pagesize=20>; rel="self"
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchForumsresponse'
+              example:
+                pagination:
+                  page: 1
+                  pagesize: 1
+                  result_start: 1
+                  result_end: 1
+                  result_size: 1
+                  total_result_size: 391
+                result:
+                - id: 89
+                  category_id: 2
+                  description: Eclipse forum for newcomers
+                  name: Newcomers
+                  created_date: 1248707078
+                  topic_count: 22344
+                  post_count: 62843
+                  last_post_id: 1780973
+                  html_url: https://www.eclipse.org/forums/index.php/f/89/
+                  topics_url: https://api.eclipse.org/forums/topic?forum_id=89
+                  category_url: https://api.eclipse.org/forums/category/2
+      deprecated: false
+  /forums/forum/{forum_id}:
+    get:
+      tags:
+      - Forums
+      summary: Retrieve Forum
+      description: '### Overview
+
+
+        Retrieve information for **a specific forum** from the Eclipse Forums website.
+
+
+        ### What is a forum?
+
+
+        A forum is a group of topics.
+
+
+        Topics are associated to a forum by forum id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the forum
+
+
+        + **name:** name of the forum
+
+
+        + **category_id:** id of the category associated to this forum
+
+
+        + **url:** url of a specific forum on the Eclipse Forums website *(Note: the trailing slash is important)*
+
+
+        + **description:** description of the forum
+
+
+        + **created_date:** date when the forum has been created (timestamp)
+
+
+        + **topic_count:** number of topics in this forum
+
+
+        + **post_count:** number of posts in this forum
+
+
+        + **last_post_id:** id of the last post in this forum
+
+
+        + **category_url:** url that will return information about a category
+
+
+        + **topics_url:** url that will return all the topics associated with a specific forum id'
+      operationId: RetrieveForum
+      parameters:
+      - name: forum_id
+        in: path
+        description: Unique identifier for a forum
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveForumresponse'
+              example:
+                id: 89
+                category_id: 2
+                description: Eclipse forum for newcomers
+                name: Newcomers
+                created_date: 1248707078
+                topic_count: 22344
+                post_count: 62843
+                last_post_id: 1780973
+                html_url: https://www.eclipse.org/forums/index.php/f/89/
+                topics_url: https://api.eclipse.org/forums/topic?forum_id=89
+                category_url: https://api.eclipse.org/forums/category/2
+      deprecated: false
+  /forums/topic:
+    get:
+      tags:
+      - Forums
+      summary: Fetch Topics
+      description: '### Overview
+
+
+        Retrieve information for **all the topics** from the Eclipse Forums website.
+
+
+        Optionally, you can retrieve information for all the topics associated to a specific forum by using the forum_id parameter.
+
+        You can also retrieve topics that have been created between dates using the since and until parameters.
+
+
+        ### What is a topic?
+
+
+        A topic is a group of posts.
+
+
+        Posts are associated to a topic by topic id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the topic
+
+
+        + **forum_id:** id of the forum associated to this topic
+
+
+        + **last_post_id:** id of the last post in this forum
+
+
+        + **last_post_date:** date of the last post in this topic (timestamp)
+
+
+        + **root_post_id:** id of the root post of this topic
+
+
+        + **replies:** number of replies for this topic
+
+
+        + **views:** number of views for this topic
+
+
+        + **url:** url of a specific topic on the Eclipse Forums website *(Note: the trailing slash is important)*
+
+
+        + **forum_url:** url that will return information about the forum associated to this topic
+
+
+        + **posts_url:** url that will return information about for all the posts associated with a specific topic id'
+      operationId: FetchTopics
+      parameters:
+      - name: forum_id
+        in: query
+        description: Unique identifier for a forum
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: The index of the page to get, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: order_by
+        in: query
+        description: The order created date in which the results will be returned. DESC by default
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: since
+        in: query
+        description: The results since a timestamp onward
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: until
+        in: query
+        description: The results until a timestamp
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            Link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: <https://api.eclipse.org/forums/topic?forum_id=1&amp;page=1&amp;pagesize=20>; rel="last", <https://api.eclipse.org/forums/topic?forum_id=1&amp;page=99&amp;pagesize=20>; rel="first", <https://api.eclipse.org/forums/topic?forum_id=1&amp;page=1&amp;pagesize=20>; rel="self"
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchTopicsresponse'
+              example:
+                pagination:
+                  page: 1
+                  pagesize: 1
+                  result_start: 1
+                  result_end: 1
+                  result_size: 1
+                  total_result_size: 892958
+                result:
+                - id: 1091418
+                  forum_id: 89
+                  last_post_id: 1780973
+                  last_post_date: 1517333817
+                  root_post_id: 1780971
+                  replies: 2
+                  views: 52
+                  subject: keep the parameter  value selected
+                  html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+                  posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+                  forum_url: https://api.eclipse.org/forums/forum/89
+      deprecated: false
+  /forums/topic/{topic_id}:
+    get:
+      tags:
+      - Forums
+      summary: Retrieve Topic
+      description: '### Overview
+
+
+        Retrieve information for **a specific topic** from the Eclipse Forums website.
+
+
+        ### What is a topic?
+
+
+        A topic is a group of posts.
+
+
+        Posts are associated to a topic by topic id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the topic
+
+
+        + **forum_id:** id of the forum associated to this topic
+
+
+        + **last_post_id:** id of the last post in this forum
+
+
+        + **last_post_date:** date of the last post in this topic (timestamp)
+
+
+        + **root_post_id:** id of the root post of this topic
+
+
+        + **replies:** number of replies for this topic
+
+
+        + **views:** number of views for this topic
+
+
+        + **url:** url of a specific topic on the Eclipse Forums website *(Note: the trailing slash is important)*
+
+
+        + **forum_url:** url that will return information about the forum associated to this topic
+
+
+        + **posts_url:** url that will return information about all the posts associated with a specific topic id'
+      operationId: RetrieveTopic
+      parameters:
+      - name: topic_id
+        in: path
+        description: Unique identifier for a topic
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveTopicresponse'
+              example:
+                id: 1091418
+                forum_id: 89
+                last_post_id: 1780973
+                last_post_date: 1517333817
+                root_post_id: 1780971
+                replies: 2
+                views: 52
+                subject: keep the parameter  value selected
+                html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+                posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+                forum_url: https://api.eclipse.org/forums/forum/89
+      deprecated: false
+  /forums/post:
+    get:
+      tags:
+      - Forums
+      summary: Fetch Posts
+      description: '### Overview
+
+
+        Retrieve information for **all the posts** from the Eclipse Forums website.
+
+
+        Optionally, you can retrieve information for all the posts associated to a specific topic by using the topic_id parameter.
+
+        You can also retrieve posts that have been created between dates using the since and until parameters.
+
+
+        ### What is a post?
+
+
+        A post is a message attached to a specific topic
+
+
+        Posts are associated to a topic by topic id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the post
+
+
+        + **subject:** subject of the post
+
+
+        + **forum_id:** id of the forum associated to this post
+
+
+        + **topic_id:** id of the topic associated to this post
+
+
+        + **poster_id:** id of the user that submitted this post
+
+
+        + **created_date:** date that this post has been created (timestamp)
+
+
+        + **url:** url of a specific post on the Eclipse Forums website
+
+
+        + **body:** body content of this post
+
+
+        + **topic_url:** url that will return information about the topic associated to this post
+
+
+        + **topic_posts_url:** url that will return all the posts from the topic associated to this post'
+      operationId: FetchPosts
+      parameters:
+      - name: topic_id
+        in: query
+        description: Unique identifier for a topic
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: The index of the page to get, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: order_by
+        in: query
+        description: The order created date in which the results will be returned. DESC by default
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: since
+        in: query
+        description: The results since a timestamp onward
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: until
+        in: query
+        description: The results until a timestamp
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            Link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: <https://api.eclipse.org/forums/post?topic_id=1&amp;page=1&amp;pagesize=20>; rel="last", <https://api.eclipse.org/forums/post?topic_id=1&amp;page=99&amp;pagesize=20>; rel="first", <https://api.eclipse.org/forums/post?topic_id=1&amp;page=1&amp;pagesize=20>; rel="self"
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchPostsresponse'
+              example:
+                pagination:
+                  page: 1
+                  pagesize: 1
+                  result_start: 1
+                  result_end: 1
+                  result_size: 1
+                  total_result_size: 1645105
+                result:
+                - id: 1780973
+                  subject: 'Re: keep the parameter  value selected'
+                  topic_id: 1091418
+                  poster_id: 219149
+                  created_date: 1517333817
+                  forum_id: 89
+                  body: This is the body
+                  html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
+                  topic_url: https://api.eclipse.org/forums/topic/1091418
+                  forum_url: https://api.eclipse.org/forums/forum/89
+                  user_url: https://api.eclipse.org/forums/user/219149
+      deprecated: false
+  /forums/post/{post_id}:
+    get:
+      tags:
+      - Forums
+      summary: Retrieve Post
+      description: '### Overview
+
+
+        Retrieve information for **a specific post** from the Eclipse Forums website.
+
+
+        ### What is a post?
+
+
+        A post is a message attached to a specific topic
+
+
+        Posts are associated to a topic by topic id.
+
+
+        ### Result definition
+
+
+        + **id:** id of the post
+
+
+        + **subject:** subject of the post
+
+
+        + **forum_id:** id of the forum associated to this post
+
+
+        + **topic_id:** id of the topic associated to this post
+
+
+        + **poster_id:** id of the user that submitted this post
+
+
+        + **created_date:** date that this post has been created (timestamp)
+
+
+        + **url:** url of a specific post on the Eclipse Forums website
+
+
+        + **body:** body content of this post
+
+
+        + **topic_url:** url that will return information about the topic associated to this post
+
+
+        + **topic_posts_url:** url that will return all the posts from the topic associated to this post'
+      operationId: RetrievePost
+      parameters:
+      - name: post_id
+        in: path
+        description: Unique identifier for a post
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievePostresponse'
+              example:
+                id: 1780973
+                subject: 'Re: keep the parameter  value selected'
+                topic_id: 1091418
+                poster_id: 219149
+                created_date: 1517333817
+                forum_id: 89
+                body: This is the body
+                html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
+                topic_url: https://api.eclipse.org/forums/topic/1091418
+                forum_url: https://api.eclipse.org/forums/forum/89
+                user_url: https://api.eclipse.org/forums/user/219149
+      deprecated: false
+  /forums/user/{user_id}:
+    get:
+      tags:
+      - Forums
+      summary: Retrieve User
+      description: '### Overview
+
+
+        Retrieve information for **a specific user** from the Eclipse Forums website.
+
+
+        ### What is a user?
+
+
+        A user is the author of a post
+
+
+        ### Result definition
+
+
+        + **id:** id of the user
+
+
+        + **alias:** alias of the user
+
+
+        + **email:** email of the user
+
+
+        + **posted_msg_count:** number of posts the user created
+
+
+        + **join_date:** timestamp of the date the user joined the Eclipse Forums
+
+
+        + **last_visit:** timestamp of the date the user last visited the Eclipse Forums website
+
+
+        + **level_name:** level of the user
+
+
+        + **url:** url of the user on the Eclipse Forums website
+
+
+        + **account_url:** url of the user''s account on accounts.eclipse.org'
+      operationId: RetrieveUser1
+      parameters:
+      - name: user_id
+        in: path
+        description: Unique identifier for a user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserresponse1'
+              example:
+                id: 1
+                alias: Test user
+                email: test@user.org
+                post_count: 4
+                join_date: 1510351551
+                last_visit: 1517333991
+                level_name: Junior Member
+                html_url: https://www.eclipse.org/forums/index.php?t=usrinfo&id=1
+                account_url: https://api.eclipse.org/account/profile?mail=test@user.org
+                posts_url: https://api.eclipse.org/forums/post?user_id=1
+      deprecated: false
+components:
+  schemas:
+    Pagination:
+      title: Pagination
+      required:
+      - page
+      - pagesize
+      - result_start
+      - result_end
+      - result_size
+      - total_result_size
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        pagesize:
+          type: integer
+          format: int32
+        result_start:
+          type: integer
+          format: int32
+        result_end:
+          type: integer
+          format: int32
+        result_size:
+          type: integer
+          format: int32
+        total_result_size:
+          type: integer
+          format: int32
+      example:
+        page: 1
+        pagesize: 2
+        result_start: 1
+        result_end: 2
+        result_size: 2
+        total_result_size: 9
+    Result7:
+      title: Result7
+      required:
+      - id
+      - subject
+      - topic_id
+      - poster_id
+      - created_date
+      - forum_id
+      - body
+      - html_url
+      - topic_url
+      - forum_url
+      - user_url
+      type: object
+      properties:
+        id:
+          type: string
+        subject:
+          type: string
+        topic_id:
+          type: string
+        poster_id:
+          type: string
+        created_date:
+          type: string
+        forum_id:
+          type: string
+        body:
+          type: string
+        html_url:
+          type: string
+        topic_url:
+          type: string
+        forum_url:
+          type: string
+        user_url:
+          type: string
+      example:
+        id: 1780973
+        subject: 'Re: keep the parameter  value selected'
+        topic_id: 1091418
+        poster_id: 219149
+        created_date: 1517333817
+        forum_id: 89
+        body: This is the body
+        html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
+        topic_url: https://api.eclipse.org/forums/topic/1091418
+        forum_url: https://api.eclipse.org/forums/forum/89
+        user_url: https://api.eclipse.org/forums/user/219149
+    FetchTopicsresponse:
+      title: FetchTopicsresponse
+      required:
+      - pagination
+      - result
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result6'
+          description: ''
+      example:
+        pagination:
+          page: 1
+          pagesize: 1
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 892958
+        result:
+        - id: 1091418
+          forum_id: 89
+          last_post_id: 1780973
+          last_post_date: 1517333817
+          root_post_id: 1780971
+          replies: 2
+          views: 52
+          subject: keep the parameter  value selected
+          html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+          posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+          forum_url: https://api.eclipse.org/forums/forum/89
+    FetchPostsresponse:
+      title: FetchPostsresponse
+      required:
+      - pagination
+      - result
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result7'
+          description: ''
+      example:
+        pagination:
+          page: 1
+          pagesize: 1
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 1645105
+        result:
+        - id: 1780973
+          subject: 'Re: keep the parameter  value selected'
+          topic_id: 1091418
+          poster_id: 219149
+          created_date: 1517333817
+          forum_id: 89
+          body: This is the body
+          html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
+          topic_url: https://api.eclipse.org/forums/topic/1091418
+          forum_url: https://api.eclipse.org/forums/forum/89
+          user_url: https://api.eclipse.org/forums/user/219149
+    FetchForumsresponse:
+      title: FetchForumsresponse
+      required:
+      - pagination
+      - result
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result5'
+          description: ''
+      example:
+        pagination:
+          page: 1
+          pagesize: 1
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 391
+        result:
+        - id: 89
+          category_id: 2
+          description: Eclipse forum for newcomers
+          name: Newcomers
+          created_date: 1248707078
+          topic_count: 22344
+          post_count: 62843
+          last_post_id: 1780973
+          html_url: https://www.eclipse.org/forums/index.php/f/89/
+          topics_url: https://api.eclipse.org/forums/topic?forum_id=89
+          category_url: https://api.eclipse.org/forums/category/2
+    RetrieveForumresponse:
+      title: RetrieveForumresponse
+      required:
+      - id
+      - category_id
+      - description
+      - name
+      - created_date
+      - topic_count
+      - post_count
+      - last_post_id
+      - html_url
+      - topics_url
+      - category_url
+      type: object
+      properties:
+        id:
+          type: string
+        category_id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        created_date:
+          type: string
+        topic_count:
+          type: string
+        post_count:
+          type: string
+        last_post_id:
+          type: string
+        html_url:
+          type: string
+        topics_url:
+          type: string
+        category_url:
+          type: string
+      example:
+        id: 89
+        category_id: 2
+        description: Eclipse forum for newcomers
+        name: Newcomers
+        created_date: 1248707078
+        topic_count: 22344
+        post_count: 62843
+        last_post_id: 1780973
+        html_url: https://www.eclipse.org/forums/index.php/f/89/
+        topics_url: https://api.eclipse.org/forums/topic?forum_id=89
+        category_url: https://api.eclipse.org/forums/category/2
+    RetrieveCategoryresponse:
+      title: RetrieveCategoryresponse
+      required:
+      - id
+      - name
+      - description
+      - html_url
+      - forums_url
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        html_url:
+          type: string
+        forums_url:
+          type: string
+      example:
+        id: 1
+        name: Eclipse Projects
+        description: ' - Eclipse Project Forums - click +/- to expand/collapse'
+        html_url: https://www.eclipse.org/forums/index.php/i/1/
+        forums_url: https://api.eclipse.org/forums/forum?category_id=1
+    Result6:
+      title: Result6
+      required:
+      - id
+      - forum_id
+      - last_post_id
+      - last_post_date
+      - root_post_id
+      - replies
+      - views
+      - subject
+      - html_url
+      - posts_url
+      - forum_url
+      type: object
+      properties:
+        id:
+          type: string
+        forum_id:
+          type: string
+        last_post_id:
+          type: string
+        last_post_date:
+          type: string
+        root_post_id:
+          type: string
+        replies:
+          type: string
+        views:
+          type: string
+        subject:
+          type: string
+        html_url:
+          type: string
+        posts_url:
+          type: string
+        forum_url:
+          type: string
+      example:
+        id: 1091418
+        forum_id: 89
+        last_post_id: 1780973
+        last_post_date: 1517333817
+        root_post_id: 1780971
+        replies: 2
+        views: 52
+        subject: keep the parameter  value selected
+        html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+        posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+        forum_url: https://api.eclipse.org/forums/forum/89
+    RetrieveUserresponse1:
+      title: RetrieveUserresponse1
+      required:
+      - id
+      - alias
+      - email
+      - post_count
+      - join_date
+      - last_visit
+      - level_name
+      - html_url
+      - account_url
+      - posts_url
+      type: object
+      properties:
+        id:
+          type: string
+        alias:
+          type: string
+        email:
+          type: string
+        post_count:
+          type: string
+        join_date:
+          type: string
+        last_visit:
+          type: string
+        level_name:
+          type: string
+        html_url:
+          type: string
+        account_url:
+          type: string
+        posts_url:
+          type: string
+      example:
+        id: 1
+        alias: Test user
+        email: test@user.org
+        post_count: 4
+        join_date: 1510351551
+        last_visit: 1517333991
+        level_name: Junior Member
+        html_url: https://www.eclipse.org/forums/index.php?t=usrinfo&id=1
+        account_url: https://api.eclipse.org/account/profile?mail=test@user.org
+        posts_url: https://api.eclipse.org/forums/post?user_id=1
+    FetchCategoriesresponse:
+      title: FetchCategoriesresponse
+      required:
+      - pagination
+      - result
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result4'
+          description: ''
+      example:
+        pagination:
+          page: 1
+          pagesize: 2
+          result_start: 1
+          result_end: 2
+          result_size: 2
+          total_result_size: 9
+        result:
+        - id: 1
+          name: Eclipse Projects
+          description: ' - Eclipse Project Forums - click +/- to expand/collapse'
+          html_url: https://www.eclipse.org/forums/index.php/i/1/
+          forums_url: https://api.eclipse.org/forums/forum?category_id=1
+        - id: 2
+          name: Newcomers
+          description: ' - General Newcomer discussions'
+          html_url: https://www.eclipse.org/forums/index.php/i/2/
+          forums_url: https://api.eclipse.org/forums/forum?category_id=2
+    RetrieveTopicresponse:
+      title: RetrieveTopicresponse
+      required:
+      - id
+      - forum_id
+      - last_post_id
+      - last_post_date
+      - root_post_id
+      - replies
+      - views
+      - subject
+      - html_url
+      - posts_url
+      - forum_url
+      type: object
+      properties:
+        id:
+          type: string
+        forum_id:
+          type: string
+        last_post_id:
+          type: string
+        last_post_date:
+          type: string
+        root_post_id:
+          type: string
+        replies:
+          type: string
+        views:
+          type: string
+        subject:
+          type: string
+        html_url:
+          type: string
+        posts_url:
+          type: string
+        forum_url:
+          type: string
+      example:
+        id: 1091418
+        forum_id: 89
+        last_post_id: 1780973
+        last_post_date: 1517333817
+        root_post_id: 1780971
+        replies: 2
+        views: 52
+        subject: keep the parameter  value selected
+        html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+        posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+        forum_url: https://api.eclipse.org/forums/forum/89
+    Result4:
+      title: Result4
+      required:
+      - id
+      - name
+      - description
+      - html_url
+      - forums_url
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        html_url:
+          type: string
+        forums_url:
+          type: string
+      example:
+        id: 1
+        name: Eclipse Projects
+        description: ' - Eclipse Project Forums - click +/- to expand/collapse'
+        html_url: https://www.eclipse.org/forums/index.php/i/1/
+        forums_url: https://api.eclipse.org/forums/forum?category_id=1
+    Result5:
+      title: Result5
+      required:
+      - id
+      - category_id
+      - description
+      - name
+      - created_date
+      - topic_count
+      - post_count
+      - last_post_id
+      - html_url
+      - topics_url
+      - category_url
+      type: object
+      properties:
+        id:
+          type: string
+        category_id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        created_date:
+          type: string
+        topic_count:
+          type: string
+        post_count:
+          type: string
+        last_post_id:
+          type: string
+        html_url:
+          type: string
+        topics_url:
+          type: string
+        category_url:
+          type: string
+      example:
+        id: 89
+        category_id: 2
+        description: Eclipse forum for newcomers
+        name: Newcomers
+        created_date: 1248707078
+        topic_count: 22344
+        post_count: 62843
+        last_post_id: 1780973
+        html_url: https://www.eclipse.org/forums/index.php/f/89/
+        topics_url: https://api.eclipse.org/forums/topic?forum_id=89
+        category_url: https://api.eclipse.org/forums/category/2
+    RetrievePostresponse:
+      title: RetrievePostresponse
+      required:
+      - id
+      - subject
+      - topic_id
+      - poster_id
+      - created_date
+      - forum_id
+      - body
+      - html_url
+      - topic_url
+      - forum_url
+      - user_url
+      type: object
+      properties:
+        id:
+          type: string
+        subject:
+          type: string
+        topic_id:
+          type: string
+        poster_id:
+          type: string
+        created_date:
+          type: string
+        forum_id:
+          type: string
+        body:
+          type: string
+        html_url:
+          type: string
+        topic_url:
+          type: string
+        forum_url:
+          type: string
+        user_url:
+          type: string
+      example:
+        id: 1780973
+        subject: 'Re: keep the parameter  value selected'
+        topic_id: 1091418
+        poster_id: 219149
+        created_date: 1517333817
+        forum_id: 89
+        body: This is the body
+        html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
+        topic_url: https://api.eclipse.org/forums/topic/1091418
+        forum_url: https://api.eclipse.org/forums/forum/89
+        user_url: https://api.eclipse.org/forums/user/219149
+  headers:
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
+  securitySchemes:
+    oauth2:
+      description: 'Get access to data while protecting your account credentials.
+
+        OAuth2 is also a safer and more secure way to give you access.
+
+        '
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.php55.dev.docker/oauth2/authorize
+          tokenUrl: https://accounts.php55.dev.docker/oauth2/token
+          scopes:
+            write: Grants write access
+            read: Grants read access

@@ -1,0 +1,430 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Profile User Delete Request API
+  description: Access information on Eclipse Foundation profiles.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  contact:
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/eclipsefdn-profile-api/-/issues
+servers:
+- url: https://api.eclipse.org
+  description: Production endpoints for Eclipse Foundation profile data
+tags:
+- name: User Delete Request
+  description: User delete request processing
+paths:
+  /account/profile/{name}/user_delete_request:
+    post:
+      tags:
+      - User Delete Request
+      summary: Initialize the user deletion process via username
+      description: Initialize the user deletion process for a specified user.
+      operationId: CreateDeleteRequests
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: name
+        in: path
+        description: An ef username.
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserDeleteRequests'
+        '403':
+          description: Invalid authentication
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict - Records already exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data.
+      deprecated: false
+  /account/user_delete_request:
+    get:
+      tags:
+      - User Delete Request
+      summary: Retrieve list of user delete requests via params
+      description: Retrieve a list of user delete requests filtered by desired parameters
+      operationId: RetrieveDeleteRequests
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: uid
+        in: query
+        description: A user uid.
+        required: false
+        schema:
+          type: integer
+      - name: name
+        in: query
+        description: An EF username.
+        required: false
+        schema:
+          type: string
+      - name: mail
+        in: query
+        description: A user email.
+        required: false
+        schema:
+          type: string
+      - name: host
+        in: query
+        description: A host name.
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Current request status.
+        required: false
+        schema:
+          type: integer
+      - name: since
+        in: query
+        description: A starting date range.
+        required: false
+        schema:
+          type: integer
+      - name: until
+        in: query
+        description: An ending date range.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserDeleteRequests'
+        '500':
+          description: Error while retrieving data.
+  /account/user_delete_request/ready:
+    get:
+      tags:
+      - User Delete Request
+      summary: Retrieve list of final-stage user delete requests
+      description: Retrieve a list of user delete requests ready to be handled by accounts.e.o
+      operationId: RetrieveFinalStageDeleteRequests
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDeleteRequests'
+        '204':
+          description: No Content
+        '500':
+          description: Error while retrieving data.
+  /account/user_delete_request/{request_id}:
+    get:
+      tags:
+      - User Delete Request
+      summary: Retrieve a user delete request by id
+      operationId: RetrieveDeleteRequest
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: request_id
+        in: path
+        description: The desired request id.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDeleteRequest'
+        '403':
+          description: Invalid authentication
+        '404':
+          description: Delete Request not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data.
+    put:
+      tags:
+      - User Delete Request
+      summary: Update a user delete request by id
+      operationId: UpdateDeleteRequest
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: request_id
+        in: path
+        description: The desired request id.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: The new status to set the request.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestStatusUpdate'
+      responses:
+        '204':
+          description: Success - No content
+        '400':
+          description: Bad Request - invalid request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Invalid authentication
+        '404':
+          description: Delete Request not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while modifying data.
+    delete:
+      tags:
+      - User Delete Request
+      summary: Delete a user delete request by id
+      operationId: DeleteDeleteRequest
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: request_id
+        in: path
+        description: The desired request id.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Success - No content
+        '403':
+          description: Invalid authentication
+        '404':
+          description: Delete Request not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while modifying data.
+components:
+  schemas:
+    PaginatedUserDeleteRequests:
+      type: object
+      additionalProperties: false
+      required:
+      - result
+      - pagination
+      properties:
+        result:
+          $ref: '#/components/schemas/UserDeleteRequests'
+        pagination:
+          type: object
+          description: The pagination information
+          additionalProperties: false
+          required:
+          - page
+          - page_size
+          - result_start
+          - result_end
+          - result_size
+          - total_result_size
+          properties:
+            page:
+              type: number
+            page_size:
+              type: number
+            result_start:
+              type: number
+            result_end:
+              type: number
+            result_size:
+              type: number
+            total_result_size:
+              type: string
+      example:
+        result:
+        - id: '1'
+          uid: '606609'
+          name: zacharysabourin
+          mail: zachary.sabourin@eclipse-foundation.org
+          host: projects.eclipse.org
+          status: '0'
+          created: '1686086484'
+          changed: '1686086484'
+          url: https://api.eclipse.org/account/user_delete_request/1
+        - id: '2'
+          uid: '606609'
+          name: zacharysabourin
+          mail: zachary.sabourin@eclipse-foundation.org
+          host: marketplace.eclipse.org
+          status: '0'
+          created: '1686086484'
+          changed: '1686086484'
+          url: https://api.eclipse.org/account/user_delete_request/2
+        - id: '3'
+          uid: '606609'
+          name: zacharysabourin
+          mail: zachary.sabourin@eclipse-foundation.org
+          host: eclipse.org/downloads/packages
+          status: '0'
+          created: '1686086484'
+          changed: '1686086484'
+          url: https://api.eclipse.org/account/user_delete_request/3
+        - id: '4'
+          uid: '606609'
+          name: zacharysabourin
+          mail: zachary.sabourin@eclipse-foundation.org
+          host: blogs.eclipse.org
+          status: '0'
+          created: '1686086484'
+          changed: '1686086484'
+          url: https://api.eclipse.org/account/user_delete_request/4
+        - id: '5'
+          uid: '606609'
+          name: zacharysabourin
+          mail: zachary.sabourin@eclipse-foundation.org
+          host: accounts.eclipse.org
+          status: '0'
+          created: '1686086484'
+          changed: '1686086484'
+          url: https://api.eclipse.org/account/user_delete_request/5
+        - id: '6'
+          uid: '606609'
+          name: zacharysabourin
+          mail: zachary.sabourin@eclipse-foundation.org
+          host: eclipsecon.org
+          status: '0'
+          created: '1686086484'
+          changed: '1686086484'
+          url: https://api.eclipse.org/account/user_delete_request/6
+        - id: '7'
+          uid: '606609'
+          name: zacharysabourin
+          mail: zachary.sabourin@eclipse-foundation.org
+          host: newsroom.eclipse.org
+          status: '0'
+          created: '1686086484'
+          changed: '1686086484'
+          url: https://api.eclipse.org/account/user_delete_request/7
+        pagination:
+          page: 1
+          page_size: 50
+          result_start: 1
+          result_end: 6
+          result_size: 6
+          total_result_size: '6'
+    UserDeleteRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - uid
+      - name
+      - mail
+      - host
+      - status
+      - created
+      - changed
+      - url
+      properties:
+        id:
+          type: string
+          description: The request id
+        uid:
+          type: string
+          description: The user uid
+        name:
+          type: string
+          description: The user's ef username
+        mail:
+          type: string
+          description: The user email
+        host:
+          type: string
+          description: The request host name
+        status:
+          type: string
+          description: The current request status. Ex, 0, 1, or 2
+        created:
+          type: string
+          description: The epoch time stamp of the creation of the request
+        changed:
+          type: string
+          description: The epoch time stamp of the last change made to the request
+        url:
+          type: string
+          description: The URL pointing to the resource
+      example:
+        id: '1'
+        uid: '606609'
+        name: zacharysabourin
+        mail: zachary.sabourin@eclipse-foundation.org
+        host: projects.eclipse.org
+        status: '0'
+        created: '1686086484'
+        changed: '1686086484'
+        url: https://api.eclipse.org/account/user_delete_request/1
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
+    RequestStatusUpdate:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      properties:
+        status:
+          type: integer
+          description: The desired status for updating the delete request.
+      example:
+        status: 2
+    UserDeleteRequests:
+      type: array
+      description: The list of UserDeleteRequest objects found
+      items:
+        $ref: '#/components/schemas/UserDeleteRequest'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://accounts.eclipse.org/oauth2/token
+          scopes:
+            eclipsefdn_view_all_profiles: Access private profile information

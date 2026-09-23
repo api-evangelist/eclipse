@@ -1,0 +1,135 @@
+openapi: 3.2.0
+info:
+  version: 1.1.0
+  title: Eclipse Foundation Git ECA Contributions API
+  description: Collection of API endpoints used in the validation and management of external Git services, such as Gitlab and Github.
+  contact:
+    name: IT support
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/git-eca-rest-api/-/issues
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/git
+  description: Production endpoint for the Git ECA validation API
+tags:
+- name: Contributions
+  description: Definitions in relation to contributions tracked through ECA validation
+paths:
+  /eca/contributions/{username}/latest-contribution:
+    parameters:
+    - name: username
+      in: path
+      description: The Eclipse Foundation account username to retrieve the latest contribution for
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getLatestContributionForUser
+      tags:
+      - Contributions
+      summary: Latest known contribution for a user
+      description: Returns the most recent contribution validated by the ECA for the given user, as determined by the validation creation date.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitValidationStatus'
+        '404':
+          description: Not Found - no user exists for the given username, the user is blocked, or the user has no tracked contributions
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    NullableString:
+      description: A nullable String type value
+      type:
+      - 'null'
+      - string
+    CommitValidationMessage:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - status_code
+      - author_email
+      properties:
+        id:
+          type: integer
+          description: internal ID of the commit message for tracking
+        status_code:
+          type: integer
+          description: error code associated with the commit
+        eclipse_id:
+          $ref: '#/components/schemas/NullableString'
+          description: the Eclipse Foundation ID of the user
+        author_email:
+          type: string
+          description: Email address of the author of the commit for additional information
+        committer_email:
+          type: string
+          description: Email address of the committer of the commit for additional information
+        provider_id:
+          $ref: '#/components/schemas/NullableString'
+          description: the outward facing URL of the repo the commit belongs to.
+    DateTime:
+      type: string
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    CommitValidationStatus:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - commit_hash
+      - project
+      - repo_url
+      - provider
+      - creation_date
+      - last_modified
+      - errors
+      properties:
+        id:
+          type: integer
+          description: internal ID of the commit for tracking
+        commit_hash:
+          type: string
+          description: the SHA of the commit that was validated
+        user_mail:
+          type:
+          - string
+          - 'null'
+          description: the email of the user associated with the status
+        estimated_loc:
+          type: integer
+          description: the estimated number of lines of code changed by commit if available.
+        project:
+          type: string
+          description: The short project ID of the project that was detected for the commit, if it exists.
+        repo_url:
+          type: string
+          description: the outward facing URL of the repo the commit belongs to.
+        provider:
+          type: string
+          description: The provider for which the commit is being validated for
+          enum:
+          - github
+          - gitlab
+          - gerrit
+        creation_date:
+          $ref: '#/components/schemas/DateTime'
+          description: Time that the commit was first attempted to be validated
+        last_modified:
+          $ref: '#/components/schemas/DateTime'
+          description: The latest tracked time of validation.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitValidationMessage'

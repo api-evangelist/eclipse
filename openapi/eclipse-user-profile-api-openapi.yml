@@ -1,0 +1,444 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: User Profile API
+  description: Access information on Eclipse Foundation profiles.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  contact:
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/eclipsefdn-profile-api/-/issues
+servers:
+- url: https://api.eclipse.org
+  description: Production endpoints for Eclipse Foundation profile data
+tags:
+- name: User Profile
+  description: Profile data for a user
+paths:
+  /account/profile:
+    get:
+      tags:
+      - User Profile
+      summary: Search for user or get current user
+      description: Retrieve information about a user with given params, or the user making the request.
+      operationId: UserSearch
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: uid
+        in: query
+        description: A user uid.
+        required: false
+        schema:
+          type: integer
+      - name: name
+        in: query
+        description: An EF username.
+        required: false
+        schema:
+          type: string
+      - name: mail
+        in: query
+        description: A user email.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDatas'
+        '403':
+          description: Invalid authentication
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data.
+  /account/profile/{name}:
+    get:
+      tags:
+      - User Profile
+      summary: Retrieve user via Ef Username
+      description: Retrieve profile information about a specified user.
+      operationId: RetrieveUserEf
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: name
+        in: path
+        description: A valid Eclipse username.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data.
+      deprecated: false
+  /github/profile/{handle}:
+    get:
+      tags:
+      - User Profile
+      summary: Retrieve user via Github handle
+      description: Retrieve profile information about a specified user.
+      operationId: RetrieveUserGh
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: handle
+        in: path
+        description: A valid Github handle.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data.
+      deprecated: false
+  /account/profile/{name}/cache:
+    delete:
+      tags:
+      - User Profile
+      summary: Clear user profile cache
+      description: Clear the cache data for specified user.
+      operationId: clearCacheForUser
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: name
+        in: path
+        description: An ef username.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    UserDatas:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserData'
+      example:
+      - uid: '606609'
+        name: zacharysabourin
+        mail: zachary.sabourin@eclipse-foundation.org
+        picture: https://secure.gravatar.com/avatar/fbbbb03860062596a5cf11105dcc7d47.jpg?d=mm&s=185&r=G
+        eca:
+          signed: true
+          can_contribute_spec_project: true
+        is_committer: true
+        first_name: Zachary
+        last_name: Sabourin
+        github_handle: zacharysabourin
+        twitter_handle: sometwitteruser
+        publisher_agreements:
+          open-vsx:
+            version: '1'
+        org: Eclipse Foundation
+        org_id: null
+        job_title: Web Developer
+        website: https://google.com
+        country:
+          code: CA
+          name: Canada
+        bio: This is my bio. Hello!
+        interests:
+        - MTG
+        - Warhammer
+        - Bass guitar
+        working_groups_interests:
+        - adoptium
+        - oniro
+        opt_in:
+          copilot: true
+        eca_url: https://api.eclipse.org/account/profile/zacharysabourin/eca
+        projects_url: https://api.eclipse.org/account/profile/zacharysabourin/projects
+        gerrit_url: ''
+        mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
+        mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
+    Country:
+      type: object
+      properties:
+        code:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The country code.
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      example:
+        code: CA
+        name: Canada
+    PublisherAgreement:
+      type: object
+      additionalProperties: false
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'
+    UserData:
+      type: object
+      additionalProperties: false
+      required:
+      - uid
+      - name
+      - picture
+      - first_name
+      - last_name
+      - publisher_agreements
+      - github_handle
+      - twitter_handle
+      - job_title
+      - website
+      - country
+      - interests
+      properties:
+        uid:
+          type: string
+          description: The unique user id.
+        name:
+          type: string
+          description: The user's ef username name.
+        picture:
+          type: string
+          description: URL of the user's picture.
+        mail:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's email.
+        eca:
+          oneOf:
+          - $ref: '#/components/schemas/Eca'
+          - type: 'null'
+        is_committer:
+          oneOf:
+          - type: boolean
+          - type: 'null'
+          description: User's committer status.
+        first_name:
+          type: string
+          description: The user's first name.
+        last_name:
+          type: string
+          description: The user's last name.
+        full_name:
+          type: string
+          description: The user's full name.
+        publisher_agreements:
+          type: object
+          propertyNames:
+            description: The publisher agreement name.
+          additionalProperties:
+            $ref: '#/components/schemas/PublisherAgreement'
+        github_handle:
+          type: string
+          description: The user's Github handle.
+        github_id:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The users GitHub account ID if linked.
+        twitter_handle:
+          type: string
+          description: The user's Twitter handle.
+        mxid:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's matrix ID, if it exists
+        org:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's organization.
+        org_id:
+          oneOf:
+          - type: integer
+          - type: 'null'
+          description: The user's organization id.
+        job_title:
+          type: string
+          description: The user's job title at the organization.
+        website:
+          type: string
+          description: The user's website.
+        country:
+          $ref: '#/components/schemas/Country'
+        bio:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's account bio
+        interests:
+          type: array
+          items:
+            type: string
+          description: A list of the user's interests.
+        working_groups_interests:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's working group interests.
+        opt_in:
+          description: Optional features that users have opted into for their account
+          oneOf:
+          - type: 'null'
+          - type: object
+            additionalProperties:
+              type: boolean
+        public_fields:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's public fields.
+        mail_history:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's email history.
+        mail_alternate:
+          oneOf:
+          - type: 'null'
+          - type: array
+          description: A list of the user's alternate emails.
+        gerrit_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's Gerrit URL, deprecated and always empty
+          deprecated: true
+        projects_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's projects URL.
+        mailinglist_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's mailing list URL.
+        mpc_favorites_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's Marketplace favorites URL.
+        eca_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The user's ECA status URL.
+      example:
+        uid: '606609'
+        name: zacharysabourin
+        mail: zachary.sabourin@eclipse-foundation.org
+        picture: https://secure.gravatar.com/avatar/fbbbb03860062596a5cf11105dcc7d47.jpg?d=mm&s=185&r=G
+        eca:
+          signed: true
+          can_contribute_spec_project: true
+        is_committer: true
+        first_name: Zachary
+        last_name: Sabourin
+        github_handle: zacharysabourin
+        twitter_handle: sometwitteruser
+        publisher_agreements:
+          open-vsx:
+            version: '1'
+        org: Eclipse Foundation
+        org_id: null
+        job_title: Web Developer
+        website: https://google.com
+        country:
+          code: CA
+          name: Canada
+        bio: This is my bio. Hello!
+        interests:
+        - MTG
+        - Warhammer
+        - Bass guitar
+        working_groups_interests:
+        - adoptium
+        - oniro
+        opt_in:
+          copilot: true
+        eca_url: https://api.eclipse.org/account/profile/zacharysabourin/eca
+        projects_url: https://api.eclipse.org/account/profile/zacharysabourin/projects
+        gerrit_url: ''
+        mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
+        mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
+    Eca:
+      type: object
+      additionalProperties: false
+      required:
+      - signed
+      - can_contribute_spec_project
+      properties:
+        signed:
+          type: boolean
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
+      example:
+        signed: true
+        can_contribute_spec_project: true
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://accounts.eclipse.org/oauth2/token
+          scopes:
+            eclipsefdn_view_all_profiles: Access private profile information

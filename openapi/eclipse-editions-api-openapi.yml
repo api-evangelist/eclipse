@@ -1,0 +1,156 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Newsroom REST Editions API
+  version: '1.0'
+  description: REST API for interacting with newsroom different endpoints.
+servers:
+- url: https://newsroom.eclipse.org
+  description: The production API server
+tags:
+- name: Editions
+paths:
+  /api/edition:
+    get:
+      tags:
+      - Editions
+      summary: Get Editions
+      description: Retrieve metadata for all Editions.
+      operationId: FetchEditions
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - editions
+                - pager
+                properties:
+                  editions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Edition'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                editions:
+                - title: Example Community Newsletter
+                  id: '12345'
+                  date: 2025-01
+                  type: Community
+                  featured_committer:
+                    name: Example Contributor
+                    body: Example text.
+                    picture: https://newsroom.eclipse.org/images/picture.jpg
+                    url: https://newsroom.eclipse.org/url
+                  featured_project:
+                    id: eclipse.project
+                    body: 'This project provides an open source platform for building and managing distributed systems using standardized approaches.
+
+                      '
+                    logo: https://newsroom.eclipse.org/example-logo.png
+                  ads: ''
+                pager:
+                  current_page: 0
+                  total_items: '99'
+                  total_pages: 99
+                  items_per_page: '20'
+      deprecated: false
+components:
+  parameters:
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+  schemas:
+    Edition:
+      type: object
+      required:
+      - title
+      - date
+      - type
+      - featured_committer
+      - featured_project
+      properties:
+        title:
+          type: string
+        id:
+          type: string
+        date:
+          type: string
+          description: Year and month (YYYY-MM)
+          example: 2025-12
+        type:
+          type: string
+        featured_committer:
+          $ref: '#/components/schemas/EditionFeaturedCommitter'
+        featured_project:
+          $ref: '#/components/schemas/EditionFeaturedProject'
+        ads:
+          type:
+          - string
+          - 'null'
+          format: uri
+    EditionFeaturedProject:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        body:
+          type: string
+        logo:
+          type: string
+          format: uri
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string
+    EditionFeaturedCommitter:
+      type: object
+      required:
+      - body
+      properties:
+        name:
+          type: string
+        body:
+          type: string
+        picture:
+          type: string
+          format: uri
+        url:
+          type: string
+          format: uri

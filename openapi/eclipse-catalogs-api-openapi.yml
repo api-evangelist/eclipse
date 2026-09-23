@@ -1,0 +1,131 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Marketplace REST Catalogs API
+  version: '1.0'
+  description: REST API for interacting with marketplace listings, catalogs, and versions.
+servers:
+- url: https://marketplace.eclipse.org
+  description: The production API server
+tags:
+- name: Catalogs
+paths:
+  /catalogs/api/p:
+    get:
+      tags:
+      - Catalogs
+      summary: List catalogs
+      description: 'This will return a listing of all catalogs that are browsable with the MPC. It also includes basic branding parameters, like title and icon and strategies resolving dependencies. If you want to override this url (e.g. in your RCP application) you have to set the following system-property:
+
+        ```
+
+        -Dorg.eclipse.epp.internal.mpc.core.service.DefaultCatalogService.url=http://mydomain.tld
+
+        ```'
+      operationId: getCatalogs
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: "<marketplace>\n  <catalogs>\n    <catalog id=\"38413\" title=\"Eclipse Marketplace\" url=\"http://mydomain.tld\" selfContained=\"0\" icon=\"http://marketplace.eclipse.org/sites/default/files/default_1_0.png\">\n      <description>Eclipse Marketplace (MP) is a place to find and keep track of Eclipse-based solutions.</description>\n      <dependenciesRepository></dependenciesRepository>\n      <wizard title=\"\">\n        <icon>http://marketplace.eclipse.org/sites/default/files/default_1.png</icon>\n        <searchtab enabled=\"1\">Search</searchtab>\n        <populartab enabled=\"1\">Popular</populartab>\n        <recenttab enabled=\"1\">Recent</recenttab>\n        <news shorttitle=\"January 01/27\" timestamp=\"1422334800\">https://www.eclipse.org/community/eclipse_newsletter/2015/january/</news>\n      </wizard>\n    </catalog>\n  </catalogs>\n</marketplace>\n"
+              schema:
+                $ref: '#/components/schemas/Catalogs'
+components:
+  schemas:
+    PseudoBool:
+      type: integer
+      description: Boolean value represented by a 1 for true, 0 for false
+      enum:
+      - 1
+      - 0
+    Catalog:
+      type: object
+      properties:
+        selfContained:
+          allOf:
+          - $ref: '#/components/schemas/PseudoBool'
+          - xml:
+              attribute: true
+        icon:
+          type: string
+          format: url
+          description: Absolute URL of icon for catalog
+          xml:
+            attribute: true
+        description:
+          type: string
+          description: Short description
+        dependenciesRepository:
+          type: string
+          description: Location of dependencies repository
+        wizard:
+          type: object
+          properties:
+            icon:
+              type: string
+              format: url
+              description: Absolute URL of icon image for wizard
+              xml:
+                attribute: true
+            searchtab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+            populartab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+            recenttab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+            favoritestab:
+              type: object
+              properties:
+                enabled:
+                  allOf:
+                  - $ref: '#/components/schemas/PseudoBool'
+                  - xml:
+                      attribute: true
+                apiserver:
+                  type: string
+                  format: url
+                  xml:
+                    attribute: true
+            news:
+              type: object
+              properties:
+                shorttitle:
+                  type: string
+                  description: Title to include in tab for this section
+                  xml:
+                    attribute: true
+                timestamp:
+                  type: integer
+                  description: Seconds since epoch timestamp for when news source was updated
+                  xml:
+                    attribute: true
+    Catalogs:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        catalogs:
+          type: array
+          xml:
+            name: catalogs
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Catalog'

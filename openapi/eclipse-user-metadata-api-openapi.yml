@@ -1,0 +1,345 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Profile User Metadata API
+  description: Access information on Eclipse Foundation profiles.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  contact:
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/eclipsefdn-profile-api/-/issues
+servers:
+- url: https://api.eclipse.org
+  description: Production endpoints for Eclipse Foundation profile data
+tags:
+- name: User Metadata
+  description: Additional user metadata
+paths:
+  /account/profile/{name}/eca:
+    get:
+      tags:
+      - User Metadata
+      summary: Retrieve user eca status via username
+      description: Retrieve eca status about a specified user.
+      operationId: RetrieveEca
+      parameters:
+      - name: name
+        in: path
+        description: An ef username.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Eca'
+              example:
+                signed: true
+                can_contribute_spec_project: true
+        '500':
+          description: Error while retrieving data.
+      deprecated: false
+  /account/profile/{name}/employment-history:
+    get:
+      tags:
+      - User Metadata
+      summary: Retrieve user employment history via username
+      description: Retrieve employment history for a specified user.
+      operationId: getUserEmploymentHistory
+      security:
+      - OAuth2:
+        - eclipsefdn_view_all_profiles
+      parameters:
+      - name: name
+        in: path
+        description: An ef username.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmploymentHistories'
+        '500':
+          description: Error while retrieving data.
+      deprecated: false
+  /account/profile/{name}/mailing-list:
+    get:
+      tags:
+      - User Metadata
+      summary: Retrieve user mailing-list subscriptions via username
+      description: Retrieve mailing-list subscriptions for a specified user.
+      operationId: RetrieveMailingList
+      parameters:
+      - name: name
+        in: path
+        description: An ef username.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data.
+      deprecated: false
+  /account/profile/{name}/projects:
+    get:
+      tags:
+      - User Metadata
+      summary: Retrieve user projects via username
+      description: Retrieve projects for a specified user.
+      operationId: RetrieveProjects
+      parameters:
+      - name: name
+        in: path
+        description: An ef username.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeopleProjectMap'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data.
+      deprecated: false
+components:
+  schemas:
+    PeopleProject:
+      type: object
+      additionalProperties: false
+      required:
+      - ActiveDate
+      - EditBugs
+      - SortOrder
+      - ProjectName
+      - Url
+      - SpecificationProject
+      - Relation
+      properties:
+        ActiveDate:
+          type: string
+          description: The active date for this record
+        InactiveDate:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The inactive date for this record
+        EditBugs:
+          type: string
+          description: Edit bugs status. 1 for true, 0 for false
+        SortOrder:
+          type: string
+          description: The sort order for this record
+        ProjectName:
+          type: string
+          description: The project's name
+        Url:
+          type: string
+          description: The project URL
+        SpecificationProject:
+          type: boolean
+          description: The active date for tis record
+        Relation:
+          $ref: '#/components/schemas/Relation'
+    PeopleProjects:
+      type: array
+      description: Map of projects that the user is associated with.
+      items:
+        $ref: '#/components/schemas/PeopleProject'
+      example:
+      - active_date: '2022-09-21T00:00:00Z'
+        inactive_date: ''
+        edit_bugs: '0'
+        sort_order: ''
+        project_name: Eclise USS SDK
+        url: https://projects.eclipse.org/projects/technology.usssdk
+        specification_project: false
+        relation:
+          relation: CM
+          description: commiter
+          is_active: '1'
+          type:
+            type: PR
+            description: Person - Project
+    PeopleProjectMap:
+      type: object
+      propertyNames:
+        description: The project ID
+      additionalProperties:
+        $ref: '#/components/schemas/PeopleProjects'
+      example:
+        technology.usssdk:
+        - active_date: '2022-09-21T00:00:00Z'
+          inactive_date: ''
+          edit_bugs: '0'
+          sort_order: ''
+          project_name: Eclise USS SDK
+          url: https://projects.eclipse.org/projects/technology.usssdk
+          specification_project: false
+          relation:
+            relation: CM
+            description: commiter
+            is_active: '1'
+            type:
+              type: PR
+              description: Person - Project
+    Subscriptions:
+      type: object
+      additionalProperties: false
+      required:
+      - mailing_list_subscriptions
+      properties:
+        mailing_list_subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailingList'
+      example:
+        mailing_list_subscriptions:
+        - list_name: cross-project-issues-dev
+          list_description: Cross project issues
+        - list_name: epp
+          list_description: Eclipse Packaging Project
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
+    EmploymentHistories:
+      type: array
+      items:
+        $ref: '#/components/schemas/EmploymentHistory'
+    EmploymentHistory:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - organization_name
+      - start
+      properties:
+        organization_id:
+          type: number
+          description: Internal numerical ID of organization
+        organization_name:
+          type: string
+          description: The legal name of the organization
+        start:
+          type: string
+          description: Start or entry date of the user employment
+        end:
+          type:
+          - 'null'
+          - string
+          description: Termination or change date for employment
+    MailingList:
+      type: object
+      additionalProperties: false
+      required:
+      - list_name
+      - list_description
+      properties:
+        list_name:
+          type: string
+          description: The mailing list name.
+        list_description:
+          type: string
+          description: The mailing list description.
+      example:
+        list_name: cross-project-issues-dev
+        list_description: Cross project issues
+    Eca:
+      type: object
+      additionalProperties: false
+      required:
+      - signed
+      - can_contribute_spec_project
+      properties:
+        signed:
+          type: boolean
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
+      example:
+        signed: true
+        can_contribute_spec_project: true
+    Relation:
+      type: object
+      additionalProperties: false
+      required:
+      - Relation
+      - Description
+      - IsActive
+      - Type
+      properties:
+        Relation:
+          type: string
+          description: The relation code.
+        Description:
+          type: string
+          description: The relation description.
+        IsActive:
+          type: string
+          description: The active flag for the relation. 1 for true, 0 for false.
+        Type:
+          type: object
+          additionalProperties: false
+          required:
+          - Type
+          - Description
+          properties:
+            Type:
+              type: string
+              description: The type code.
+            Description:
+              type: string
+              description: The type description.
+      example:
+        Relation: CM
+        Description: commiter
+        IsActive: '1'
+        Type:
+          Type: PR
+          Description: Person - Project
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://accounts.eclipse.org/oauth2/token
+          scopes:
+            eclipsefdn_view_all_profiles: Access private profile information

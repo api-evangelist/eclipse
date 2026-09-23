@@ -1,0 +1,159 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Newsroom REST Sponsorship Campaigns API
+  version: '1.0'
+  description: REST API for interacting with newsroom different endpoints.
+servers:
+- url: https://newsroom.eclipse.org
+  description: The production API server
+tags:
+- name: Sponsorship Campaigns
+paths:
+  /api/sponsorship-campaign:
+    get:
+      tags:
+      - Sponsorship Campaigns
+      summary: List sponsorship campaigns
+      description: Retrieve all published sponsorship campaigns.
+      operationId: FetchSponsorshipCampaigns
+      parameters:
+      - name: publish_to
+        in: query
+        required: false
+        description: 'Return only campaigns published to the given page. Repeat the parameter (publish_to[]=ide&publish_to[]=adoptium) to match any of several pages.
+
+          '
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - ide
+          - adoptium
+          - openvsx
+          - jakartaee
+          - ecdtools
+        example: ide
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SponsorshipCampaign'
+              example:
+              - nid: 1234
+                title: Example Sponsorship Campaign
+                updated_date: '2026-08-05T13:14:28Z'
+                campaign:
+                  start: '2026-01-01T00:00:00Z'
+                  end: '2026-03-31T23:59:59Z'
+                current_amount: '50000'
+                goal: '100000'
+                individual_sponsor_count: '42'
+                publish_to:
+                - ide
+                - adoptium
+      deprecated: false
+  /api/sponsorship-campaign/{id}:
+    get:
+      tags:
+      - Sponsorship Campaigns
+      summary: Get a sponsorship campaign by node ID
+      description: Retrieve a single published sponsorship campaign by its node ID. Returns an array containing the single matching campaign.
+      operationId: FetchSponsorshipCampaign
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The node ID of the sponsorship campaign.
+        schema:
+          type: integer
+          format: int32
+        example: 1234
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SponsorshipCampaign'
+              example:
+              - nid: 1234
+                title: Example Sponsorship Campaign
+                updated_date: '2026-08-05T13:14:28Z'
+                campaign:
+                  start: '2026-01-01T00:00:00Z'
+                  end: '2026-03-31T23:59:59Z'
+                current_amount: '50000'
+                goal: '100000'
+                individual_sponsor_count: '42'
+                publish_to:
+                - ide
+                - adoptium
+        '404':
+          description: No published sponsorship campaign has the given ID.
+      deprecated: false
+components:
+  schemas:
+    SponsorshipCampaign:
+      type: object
+      required:
+      - nid
+      - title
+      - updated_date
+      - campaign
+      - current_amount
+      - goal
+      - individual_sponsor_count
+      - publish_to
+      properties:
+        nid:
+          type: integer
+          format: int32
+        title:
+          type: string
+        updated_date:
+          type: string
+          format: date-time
+          description: Node last updated date and time (ISO 8601, UTC).
+          example: '2026-08-05T13:14:28Z'
+        campaign:
+          $ref: '#/components/schemas/SponsorshipCampaignDates'
+        current_amount:
+          type: string
+        goal:
+          type: string
+        individual_sponsor_count:
+          type: string
+        publish_to:
+          type: array
+          description: Pages the campaign is published to.
+          items:
+            type: string
+            enum:
+            - ide
+            - adoptium
+            - openvsx
+            - jakartaee
+            - ecdtools
+    SponsorshipCampaignDates:
+      type: object
+      required:
+      - start
+      - end
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: Campaign start date and time (ISO 8601, UTC).
+          example: '2026-01-01T00:00:00Z'
+        end:
+          type: string
+          format: date-time
+          description: Campaign end date and time (ISO 8601, UTC).
+          example: '2026-03-31T23:59:59Z'

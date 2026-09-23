@@ -1,0 +1,397 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Project Management Infrastructure (PMI) RESTful…
+  description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://projects.eclipse.org
+  description: The production API server
+tags:
+- name: Proposals
+  description: Eclipse project proposals submitted for community review.
+paths:
+  /api/proposals:
+    get:
+      tags:
+      - Proposals
+      summary: Fetch Proposals
+      description: '### Overview
+
+
+        Retrieve a paginated list of Eclipse project proposals.
+
+
+        Unlike the projects index, pagination metadata is included in the response body alongside the `result` array, in addition to the `Link` header.'
+      operationId: FetchProposals
+      parameters:
+      - name: spec_project
+        in: query
+        description: Filter to specification projects only. Set to any non-zero integer to enable.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: spec_project_working_group
+        in: query
+        description: Filter by specification project working group ID.
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: industry_collaboration
+        in: query
+        description: Filter by industry collaboration (working group) ID.
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: Filter by proposal state (case-insensitive). Accepts a single value (`state=Active`) or an array (`state[]=Active&state[]=Draft`).
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The index of the page to retrieve, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          minimum: 1
+          maximum: 100
+      - name: order_by
+        in: query
+        description: 'The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`, `RANDOM`.'
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: ASC
+      responses:
+        '200':
+          description: A paginated wrapper object containing the proposals and pagination metadata.
+          headers:
+            Link:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProposalsIndexResponse'
+              example:
+                result:
+                - id: 789
+                  project_id: technology.new-project
+                  name: New Eclipse Project Proposal
+                  parent: technology
+                  top_level_project: technology
+                  industry_collaborations: []
+                  state: Active
+                  summary: A short plain-text summary of the proposal.
+                  scope: ''
+                  background: ''
+                  date: '2023-06-01'
+                  url: https://projects.eclipse.org/proposals/new-project
+                  project_url: ''
+                  spec_project: []
+                  committers: []
+                  project_leads: []
+                  patent_license: ''
+                  licenses:
+                  - Eclipse Public License 2.0
+                  repo_type: Git
+                  repos:
+                  - https://github.com/eclipse/new-project
+                pagination:
+                  page: 1
+                  pagesize: 20
+                  result_start: 1
+                  result_end: 1
+                  result_size: 1
+                  total_result_size: 1
+  /api/proposals/{nid}:
+    get:
+      tags:
+      - Proposals
+      summary: Retrieve a Proposal
+      description: '### Overview
+
+
+        Retrieve a single Eclipse project proposal by its Drupal node ID.'
+      operationId: RetrieveAProposal
+      parameters:
+      - name: nid
+        in: path
+        description: The Drupal node ID of the proposal.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: An array containing the matching proposal.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Proposal'
+              example:
+              - id: 789
+                project_id: technology.new-project
+                name: New Eclipse Project Proposal
+                parent: technology
+                top_level_project: technology
+                industry_collaborations: []
+                state: Active
+                summary: A short plain-text summary of the proposal.
+                scope: ''
+                background: ''
+                date: '2023-06-01'
+                url: https://projects.eclipse.org/proposals/new-project
+                project_url: ''
+                spec_project: []
+                committers: []
+                project_leads: []
+                patent_license: ''
+                licenses:
+                - Eclipse Public License 2.0
+                repo_type: Git
+                repos:
+                - https://github.com/eclipse/new-project
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Pagination:
+      title: Pagination
+      type: object
+      description: Pagination metadata included in some list responses.
+      properties:
+        page:
+          type: integer
+          description: Current page number (1-based).
+        pagesize:
+          type: integer
+          description: Maximum number of results per page.
+        result_start:
+          type: integer
+          description: One-based index of the first result on this page.
+        result_end:
+          type: integer
+          description: One-based index of the last result on this page. -1 when the page is empty.
+        result_size:
+          type: integer
+          description: Number of results on this page.
+        total_result_size:
+          type: integer
+          description: Total number of results across all pages.
+      example:
+        page: 1
+        pagesize: 20
+        result_start: 1
+        result_end: 20
+        result_size: 20
+        total_result_size: 150
+    Proposal:
+      title: Proposal
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Drupal node ID of the proposal.
+        project_id:
+          type: string
+          description: Proposed Eclipse project identifier.
+        name:
+          type: string
+          description: Proposal title.
+        parent:
+          type: string
+          description: Project ID of the parent project, or empty string.
+        top_level_project:
+          type: string
+          description: Project ID of the top-level project, or empty string.
+        industry_collaborations:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkingGroup'
+          description: Working groups / industry collaborations associated with this proposal.
+        state:
+          type: string
+          description: Current proposal state (e.g. `Active`, `Draft`, `Withdrawn`).
+        summary:
+          type: string
+          description: Plain-text summary truncated to 200 characters (HTML stripped).
+        scope:
+          type: string
+          description: Raw scope field text.
+        background:
+          type: string
+          description: Raw background field text.
+        date:
+          type: string
+          description: Proposal creation date in `Y-m-d` format.
+        url:
+          type: string
+          description: Absolute URL to the proposal page.
+        project_url:
+          type: string
+          description: Absolute URL to the resulting project page if the project already exists, otherwise empty string.
+        spec_project:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpecProjectWorkingGroup'
+          description: Specification working group(s) associated with this proposal (at most one entry).
+        committers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer'
+          description: Initial committers listed in the proposal. The `username` field may be null when a committer does not yet have an Eclipse account.
+        project_leads:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer'
+          description: Proposed project leads.
+        patent_license:
+          type: string
+          description: Patent license selected for this proposal.
+        licenses:
+          type: array
+          items:
+            type: string
+          description: License term labels selected for this proposal.
+        repo_type:
+          type: string
+          description: Source repository type (e.g. `Git`).
+        repos:
+          type: array
+          items:
+            type: string
+          description: Source repository URIs.
+      example:
+        id: 789
+        project_id: technology.new-project
+        name: New Eclipse Project Proposal
+        parent: technology
+        top_level_project: technology
+        industry_collaborations: []
+        state: Active
+        summary: A short plain-text summary of the proposal.
+        scope: ''
+        background: ''
+        date: '2023-06-01'
+        url: https://projects.eclipse.org/proposals/new-project
+        project_url: ''
+        spec_project: []
+        committers: []
+        project_leads: []
+        patent_license: ''
+        licenses:
+        - Eclipse Public License 2.0
+        repo_type: Git
+        repos:
+        - https://github.com/eclipse/new-project
+    ProposalsIndexResponse:
+      title: ProposalsIndexResponse
+      type: object
+      description: Paginated proposals list. Unlike the projects index, this endpoint preserves the pagination metadata in the response body alongside the `result` array.
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proposal'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      example:
+        result:
+        - id: 789
+          project_id: technology.new-project
+          name: New Eclipse Project Proposal
+        pagination:
+          page: 1
+          pagesize: 20
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 1
+    WorkingGroup:
+      title: WorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
+    SpecProjectWorkingGroup:
+      title: SpecProjectWorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
+    Committer:
+      title: Committer
+      type: object
+      description: A person with a role on an Eclipse project (committer, contributor, or project lead).
+      required:
+      - username
+      - url
+      properties:
+        username:
+          type:
+          - string
+          - 'null'
+          description: Eclipse account username (may be null for proposals where the person has no account yet).
+        full_name:
+          type: string
+          description: Display name of the person.
+        url:
+          type: string
+          description: Absolute URL to the person's profile on api.eclipse.org.
+      example:
+        username: acommitter
+        full_name: A Committer
+        url: https://api.eclipse.org/account/profile/acommitter
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

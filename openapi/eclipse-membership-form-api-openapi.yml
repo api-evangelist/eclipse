@@ -1,0 +1,275 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Membership form API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  description: Definitions related to membership form data in the database
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Membership form
+  description: Definitions related to membership form data in the database
+paths:
+  /form:
+    get:
+      tags:
+      - Membership form
+      summary: Membership form list
+      description: Returns a list of tracked membership forms
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipForms'
+        '500':
+          description: Error while retrieving data
+      operationId: getForm
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Membership form
+      summary: Membership form create
+      description: Using the passed form object, updates or inserts are made to save the data.
+      requestBody:
+        description: The form to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipForm'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipForm'
+        '403':
+          description: Unauthorized
+      operationId: postForm
+      x-operation-id-source: derived
+  /form/{id}:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      tags:
+      - Membership form
+      summary: Membership form
+      description: Returns a membership form entry that has a matching ID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipForm'
+        '403':
+          description: Unauthorized
+        '404':
+          description: Form not found
+        '500':
+          description: Error while retrieving data
+      operationId: getFormById
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Membership form
+      summary: Membership form update
+      description: Using the passed form object, updates or inserts are made to save the data.
+      requestBody:
+        description: The form to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipForm'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipForm'
+        '403':
+          description: Unauthorized
+      operationId: putFormById
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Membership form
+      summary: Membership form delete
+      description: Remove a membership form entry with the given ID
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized
+      operationId: deleteFormById
+      x-operation-id-source: derived
+  /form/{id}/complete:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    post:
+      tags:
+      - Membership form
+      summary: Membership form submit
+      description: Submit a finalized form to the membership team
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConstraintViolations'
+        '403':
+          description: Unauthorized
+        '404':
+          description: Form not found
+        '500':
+          description: Error while retrieving data
+      operationId: postFormByIdComplete
+      x-operation-id-source: derived
+  /form/{id}/{transactionId}:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: transactionId
+      in: path
+      description: Unique ID of the transaction entry
+      required: true
+      schema:
+        type: number
+    - name: token
+      in: query
+      description: Unique token of the transaction entry
+      required: true
+      schema:
+        type: string
+    - name: state
+      in: query
+      description: The validated state of the current form
+      required: true
+      schema:
+        $ref: '#/components/schemas/FormState'
+    get:
+      tags:
+      - Membership form
+      summary: Membership form validation
+      description: Validate the current form as CONFIRMED or REJECTED
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request - Missing query parameters
+        '404':
+          description: Transaction or Form Not Found
+        '500':
+          description: error while retrieving or updating data
+      operationId: getFormByIdByTransactionId
+      x-operation-id-source: derived
+components:
+  schemas:
+    ConstraintViolation:
+      type: object
+      properties:
+        root_id:
+          $ref: '#/components/schemas/ObjectID'
+          description: ID of the object that was validated.
+        path:
+          type: string
+          description: path to the property that had an error.
+        type:
+          type: string
+          description: name of the type of object that had errors (i.e, Contact, FormOrganization, MembershipForm etc.).
+        value:
+          type: object
+          description: the bad value in question.
+    MembershipForms:
+      type: array
+      items:
+        $ref: '#/components/schemas/MembershipForm'
+    MembershipForm:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectID'
+        user_id:
+          $ref: '#/components/schemas/ObjectID'
+        membership_level:
+          type: string
+          description: The level of membership with the Eclipse Foundation that is being targeted.
+        signing_authority:
+          type: boolean
+          description: Whether the currently submitting user has signing authority for membership contracts.
+        purchase_order_required:
+          type:
+          - string
+          - 'null'
+          description: Indicator for whether a purchase order is required, either yes, no, or not applicable.
+          enum:
+          - 'yes'
+          - 'no'
+          - na
+        vat_number:
+          type:
+          - string
+          - 'null'
+          description: The EU VAT registration number, if applicable
+        registration_country:
+          type:
+          - string
+          - 'null'
+          description: The EU country the organization is registered under for VAT.
+        updated_date:
+          $ref: '#/components/schemas/DateTime'
+    ConstraintViolations:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConstraintViolation'
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    FormState:
+      type: string
+      description: the current form state
+      enum:
+      - SUBMITTED
+      - INPROGRESS
+      - COMPLETE
+      - CONFIRMED
+      - REJECTED
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

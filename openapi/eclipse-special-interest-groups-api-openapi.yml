@@ -1,0 +1,161 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Working Groups Special Interest Groups API
+  description: Access information on Eclipse Foundation Working Groups.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/working-groups
+  description: Production endpoint for Eclipse Foundation working group data
+tags:
+- name: Special Interest Groups
+paths:
+  /{alias}/special-interest-groups:
+    parameters:
+    - name: alias
+      in: path
+      description: The name of the working group to retrieve
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Special Interest Groups
+      summary: Special Interest Group for Working Group
+      description: Returns a list of all known special interest groups for the given Working Group
+      operationId: getSpecialInterestGroupsByWorkingGroup
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpecialInterestGroups'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data
+  /special-interest-groups:
+    get:
+      tags:
+      - Special Interest Groups
+      summary: Special Interest Group list
+      description: Returns a list of all known special interest groups
+      operationId: getSpecialInterestGroups
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpecialInterestGroups'
+        '500':
+          description: Error while retrieving data
+  /special-interest-groups/{sigAlias}:
+    parameters:
+    - name: sigAlias
+      in: path
+      description: The alias of the special interest group to retrieve
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Special Interest Groups
+      summary: Special Interest Group
+      description: Returns a special interest group
+      operationId: getSpecialInterestGroupByAlias
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpecialInterestGroups'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The URL
+        friendly_message:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The friendly message for the error
+    SpecialInterestGroup:
+      type: object
+      properties:
+        alias:
+          type: string
+          description: The name of the Special Interest Group
+        description:
+          type: string
+          description: Short description of the Special Interest Group
+        logo:
+          type:
+          - string
+          - 'null'
+          format: url
+          description: URL for the Special Interest Group logo if one exists
+        resources:
+          type: object
+          properties:
+            membership_document:
+              type: string
+              description: The document ID for the associative membership document in the Foundation
+            links:
+              type: array
+              description: List of links associated with the Special Interest Group
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    format: url
+                    description: The URL of the link
+                  title:
+                    type: string
+                    description: The title of the link to be displayed
+                  order:
+                    type: number
+                    description: Used to order the links explicitly
+        associated_working_group:
+          type: string
+          description: The alias of the associated Working Group
+    SpecialInterestGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/SpecialInterestGroup'
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

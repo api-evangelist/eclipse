@@ -1,0 +1,645 @@
+openapi: 3.2.0
+info:
+  termsOfService: https://www.eclipse.org/legal/termsofuse.php
+  license:
+    name: Eclipse Public License 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  version: '0.1'
+  title: Eclipse File Decision API
+servers:
+- url: https://open-vsx.org
+  description: Generated server url
+tags:
+- name: file-decision-api
+paths:
+  /admin/scans/files/decisions:
+    post:
+      tags:
+      - file-decision-api
+      summary: Create or update file decisions
+      operationId: makeFileDecisions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileDecisionRequest'
+        required: true
+      responses:
+        '200':
+          description: Decisions processed successfully
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDecisionResponse'
+        '400':
+          description: Invalid request
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+    delete:
+      tags:
+      - file-decision-api
+      summary: Remove file decisions
+      operationId: deleteFileDecisions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileDecisionDeleteRequest'
+        required: true
+      responses:
+        '200':
+          description: Deletions processed successfully
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDecisionDeleteResponse'
+        '400':
+          description: Invalid request
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans/files:
+    get:
+      tags:
+      - file-decision-api
+      summary: Get files with admin decisions
+      operationId: getFiles
+      parameters:
+      - name: decision
+        in: query
+        description: Filter by admin decision type
+        required: false
+        schema:
+          type: string
+          enum:
+          - allowed
+          - blocked
+      - name: publisher
+        in: query
+        description: Filter by publisher name
+        required: false
+        schema:
+          type: string
+      - name: namespace
+        in: query
+        description: Filter by namespace
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Filter by display name, extension name, or file name
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        description: Maximum number of entries to return
+        required: false
+        schema:
+          type: integer
+          default: 18
+          maximum: 100
+          minimum: 0
+      - name: offset
+        in: query
+        description: Number of entries to skip
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: sortBy
+        in: query
+        description: Field to sort by
+        required: false
+        schema:
+          type: string
+          default: dateDecided
+          enum:
+          - dateDecided
+          - fileName
+          - publisher
+          - namespace
+      - name: sortOrder
+        in: query
+        description: Sort order
+        required: false
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+      - name: dateDecidedFrom
+        in: query
+        description: Filter files decided on or after this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      - name: dateDecidedTo
+        in: query
+        description: Filter files decided on or before this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of file decisions
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesResponse'
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans/files/{fileId}:
+    get:
+      tags:
+      - file-decision-api
+      summary: Get specific file decision
+      operationId: getFileDecision
+      parameters:
+      - name: fileId
+        in: path
+        description: File decision ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 123
+      responses:
+        '200':
+          description: File decision details
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDecision'
+        '404':
+          description: File decision not found
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans/files/counts:
+    get:
+      tags:
+      - file-decision-api
+      summary: Get file decision counts
+      operationId: getFileDecisionCounts
+      parameters:
+      - name: dateDecidedFrom
+        in: query
+        description: Filter files decided on or after this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      - name: dateDecidedTo
+        in: query
+        description: Filter files decided on or before this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: File decision counts
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDecisionCounts'
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+components:
+  schemas:
+    FileDecisionDeleteResult:
+      type: object
+      description: Individual result for a file decision delete operation
+      properties:
+        fileId:
+          type: integer
+          format: int64
+          description: The file ID that was processed
+        success:
+          type: boolean
+          description: Whether the deletion was successful
+        error:
+          type: string
+          description: Error message if the deletion failed
+    FileDecisionDeleteRequest:
+      type: object
+      description: Request body for deleting file decisions
+      properties:
+        fileIds:
+          type: array
+          description: List of file IDs to delete
+          items:
+            type: integer
+            format: int64
+    FilesResponse:
+      type: object
+      description: Paginated list of file decisions
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        offset:
+          type: integer
+          format: int32
+          description: Number of skipped entries
+          minimum: 0
+        totalSize:
+          type: integer
+          format: int32
+          description: Total number of files matching the query
+          minimum: 0
+        files:
+          type: array
+          description: List of file decisions
+          items:
+            $ref: '#/components/schemas/FileDecision'
+      required:
+      - files
+      - offset
+      - totalSize
+    FileDecisionRequest:
+      type: object
+      description: Request body for creating/updating file decisions
+      properties:
+        fileHashes:
+          type: array
+          description: List of file hashes to apply the decision to
+          items:
+            type: string
+        decision:
+          type: string
+          description: 'Decision to apply: ''allowed'' or ''blocked'''
+    FileDecisionResult:
+      type: object
+      description: Individual result for a file decision create/update operation
+      properties:
+        fileHash:
+          type: string
+          description: The file hash that was processed
+          example: a3f5c8e9d2b1f4a6
+        success:
+          type: boolean
+          description: Whether the operation was successful
+          example: true
+        error:
+          type: string
+          description: Error message if the operation failed
+          example: File hash not found
+    FileDecision:
+      type: object
+      description: File allow/block list decision
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        id:
+          type: string
+          description: Unique identifier for the file decision
+        scanId:
+          type: string
+          description: ID of the scan that originally flagged this file
+        fileName:
+          type: string
+          description: Path to the file within the extension
+        fileHash:
+          type: string
+          description: SHA256 hash of the file
+        fileType:
+          type: string
+          description: File extension/type
+        decision:
+          type: string
+          description: The admin decision for this file
+        decidedBy:
+          type: string
+          description: Email of the admin who made the decision
+        dateDecided:
+          type: string
+          description: When the decision was made (UTC)
+        displayName:
+          type: string
+          description: Human-readable name of the extension containing this file
+        namespace:
+          type: string
+          description: Extension namespace
+        extensionName:
+          type: string
+          description: Technical name of the extension
+        publisher:
+          type: string
+          description: Publisher name
+        version:
+          type: string
+          description: Extension version when decision was made
+    FileDecisionCounts:
+      type: object
+      description: Counts of allowed and blocked files
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        allowed:
+          type: integer
+          format: int32
+          description: Total count of allowed files
+        blocked:
+          type: integer
+          format: int32
+          description: Total count of blocked files
+        total:
+          type: integer
+          format: int32
+          description: Total count of all files
+    FileDecisionDeleteResponse:
+      type: object
+      description: Response for file decision delete operations
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        processed:
+          type: integer
+          format: int32
+          description: Total number of file IDs processed
+        successful:
+          type: integer
+          format: int32
+          description: Number of deletions completed successfully
+        failed:
+          type: integer
+          format: int32
+          description: Number of deletions that failed
+        results:
+          type: array
+          description: Detailed results for each file ID
+          items:
+            $ref: '#/components/schemas/FileDecisionDeleteResult'
+    FileDecisionResponse:
+      type: object
+      description: Response for file decision create/update operations
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        processed:
+          type: integer
+          format: int32
+          description: Total number of file hashes processed
+          example: 5
+        successful:
+          type: integer
+          format: int32
+          description: Number of decisions applied successfully
+          example: 4
+        failed:
+          type: integer
+          format: int32
+          description: Number of decisions that failed
+          example: 1
+        results:
+          type: array
+          description: Detailed results for each file hash
+          items:
+            $ref: '#/components/schemas/FileDecisionResult'

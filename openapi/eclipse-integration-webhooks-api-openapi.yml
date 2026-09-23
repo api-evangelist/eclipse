@@ -1,0 +1,243 @@
+openapi: 3.2.0
+info:
+  version: 1.1.0
+  title: Eclipse Foundation Git ECA Integration Webhooks API
+  description: Collection of API endpoints used in the validation and management of external Git services, such as Gitlab and Github.
+  contact:
+    name: IT support
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/git-eca-rest-api/-/issues
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/git
+  description: Production endpoint for the Git ECA validation API
+tags:
+- name: Integration Webhooks
+  description: Endpoints related to binding to external Git services through a webhook
+paths:
+  /webhooks/github:
+    post:
+      operationId: processGithubWebhook
+      tags:
+      - Integration Webhooks
+      summary: Github incoming hook event processing
+      description: Process incoming pull request hook events from Github
+      parameters:
+      - in: header
+        name: X-GitHub-Delivery
+        schema:
+          type: string
+        required: true
+      - in: header
+        name: X-GitHub-Event
+        schema:
+          type: string
+        required: true
+      - in: header
+        name: X-GitHub-Hook-ID
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GithubWebhookEvent'
+      responses:
+        '200':
+          description: Success
+        '500':
+          description: Error while processing data
+  /webhooks/github/revalidate/{fingerprint}:
+    parameters:
+    - name: fingerprint
+      in: path
+      description: Unique ID for the request group
+      required: true
+      schema:
+        type: string
+    post:
+      operationId: revalidateWebhookRequest
+      tags:
+      - Integration Webhooks
+      summary: Gitlab webhook revalidation request
+      description: Process incoming system hooks from GitLab
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RevalidationRequest'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+  /webhooks/gitlab/system:
+    post:
+      operationId: processGitlabHook
+      tags:
+      - Integration Webhooks
+      summary: Gitlab event processing
+      description: Process incoming system hooks from GitLab
+      parameters:
+      - in: header
+        name: X-Gitlab-Event
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemHook'
+      responses:
+        '200':
+          description: Success
+        '500':
+          description: Error while processing data
+components:
+  schemas:
+    SystemHook:
+      type: object
+      additionalProperties: false
+      required:
+      - created_at
+      - updated_at
+      - event_name
+      - name
+      - owner_email
+      - owner_name
+      - owners
+      - path
+      - path_with_namespace
+      - project_id
+      - project_visibility
+      properties:
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+          description: Time of the project creation event
+        updated_at:
+          $ref: '#/components/schemas/DateTime'
+          description: Time indicating the last event occured
+        event_name:
+          type: string
+          description: The event type
+        name:
+          type: string
+          description: The project name
+        owner_email:
+          type: string
+          description: The namespace's email. If not user, will be empty
+        owner_name:
+          type: string
+          description: The namespace name (group, user)
+        owners:
+          type: array
+          description: The project owners
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: The project owner user name
+              email:
+                type: string
+                description: The project owner email
+        path:
+          type: string
+          description: The project path
+        path_with_namespace:
+          type: string
+          description: The project path with namespace
+        project_id:
+          type: integer
+          description: The project's gitlab id
+        project_visibility:
+          type: string
+          description: The project's visibility (public, private)
+        old_path_with_namespace:
+          type:
+          - 'null'
+          - string
+          description: The old path with namespace, only used in 'project_rename' hooks
+    GithubWebhookEvent:
+      type: object
+      properties:
+        installation:
+          type: object
+          description: Information about the Github App installation making this request
+          properties:
+            id:
+              type: string
+              description: The ID of the app installation that is making the validation request on behalf of the repository/user.
+        repository:
+          type: object
+          description: Information about the repository that triggered this request
+          properties:
+            full_name:
+              type: string
+              description: The full name of the repository, including organization.
+            html_url:
+              type: string
+              description: The link to the repository the event was triggered by
+        pull_request:
+          type: object
+          description: Information on the pull request that triggered this workflow.
+          properties:
+            number:
+              type: int
+              description: The numeric ID of the pull request that triggered the flow
+            head:
+              type: object
+              properties:
+                sha:
+                  type: string
+                  description: The SHA hash of the head of the pull request.
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          type:
+          - string
+          - 'null'
+          description: The optional friendly message for the error
+    DateTime:
+      type: string
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    RevalidationRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - h-form-captcha-response
+      properties:
+        h-form-captcha-response:
+          type: string
+          description: the hCaptcha challenge response.

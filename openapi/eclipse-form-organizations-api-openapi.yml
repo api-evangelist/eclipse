@@ -1,0 +1,178 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Form Organizations API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  description: Definitions related to membership form organizations
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Form Organizations
+  description: Definitions related to membership form organizations
+paths:
+  /form/{id}/organizations:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      tags:
+      - Form Organizations
+      summary: Form Organizations list
+      description: Returns a list of tracked organizationsfor the form
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormOrganizations'
+        '500':
+          description: Error while retrieving data
+      operationId: getFormByIdOrganizations
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Form Organizations
+      summary: Form Organizations create
+      description: Using the passed organization object, a new organization object is saved to the dataset.
+      requestBody:
+        description: The organization to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormOrganization'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormOrganization'
+        '403':
+          description: Unauthorized
+      operationId: postFormByIdOrganizations
+      x-operation-id-source: derived
+  /form/{id}/organizations/{orgID}:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: orgID
+      in: path
+      description: Unique ID of the organization for the form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    put:
+      tags:
+      - Form Organizations
+      summary: Form Organizations update
+      description: Using the passed organization object, updates or inserts are made to save the data.
+      requestBody:
+        description: The organization to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormOrganization'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormOrganization'
+        '403':
+          description: Unauthorized
+      operationId: putFormByIdOrganizationsByOrgID
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Form Organizations
+      summary: Form Organizations delete
+      description: Remove an organization for the form given a form ID
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized
+      operationId: deleteFormByIdOrganizationsByOrgID
+      x-operation-id-source: derived
+components:
+  schemas:
+    FormOrganizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/FormOrganization'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    FormOrganization:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectID'
+        form_id:
+          $ref: '#/components/schemas/ObjectID'
+        legal_name:
+          type: string
+          description: Legal Name of the Organization
+        organization_type:
+          type: string
+          description: The category of organization used for fee determination for current entity
+          enum:
+          - NON_PROFIT_OPEN_SOURCE
+          - ACADEMIC
+          - STANDARDS
+          - GOVERNMENT_ORGANIZATION_AGENCY_NGO
+          - MEDIA_ORGANIZATION
+          - RESEARCH
+          - OTHER
+        twitter:
+          type: string
+          description: The Twitter handle of the organization
+        aggregate_revenue:
+          type: string
+          description: The aggregate revenue of the organization and its affiliates
+        employee_count:
+          type: string
+          description: The number of employees for the given organization
+        address:
+          type: object
+          properties:
+            address_line_"1":
+              type: string
+              description: Street address of the organization
+            address_line_"2":
+              type:
+              - string
+              - 'null'
+              description: Additional information about the street address of the organization
+            locality:
+              type: string
+              description: The city/township in which the organization is based
+            administrative_area:
+              type: string
+              description: The province/state/area in which the organization is based
+            country:
+              type: string
+              description: The country in which the organization is based
+            postal_code:
+              type: string
+              description: The postal code of the physical address of the organization
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

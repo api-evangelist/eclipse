@@ -1,0 +1,56 @@
+openapi: 3.2.0
+info:
+  termsOfService: https://www.eclipse.org/legal/termsofuse.php
+  license:
+    name: Eclipse Public License 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  version: '0.1'
+  title: Eclipse Sitemap Controller API
+servers:
+- url: https://open-vsx.org
+  description: Generated server url
+tags:
+- name: sitemap-controller
+paths:
+  /sitemap.xml:
+    get:
+      tags:
+      - sitemap-controller
+      operationId: getSitemap
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/xml:
+              schema:
+                type: string
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+      summary: Get sitemap
+      x-summary-source: derived

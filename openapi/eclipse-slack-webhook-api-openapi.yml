@@ -1,0 +1,191 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Slack Webhook API
+  version: 1.0.0
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  description: 'Operations tagged Slack Webhook across 2 of this provider''s published API definitions: eclipse-info-api-openapi.json, eclipse-profile-api-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.eclipse.org/foundation/info
+  description: Production endpoint for the Eclipse Foundation information
+- url: https://api.eclipse.org
+  description: Production endpoints for Eclipse Foundation profile data
+tags:
+- name: Slack Webhook
+paths:
+  /webhook/slack/m:
+    post:
+      tags:
+      - Slack Webhook
+      summary: Retrieve basic member and contact data via org name search
+      description: Retrieve member and contact data via partial name matching.
+      operationId: slackMembershipWebhook
+      requestBody:
+        description: The Slack profile search request
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SlackRequest'
+      responses:
+        '200':
+          description: Success - Org found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackResponse'
+        '400':
+          description: Bad search param
+        '403':
+          description: Invalid authentication
+        '404':
+          description: No matching org found
+        '500':
+          description: Error while retrieving data.
+    servers:
+    - url: https://api.eclipse.org/foundation/info
+      description: Production endpoint for the Eclipse Foundation information
+  /slack/profile:
+    post:
+      tags:
+      - Slack Webhook
+      summary: Retrieve a user profile by username or email
+      description: Retrieve profile information by email or username.
+      operationId: SlackProfileWebhook
+      requestBody:
+        description: The Slack profile search request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlackRequest_2'
+      responses:
+        '200':
+          description: Success - Profile found/not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackResponse_2'
+        '403':
+          description: Invalid authentication
+        '500':
+          description: Error while retrieving data.
+    servers:
+    - url: https://api.eclipse.org
+      description: Production endpoints for Eclipse Foundation profile data
+components:
+  schemas:
+    SlackRequest:
+      type: string
+      description: A string containing encoded key-value tuples.
+      example: token=test-token&team_id=T123&team_domain=eclipsefoundation&channel_id=CHAN123&channel_name=webdev&user_id=USER123&user_name=tester&command=%2Fm
+    SlackResponse:
+      type: object
+      properties:
+        response_type:
+          type: string
+          description: Visibilty control used by slack. Used to post response in channel
+        text:
+          type: string
+          description: The response message
+        attachments:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SlackAttachment'
+            - type: 'null'
+      example:
+        response_type: ephemeral
+        text: '*1* member org(s) found matching *sample*'
+        attachments:
+        - title: '*Sample Org* (Strategic Developer)'
+          title_link: sample-org.com
+          text: '*Company Representative:* Test User
+
+            '
+    SlackAttachment:
+      type: object
+      properties:
+        title:
+          type: string
+          description: the attachment title
+        title_link:
+          type: string
+          description: A URL to embed in the title
+        text:
+          type: string
+          description: The content of the attachment. A markdown formatted string in this case
+    SlackRequest_2:
+      type: object
+      additionalProperties: false
+      required:
+      - token
+      - text
+      - team_domain
+      properties:
+        text:
+          type: string
+          description: The value used to search for a profile
+        token:
+          type: string
+          description: The authentication token
+        team_domain:
+          type: string
+          description: The slack team domain
+      example:
+        text: zacharysabourin
+        token: auth_token
+        team_domain: my_team
+    SlackResponse_2:
+      type: object
+      additionalProperties: false
+      required:
+      - response_type
+      - text
+      properties:
+        response_type:
+          type: string
+          description: Visibilty control used by slack. Used to post response in channel
+        text:
+          type: string
+          description: The response message
+        attachments:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/SlackAttachment_2'
+            - type: 'null'
+      example:
+        response_type: in_channel
+        text: An Eclipse account was found with zacharysabourin https://accounts.eclipse.org/user/606609.
+        attachments:
+        - title: Zachary Sabourin(Eclipse Foundation)
+          title_link: https://accounts.eclipse.org/user/606609.
+          text: "*ECA Status:* Valid\\*Name:* zacharysabourin\\*Mail:* email@test.com\\*Committer:* No\\*Github handle:* https://github.com/zacharysabourin\\*Job title:* Web Developer\\*Bio:* I'm fascinated by the power of technology and I'm always trying to learn new things! When I'm not working or learning, I enjoy exploring my many interests or going on walks. \n\n\"Be yourself; everyone else is already taken\" -Oscar Wilde\n\n*Interests*Video games, bass guitar, Music, Magic: the Gathering, PodCasts"
+    SlackAttachment_2:
+      type: object
+      additionalProperties: false
+      required:
+      - title
+      - title_link
+      - text
+      properties:
+        title:
+          type: string
+          description: the attachment title
+        title_link:
+          type: string
+          description: A URL to embed in the title
+        text:
+          type: string
+          text: The content of the attachment. A markdown formatted string in this case
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://accounts.eclipse.org/oauth2/token
+          scopes:
+            eclipsefdn_view_all_profiles: Access private profile information
+x-refined-from:
+- eclipse-info-api-openapi.json
+- eclipse-profile-api-openapi.json

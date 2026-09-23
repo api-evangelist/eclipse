@@ -1,0 +1,1401 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Projects API
+  version: '1.0'
+  description: 'Operations tagged Projects across 4 of this provider''s published API definitions: eclipse-membership-portal-api-openapi.json, eclipse-project-adopters-api-openapi.json, eclipse-projects-pmi-api-openapi.json, eclipse-restful-api-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
+- url: https://api.eclipse.org/adopters
+  description: Production endpoint for foundation project adopters data
+- url: https://projects.eclipse.org
+  description: The production API server
+- url: https://api.eclipse.org
+  description: The production API server
+tags:
+- name: Projects
+  description: Definitions related to Eclipse Foundation projects entities in relation to organizations
+paths:
+  /projects/{projectId}/organizations:
+    parameters:
+    - name: projectId
+      in: path
+      description: The project ID to retrieve active projects for
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Projects
+      summary: Project Organizations
+      description: Returns a list of active and participating organizations from the Eclipse API for the given project
+      operationId: getProjectOrganizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        '404':
+          description: No project with ID found
+        '500':
+          description: Error while retrieving data
+    servers:
+    - url: https://membership.eclipse.org/api
+      description: Production endpoint for the membership portal data
+  /projects/{projectId}:
+    parameters:
+    - name: projectId
+      in: path
+      description: The id of the project to retreive
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Adopters of single project
+      description: All project adopters under a specific project
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdoptedProject'
+        '500':
+          description: Error while retrieving data.
+      tags:
+      - Projects
+      operationId: getProjectsByProjectId
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.eclipse.org/adopters
+      description: Production endpoint for foundation project adopters data
+  /api/projects:
+    get:
+      tags:
+      - Projects
+      summary: Fetch Projects
+      description: '### Overview
+
+
+        Retrieve metadata for all projects.'
+      operationId: FetchProjects
+      parameters:
+      - name: github_only
+        in: query
+        description: Select only the projects that have GitHub repositories or a GitHub organisation defined.
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      - name: gitlab_only
+        in: query
+        description: Select only the projects that have GitLab repositories defined.
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      - name: spec_project
+        in: query
+        description: Filter to specification projects only. Set to any non-zero integer to enable the filter.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: spec_project_working_group
+        in: query
+        description: Filter projects by their specification project working group ID (e.g. `jakarta-ee`).
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: working_group
+        in: query
+        description: Filter projects by their associated working group ID.
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: industry_collaboration
+        in: query
+        description: Filter projects by their associated industry collaboration (working group) ID.
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: technology_types
+        in: query
+        description: Filter projects by technology type name.
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: 'Filter projects by state. Accepted values: `Regular`, `Archived`, `Incubating` (case-insensitive). Multiple values may be passed as a comma-separated list, e.g. `state=Regular,Incubating`. Values outside the allowed set are silently ignored.'
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The index of the page to retrieve, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          minimum: 1
+          maximum: 100
+      - name: order_by
+        in: query
+        description: 'The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`, `RANDOM`. When `RANDOM` is used the response is cached for 5 hours.'
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: ASC
+      responses:
+        '200':
+          description: Array of projects matching the query.
+          headers:
+            Link:
+              schema:
+                type: string
+              example: <https://projects.eclipse.org/api/projects?page=2&pagesize=20>; rel="next", <https://projects.eclipse.org/api/projects?page=27&pagesize=20>; rel="last", <https://projects.eclipse.org/api/projects?page=1&pagesize=20>; rel="first", <https://projects.eclipse.org/api/projects?page=1&pagesize=20>; rel="self"
+            X-Rate-Limit-Limit:
+              schema:
+                type: integer
+                format: int32
+              example: 1000
+            X-Rate-Limit-Remaining:
+              schema:
+                type: integer
+                format: int32
+              example: 964
+            X-Rate-Limit-Reset:
+              schema:
+                type: integer
+                format: int32
+              example: 3553
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FetchProjectsresponse'
+                description: ''
+              example:
+              - nid: 123
+                project_id: ee4j.batch
+                short_project_id: batch
+                name: Jakarta Batch
+                summary: The Jakarta Batch project defines and maintains the Jakarta Batch specification.
+                url: https://projects.eclipse.org/projects/ee4j.batch
+                website_url: https://projects.eclipse.org/projects/ee4j.batch
+                website_repo: ''
+                logo: ''
+                tags: []
+                licenses:
+                - name: Eclipse Public License 2.0
+                  short_name: EPL-2.0
+                  url: https://www.eclipse.org/legal/epl-2.0/
+                github_repos:
+                - url: https://github.com/eclipse-ee4j/batch-api
+                - url: https://github.com/eclipse-ee4j/batch-tck
+                github:
+                  org: eclipse-ee4j
+                  ignored_repos: []
+                gitlab_repos: []
+                gitlab:
+                  project_group: ''
+                  ignored_sub_groups: []
+                gerrit_repos: []
+                contributors: []
+                committers:
+                - username: acommitter
+                  full_name: A Committer
+                  url: https://api.eclipse.org/account/profile/acommitter
+                project_leads:
+                - username: aprojectlead
+                  full_name: A Project Lead
+                  url: https://api.eclipse.org/account/profile/aprojectlead
+                working_groups:
+                - name: Jakarta EE
+                  id: jakarta-ee
+                industry_collaborations:
+                - name: Jakarta EE
+                  id: jakarta-ee
+                technology_types: []
+                spec_project_working_group:
+                  name: Jakarta EE
+                  id: jakarta-ee
+                state: Regular
+                provisioned: true
+                latest_release_name: '3.0'
+                releases: https://projects.eclipse.org/api/projects/ee4j.batch/releases
+                top_level_project: ee4j
+                slsa:
+                  build_level: ''
+                dev_list:
+                  name: ee4j-batch-dev
+                  email: ee4j-batch-dev@eclipse.org
+                  url: https://accounts.eclipse.org/mailing-list/ee4j-batch-dev
+                mailing_lists: []
+                reviews: https://projects.eclipse.org/api/projects/ee4j.batch/reviews
+                documentation_url: ''
+                gettingstarted_url: ''
+                download_url: ''
+                scope: '<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>
+
+
+                  '
+                security_team:
+                  individual_members: []
+                  groups:
+                    include_committers: true
+                    include_project_leads: false
+    servers:
+    - url: https://projects.eclipse.org
+      description: The production API server
+  /api/projects/{project_id}:
+    get:
+      tags:
+      - Projects
+      summary: Retrieve a Project
+      description: '### Overview
+
+
+        Retrieve information for a specific project.
+
+
+        **Note** that underscores in a project ID are treated as dots (e.g. `technology_dash` resolves to `technology.dash`). A `.json` suffix is also accepted and stripped.
+
+
+        ### Examples:
+
+
+        * https://projects.eclipse.org/api/projects/technology_dash
+
+        * https://projects.eclipse.org/api/projects/ecd_che'
+      operationId: RetrieveAProject
+      parameters:
+      - name: project_id
+        in: path
+        description: ID of the project. Underscores are treated as dots (e.g. `technology_dash` → `technology.dash`). A `.json` suffix is accepted and stripped.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array containing the matching project (with full HTML description).
+          headers:
+            X-Rate-Limit-Limit:
+              description: The rate limit ceiling for the requester.
+              schema:
+                type: integer
+                format: int32
+              example: 1000
+            X-Rate-Limit-Remaining:
+              description: The number of requests left in the current rate-limit window.
+              schema:
+                type: integer
+                format: int32
+              example: 964
+            X-Rate-Limit-Reset:
+              description: The number of seconds left until the rate-limit window resets.
+              schema:
+                type: integer
+                format: int32
+              example: 3553
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetrieveaProjectresponse'
+                description: ''
+              example:
+              - nid: 123
+                project_id: ee4j.batch
+                short_project_id: batch
+                name: Jakarta Batch
+                summary: The Jakarta Batch project defines and maintains the Jakarta Batch specification.
+                description: '<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>
+
+
+                  '
+                url: https://projects.eclipse.org/projects/ee4j.batch
+                website_url: https://projects.eclipse.org/projects/ee4j.batch
+                website_repo: ''
+                logo: ''
+                tags: []
+                licenses:
+                - name: Eclipse Public License 2.0
+                  short_name: EPL-2.0
+                  url: https://www.eclipse.org/legal/epl-2.0/
+                github_repos:
+                - url: https://github.com/eclipse-ee4j/batch-api
+                - url: https://github.com/eclipse-ee4j/batch-tck
+                github:
+                  org: eclipse-ee4j
+                  ignored_repos: []
+                gitlab_repos: []
+                gitlab:
+                  project_group: ''
+                  ignored_sub_groups: []
+                gerrit_repos: []
+                contributors: []
+                committers:
+                - username: acommitter
+                  full_name: A Committer
+                  url: https://api.eclipse.org/account/profile/acommitter
+                project_leads:
+                - username: aprojectlead
+                  full_name: A Project Lead
+                  url: https://api.eclipse.org/account/profile/aprojectlead
+                working_groups:
+                - name: Jakarta EE
+                  id: jakarta-ee
+                industry_collaborations:
+                - name: Jakarta EE
+                  id: jakarta-ee
+                technology_types: []
+                spec_project_working_group:
+                  name: Jakarta EE
+                  id: jakarta-ee
+                state: Regular
+                provisioned: true
+                latest_release_name: '3.0'
+                releases: https://projects.eclipse.org/api/projects/ee4j.batch/releases
+                top_level_project: ee4j
+                slsa:
+                  build_level: ''
+                dev_list:
+                  name: ee4j-batch-dev
+                  email: ee4j-batch-dev@eclipse.org
+                  url: https://accounts.eclipse.org/mailing-list/ee4j-batch-dev
+                mailing_lists: []
+                reviews: https://projects.eclipse.org/api/projects/ee4j.batch/reviews
+                documentation_url: ''
+                gettingstarted_url: ''
+                download_url: ''
+                scope: '<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>
+
+
+                  '
+                security_team:
+                  individual_members: []
+                  groups:
+                    include_committers: true
+                    include_project_leads: false
+        '404':
+          $ref: '#/components/responses/NotFound'
+    servers:
+    - url: https://projects.eclipse.org
+      description: The production API server
+  /api/projects/{project_id}/releases:
+    get:
+      tags:
+      - Projects
+      summary: Fetch Releases for a Project
+      description: '### Overview
+
+
+        Retrieve a paginated list of releases associated with the given project.'
+      operationId: FetchProjectReleases
+      parameters:
+      - name: project_id
+        in: path
+        description: ID of the project. Underscores are treated as dots.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The index of the page to retrieve, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          minimum: 1
+          maximum: 100
+      - name: order_by
+        in: query
+        description: 'The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`.'
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: ASC
+      responses:
+        '200':
+          description: A wrapper object containing the paginated releases.
+          headers:
+            Link:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleasesResponse'
+              example:
+                releases:
+                - name: '3.0'
+                  url: https://projects.eclipse.org/projects/ee4j.batch/releases/3.0
+                  date: '2022-05-31'
+                  type: 1
+                  downloads:
+                    tracked: false
+                    associated_files: []
+        '404':
+          $ref: '#/components/responses/NotFound'
+    servers:
+    - url: https://projects.eclipse.org
+      description: The production API server
+  /api/projects/{project_id}/reviews:
+    get:
+      tags:
+      - Projects
+      summary: Fetch Reviews for a Project
+      description: '### Overview
+
+
+        Retrieve a paginated list of reviews associated with the given project.'
+      operationId: FetchProjectReviews
+      parameters:
+      - name: project_id
+        in: path
+        description: ID of the project. Underscores are treated as dots.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The index of the page to retrieve, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          minimum: 1
+          maximum: 100
+      - name: order_by
+        in: query
+        description: 'The order in which results are returned. Defaults to `ASC`. Accepted values: `ASC`, `DESC`.'
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: ASC
+      responses:
+        '200':
+          description: A wrapper object containing the paginated reviews.
+          headers:
+            Link:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewsResponse'
+              example:
+                reviews:
+                - id: 456
+                  slides_url: https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0
+                  review_date: '2022-04-13'
+                  review_name: Release 3.0
+                  status: success
+                  date: '2022-04-13'
+                  summary: The committer team proposes releasing Jakarta Batch 3.0.
+        '404':
+          $ref: '#/components/responses/NotFound'
+    servers:
+    - url: https://projects.eclipse.org
+      description: The production API server
+components:
+  schemas:
+    Organizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organization'
+    Organization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - description
+      - website
+      - logos
+      - levels
+      - wgpas
+      - member_since
+      - renewal_date
+      - is_active_member
+      properties:
+        organization_id:
+          type: integer
+        name:
+          type: string
+        renewal_date:
+          type: string
+        member_since:
+          type: string
+        is_active_member:
+          type: boolean
+          description: True if the organization is an active member
+        levels:
+          type: array
+          items:
+            type: object
+            properties:
+              level:
+                type: string
+              description:
+                type: string
+        description:
+          type:
+          - object
+          - 'null'
+          properties:
+            short:
+              type: string
+            full:
+              type: string
+        website:
+          type:
+          - string
+          - 'null'
+        logos:
+          type:
+          - object
+          - 'null'
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+        wgpas:
+          type: array
+          items:
+            type: object
+            properties:
+              document_id:
+                $ref: '#/components/schemas/ObjectID'
+              level:
+                type: string
+              working_group:
+                type: string
+              description:
+                type: string
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    Adopter:
+      type: object
+      additionalProperties: false
+      required:
+      - projects
+      - homepage_url
+      - logo
+      - logo_white
+      - name
+      properties:
+        projects:
+          type: array
+          description: List of projects by their ID that the company adopts within a product
+          items:
+            type: string
+        homepage_url:
+          type: string
+          description: The URL containing the adopter's homepage.
+        logo:
+          type: string
+          description: The adopter's color logo.
+        logo_white:
+          type: string
+          description: The adopter's white logo.
+        name:
+          type: string
+          description: The adopter's company name.
+    AdoptedProject:
+      type: object
+      additionalProperties: false
+      required:
+      - adopters
+      - logo
+      - name
+      - project_id
+      - url
+      properties:
+        adopters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Adopter'
+        logo:
+          type: string
+          description: The URL containing the project logo.
+        name:
+          type: string
+          description: The name of the project.
+        project_id:
+          type: string
+          description: The id of the project.
+        url:
+          type: string
+          description: The project URL under projects.eclipse.org.
+    FetchProjectsresponse:
+      title: FetchProjectsresponse
+      type: object
+      description: Project data returned by the projects list endpoint (without the full HTML description field).
+      properties:
+        nid:
+          type: integer
+          description: Drupal node ID.
+        project_id:
+          type: string
+          description: Fully-qualified Eclipse project identifier (e.g. `ee4j.batch`).
+        short_project_id:
+          type: string
+          description: Last segment of the project ID (e.g. `batch`).
+        name:
+          type: string
+          description: Project name.
+        summary:
+          type: string
+          description: Short plain-text summary of the project.
+        url:
+          type: string
+          description: URL of the project page on projects.eclipse.org.
+        website_url:
+          type: string
+          description: Project's external website URL (falls back to the PMI URL when not set).
+        website_repo:
+          type: string
+          description: Repository URL for the project's website source code.
+        logo:
+          type: string
+          description: URL of the project logo image, or empty string.
+        tags:
+          type: array
+          items:
+            type: string
+          description: Taxonomy tag labels assigned to the project.
+        licenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/License'
+          description: Licenses declared for the project.
+        github_repos:
+          type: array
+          items:
+            $ref: '#/components/schemas/GithubRepo'
+          description: Explicitly listed GitHub repository URLs.
+        github:
+          $ref: '#/components/schemas/GithubInfo'
+        gitlab_repos:
+          type: array
+          items:
+            type: object
+          description: GitLab repository entries. Currently always an empty array; reserved for future use.
+        gitlab:
+          $ref: '#/components/schemas/GitlabInfo'
+        gerrit_repos:
+          type: array
+          items:
+            type: object
+          description: Gerrit repository entries. Currently always an empty array; reserved for future use.
+        contributors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer'
+          description: External contributors (non-committer participants).
+        committers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer'
+          description: Active committers on the project.
+        project_leads:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer'
+          description: Project leads.
+        working_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkingGroup'
+          description: Industry collaborations / working groups the project participates in.
+        industry_collaborations:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkingGroup'
+          description: Alias for `working_groups`; always contains the same data.
+        technology_types:
+          type: array
+          items:
+            type: string
+          description: Technology type taxonomy term labels.
+        spec_project_working_group:
+          description: 'The specification working group this project produces a specification for. Returns an empty object `{}` when the project is not a specification project, or an object with `name` and `id` when it is. TODO: the PHP implementation overwrites the value in a loop and returns the last matched term only; consumers should handle both empty-object and WorkingGroup-shaped values.'
+          anyOf:
+          - $ref: '#/components/schemas/SpecProjectWorkingGroup'
+          - type: object
+        state:
+          type: string
+          description: 'Project lifecycle state. Known values: `Regular`, `Archived`, `Incubating`.'
+        provisioned:
+          type: boolean
+          description: Whether the project's infrastructure has been provisioned (project is active).
+        latest_release_name:
+          type: string
+          description: Title of the most recent release, or empty string if none exist.
+        releases:
+          type: string
+          description: Absolute URL to this project's releases API endpoint.
+        top_level_project:
+          type: string
+          description: Project ID of the top-level project, or empty string for top-level projects.
+        slsa:
+          $ref: '#/components/schemas/SlsaInfo'
+        dev_list:
+          description: Primary development mailing list. Returns an empty array `[]` when no dev list is configured, or a DevList object when one is set.
+          oneOf:
+          - $ref: '#/components/schemas/DevList'
+          - type: array
+            maxItems: 0
+            items:
+              $ref: '#/components/schemas/DevList'
+        mailing_lists:
+          type: array
+          items:
+            $ref: '#/components/schemas/DevList'
+          description: Additional mailing lists for the project.
+        reviews:
+          type: string
+          description: Absolute URL to this project's reviews API endpoint.
+        documentation_url:
+          type: string
+          description: URL to the project's documentation.
+        gettingstarted_url:
+          type: string
+          description: URL to the project's getting-started guide.
+        download_url:
+          type: string
+          description: URL to the project's download page.
+        scope:
+          type: string
+          description: HTML-formatted project scope description.
+        security_team:
+          $ref: '#/components/schemas/SecurityTeam'
+      example:
+        nid: 123
+        project_id: ee4j.batch
+        short_project_id: batch
+        name: Jakarta Batch
+        summary: The Jakarta Batch project defines and maintains the Jakarta Batch specification.
+        url: https://projects.eclipse.org/projects/ee4j.batch
+        website_url: https://projects.eclipse.org/projects/ee4j.batch
+        website_repo: ''
+        logo: ''
+        tags: []
+        licenses:
+        - name: Eclipse Public License 2.0
+          short_name: EPL-2.0
+          url: https://www.eclipse.org/legal/epl-2.0/
+        github_repos:
+        - url: https://github.com/eclipse-ee4j/batch-api
+        - url: https://github.com/eclipse-ee4j/batch-tck
+        github:
+          org: eclipse-ee4j
+          ignored_repos: []
+        gitlab_repos: []
+        gitlab:
+          project_group: ''
+          ignored_sub_groups: []
+        gerrit_repos: []
+        contributors: []
+        committers:
+        - username: acommitter
+          full_name: A Committer
+          url: https://api.eclipse.org/account/profile/acommitter
+        project_leads:
+        - username: aprojectlead
+          full_name: A Project Lead
+          url: https://api.eclipse.org/account/profile/aprojectlead
+        working_groups:
+        - name: Jakarta EE
+          id: jakarta-ee
+        industry_collaborations:
+        - name: Jakarta EE
+          id: jakarta-ee
+        technology_types: []
+        spec_project_working_group:
+          name: Jakarta EE
+          id: jakarta-ee
+        state: Regular
+        provisioned: true
+        latest_release_name: '3.0'
+        releases: https://projects.eclipse.org/api/projects/ee4j.batch/releases
+        top_level_project: ee4j
+        slsa:
+          build_level: ''
+        dev_list:
+          name: ee4j-batch-dev
+          email: ee4j-batch-dev@eclipse.org
+          url: https://accounts.eclipse.org/mailing-list/ee4j-batch-dev
+        mailing_lists: []
+        reviews: https://projects.eclipse.org/api/projects/ee4j.batch/reviews
+        documentation_url: ''
+        gettingstarted_url: ''
+        download_url: ''
+        scope: '<p><strong>Project Scope:</strong> The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>
+
+
+          '
+        security_team:
+          individual_members: []
+          groups:
+            include_committers: true
+            include_project_leads: false
+    WorkingGroup:
+      title: WorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
+    Release:
+      title: Release
+      type: object
+      properties:
+        name:
+          type: string
+          description: Release name / version label.
+        url:
+          type: string
+          description: Absolute URL of the release page on projects.eclipse.org.
+        date:
+          type: string
+          description: Release date formatted as `Y-m-d`, or empty string if not set.
+        type:
+          type: integer
+          description: Numeric release type identifier from `field_release_type`.
+        downloads:
+          $ref: '#/components/schemas/ReleaseDownloads'
+      example:
+        name: '3.0'
+        url: https://projects.eclipse.org/projects/ee4j.batch/releases/3.0
+        date: '2022-05-31'
+        type: 1
+        downloads:
+          tracked: false
+          associated_files: []
+    GitlabInfo:
+      title: GitlabInfo
+      type: object
+      properties:
+        project_group:
+          type: string
+          description: GitLab project group namespace (may be empty).
+        ignored_sub_groups:
+          type: array
+          items:
+            type: string
+          description: GitLab sub-group names excluded from project tooling.
+      example:
+        project_group: ''
+        ignored_sub_groups: []
+    Committer:
+      title: Committer
+      type: object
+      description: A person with a role on an Eclipse project (committer, contributor, or project lead).
+      required:
+      - username
+      - url
+      properties:
+        username:
+          type:
+          - string
+          - 'null'
+          description: Eclipse account username (may be null for proposals where the person has no account yet).
+        full_name:
+          type: string
+          description: Display name of the person.
+        url:
+          type: string
+          description: Absolute URL to the person's profile on api.eclipse.org.
+      example:
+        username: acommitter
+        full_name: A Committer
+        url: https://api.eclipse.org/account/profile/acommitter
+    Review:
+      title: Review
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Drupal node ID of the review.
+        slides_url:
+          type: string
+          description: Absolute URL of the review page on projects.eclipse.org.
+        review_date:
+          type: string
+          description: Review end date value from `field_review_end_date`.
+        review_name:
+          type: string
+          description: Human-readable review name with the trailing ` Review` suffix stripped.
+        status:
+          type: string
+          description: 'Review outcome. Known values: `fail`, `success`, `withdrawn`, `ongoing`. Any unrecognised stored value is normalised to `unknown_state`.'
+          enum:
+          - fail
+          - success
+          - withdrawn
+          - ongoing
+          - unknown_state
+        date:
+          type: string
+          description: Alias for `review_date`.
+        summary:
+          type: string
+          description: Body summary field value, or the full body text if no summary is available.
+      example:
+        id: 456
+        slides_url: https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0
+        review_date: '2022-04-13'
+        review_name: Release 3.0
+        status: success
+        date: '2022-04-13'
+        summary: The committer team proposes releasing Jakarta Batch 3.0.
+    GithubRepo:
+      title: GithubRepo
+      required:
+      - url
+      type: object
+      properties:
+        url:
+          type: string
+          description: Full GitHub repository URL.
+      example:
+        url: https://github.com/eclipse-ee4j/batch-api
+    GithubInfo:
+      title: GithubInfo
+      type: object
+      properties:
+        org:
+          type: string
+          description: GitHub organisation name for the project (may be empty).
+        ignored_repos:
+          type: array
+          items:
+            type: string
+          description: GitHub repository names excluded from project tooling.
+      example:
+        org: eclipse-ee4j
+        ignored_repos: []
+    SpecProjectWorkingGroup:
+      title: SpecProjectWorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
+    SecurityTeamGroups:
+      title: SecurityTeamGroups
+      type: object
+      description: Flags indicating which standard project roles are automatically included in the security team.
+      properties:
+        include_committers:
+          type: boolean
+        include_project_leads:
+          type: boolean
+      example:
+        include_committers: true
+        include_project_leads: false
+    DevList:
+      title: DevList
+      type: object
+      description: A project mailing list.
+      properties:
+        name:
+          type: string
+          description: Mailing list name (also the local part of the email address).
+        email:
+          type: string
+          description: Full mailing list e-mail address.
+        url:
+          type: string
+          description: URL to the mailing list archive on accounts.eclipse.org.
+      example:
+        name: ee4j-batch-dev
+        email: ee4j-batch-dev@eclipse.org
+        url: https://accounts.eclipse.org/mailing-list/ee4j-batch-dev
+    RetrieveaProjectresponse:
+      title: RetrieveaProjectresponse
+      description: Full project data returned by the single-project endpoint. Identical to FetchProjectsresponse but also includes the `description` field containing the full HTML-rendered project description.
+      allOf:
+      - $ref: '#/components/schemas/FetchProjectsresponse'
+      - type: object
+        properties:
+          description:
+            type: string
+            description: Full HTML-rendered project description body.
+    ReleasesResponse:
+      title: ReleasesResponse
+      type: object
+      properties:
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Release'
+          description: Paginated list of releases for the project.
+      example:
+        releases:
+        - name: '3.0'
+          url: https://projects.eclipse.org/projects/ee4j.batch/releases/3.0
+          date: '2022-05-31'
+          type: 1
+          downloads:
+            tracked: false
+            associated_files: []
+    License:
+      title: License
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full license name.
+        short_name:
+          type: string
+          description: Abbreviated license identifier (e.g. `EPL-2.0`).
+        url:
+          type: string
+          description: URL to the license text.
+      example:
+        name: Eclipse Public License 2.0
+        short_name: EPL-2.0
+        url: https://www.eclipse.org/legal/epl-2.0/
+    ReviewsResponse:
+      title: ReviewsResponse
+      type: object
+      properties:
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
+          description: Paginated list of reviews for the project.
+      example:
+        reviews:
+        - id: 456
+          slides_url: https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0
+          review_date: '2022-04-13'
+          review_name: Release 3.0
+          status: success
+          date: '2022-04-13'
+          summary: The committer team proposes releasing Jakarta Batch 3.0.
+    SlsaInfo:
+      title: SlsaInfo
+      type: object
+      properties:
+        build_level:
+          type: string
+          description: SLSA build level achieved by the project (empty string if not set).
+      example:
+        build_level: '2'
+    SecurityTeam:
+      title: SecurityTeam
+      type: object
+      properties:
+        individual_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer'
+          description: Individually named security team members who are not already covered by the group roles.
+        groups:
+          $ref: '#/components/schemas/SecurityTeamGroups'
+      example:
+        individual_members: []
+        groups:
+          include_committers: true
+          include_project_leads: false
+    ReleaseDownloads:
+      title: ReleaseDownloads
+      type: object
+      properties:
+        tracked:
+          type: boolean
+          description: Whether download statistics are tracked for this release.
+        associated_files:
+          type: array
+          items:
+            type: string
+          description: Values from `field_release_download_files` associated with this release.
+      example:
+        tracked: false
+        associated_files: []
+    FetchProjectsresponse_2:
+      title: FetchProjectsresponse
+      type: object
+      properties:
+        project_id:
+          type: string
+        name:
+          type: string
+        scope:
+          type: string
+        url:
+          type: string
+        logo:
+          type: string
+        github_repos:
+          type: array
+          items:
+            $ref: '#/components/schemas/GithubRepo_2'
+          description: ''
+        contributors:
+          type: array
+          items:
+            type: string
+          description: ''
+        committers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer_2'
+          description: ''
+        working_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkingGroup'
+          description: ''
+        spec_project_working_group:
+          $ref: '#/components/schemas/SpecProjectWorkingGroup'
+      example:
+        project_id: ee4j.batch
+        name: Jakarta Batch
+        scope: '<p><strong>Project Scope:&nbsp; </strong>The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>
+
+
+
+          <p><strong>Specification Scope: &nbsp;&nbsp;</strong> Jakarta Batch describes a means for developing, executing and managing batch processes in Jakarta EE applications.</p>
+
+
+          '
+        url: https://projects.eclipse.org/projects/ee4j.batch
+        logo: ''
+        github_repos:
+        - url: https://github.com/eclipse-ee4j/batch-api
+        - url: https://github.com/eclipse-ee4j/batch-tck
+        contributors: []
+        committers:
+        - username: rmannibucau
+          url: https://api.eclipse.org/account/profile/rmannibucau
+        - username: skurz
+          url: https://api.eclipse.org/account/profile/skurz
+        - username: amauer4xm
+          url: https://api.eclipse.org/account/profile/amauer4xm
+        - username: ksutter
+          url: https://api.eclipse.org/account/profile/ksutter
+        - username: cfangmr0
+          url: https://api.eclipse.org/account/profile/cfangmr0
+        working_groups:
+        - name: Jakarta EE
+          id: jakarta-ee
+        spec_project_working_group:
+          name: Jakarta EE
+          id: jakarta-ee
+    RetrieveaProjectresponse_2:
+      title: RetrieveaProjectresponse
+      type: object
+      properties:
+        project_id:
+          type: string
+        name:
+          type: string
+        scope:
+          type: string
+        url:
+          type: string
+        logo:
+          type: string
+        github_repos:
+          type: array
+          items:
+            $ref: '#/components/schemas/GithubRepo_2'
+          description: ''
+        contributors:
+          type: array
+          items:
+            type: string
+          description: ''
+        committers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer_2'
+          description: ''
+        working_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkingGroup'
+          description: ''
+        spec_project_working_group:
+          $ref: '#/components/schemas/SpecProjectWorkingGroup'
+      example:
+        project_id: ee4j.batch
+        name: Jakarta Batch
+        scope: '<p><strong>Project Scope:&nbsp; </strong>The Jakarta Batch project defines and maintains the Jakarta Batch specification and related artifacts.</p>
+
+
+
+          <p><strong>Specification Scope: &nbsp;&nbsp;</strong> Jakarta Batch describes a means for developing, executing and managing batch processes in Jakarta EE applications.</p>
+
+
+          '
+        url: https://projects.eclipse.org/projects/ee4j.batch
+        logo: ''
+        github_repos:
+        - url: https://github.com/eclipse-ee4j/batch-api
+        - url: https://github.com/eclipse-ee4j/batch-tck
+        contributors: []
+        committers:
+        - username: rmannibucau
+          url: https://api.eclipse.org/account/profile/rmannibucau
+        - username: skurz
+          url: https://api.eclipse.org/account/profile/skurz
+        - username: amauer4xm
+          url: https://api.eclipse.org/account/profile/amauer4xm
+        - username: ksutter
+          url: https://api.eclipse.org/account/profile/ksutter
+        - username: cfangmr0
+          url: https://api.eclipse.org/account/profile/cfangmr0
+        working_groups:
+        - name: Jakarta EE
+          id: jakarta-ee
+        spec_project_working_group:
+          name: Jakarta EE
+          id: jakarta-ee
+    GithubRepo_2:
+      title: GithubRepo
+      required:
+      - url
+      type: object
+      properties:
+        url:
+          type: string
+      example:
+        url: https://github.com/eclipse-ee4j/batch-api
+    Committer_2:
+      title: Committer
+      required:
+      - username
+      - url
+      type: object
+      properties:
+        username:
+          type: string
+        url:
+          type: string
+      example:
+        username: rmannibucau
+        url: https://api.eclipse.org/account/profile/rmannibucau
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+    oauth2:
+      description: 'Get access to data while protecting your account credentials.
+
+        OAuth2 is also a safer and more secure way to give you access.
+
+        '
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.php55.dev.docker/oauth2/authorize
+          tokenUrl: https://accounts.php55.dev.docker/oauth2/token
+          scopes:
+            write: Grants write access
+            read: Grants read access
+x-refined-from:
+- eclipse-membership-portal-api-openapi.json
+- eclipse-project-adopters-api-openapi.json
+- eclipse-projects-pmi-api-openapi.json
+- eclipse-restful-api-openapi.json

@@ -1,0 +1,201 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Form Working Groups API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  description: Definitions related to membership form working group targets
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Form Working Groups
+  description: Definitions related to membership form working group targets
+paths:
+  /form/{id}/working_groups:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      tags:
+      - Form Working Groups
+      summary: Form Working Groups list
+      description: Returns a list of tracked Form Working Groups for membership form
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormWorkingGroups'
+        '403':
+          description: Unauthorized
+        '500':
+          description: Error while retrieving data
+      operationId: getFormByIdWorkingGroups
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Form Working Groups
+      summary: Form Working Groups create
+      description: Using the passed Form Working Groups object, creates a new object in the dataset.
+      requestBody:
+        description: The working group to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormWorkingGroup'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormWorkingGroup'
+        '403':
+          description: Unauthorized
+      operationId: postFormByIdWorkingGroups
+      x-operation-id-source: derived
+  /form/{id}/working_groups/{workingGroupID}:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: workingGroupID
+      in: path
+      description: Unique ID of the working group relationship within a form
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      tags:
+      - Form Working Groups
+      summary: Form Working Group
+      description: Returns a working group entry that has a matching ID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormWorkingGroup'
+        '403':
+          description: Unauthorized
+        '500':
+          description: Error while retrieving data
+      operationId: getFormByIdWorkingGroupsByWorkingGroupID
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Form Working Groups
+      summary: Form Working Groups update
+      description: Using the passed Form Working Groups object, updates or inserts are made to save the data.
+      requestBody:
+        description: The working group to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormWorkingGroup'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormWorkingGroup'
+        '403':
+          description: Unauthorized
+      operationId: putFormByIdWorkingGroupsByWorkingGroupID
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Form Working Groups
+      summary: Form Working Groups delete
+      description: Remove a working group form entry with the given ID
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized
+      operationId: deleteFormByIdWorkingGroupsByWorkingGroupID
+      x-operation-id-source: derived
+components:
+  schemas:
+    FormWorkingGroup:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectID'
+        form_id:
+          $ref: '#/components/schemas/ObjectID'
+        working_group:
+          type: string
+          description: The ID of the working group relationship to be formed
+        participation_level:
+          type: string
+          description: The desired participation level desired within the new working group
+        effective_date:
+          $ref: '#/components/schemas/DateTime'
+        contact:
+          $ref: '#/components/schemas/Contact'
+    ContactType:
+      type: string
+      description: The type of contact that is being stored
+      enum:
+      - COMPANY
+      - WORKING_GROUP
+      - MARKETING
+      - ACCOUNTING
+      - SIGNING
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    FormWorkingGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/FormWorkingGroup'
+    Contact:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectID'
+        form_id:
+          $ref: '#/components/schemas/ObjectID'
+        first_name:
+          type: string
+          description: First name of the contact
+        last_name:
+          type: string
+          description: Last name of the contact
+        email:
+          type: string
+          description: Professional email address at which the individual can be reached at
+        job_title:
+          type: string
+          description: Job title of the contact
+        type:
+          $ref: '#/components/schemas/ContactType'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

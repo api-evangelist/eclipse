@@ -1,0 +1,65 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal System relations API
+  description: API used for reading and updating information about member organizations and it's associated metadata.
+  contact:
+    name: Software Development Team
+    url: https://gitlab.eclipse.org/eclipsefdn/software-dev
+    email: software-dev@eclipse-foundation.org
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
+tags:
+- name: System relations
+  description: Definitions related to Eclipse Foundation relation code entities
+paths:
+  /sys/relations:
+    parameters:
+    - name: type
+      in: query
+      description: The type of relation
+      required: false
+      schema:
+        type: string
+    get:
+      tags:
+      - System relations
+      summary: List of relations by type
+      description: Returns a list of system relations by the given type
+      operationId: getRelations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SysRelations'
+components:
+  schemas:
+    SysRelation:
+      type: object
+      properties:
+        relation:
+          type: string
+          description: the relation abbreviation
+        description:
+          type: string
+          description: The relation description
+        active:
+          type: boolean
+          description: the active flag
+        type:
+          type: string
+          description: The relation type abbreviation
+    SysRelations:
+      type: array
+      items:
+        $ref: '#/components/schemas/SysRelation'
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

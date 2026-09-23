@@ -1,0 +1,108 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Project Management Infrastructure (PMI) RESTful Git…
+  description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://projects.eclipse.org
+  description: The production API server
+tags:
+- name: Github
+  description: GitHub repository index for Eclipse projects.
+paths:
+  /api/github:
+    get:
+      tags:
+      - Github
+      summary: Fetch GitHub Repositories for all Projects
+      description: '### Overview
+
+
+        Returns a map of Eclipse project IDs to their associated GitHub repositories. Optionally filter by a specific repository name substring.'
+      operationId: FetchGithubRepos
+      parameters:
+      - name: repo
+        in: query
+        description: Filter by repository path (org/repo, e.g. `eclipse-ee4j/batch-api`). A `LIKE '%<value>'` pattern is applied, so a partial trailing match is sufficient.
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A map of project IDs to their GitHub repository data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GithubIndexResponse'
+              example:
+                ee4j.batch:
+                  repos:
+                  - eclipse-ee4j/batch-api
+                  - eclipse-ee4j/batch-tck
+                  specification_project: true
+  /api/github/{project_id}:
+    get:
+      tags:
+      - Github
+      summary: Fetch GitHub Repositories for a Project
+      description: '### Overview
+
+
+        Returns the GitHub repositories for a specific Eclipse project. Underscores in `project_id` are treated as dots.'
+      operationId: FetchGithubReposByProject
+      parameters:
+      - name: project_id
+        in: path
+        description: ID of the project. Underscores are treated as dots.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A map containing the GitHub repositories for the given project (empty map if not found).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GithubIndexResponse'
+              example:
+                ee4j.batch:
+                  repos:
+                  - eclipse-ee4j/batch-api
+                  - eclipse-ee4j/batch-tck
+                  specification_project: true
+components:
+  schemas:
+    GithubProjectEntry:
+      title: GithubProjectEntry
+      type: object
+      description: GitHub repository data for a single Eclipse project.
+      properties:
+        repos:
+          type: array
+          items:
+            type: string
+          description: GitHub repository paths in `org/repo` format (the `https://github.com/` prefix is stripped).
+        specification_project:
+          type: boolean
+          description: Whether this project has a specification working group configured.
+      example:
+        repos:
+        - eclipse-ee4j/batch-api
+        - eclipse-ee4j/batch-tck
+        specification_project: true
+    GithubIndexResponse:
+      title: GithubIndexResponse
+      type: object
+      description: A map of Eclipse project IDs to their GitHub repository data. Keys are project IDs (e.g. `ee4j.batch`).
+      additionalProperties:
+        $ref: '#/components/schemas/GithubProjectEntry'
+      example:
+        ee4j.batch:
+          repos:
+          - eclipse-ee4j/batch-api
+          - eclipse-ee4j/batch-tck
+          specification_project: true

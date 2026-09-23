@@ -1,0 +1,79 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Email API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Email
+paths:
+  /email/optout/{id}/{transactionId}:
+    parameters:
+    - name: id
+      in: path
+      description: Unique contact ID
+      required: true
+      schema:
+        type: string
+    - name: transactionId
+      in: path
+      description: Unique ID of the transaction entry
+      required: true
+      schema:
+        type: number
+    - name: token
+      in: query
+      description: Secure Transaction token for validation
+      required: true
+      schema:
+        type: string
+    - name: email
+      in: query
+      description: Contact email to be opted out from further emails
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Email
+      summary: Opt out an email
+      description: Adds an email to our opt-out list to be excluded from further emails
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request - Missing email or token param
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Transaction Not Found
+        '500':
+          description: Error while retrieving or updating data
+      operationId: getEmailOptoutByIdByTransactionId
+      x-operation-id-source: derived
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

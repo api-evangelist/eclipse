@@ -1,0 +1,75 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Committer Paperwork Retire API
+  description: Access information on Eclipse committer paperwork.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/foundation/paperwork
+  description: Production endpoint for Eclipse committer paperwork data.
+tags:
+- name: Retire
+paths:
+  /{username}/retire:
+    parameters:
+    - name: username
+      in: path
+      description: The LDAP uid of the user.
+      required: true
+      schema:
+        type: string
+    post:
+      summary: Retire paperwork
+      description: Retires a user form being a committer on a specific project.
+      security:
+      - openId:
+        - committer_paperwork_delete
+      requestBody:
+        description: Committer paperwork used to validate request and update role.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetirementRequest'
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+        '500':
+          description: Error while updating data.
+      tags:
+      - Retire
+      operationId: postByUsernameRetire
+      x-operation-id-source: derived
+components:
+  schemas:
+    RetirementRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - info
+      properties:
+        info:
+          type: object
+          additionalProperties: false
+          required:
+          - requestor
+          - project_id
+          - project_role
+          properties:
+            requestor:
+              type: string
+              description: User id of the requestor.
+            project_id:
+              type: string
+              description: The project id.
+            project_role:
+              type: string
+              description: The role on the project the retiree will lose.
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration

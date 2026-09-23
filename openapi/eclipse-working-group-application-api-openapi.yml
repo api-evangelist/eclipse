@@ -1,0 +1,203 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Working Group Application API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Working Group Application
+paths:
+  /working_groups/application:
+    get:
+      tags:
+      - Working Group Application
+      summary: Working Group Application list
+      description: Returns a list of working group applications
+      operationId: getApplications
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroupApplications'
+        '500':
+          description: Error while retrieving data
+    post:
+      tags:
+      - Working Group Application
+      summary: Working Group Application create
+      description: Creates a new working group application
+      operationId: createApplication
+      requestBody:
+        description: The working group to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkingGroupApplication'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroupApplication'
+        '400':
+          description: Bad data passed for initial state of the application
+        '500':
+          description: Error while creating the application
+  /working_groups/application/{id}:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the working group application form
+      required: true
+      schema:
+        type: int
+    get:
+      tags:
+      - Working Group Application
+      summary: Working Group Application single
+      description: Returns a list of working group applications
+      operationId: getSingleApplication
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroupApplication'
+        '500':
+          description: Error while retrieving data
+    put:
+      tags:
+      - Working Group Application
+      summary: Working Group Application update
+      description: Updates an existing working group application
+      operationId: updateApplication
+      requestBody:
+        description: The working group to be updated in the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkingGroupApplication'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroupApplication'
+        '400':
+          description: Bad data passed for initial state of the application
+        '500':
+          description: Error while creating the application
+  /working_groups/application/{id}/complete:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the working group application form
+      required: true
+      schema:
+        type: int
+    post:
+      tags:
+      - Working Group Application
+      summary: Working Group Application complete
+      description: Completes an existing working group application
+      operationId: workingGroupApplicationComplete
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad data passed for initial state of the application
+        '404':
+          description: No application found with the given ID
+        '500':
+          description: Error while creating the application
+components:
+  schemas:
+    WorkingGroupApplications:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroupApplication'
+    WorkingGroupApplication:
+      type: object
+      properties:
+        id:
+          type:
+          - integer
+          - 'null'
+          description: Unique ID for the working group application, can be ommitted for new applications.
+        user:
+          type: string
+          description: Requesting user from the organization
+        org_id:
+          type: integer
+          description: The organization associated with the request
+        contacts:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              user:
+                type:
+                - 'null'
+                - string
+                description: The username of the user if it already exists.
+              first_name:
+                type:
+                - 'null'
+                - string
+                description: The first name of the user (only needed if the user does not yet exist).
+              last_name:
+                type:
+                - 'null'
+                - string
+                description: The last name of the user (only needed if the user does not yet exist).
+              job_title:
+                type:
+                - 'null'
+                - string
+                description: The job title of the user (only needed if the user does not yet exist).
+              working_group_alias:
+                type:
+                - 'null'
+                - string
+                description: Alias of the working group to join
+              working_group_level:
+                type:
+                - 'null'
+                - string
+                description: The relation code for the level the organization wishes to join the Working Group at.
+              mail:
+                type:
+                - 'null'
+                - string
+                description: Professional email address at which the individual can be reached at  (only needed if the user does not yet exist).
+              is_signing_authority:
+                type: boolean
+                description: Whether the given user is the signing authority for the current application batch
+        created:
+          type: string
+          description: The time the application was created
+        updated:
+          type: string
+          description: The time the application was last updated
+        state:
+          type: string
+          description: The current state of the application
+          enum:
+          - INPROGRESS
+          - SUBMITTED
+          - COMPLETE
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

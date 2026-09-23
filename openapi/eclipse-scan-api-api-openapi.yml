@@ -1,0 +1,927 @@
+openapi: 3.2.0
+info:
+  termsOfService: https://www.eclipse.org/legal/termsofuse.php
+  license:
+    name: Eclipse Public License 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  version: '0.1'
+  title: Eclipse Scan API
+servers:
+- url: https://open-vsx.org
+  description: Generated server url
+tags:
+- name: scan-api
+paths:
+  /admin/scans/{scanId}/jobs/retry:
+    post:
+      tags:
+      - scan-api
+      summary: Retry all failed scanner jobs for a scan
+      operationId: retryFailedScannerJobs
+      parameters:
+      - name: scanId
+        in: path
+        description: Scan ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 123
+      responses:
+        '200':
+          description: Failed jobs re-queued; returns the updated scan in SCANNING state
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+        '400':
+          description: Scan is not terminal or has no failed jobs to retry
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '404':
+          description: Scan or scanner jobs were not found
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans/decisions:
+    post:
+      tags:
+      - scan-api
+      summary: Make security decisions for quarantined scans
+      operationId: makeScanDecisions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanDecisionRequest'
+        required: true
+      responses:
+        '200':
+          description: Decisions processed successfully
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanDecisionResponse'
+        '400':
+          description: Invalid request or scan not in quarantined status
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans:
+    get:
+      tags:
+      - scan-api
+      summary: Get all extension scans
+      operationId: getAllScans
+      parameters:
+      - name: status
+        in: query
+        description: Filter by scan status (comma-separated for multiple values)
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - STARTED
+            - VALIDATING
+            - SCANNING
+            - PASSED
+            - QUARANTINED
+            - AUTO REJECTED
+            - ERROR
+            example: QUARANTINED
+      - name: publisher
+        in: query
+        description: Filter by publisher name (partial matches supported)
+        required: false
+        schema:
+          type: string
+      - name: namespace
+        in: query
+        description: Filter by namespace (partial matches supported)
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Filter by display name or extension name (partial matches supported)
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        description: Maximal number of entries to return
+        required: false
+        schema:
+          type: integer
+          default: 10
+          maximum: 100
+          minimum: 0
+      - name: offset
+        in: query
+        description: Number of entries to skip
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: sortBy
+        in: query
+        description: Field to sort by
+        required: false
+        schema:
+          type: string
+          default: scanEndTime
+          enum:
+          - scanEndTime
+          - scanStartTime
+          - displayName
+          - publisher
+          - status
+      - name: sortOrder
+        in: query
+        description: Sort order
+        required: false
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+      - name: dateStartedFrom
+        in: query
+        description: Filter scans started on or after this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      - name: dateStartedTo
+        in: query
+        description: Filter scans started on or before this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      - name: validationType
+        in: query
+        description: Filter by validation type (comma-separated for multiple values, e.g., NAME SQUATTING, BLOCKLIST, SECRET)
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            example: NAME SQUATTING
+      - name: threatScannerName
+        in: query
+        description: Filter by threat scanner name (comma-separated for multiple values).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            example: ClamAV
+      - name: enforcement
+        in: query
+        description: Filter by enforcement status of threats/validations
+        required: false
+        schema:
+          type: string
+          default: all
+          enum:
+          - enforced
+          - notEnforced
+          - all
+      - name: adminDecision
+        in: query
+        description: Filter by admin decision status (comma-separated for multiple values). Use 'allowed' for scans with Allowed decision, 'blocked' for Blocked decision, 'needs-review' for scans with no decision yet.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - allowed
+            - blocked
+            - needs-review
+      responses:
+        '200':
+          description: List of all scans
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans/{scanId}:
+    get:
+      tags:
+      - scan-api
+      summary: Get a specific scan by ID
+      operationId: getScan
+      parameters:
+      - name: scanId
+        in: path
+        description: Scan ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 123
+      responses:
+        '200':
+          description: Scan details
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+        '404':
+          description: Scan not found
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans/filterOptions:
+    get:
+      tags:
+      - scan-api
+      summary: Get scan filter options
+      operationId: getScanFilterOptions
+      responses:
+        '200':
+          description: Lists of unique values usable for scan filtering
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanFilterOptions'
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+  /admin/scans/counts:
+    get:
+      tags:
+      - scan-api
+      summary: Get scan counts
+      operationId: getScanCounts
+      parameters:
+      - name: dateStartedFrom
+        in: query
+        description: Filter scans started on or after this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      - name: dateStartedTo
+        in: query
+        description: Filter scans started on or before this date (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+      - name: enforcement
+        in: query
+        description: Filter by enforcement status of threats/validations
+        required: false
+        schema:
+          type: string
+          default: all
+          enum:
+          - enforced
+          - notEnforced
+          - all
+      - name: validationType
+        in: query
+        description: Filter by validation type (comma-separated for multiple values, e.g., NAME SQUATTING, BLOCKLIST, SECRET)
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            example: NAME SQUATTING
+      - name: threatScannerName
+        in: query
+        description: Filter by threat scanner name (comma-separated for multiple values).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            example: ClamAV
+      responses:
+        '200':
+          description: Scan counts by status and quarantine decision
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanStatistics'
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                format: int32
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                format: int32
+components:
+  schemas:
+    ScannerJob:
+      type: object
+      description: Lifecycle state of a scanner job for an extension scan
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the scanner job
+        scannerType:
+          type: string
+          description: Identifies the scanner type that runs this job
+        status:
+          type: string
+          description: 'Current lifecycle status: QUEUED, PROCESSING, SUBMITTED, COMPLETE, FAILED, REMOVED'
+        createdAt:
+          type: string
+          description: When the job was created (UTC)
+        updatedAt:
+          type: string
+          description: When the job was last updated (UTC)
+        errorMessage:
+          type: string
+          description: Error message if the job failed or was removed
+        externalUrl:
+          type: string
+          description: Deep link to the external scanner's own dashboard for this job. Only populated for async scanners that configure external-url-template.
+    ScanStatistics:
+      type: object
+      description: Total counts for scan statuses and quarantine decisions
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        ERROR:
+          type: integer
+          format: int64
+          description: Indicates an error; when this is present, all other properties should be ignored
+        STARTED:
+          type: integer
+          format: int64
+        VALIDATING:
+          type: integer
+          format: int64
+        SCANNING:
+          type: integer
+          format: int64
+        PASSED:
+          type: integer
+          format: int64
+        QUARANTINED:
+          type: integer
+          format: int64
+        AUTO_REJECTED:
+          type: integer
+          format: int64
+        ALLOWED:
+          type: integer
+          format: int64
+        BLOCKED:
+          type: integer
+          format: int64
+        NEEDS_REVIEW:
+          type: integer
+          format: int64
+    Threat:
+      type: object
+      description: Security threat detected by scanner
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the threat
+        type:
+          type: string
+          description: Type of security scanner that flagged this file
+        ruleName:
+          type: string
+          description: Name of the scanner rule that triggered the detection
+        reason:
+          type: string
+          description: Human-readable reason for threat detection
+        dateDetected:
+          type: string
+          description: When the threat was detected (UTC)
+        fileName:
+          type: string
+          description: Path to the flagged file within the extension
+        fileHash:
+          type: string
+          description: SHA256 hash of the flagged file
+        fileExtension:
+          type: string
+          description: File extension of the flagged file
+        severity:
+          type: string
+          description: Severity level of the threat
+        enforcedFlag:
+          type: boolean
+          description: Whether this threat is enforced (affects extension status)
+    ScanDecisionResult:
+      type: object
+      description: Individual result in a scan decision response
+      properties:
+        scanId:
+          type: string
+          description: The scan ID that was processed
+        success:
+          type: boolean
+          description: Whether the decision was applied successfully
+        error:
+          type: string
+          description: Error message if the decision failed
+    CheckResult:
+      type: object
+      description: Result of a single check or scan execution
+      properties:
+        checkType:
+          type: string
+          description: Type of check
+        category:
+          type: string
+          description: 'Category: PUBLISH_CHECK or SCANNER_JOB'
+        result:
+          type: string
+          description: 'Result: PASSED, QUARANTINE, REJECT, or ERROR'
+        startedAt:
+          type: string
+          description: When the check started (UTC)
+        completedAt:
+          type: string
+          description: When the check completed (UTC)
+        durationMs:
+          type: integer
+          format: int64
+          description: Duration of check in milliseconds
+        filesScanned:
+          type: integer
+          format: int32
+          description: Number of files scanned (if applicable)
+        findingsCount:
+          type: integer
+          format: int32
+          description: Number of findings/issues detected
+        summary:
+          type: string
+          description: Brief summary of the result
+        errorMessage:
+          type: string
+          description: Error message if check failed with error
+        required:
+          type: boolean
+          description: Whether this check was required (errors block publishing). Null for scanner jobs.
+        externalUrl:
+          type: string
+          description: Deep link to the external scanner's own dashboard for this job. Only populated for SCANNER_JOB rows whose scanner configures external-url-template.
+    ScanDecisionRequest:
+      type: object
+      description: Request body for making security decisions on quarantined scans
+      properties:
+        scanIds:
+          type: array
+          description: List of scan IDs to apply the decision to (can be single or multiple)
+          items:
+            type: string
+        decision:
+          type: string
+          description: Security decision to apply to all specified scans
+    ScanResult:
+      type: object
+      description: Extension scan result with status and validation details
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        id:
+          type: string
+          description: Unique identifier for the scan
+        status:
+          type: string
+          description: Current status of the scan
+        extensionIcon:
+          type: string
+          description: URL to extension icon
+        displayName:
+          type: string
+          description: Display name of the extension
+        namespace:
+          type: string
+          description: Extension namespace
+        extensionName:
+          type: string
+          description: Name of the extension
+        publisher:
+          type: string
+          description: Login name of the user who published the extension
+        publisherUrl:
+          type: string
+          description: Profile URL of the user who published the extension
+        version:
+          type: string
+          description: Extension version
+        downloadUrl:
+          type: string
+          description: URL to download the extension package
+        targetPlatform:
+          type: string
+          description: Target platform for the scan
+        universalTargetPlatform:
+          type: boolean
+          description: True if the scan target platform is universal
+        dateScanStarted:
+          type: string
+          description: When the scan started (UTC)
+        dateScanEnded:
+          type: string
+          description: When the scan completed (UTC)
+        dateQuarantined:
+          type: string
+          description: When the extension was quarantined (UTC)
+        dateRejected:
+          type: string
+          description: When the extension was auto-rejected (UTC)
+        adminDecision:
+          $ref: '#/components/schemas/AdminDecision'
+          description: Admin decision on quarantined extension
+        threats:
+          type: array
+          description: Files flagged by security scanner
+          items:
+            $ref: '#/components/schemas/Threat'
+        validationFailures:
+          type: array
+          description: Validation failures that caused auto-rejection
+          items:
+            $ref: '#/components/schemas/ValidationFailure'
+        checkResults:
+          type: array
+          description: All checks/scans that were executed (pass, fail, or skip)
+          items:
+            $ref: '#/components/schemas/CheckResult'
+        scannerJobs:
+          type: array
+          description: Scanner jobs for this scan with their current lifecycle state (QUEUED, PROCESSING, SUBMITTED, COMPLETE, FAILED, REMOVED). Lets the UI surface ongoing or queued scanners without inferring their state from checkResults.
+          items:
+            $ref: '#/components/schemas/ScannerJob'
+        errorMessage:
+          type: string
+          description: Error message if the scan failed with an error
+    ScanDecisionResponse:
+      type: object
+      description: Response for security decisions on scans
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        processed:
+          type: integer
+          format: int32
+          description: Total number of scan IDs processed
+        successful:
+          type: integer
+          format: int32
+          description: Number of decisions applied successfully
+        failed:
+          type: integer
+          format: int32
+          description: Number of decisions that failed
+        results:
+          type: array
+          description: Detailed results for each scan ID
+          items:
+            $ref: '#/components/schemas/ScanDecisionResult'
+    ScanFilterOptions:
+      type: object
+      description: Lists of unique values that can be used to filter scan results
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        validationTypes:
+          type: array
+          description: List of unique validation types from all scans.
+          items:
+            type: string
+        threatScannerNames:
+          type: array
+          description: List of unique threat scanner names.
+          items:
+            type: string
+      required:
+      - threatScannerNames
+      - validationTypes
+    AdminDecision:
+      type: object
+      description: Admin decision on a quarantined extension
+      properties:
+        decision:
+          type: string
+          description: Manual security decision for quarantined extension
+        decidedBy:
+          type: string
+          description: Admin who made the decision
+        dateDecided:
+          type: string
+          description: When the admin decision was made (UTC)
+    ValidationFailure:
+      type: object
+      description: Details of a validation check that failed
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the validation failure
+        type:
+          type: string
+          description: Type of validation that failed
+        ruleName:
+          type: string
+          description: Specific rule name for the validation failure
+        reason:
+          type: string
+          description: Detailed explanation of why validation failed
+        dateDetected:
+          type: string
+          description: When the validation failure occurred (UTC)
+        enforcedFlag:
+          type: boolean
+          description: Whether this validation failure is enforced

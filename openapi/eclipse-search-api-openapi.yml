@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Eclipse Marketplace REST Eclipse Marketplace REST Search API
+  title: Eclipse Marketplace REST Search API
   description: 'REST API for the Eclipse Marketplace. Returns XML describing markets,
 
     categories, taxonomies, individual listing nodes and search results
@@ -11,9 +11,7 @@ info:
 
     This specification is a best-effort, documentation-derived description
 
-    and may omit fields.
-
-    '
+    and may omit fields.'
   version: 1.0.0
   contact:
     name: Eclipse Foundation
@@ -56,24 +54,6 @@ paths:
       - Search
 components:
   schemas:
-    MarketplaceSearch:
-      type: object
-      description: XML root <marketplace> with a <search> element listing matching nodes.
-      properties:
-        search:
-          type: object
-          properties:
-            count:
-              type: integer
-            term:
-              type: string
-            url:
-              type: string
-              format: uri
-            nodes:
-              type: array
-              items:
-                $ref: '#/components/schemas/MarketplaceNode'
     MarketplaceNode:
       type: object
       properties:
@@ -134,3 +114,21 @@ components:
         supporturl:
           type: string
           format: uri
+    MarketplaceSearch:
+      type: object
+      description: XML root <marketplace> with a <search> element listing matching nodes.
+      properties:
+        search:
+          type: object
+          properties:
+            count:
+              type: integer
+            term:
+              type: string
+            url:
+              type: string
+              format: uri
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MarketplaceNode'

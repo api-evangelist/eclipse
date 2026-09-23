@@ -1,0 +1,80 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Eclipse Foundation Downloads Files API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  description: Definitions in relation to retrieval of mailing lists
+servers:
+- url: https://api.eclipse.org/download
+  description: Production endpoint for the download information
+tags:
+- name: Files
+  description: Definitions in relation to retrieval of mailing lists
+paths:
+  /file/{file_id}:
+    parameters:
+    - name: file_id
+      in: path
+      description: The ID of the file to retrieve
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Files
+      summary: File by ID
+      description: Returns a file indexes metadata by its file ID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '500':
+          description: Error while retrieving data
+      operationId: getFileByFileId
+      x-operation-id-source: derived
+components:
+  schemas:
+    NullableString:
+      description: A nullable String type value
+      oneOf:
+      - type: 'null'
+      - type: string
+    File:
+      type: object
+      additionalProperties: false
+      required:
+      - file_id
+      - file_name
+      - download_count
+      - size_disk_bytes
+      - timestamp_disk
+      properties:
+        file_id:
+          type: integer
+          description: placeholder
+        file_name:
+          type: string
+          description: placeholder
+        download_count:
+          type: integer
+          description: placeholder
+        size_disk_bytes:
+          type: integer
+          description: placeholder
+        timestamp_disk:
+          type: integer
+          description: placeholder
+        md5sum:
+          $ref: '#/components/schemas/NullableString'
+          description: placeholder
+        sha1sum:
+          $ref: '#/components/schemas/NullableString'
+          description: placeholder
+        sha512sum:
+          $ref: '#/components/schemas/NullableString'
+          description: placeholder

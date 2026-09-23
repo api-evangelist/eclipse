@@ -1,0 +1,315 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Newsroom REST Ads API
+  version: '1.0'
+  description: REST API for interacting with newsroom different endpoints.
+servers:
+- url: https://newsroom.eclipse.org
+  description: The production API server
+tags:
+- name: Ads
+paths:
+  /api/ads:
+    post:
+      tags:
+      - Ads
+      summary: Fetch random ads
+      description: Returns a list of randomly-selected ads based on requested formats and publish target, and records an impression for each returned ad (host, source, client IP).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdsRequest'
+            example:
+              host: www.eclipse.org
+              source: /downloads/download.php
+              publish_to: eclipse_org_downloads
+              format:
+                ads_square: 1
+                ads_top_leaderboard: 1
+                ads_leaderboard: 1
+                ads_download: 1
+      responses:
+        '200':
+          description: Successfully returned ads and recorded impressions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateAdsResponse'
+              example:
+              - id: '00001'
+                campaign_name: '00001'
+                url: https://newsroom.eclipse.org/ads/campaign
+                image: https://newsroom.eclipse.org/images/ads/example-banner.jpg
+                member_organization_id: ''
+                type: internal
+                format: ads_square
+                weight: '100'
+                groups: ''
+                publish_to: eclipse_org_home
+        '406':
+          description: Invalid request or no ads could be retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAdsError'
+              examples:
+                missing_host:
+                  summary: Missing host
+                  value:
+                    message: Invalid "host" value.
+                    status: 406
+                missing_source:
+                  summary: Missing source
+                  value:
+                    message: Invalid "source" value.
+                    status: 406
+                missing_publish_to:
+                  summary: Missing publish_to
+                  value:
+                    message: Invalid "publish_to" value.
+                    status: 406
+                missing_format:
+                  summary: Missing format
+                  value:
+                    message: Invalid "format" value.
+                    status: 406
+                no_ads:
+                  summary: No ads found
+                  value:
+                    message: Could not retrieve ads.
+                    status: 406
+      operationId: postApiAds
+      x-operation-id-source: derived
+    get:
+      tags:
+      - Ads
+      summary: List ads
+      description: Retrieve ads.
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: p[publish_to]
+        in: query
+        description: Filter ads by publication channel.
+        required: false
+        schema:
+          type: string
+          enum:
+          - eclipse_org_home
+          - eclipse_org_downloads
+        example: eclipse_org_home
+      - name: p[format]
+        in: query
+        description: Filter ads by format.
+        required: false
+        schema:
+          type: string
+          enum:
+          - ads_square
+          - ads_top_leaderboard
+          - ads_leaderboard
+          - ads_download
+        example: ads_top_leaderboard
+      - name: p[campaign_name]
+        in: query
+        description: Filter ads by campaign name (nid).
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 1234
+      - name: p[member_name]
+        in: query
+        description: Filter ads by member organization name.
+        required: false
+        schema:
+          type: string
+        example: IBM
+      - name: p[type]
+        in: query
+        description: Filter ads by type.
+        required: false
+        schema:
+          type: string
+          enum:
+          - strat_ad
+          - paid
+          - internal
+          - newsletter
+        example: internal
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - ads
+                - pager
+                properties:
+                  ads:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RetrieveAdsResponse'
+                  pager:
+                    $ref: '#/components/schemas/Pager'
+              example:
+                ads:
+                - id: '1234'
+                  campaign_name: Example Campaign
+                  url: https://newsroom.eclipse.org/ads/campaign
+                  image: https://newsroom.eclipse.org/images/ads/example-banner.jpg
+                  member_organization_id: ''
+                  type: internal
+                  format: ads_top_leaderboard
+                  weight: '100'
+                  groups: ''
+                  publish_to:
+                  - eclipse_org_home
+                pager:
+                  current_page: 0
+                  total_items: '29'
+                  total_pages: 2
+                  items_per_page: '20'
+      operationId: getApiAds
+      x-operation-id-source: derived
+components:
+  schemas:
+    CreateAdsError:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+    RetrieveAdsResponse:
+      type: object
+      required:
+      - campaign_name
+      - url
+      - image
+      - format
+      - type
+      - weight
+      properties:
+        id:
+          type: string
+        campaign_name:
+          type: string
+        url:
+          type: string
+          format: uri
+        image:
+          type: string
+          format: uri
+        member_organization_id:
+          type: string
+        type:
+          type: string
+        format:
+          type: string
+        weight:
+          type: string
+        groups:
+          type: string
+        publish_to:
+          type: array
+          items:
+            type: string
+    CreateAdsResponse:
+      type: object
+      required:
+      - id
+      - campaign_name
+      - url
+      - image
+      - format
+      - type
+      - weight
+      - publish_to
+      properties:
+        id:
+          type: string
+        campaign_name:
+          type: string
+          description: In the current implementation this mirrors `id`.
+        url:
+          type: string
+          format: uri
+        image:
+          type: string
+          format: uri
+        member_organization_id:
+          type: string
+        type:
+          type: string
+        format:
+          type: string
+        weight:
+          type: string
+        groups:
+          type: string
+        publish_to:
+          type: string
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string
+    CreateAdsRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - host
+      - source
+      - publish_to
+      - format
+      properties:
+        host:
+          type: string
+        source:
+          type: string
+        publish_to:
+          type: string
+        format:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 1
+  parameters:
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32

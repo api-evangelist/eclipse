@@ -1,0 +1,86 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Marketplace REST Markets API
+  version: '1.0'
+  description: REST API for interacting with marketplace listings, catalogs, and versions.
+servers:
+- url: https://marketplace.eclipse.org
+  description: The production API server
+tags:
+- name: Markets
+paths:
+  /api/p:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/client'
+      tags:
+      - Markets
+      summary: Retreive Markets with categories
+      description: This will return a listing of Markets and Categories, it includes URLs for each category, as well number of listings in each category.
+      operationId: getMarketsWithCategories
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              example: "<marketplace>\n  <market name=\"Tools\" id=\"31\" url=\"http://marketplace.eclipse.org/category/markets/tools\">\n    <category id=\"1964\" count=\"158\" url=\"http://marketplace.eclipse.org/taxonomy/term/1964%2C31\" name=\"Application Development Frameworks\" />\n  </market>\n  <market name=\"Long Term Support\" id=\"3429\" url=\"http://marketplace.eclipse.org/category/markets/long-term-support\" />\n</marketplace>\n"
+              schema:
+                $ref: '#/components/schemas/Markets'
+components:
+  schemas:
+    Market:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: market
+        properties:
+          category:
+            $ref: '#/components/schemas/BaseCategory'
+    BaseCategory:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: category
+        properties:
+          count:
+            type: integer
+            xml:
+              attribute: true
+    Markets:
+      type: array
+      xml:
+        name: marketplace
+        wrapped: true
+      items:
+        $ref: '#/components/schemas/Market'
+    BaseNode:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier
+          xml:
+            attribute: true
+        url:
+          type: string
+          description: URL
+          xml:
+            attribute: true
+        name:
+          type: string
+          description: Title
+          xml:
+            attribute: true
+  parameters:
+    client:
+      name: client
+      in: query
+      description: This variable is usually sent from MPC to alter the default list. It's available for the Most Popular Listings, Top Favorited Listings, Recently Updated Listings and Featured Listings. Only installable listings owned by an Eclipse member company will be returned.
+      schema:
+        type: string
+        enum:
+        - org.eclipse.epp.mpc.core
+        - org.eclipse.smarthome
+        - org.eclipse.kura

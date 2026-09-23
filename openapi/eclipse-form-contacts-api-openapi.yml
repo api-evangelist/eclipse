@@ -1,0 +1,173 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Form Contacts API
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  description: Definitions related to membership form designated contacts
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Form Contacts
+  description: Definitions related to membership form designated contacts
+paths:
+  /form/{id}/contacts:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      tags:
+      - Form Contacts
+      summary: Contacts list
+      description: Returns a list of tracked contacts
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contacts'
+        '500':
+          description: Error while retrieving data
+      operationId: getFormByIdContacts
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Form Contacts
+      summary: Contacts create
+      description: Using the passed contact object, updates or inserts are made to save the data.
+      requestBody:
+        description: The contact to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '403':
+          description: Unauthorized
+      operationId: postFormByIdContacts
+      x-operation-id-source: derived
+  /form/{id}/contacts/{contactID}:
+    parameters:
+    - name: id
+      in: path
+      description: Unique ID of the membership form entry
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: contactID
+      in: path
+      description: Unique ID of the contact for the current form
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      tags:
+      - Form Contacts
+      summary: Contacts
+      description: Returns a contact for the form given a form ID and contact ID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '403':
+          description: Unauthorized
+        '500':
+          description: Error while retrieving data
+      operationId: getFormByIdContactsByContactID
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Form Contacts
+      summary: Contacts update
+      description: Using the passed contact object, updates or inserts are made to save the data.
+      requestBody:
+        description: The contact to be updated or inserted into the data set.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '403':
+          description: Unauthorized
+      operationId: putFormByIdContactsByContactID
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Form Contacts
+      summary: Contacts delete
+      description: Remove a contact entry with the given ID
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized
+      operationId: deleteFormByIdContactsByContactID
+      x-operation-id-source: derived
+components:
+  schemas:
+    Contact:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectID'
+        form_id:
+          $ref: '#/components/schemas/ObjectID'
+        first_name:
+          type: string
+          description: First name of the contact
+        last_name:
+          type: string
+          description: Last name of the contact
+        email:
+          type: string
+          description: Professional email address at which the individual can be reached at
+        job_title:
+          type: string
+          description: Job title of the contact
+        type:
+          $ref: '#/components/schemas/ContactType'
+    Contacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Contact'
+    ContactType:
+      type: string
+      description: The type of contact that is being stored
+      enum:
+      - COMPANY
+      - WORKING_GROUP
+      - MARKETING
+      - ACCOUNTING
+      - SIGNING
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

@@ -1,0 +1,94 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Eclipse GeoIP REST Cities API
+  description: REST client to retrieve GeoIP information about IP addresses and to lookup IP information for countries given their ISO country code.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: http://api.eclipse.org/geoip
+  description: Production endpoint for Eclipse GeoIP REST API
+tags:
+- name: Cities
+paths:
+  /cities/{ipAddr}:
+    description: 'Retrieves city data for a given IP address in either IPv4 or IPv6 format. In cases where blacklisted IP''s are sent (such as local addresses, or addresses outside of range), a server error is returned.
+
+      '
+    get:
+      summary: Get city
+      parameters:
+      - name: ipAddr
+        in: path
+        required: true
+        description: a valid IP address to retrieve the city of origin for.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/City'
+        '400':
+          description: Bad Request - Invalid IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Cities
+      operationId: getCitiesByIpAddr
+      x-operation-id-source: derived
+components:
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The friendly message for the error
+    City:
+      type: object
+      additionalProperties: false
+      required:
+      - geoname_id
+      - names
+      properties:
+        geoname_id:
+          type: integer
+          description: The MaxMind API unique ID for a geographic location.
+        names:
+          type: object
+          description: The locale of the country name
+          additionalProperties:
+            type: string
+            description: Name of the country in the given locale.
+          example:
+            en: Ottawa
+            pt-BR: Otava

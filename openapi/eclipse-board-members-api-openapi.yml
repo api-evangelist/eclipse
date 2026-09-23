@@ -1,0 +1,81 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Eclipse Foundation Info Board Members API
+  description: Access information on the Eclipse Foundation, such as trademarks, councils, and board members.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  contact:
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/eclipsefdn-info-api/-/issues
+servers:
+- url: https://api.eclipse.org/foundation/info
+  description: Production endpoint for the Eclipse Foundation information
+tags:
+- name: Board Members
+  description: Eclipse Foundation board members
+paths:
+  /board-members:
+    get:
+      tags:
+      - Board Members
+      summary: Board of Directors list
+      description: Returns a list of members on the board of directors
+      operationId: getBoardMembers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardMembers'
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    BoardMember:
+      type: object
+      additionalProperties: false
+      required:
+      - first_name
+      - last_name
+      - relation
+      properties:
+        first_name:
+          type: string
+          description: First name of the board member
+          example: Sample
+        last_name:
+          type: string
+          description: The last name of the board member
+          example: Eclipser
+        org_name:
+          type:
+          - string
+          - 'null'
+          description: The name of the organisation this board member represents, if appointed
+          example: Test co.
+        org_id:
+          type:
+          - number
+          - 'null'
+          description: Numeric ID of the organisation the board member belongs to
+          example: 9999
+        relation:
+          type: object
+          required:
+          - code
+          - description
+          properties:
+            code:
+              type: string
+              description: The relation code for the board member
+              example: BRBE
+            description:
+              type: string
+              description: The human readable name for the relation
+              example: Board Representative - Belgium
+    BoardMembers:
+      type: array
+      items:
+        $ref: '#/components/schemas/BoardMember'

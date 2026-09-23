@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  title: Eclipse User Info API
+  version: 1.0.0
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  description: 'Operations tagged User Info across 2 of this provider''s published API definitions: eclipse-membership-application-api-openapi.json, eclipse-membership-portal-api-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://membership.eclipse.org/application_api
+  description: Production endpoint for the membership portal data
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
+tags:
+- name: User Info
+paths:
+  /userinfo:
+    get:
+      tags:
+      - User Info
+      summary: Info on currently logged in user
+      description: returns information about the currently logged in user
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoWrapper'
+        '204':
+          description: No Content - anonymous user
+        '500':
+          description: Error while retrieving data
+      operationId: getUserinfo
+      x-operation-id-source: derived
+    servers:
+    - url: https://membership.eclipse.org/application_api
+      description: Production endpoint for the membership portal data
+components:
+  schemas:
+    InfoWrapper:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User name
+        given_name:
+          type: string
+          description: First name of the user
+        family_name:
+          type: string
+          description: Family name of the user
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email of the user.
+        organizational_roles:
+          description: A map containing the user's organizational roles
+          properties:
+            organization_id:
+              type: integer
+              description: the organization id
+          additionalProperties:
+            type: array
+            items:
+              type: string
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+x-refined-from:
+- eclipse-membership-application-api-openapi.json
+- eclipse-membership-portal-api-openapi.json

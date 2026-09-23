@@ -1,0 +1,481 @@
+openapi: 3.2.0
+info:
+  title: Eclipse RESTful Eclipse USS API
+  description: This describes the resources that make up the official Eclipse Foundation REST API.
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://api.eclipse.org
+  description: The production API server
+tags:
+- name: Eclipse USS
+  description: 'The Eclipse User Storage Service (USS) allows Eclipse projects to store user-specific project information on the
+
+    Eclipse Foundation servers.'
+paths:
+  /uss/blob:
+    get:
+      tags:
+      - Eclipse USS
+      summary: Fetch Blobs
+      description: Retrieve a list of all the blobs for a user. Requires the `uss_retrieve` scope.
+      operationId: FetchBlobs
+      parameters:
+      - name: page
+        in: query
+        description: The index of the page to get, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      - name: User-Agent
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: USER_AGENT
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          description: ''
+          headers:
+            Link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: <https://api.eclipse.org/uss/blob?page=1&amp;pagesize=20>; rel="last", <https://api.eclipse.org/uss/blob?page=1&amp;pagesize=20>; rel="first", <https://api.eclipse.org/uss/blob?page=1&amp;pagesize=20>; rel="self"
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FetchBlobsresponse'
+                description: ''
+              example:
+              - application_token: MZ04RMOpksKN5GpxKXafq2MSjSP
+                etag: 9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb
+                changed: 1497030093
+                key: mpc_favorites
+                url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
+        '401':
+          description: ''
+      deprecated: false
+  /uss/blob/{application_token}/{blob_key}:
+    get:
+      tags:
+      - Eclipse USS
+      summary: Search Blobs
+      description: Search specific user blob object. Requires the `uss_retrieve` scope.
+      operationId: SearchBlobs
+      parameters:
+      - name: application_token
+        in: path
+        description: Unique identifer of the project, e.g., eclipse.org.oomph.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: blob_key
+        in: path
+        description: Unique identifier of the profile setting to save, e.g., install_xml.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The index of the page to get, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      - name: User-Agent
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: USER_AGENT
+      - name: If-None-Match
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 54d66cdf0a31cf65bf3f6c9888fc3efdd51dd079f5da4200d7e6ccb399b25a61
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      - name: If-Modified-Since
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: Wed, 21 Oct 2015 07:28:00 GMT
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          description: ''
+          headers:
+            Link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: <https://api.eclipse.org/uss/blob?page=1&amp;pagesize=20>; rel="last", <https://api.eclipse.org/uss/blob?page=1&amp;pagesize=20>; rel="first", <https://api.eclipse.org/uss/blob?page=1&amp;pagesize=20>; rel="self"
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+            Etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '"9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb"'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchBlobsresponse'
+              example:
+                application_token: MZ04RMOpksKN5GpxKXafq2MSjSP
+                etag: 9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb
+                changed: 1497030093
+                key: mpc_favorites
+                url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
+                value: MzI3NDQwNQ==
+        '304':
+          description: ''
+        '401':
+          description: ''
+      deprecated: false
+    delete:
+      tags:
+      - Eclipse USS
+      summary: Delete Blobs
+      description: Delete a blob for a user. Requires the `uss_update` scope.
+      operationId: DeleteBlobs
+      parameters:
+      - name: application_token
+        in: path
+        description: Unique identifer of the project, e.g., eclipse.org.oomph.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: blob_key
+        in: path
+        description: Unique identifier of the profile setting to save, e.g., install_xml.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      - name: User-Agent
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: USER_AGENT
+      - name: If-None-Match
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 54d66cdf0a31cf65bf3f6c9888fc3efdd51dd079f5da4200d7e6ccb399b25a61
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      security:
+      - oauth2:
+        - write
+      responses:
+        '204':
+          description: ''
+          headers: {}
+        '401':
+          description: ''
+      deprecated: false
+    put:
+      tags:
+      - Eclipse USS
+      summary: Update/Create Blobs
+      description: Delete a blob for a user. Requires the `uss_update` scope.
+      operationId: Update/createBlobs
+      parameters:
+      - name: application_token
+        in: path
+        description: Unique identifer of the project, e.g., eclipse.org.oomph.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: blob_key
+        in: path
+        description: Unique identifier of the profile setting to save, e.g., install_xml.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      - name: User-Agent
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: USER_AGENT
+      - name: If-Match
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 54d66cdf0a31cf65bf3f6c9888fc3efdd51dd079f5da4200d7e6ccb399b25a61
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+            Etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: '"9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb"'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCreateBlobsresponse'
+              example:
+                url: https://api.eclipse.org/api/blob/:namespace/:key
+        '201':
+          description: ''
+        '401':
+          description: ''
+      deprecated: false
+components:
+  schemas:
+    SearchBlobsresponse:
+      title: SearchBlobsresponse
+      required:
+      - application_token
+      - etag
+      - changed
+      - key
+      - url
+      - value
+      type: object
+      properties:
+        application_token:
+          type: string
+        etag:
+          type: string
+        changed:
+          type: string
+        key:
+          type: string
+        url:
+          type: string
+        value:
+          type: string
+      example:
+        application_token: MZ04RMOpksKN5GpxKXafq2MSjSP
+        etag: 9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb
+        changed: 1497030093
+        key: mpc_favorites
+        url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
+        value: MzI3NDQwNQ==
+    UpdateCreateBlobsresponse:
+      title: Update/CreateBlobsresponse
+      required:
+      - url
+      type: object
+      properties:
+        url:
+          type: string
+      example:
+        url: https://api.eclipse.org/api/blob/:namespace/:key
+    FetchBlobsresponse:
+      title: FetchBlobsresponse
+      required:
+      - application_token
+      - etag
+      - changed
+      - key
+      - url
+      type: object
+      properties:
+        application_token:
+          type: string
+        etag:
+          type: string
+        changed:
+          type: string
+        key:
+          type: string
+        url:
+          type: string
+      example:
+        application_token: MZ04RMOpksKN5GpxKXafq2MSjSP
+        etag: 9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb
+        changed: 1497030093
+        key: mpc_favorites
+        url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
+  headers:
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
+  securitySchemes:
+    oauth2:
+      description: 'Get access to data while protecting your account credentials.
+
+        OAuth2 is also a safer and more secure way to give you access.
+
+        '
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.php55.dev.docker/oauth2/authorize
+          tokenUrl: https://accounts.php55.dev.docker/oauth2/token
+          scopes:
+            write: Grants write access
+            read: Grants read access

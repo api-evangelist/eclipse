@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   version: 1.0.0
-  title: Hellosign API
+  title: Hellosign Signature Request API
   description: Access information on Eclipse Foundation Hellosign paperwork.
   license:
     name: Eclipse Public License - 2.0
@@ -9,6 +9,8 @@ info:
 servers:
 - url: https://api.eclipse.org/foundation/hellosign
   description: Production endpoint for Eclipse Foundation hellosign data.
+tags:
+- name: Hellosign Signature Request
 paths:
   /:
     get:
@@ -118,27 +120,6 @@ paths:
           description: Not found
         '500':
           description: Error while retrieving data
-  /callback:
-    post:
-      summary: Hellosign Events callback
-      description: Callback URL that will be registered with Hellosign for recieving updates on changes to signature requests
-        created through this API.
-      operationId: hellosignRequestEventsCallback
-      tags:
-      - Hellosign Event Callbacks
-      security: []
-      responses:
-        '200':
-          description: Success
-          content:
-            plain/text:
-              schema:
-                type: string
-              example: Hello API Event Received
-        '404':
-          description: Not found
-        '500':
-          description: Error while retrieving data
   /templates:
     get:
       summary: Document signature templates
@@ -157,11 +138,60 @@ paths:
         '401':
           description: Unauthorized
 components:
-  securitySchemes:
-    openId:
-      type: openIdConnect
-      openIdConnectUrl: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration
   schemas:
+    EfHellosignRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfHellosignRequest'
+    EfSignatureTemplates:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+        - name
+        - template_id
+        - template_name
+        - comment
+        - document
+        - related_documents
+        - revoked_documents
+        - mcca
+        - aliases
+        properties:
+          name:
+            type: string
+            description: the internal name used for lookups and identification
+          template_id:
+            type: string
+            description: The external ID linked to this template, used when targeting upstream services
+          template_name:
+            type: string
+            description: Display name for the current template
+          comment:
+            type: string
+            description: Value used in log events related to general operations of this template in the signature workflow
+          document:
+            description: the main document that is created or updated as part of a workflow using this template
+            $ref: '#/components/schemas/EfTemplateDocument'
+          related_documents:
+            type: array
+            description: List of related documents that should be updated but not created when this template is used
+            items:
+              $ref: '#/components/schemas/EfTemplateDocument'
+          revoked_documents:
+            type: array
+            description: list of document IDs that should be revoked if present when workflows using this template are completed.
+            items:
+              type: string
+          mcca:
+            type: boolean
+            description: Whether the current template targets MCCA type document events and can target organizations as well as individuals.
+          aliases:
+            type: array
+            description: Previous internal IDs used for this template, used for backwards compatibility
+            items:
+              type: string
     EfHellosignRequest:
       type: object
       additionalProperties: false
@@ -229,10 +259,24 @@ components:
                 type: string
                 format: date-time
                 description: The standardized time that the event was recieved by the system
-    EfHellosignRequests:
-      type: array
-      items:
-        $ref: '#/components/schemas/EfHellosignRequest'
+    EfTemplateDocument:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - version
+      - message
+      properties:
+        id:
+          type: string
+          description: the ID of the document
+        version:
+          type: integer
+          format: double
+          description: the version number associated with the document
+        message:
+          type: string
+          description: the message to include in logs created for the mutation of these documents
     HellosignSignatureRequest:
       type: object
       additionalProperties: false
@@ -277,71 +321,7 @@ components:
           - string
           - 'null'
           description: The message to include with the signature request
-    EfSignatureTemplates:
-      type: array
-      items:
-        type: object
-        additionalProperties: false
-        required:
-        - name
-        - template_id
-        - template_name
-        - comment
-        - document
-        - related_documents
-        - revoked_documents
-        - mcca
-        - aliases
-        properties:
-          name:
-            type: string
-            description: the internal name used for lookups and identification
-          template_id:
-            type: string
-            description: The external ID linked to this template, used when targeting upstream services
-          template_name:
-            type: string
-            description: Display name for the current template
-          comment:
-            type: string
-            description: Value used in log events related to general operations of this template in the signature workflow
-          document:
-            description: the main document that is created or updated as part of a workflow using this template
-            $ref: '#/components/schemas/EfTemplateDocument'
-          related_documents:
-            type: array
-            description: List of related documents that should be updated but not created when this template is used
-            items:
-              $ref: '#/components/schemas/EfTemplateDocument'
-          revoked_documents:
-            type: array
-            description: list of document IDs that should be revoked if present when workflows using this template are completed.
-            items:
-              type: string
-          mcca:
-            type: boolean
-            description: Whether the current template targets MCCA type document events and can target organizations as well
-              as individuals.
-          aliases:
-            type: array
-            description: Previous internal IDs used for this template, used for backwards compatibility
-            items:
-              type: string
-    EfTemplateDocument:
-      type: object
-      additionalProperties: false
-      required:
-      - id
-      - version
-      - message
-      properties:
-        id:
-          type: string
-          description: the ID of the document
-        version:
-          type: integer
-          format: double
-          description: the version number associated with the document
-        message:
-          type: string
-          description: the message to include in logs created for the mutation of these documents
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration

@@ -1,0 +1,156 @@
+openapi: 3.2.0
+info:
+  title: Eclipse Project Management Infrastructure (PMI) RESTful…
+  description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://projects.eclipse.org
+  description: The production API server
+tags:
+- name: Simultaneous Releases
+  description: Eclipse simultaneous release trains (e.g. the annual Eclipse IDE release).
+paths:
+  /api/simultaneous_release:
+    get:
+      tags:
+      - Simultaneous Releases
+      summary: Fetch all Simultaneous Releases
+      description: '### Overview
+
+
+        Returns a map of all simultaneous releases (Eclipse release trains), keyed by the release URL slug (e.g. `2023-12`).'
+      operationId: FetchSimultaneousReleases
+      responses:
+        '200':
+          description: A map of simultaneous release slugs to their release data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimultaneousReleasesMap'
+              example:
+                2023-12:
+                  release_date: 1701388800
+                  previous_release:
+                    release_name: 2023-09
+                    release_url: https://projects.eclipse.org/api/simultaneous_release/2023-09
+                  projects:
+                    eclipse.platform:
+                      project_name: Eclipse Platform
+                      new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
+      deprecated: true
+  /api/simultaneous_release/{simrel}:
+    get:
+      tags:
+      - Simultaneous Releases
+      summary: Retrieve a Simultaneous Release
+      description: '### Overview
+
+
+        Returns a specific simultaneous release (Eclipse release train) by its URL slug.'
+      operationId: RetrieveSimultaneousRelease
+      parameters:
+      - name: simrel
+        in: path
+        description: The URL slug of the simultaneous release (e.g. `2023-12`).
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A map containing the requested simultaneous release.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimultaneousReleasesMap'
+              example:
+                2023-12:
+                  release_date: 1701388800
+                  previous_release:
+                    release_name: 2023-09
+                    release_url: https://projects.eclipse.org/api/simultaneous_release/2023-09
+                  projects:
+                    eclipse.platform:
+                      project_name: Eclipse Platform
+                      new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
+        '404':
+          $ref: '#/components/responses/NotFound'
+      deprecated: true
+components:
+  schemas:
+    SimultaneousReleaseEntry:
+      title: SimultaneousReleaseEntry
+      type: object
+      description: Data for a single simultaneous release (Eclipse release train).
+      properties:
+        release_date:
+          type: integer
+          description: Unix timestamp of the release date.
+        previous_release:
+          type: object
+          description: 'Link to the preceding simultaneous release. TODO: the `previous_name` SQL alias in the implementation has a trailing comma which may cause the `release_name` value to be empty in practice — verify against live data.'
+          properties:
+            release_name:
+              type: string
+              description: URL slug of the previous simultaneous release.
+            release_url:
+              type: string
+              description: Absolute URL to the previous release's API endpoint.
+        projects:
+          type: object
+          description: Map of Eclipse project IDs to their release data within this simultaneous release.
+          additionalProperties:
+            $ref: '#/components/schemas/SimultaneousReleaseProject'
+      example:
+        release_date: 1701388800
+        previous_release:
+          release_name: 2023-09
+          release_url: https://projects.eclipse.org/api/simultaneous_release/2023-09
+        projects:
+          eclipse.platform:
+            project_name: Eclipse Platform
+            new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
+    SimultaneousReleasesMap:
+      title: SimultaneousReleasesMap
+      type: object
+      description: A map of simultaneous release URL slugs (e.g. `2023-12`) to their release data.
+      additionalProperties:
+        $ref: '#/components/schemas/SimultaneousReleaseEntry'
+      example:
+        2023-12:
+          release_date: 1701388800
+          previous_release:
+            release_name: 2023-09
+            release_url: https://projects.eclipse.org/api/simultaneous_release/2023-09
+          projects:
+            eclipse.platform:
+              project_name: Eclipse Platform
+              new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
+    SimultaneousReleaseProject:
+      title: SimultaneousReleaseProject
+      type: object
+      description: A project's contribution to a simultaneous release.
+      properties:
+        project_name:
+          type: string
+          description: Project node title.
+        new_and_noteworthy_url:
+          type:
+          - string
+          - 'null'
+          description: URL to the project's New and Noteworthy page for this release. May be null or empty if not configured.
+      example:
+        project_name: Eclipse Platform
+        new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

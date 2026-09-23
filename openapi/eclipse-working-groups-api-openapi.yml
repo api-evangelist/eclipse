@@ -1,15 +1,95 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
+  title: Eclipse Working Groups API
   version: 1.0.0
-  title: Working Groups API
-  description: Access information on Eclipse Foundation Working Groups.
   license:
     name: Eclipse Public License - 2.0
     url: https://www.eclipse.org/legal/epl-2.0/
+  description: 'Operations tagged Working Groups across 2 of this provider''s published API definitions: eclipse-membership-portal-api-openapi.json, eclipse-working-groups-api-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
 - url: https://api.eclipse.org/working-groups
   description: Production endpoint for Eclipse Foundation working group data
+tags:
+- name: Working Groups
+  description: Definitions related to Eclipse Foundation working group entities
 paths:
+  /organizations/{organizationID}/working_group/representatives:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve representatives for
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Working Groups
+      summary: Organization Working Group representatives
+      description: Gets working group representatives grouped by the alias of the Working Group they are part of
+      operationId: getOrganizationWorkingGroupRepresentatives
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationWorkingGroupRepresentatives'
+        '404':
+          description: No organization found
+        '500':
+          description: Error while retrieving data
+    servers:
+    - url: https://membership.eclipse.org/api
+      description: Production endpoint for the membership portal data
+  /working_groups:
+    get:
+      deprecated: true
+      tags:
+      - Working Groups
+      summary: Working Group List
+      description: Returns a working group entry that has a matching ID
+      operationId: getWorkingGroups
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroups'
+        '500':
+          description: Error while retrieving data
+    servers:
+    - url: https://membership.eclipse.org/api
+      description: Production endpoint for the membership portal data
+  /working_groups/{documentID}:
+    parameters:
+    - name: documentID
+      in: path
+      description: The document ID for the working group to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    get:
+      deprecated: true
+      tags:
+      - Working Groups
+      summary: Working Group
+      description: Returns a working group entry that has a matching ID
+      operationId: getWorkingGroup
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkingGroup'
+        '500':
+          description: Error while retrieving data
+    servers:
+    - url: https://membership.eclipse.org/api
+      description: Production endpoint for the membership portal data
   /:
     parameters:
     - name: status
@@ -32,6 +112,9 @@ paths:
                 $ref: '#/components/schemas/WorkingGroups'
         '500':
           description: Error while retrieving data
+    servers:
+    - url: https://api.eclipse.org/working-groups
+      description: Production endpoint for Eclipse Foundation working group data
   /{alias}:
     parameters:
     - name: alias
@@ -52,7 +135,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WorkingGroup'
+                $ref: '#/components/schemas/WorkingGroup_2'
         '404':
           description: Not Found
           content:
@@ -61,6 +144,9 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           description: Error while retrieving data
+    servers:
+    - url: https://api.eclipse.org/working-groups
+      description: Production endpoint for Eclipse Foundation working group data
   /{alias}/resources:
     parameters:
     - name: alias
@@ -90,6 +176,9 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           description: Error while retrieving data
+    servers:
+    - url: https://api.eclipse.org/working-groups
+      description: Production endpoint for Eclipse Foundation working group data
   /{alias}/levels:
     parameters:
     - name: alias
@@ -119,6 +208,9 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           description: Error while retrieving data
+    servers:
+    - url: https://api.eclipse.org/working-groups
+      description: Production endpoint for Eclipse Foundation working group data
   /{alias}/agreements:
     parameters:
     - name: alias
@@ -148,6 +240,9 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           description: Error while retrieving data
+    servers:
+    - url: https://api.eclipse.org/working-groups
+      description: Production endpoint for Eclipse Foundation working group data
   /{alias}/committees/{relationType}:
     parameters:
     - name: alias
@@ -183,35 +278,9 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           description: Error while retrieving data
-  /{alias}/special-interest-groups:
-    parameters:
-    - name: alias
-      in: path
-      description: The name of the working group to retrieve
-      required: true
-      schema:
-        type: string
-    get:
-      tags:
-      - Special Interest Groups
-      summary: Special Interest Group for Working Group
-      description: Returns a list of all known special interest groups for the given Working Group
-      operationId: getSpecialInterestGroupsByWorkingGroup
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SpecialInterestGroups'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Error while retrieving data
+    servers:
+    - url: https://api.eclipse.org/working-groups
+      description: Production endpoint for Eclipse Foundation working group data
   /organization/{id}:
     parameters:
     - name: id
@@ -241,79 +310,17 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           description: Error while retrieving data
-  /special-interest-groups:
-    get:
-      tags:
-      - Special Interest Groups
-      summary: Special Interest Group list
-      description: Returns a list of all known special interest groups
-      operationId: getSpecialInterestGroups
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SpecialInterestGroups'
-        '500':
-          description: Error while retrieving data
-  /special-interest-groups/{sigAlias}:
-    parameters:
-    - name: sigAlias
-      in: path
-      description: The alias of the special interest group to retrieve
-      required: true
-      schema:
-        type: string
-    get:
-      tags:
-      - Special Interest Groups
-      summary: Special Interest Group
-      description: Returns a special interest group
-      operationId: getSpecialInterestGroupByAlias
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SpecialInterestGroups'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Error while retrieving data
+    servers:
+    - url: https://api.eclipse.org/working-groups
+      description: Production endpoint for Eclipse Foundation working group data
 components:
-  securitySchemes:
-    openId:
-      type: openIdConnect
-      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
   schemas:
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in
-        the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
     WorkingGroups:
       type: array
       items:
         $ref: '#/components/schemas/WorkingGroup'
     WorkingGroup:
       type: object
-      additionalProperties: false
-      required:
-      - alias
-      - title
-      - status
-      - logo
-      - description
-      - resources
-      - levels
       properties:
         alias:
           type: string
@@ -331,162 +338,90 @@ components:
           type: string
           description: Short description of the working group
         resources:
-          $ref: '#/components/schemas/WorkingGroupResources'
-        levels:
-          $ref: '#/components/schemas/WorkingGroupLevels'
-        committee_mailing_lists:
-          oneOf:
-          - $ref: '#/components/schemas/WorkingGroupMailingLists'
-          - type: 'null'
-    WorkingGroupResources:
-      type: object
-      additionalProperties: false
-      required:
-      - charter
-      - contact_form
-      - members
-      - participation_agreements
-      - sponsorship
-      - website
-      properties:
-        charter:
-          type: string
-          description: Link to the charter for the current working group
-        contact_form:
-          type: string
-          description: URL link to the contact form
-        members:
-          type: string
-          description: URL to the members list for the given working group
-        sponsorship_document:
-          type:
-          - string
-          - 'null'
-          description: The ID of the sponsorship document for this working group
-        participation_agreements:
-          $ref: '#/components/schemas/WorkingGroupParticipationAgreements'
-        sponsorship:
-          type: string
-          description: link to the sponsorship agreement document
-        website:
-          type: string
-          description: the URL for the homepage of this working group
-        sustainer_commitment:
-          type:
-          - string
-          - 'null'
-          description: the URL for the sustainer commitment for the working group, optional
-        resource_display:
-          description: |
-            List of resources to be displayed for this Working Group in relation to associated resources, including references
-            to existing fields and custom fields. Will retain order of the list when displaying.
-          anyOf:
-          - type: array
-            items:
+          type: object
+          properties:
+            charter:
+              type: string
+              description: Link to the charter for the current working group
+            contact_form:
+              type: string
+              description: URL link to the contact form
+            members:
+              type: string
+              description: URL to the members list for the given working group
+            participation_agreements:
               type: object
               properties:
-                label:
-                  description: Label to override reference field, or when using custom links
+                individual:
+                  anyOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                organization:
+                  anyOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                sponsorship:
+                  type: string
+                  description: link to the sponsorship agreement document
+                sponsorship_document:
                   type:
                   - string
                   - 'null'
-                link:
-                  description: Custom link to use when defining an item, required if not using a reference
-                  type:
-                  - string
-                  - 'null'
-                ref:
-                  description: Defines one of the existing resources to be substituted in with their label and link.
-                  type:
-                  - string
-                  - 'null'
-          - type: 'null'
-    WorkingGroupParticipationAgreements:
+                  description: Sponsorship agreement document in Foundation for formalized sponsorship
+            website:
+              type: string
+              description: the URL for the homepage of this working group
+        levels:
+          type: array
+          items:
+            type: object
+            description: Definition of the participation level for the working group, including its relation code
+            properties:
+              relation:
+                type: string
+                description: code representing the relation, used internally when using common relation types
+              description:
+                type: string
+                description: the label for the participation level
+    BasicPersonData:
       type: object
-      additionalProperties: false
       properties:
-        individual:
-          $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
-        organization:
-          $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+        id:
+          type: string
+          description: Description of the stored URL/product
+        first_name:
+          type: string
+          description: First name of the user
+        last_name:
+          type: string
+          description: Last name of the user
+        relations:
+          type: array
+          description: list of relation codes that are active for the current user
+          items:
+            type: string
     WorkingGroupParticipationAgreement:
-      type:
-      - object
-      - 'null'
-      additionalProperties: false
+      type: object
       properties:
         document_id:
           $ref: '#/components/schemas/ObjectID'
         pdf:
           type: string
           description: Link to the PDF version of the participation agreement
-    WorkingGroupLevels:
+    BasicPersons:
       type: array
       items:
-        $ref: '#/components/schemas/WorkingGroupLevel'
-    WorkingGroupLevel:
+        $ref: '#/components/schemas/BasicPersonData'
+    OrganizationWorkingGroupRepresentatives:
       type: object
-      additionalProperties: false
-      required:
-      - relation
-      - description
-      description: Definition of the participation level for the working group, including its relation code
-      properties:
-        relation:
-          type: string
-          description: code representing the relation, used internally when using common relation types
-        description:
-          type: string
-          description: the label for the participation level
-    WorkingGroupMailingLists:
       additionalProperties:
-        type: array
-        items:
-          type: string
-    SpecialInterestGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/SpecialInterestGroup'
-    SpecialInterestGroup:
-      type: object
-      properties:
-        alias:
-          type: string
-          description: The name of the Special Interest Group
-        description:
-          type: string
-          description: Short description of the Special Interest Group
-        logo:
-          type:
-          - string
-          - 'null'
-          format: url
-          description: URL for the Special Interest Group logo if one exists
-        resources:
-          type: object
-          properties:
-            membership_document:
-              type: string
-              description: The document ID for the associative membership document in the Foundation
-            links:
-              type: array
-              description: List of links associated with the Special Interest Group
-              items:
-                type: object
-                properties:
-                  url:
-                    type: string
-                    format: url
-                    description: The URL of the link
-                  title:
-                    type: string
-                    description: The title of the link to be displayed
-                  order:
-                    type: number
-                    description: Used to order the links explicitly
-        associated_working_group:
-          type: string
-          description: The alias of the associated Working Group
+        $ref: '#/components/schemas/BasicPersons'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     WorkingGroupCommittee:
       type: object
       additionalProperties: false
@@ -537,25 +472,20 @@ components:
           anyOf:
           - type: 'null'
           - $ref: '#/components/schemas/CommitteeRole'
-    CommitteeRole:
+    MemberOrganizationLogos:
       type: object
-      additionalProperties: false
-      required:
-      - code
-      - description
-      - members
-      description: The committee position.
+      description: A member organization's logo data
       properties:
-        code:
-          type: string
-          description: The code representing the relation. Used internally when using common relation types.
-        description:
-          type: string
-          description: The relation description.
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommitteeMember'
+        print:
+          type:
+          - string
+          - 'null'
+          description: The print logo URL.
+        web:
+          type:
+          - string
+          - 'null'
+          description: The web logo URL.
     CommitteeMember:
       type: object
       additionalProperties: false
@@ -574,10 +504,46 @@ components:
           anyOf:
           - type: 'null'
           - $ref: '#/components/schemas/MemberOrganization'
-    MemberOrganizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/MemberOrganization'
+    WorkingGroup_2:
+      type: object
+      additionalProperties: false
+      required:
+      - alias
+      - title
+      - status
+      - logo
+      - description
+      - resources
+      - levels
+      properties:
+        alias:
+          type: string
+          description: internal alias for the working group
+        title:
+          type: string
+          description: Public-facing or official name of the working group
+        status:
+          type: string
+          description: Current status of the working group (e.g. incubating, active, archived)
+        logo:
+          type: string
+          description: image link for the working groups logo
+        description:
+          type: string
+          description: Short description of the working group
+        resources:
+          $ref: '#/components/schemas/WorkingGroupResources'
+        levels:
+          $ref: '#/components/schemas/WorkingGroupLevels'
+        committee_mailing_lists:
+          oneOf:
+          - $ref: '#/components/schemas/WorkingGroupMailingLists'
+          - type: 'null'
+    WorkingGroupMailingLists:
+      additionalProperties:
+        type: array
+        items:
+          type: string
     MemberOrganization:
       type: object
       additionalProperties: false
@@ -599,20 +565,20 @@ components:
         is_active_member:
           type: boolean
           description: Whether the organization is an active member of the Eclipse Foundation.
-    MemberOrganizationLogos:
+    WorkingGroupLevel:
       type: object
-      description: A member organization's logo data
+      additionalProperties: false
+      required:
+      - relation
+      - description
+      description: Definition of the participation level for the working group, including its relation code
       properties:
-        print:
-          type:
-          - string
-          - 'null'
-          description: The print logo URL.
-        web:
-          type:
-          - string
-          - 'null'
-          description: The web logo URL.
+        relation:
+          type: string
+          description: code representing the relation, used internally when using common relation types
+        description:
+          type: string
+          description: the label for the participation level
     Error:
       type: object
       additionalProperties: false
@@ -636,3 +602,117 @@ components:
           - type: string
           - type: 'null'
           description: The friendly message for the error
+    WorkingGroupParticipationAgreement_2:
+      type:
+      - object
+      - 'null'
+      additionalProperties: false
+      properties:
+        document_id:
+          $ref: '#/components/schemas/ObjectID'
+        pdf:
+          type: string
+          description: Link to the PDF version of the participation agreement
+    WorkingGroupParticipationAgreements:
+      type: object
+      additionalProperties: false
+      properties:
+        individual:
+          $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
+        organization:
+          $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
+    CommitteeRole:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - description
+      - members
+      description: The committee position.
+      properties:
+        code:
+          type: string
+          description: The code representing the relation. Used internally when using common relation types.
+        description:
+          type: string
+          description: The relation description.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitteeMember'
+    WorkingGroupLevels:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroupLevel'
+    WorkingGroupResources:
+      type: object
+      additionalProperties: false
+      required:
+      - charter
+      - contact_form
+      - members
+      - participation_agreements
+      - sponsorship
+      - website
+      properties:
+        charter:
+          type: string
+          description: Link to the charter for the current working group
+        contact_form:
+          type: string
+          description: URL link to the contact form
+        members:
+          type: string
+          description: URL to the members list for the given working group
+        sponsorship_document:
+          type:
+          - string
+          - 'null'
+          description: The ID of the sponsorship document for this working group
+        participation_agreements:
+          $ref: '#/components/schemas/WorkingGroupParticipationAgreements'
+        sponsorship:
+          type: string
+          description: link to the sponsorship agreement document
+        website:
+          type: string
+          description: the URL for the homepage of this working group
+        sustainer_commitment:
+          type:
+          - string
+          - 'null'
+          description: the URL for the sustainer commitment for the working group, optional
+        resource_display:
+          description: 'List of resources to be displayed for this Working Group in relation to associated resources, including references
+
+            to existing fields and custom fields. Will retain order of the list when displaying.
+
+            '
+          anyOf:
+          - type: array
+            items:
+              type: object
+              properties:
+                label:
+                  description: Label to override reference field, or when using custom links
+                  type:
+                  - string
+                  - 'null'
+                link:
+                  description: Custom link to use when defining an item, required if not using a reference
+                  type:
+                  - string
+                  - 'null'
+                ref:
+                  description: Defines one of the existing resources to be substituted in with their label and link.
+                  type:
+                  - string
+                  - 'null'
+          - type: 'null'
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+x-refined-from:
+- eclipse-membership-portal-api-openapi.json
+- eclipse-working-groups-api-openapi.json

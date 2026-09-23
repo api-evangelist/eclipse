@@ -1,0 +1,94 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Committer Paperwork Provisioning API
+  description: Access information on Eclipse committer paperwork.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/foundation/paperwork
+  description: Production endpoint for Eclipse committer paperwork data.
+tags:
+- name: Provisioning
+paths:
+  /{username}/provisioning/{id}:
+    parameters:
+    - name: username
+      in: path
+      description: The LDAP uid of the user.
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: Unique identifier of the committer paperwork record.
+      required: true
+      schema:
+        type: integer
+    post:
+      summary: Committer provisioning
+      description: Start the committer provisioning process on a specific project.
+      security:
+      - openId:
+        - committer_paperwork_delete
+      requestBody:
+        description: List of org ids to start the provisioning process.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProvisioningRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaperworkResults'
+        '404':
+          description: Not found
+        '500':
+          description: Error while updating data.
+      tags:
+      - Provisioning
+      operationId: postByUsernameProvisioningById
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaperworkResult:
+      type: object
+      additionalProperties: false
+      required:
+      - result
+      - body
+      properties:
+        result:
+          type: boolean
+          description: Result of role change
+        body:
+          type: string
+          description: Message indicating the project retired from, and the date.
+    PaperworkResults:
+      type: array
+      items:
+        $ref: '#/components/schemas/PaperworkResult'
+    ProvisioningRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - organization
+      properties:
+        organization:
+          type: object
+          additionalProperties: false
+          required:
+          - id
+          properties:
+            id:
+              type: integer
+              description: The organization id.
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration

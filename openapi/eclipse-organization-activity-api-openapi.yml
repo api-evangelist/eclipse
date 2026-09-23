@@ -1,0 +1,218 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Organization Activity API
+  description: API used for reading and updating information about member organizations and it's associated metadata.
+  contact:
+    name: Software Development Team
+    url: https://gitlab.eclipse.org/eclipsefdn/software-dev
+    email: software-dev@eclipse-foundation.org
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Organization Activity
+  description: Definitions related to Eclipse Foundation organization committer/contributor activity
+paths:
+  /organizations/{organizationID}/committers/activity:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the associated entities to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Activity
+      summary: Organization Committers activity
+      description: Returns activity of an organizations commiters
+      operationId: getOrganizationCommitterActivity
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/committers/yearly:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the associated entities to retrieve
+      required: true
+      schema:
+        $ref: '#/components/schemas/ObjectID'
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Activity
+      summary: Organization Committers yearly activity
+      description: Returns yearly activity of an organizations commiters
+      operationId: getOrganizationCommitterActivityForYear
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/activity:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      tags:
+      - Organization Activity
+      summary: Organization Activity
+      description: Gets the organization activity for a given period
+      operationId: getOrganizationActivity
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '404':
+          description: Activity not found
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/activity/overview:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    - name: period
+      in: query
+      description: The period of activity
+      required: false
+      schema:
+        type: string
+    - name: from_period
+      in: query
+      description: The starting period of activity
+      required: false
+      schema:
+        type: string
+    get:
+      tags:
+      - Organization Activity
+      summary: Organization Activity overview
+      description: Gets the organization activity overview for a given period
+      operationId: getOrganizationActivityOverview
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationActivity'
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/activity/yearly:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Organization Activity
+      summary: Organization yearly activity
+      description: Gets the organization activity for a year
+      operationId: getOrganizationActivityForYear
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationYearlyActivity'
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    OrganizationYearlyActivity:
+      type: object
+      properties:
+        activity:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationActivity'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    OrganizationActivity:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: the activity count
+        period:
+          type:
+          - string
+          - 'null'
+          description: The activity period
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

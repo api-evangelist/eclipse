@@ -1,0 +1,161 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Industry Collaboration Organizations API
+  description: API used for reading and updating information about member organizations and it's associated metadata.
+  contact:
+    name: Software Development Team
+    url: https://gitlab.eclipse.org/eclipsefdn/software-dev
+    email: software-dev@eclipse-foundation.org
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Industry Collaboration Organizations
+  description: Definitions related to collaborations with regard to organizations
+paths:
+  /interest-groups/{id}/organizations:
+    parameters:
+    - name: id
+      in: path
+      description: ID of the interest group to retrieve associated organizations for
+      required: true
+      schema:
+        type: number
+    get:
+      tags:
+      - Industry Collaboration Organizations
+      summary: Organizations for Interest Group
+      description: returns list of organizations with participants for the given Interest Group
+      operationId: getInterestGroupOrganizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        '404':
+          description: No Interest Group found for given ID
+        '500':
+          description: Error while retrieving data
+  /special-interest-groups/{id}/organizations:
+    parameters:
+    - name: id
+      in: path
+      description: alias of the special interest group to retrieve associated organizations for
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Industry Collaboration Organizations
+      summary: Organizations for Special Interest Group
+      description: returns list of organizations with participants for the given Special Interest Group
+      operationId: getSpecialInterestGroupOrganizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        '404':
+          description: No Special Interest Group found for given ID
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    Organizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organization'
+    Organization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - description
+      - website
+      - logos
+      - levels
+      - wgpas
+      - member_since
+      - renewal_date
+      - is_active_member
+      properties:
+        organization_id:
+          type: integer
+        name:
+          type: string
+        renewal_date:
+          type: string
+        member_since:
+          type: string
+        is_active_member:
+          type: boolean
+          description: True if the organization is an active member
+        levels:
+          type: array
+          items:
+            type: object
+            properties:
+              level:
+                type: string
+              description:
+                type: string
+        description:
+          type:
+          - object
+          - 'null'
+          properties:
+            short:
+              type: string
+            full:
+              type: string
+        website:
+          type:
+          - string
+          - 'null'
+        logos:
+          type:
+          - object
+          - 'null'
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+        wgpas:
+          type: array
+          items:
+            type: object
+            properties:
+              document_id:
+                $ref: '#/components/schemas/ObjectID'
+              level:
+                type: string
+              working_group:
+                type: string
+              description:
+                type: string
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

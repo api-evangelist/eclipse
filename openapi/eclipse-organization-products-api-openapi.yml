@@ -1,0 +1,172 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Membership portal Organization Products API
+  description: API used for reading and updating information about member organizations and it's associated metadata.
+  contact:
+    name: Software Development Team
+    url: https://gitlab.eclipse.org/eclipsefdn/software-dev
+    email: software-dev@eclipse-foundation.org
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://membership.eclipse.org/api
+  description: Production endpoint for the membership portal data
+tags:
+- name: Organization Products
+  description: Definitions related to Eclipse Foundation organization products
+paths:
+  /organizations/{organizationID}/products:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Products list
+      description: Returns a contact relations for the given user and relation/position in the passed organization if it exists
+      operationId: getOrganizationProducts
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationProducts'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+    post:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product create
+      description: Creates an organization product/link using the body
+      operationId: createOrganizationProduct
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+  /organizations/{organizationID}/products/{productID}:
+    parameters:
+    - name: organizationID
+      in: path
+      description: The organization ID for the organization product to retrieve
+      required: true
+      schema:
+        type: number
+    - name: productID
+      in: path
+      description: The product ID for the organization product to retrieve
+      required: true
+      schema:
+        type: number
+    get:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product
+      description: Returns a organization product/link if it exists
+      operationId: getOrganizationProduct
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationProduct'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+    put:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product create
+      description: Updates an organization product/link using the body
+      operationId: updateOrganizationProduct
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationProduct'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+    delete:
+      security:
+      - openId: []
+      tags:
+      - Organization Products
+      summary: Organization Product delete
+      description: Remove the organization product that matches the given path parameters
+      operationId: deleteOrganizationProduct
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    OrganizationProducts:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationProduct'
+    OrganizationProduct:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the ID of the organization
+        product_id:
+          type:
+          - integer
+          - 'null'
+          description: the ID of the product/url. Null is only valid when sending a new product to be saved
+        name:
+          type: string
+          description: Human-legible label for the product
+        description:
+          type: string
+          description: Description of the stored URL/product
+        product_url:
+          type: string
+          description: URL for the produtc
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration

@@ -1,13 +1,13 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Eclipse Foundation Mailing List API
-  license:
-    name: Eclipse Public License - 2.0
-    url: https://www.eclipse.org/legal/epl-2.0/
+  title: Eclipse Mailing Lists API
+  version: '1.0'
+  description: 'Operations tagged Mailing Lists across 2 of this provider''s published API definitions: eclipse-mailing-lists-api-openapi.json, eclipse-restful-api-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.eclipse.org/foundation/mailing-list
   description: Production endpoint for the membership portal data
+- url: https://api.eclipse.org
+  description: The production API server
 tags:
 - name: Mailing Lists
   description: Definitions in relation to retrieval of mailing lists
@@ -36,6 +36,11 @@ paths:
           description: Not found
         '500':
           description: Error while retrieving data
+      operationId: getRoot
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.eclipse.org/foundation/mailing-list
+      description: Production endpoint for the membership portal data
   /available:
     get:
       tags:
@@ -51,6 +56,11 @@ paths:
                 $ref: '#/components/schemas/MailingLists'
         '500':
           description: Error while retrieving data
+      operationId: getAvailable
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.eclipse.org/foundation/mailing-list
+      description: Production endpoint for the membership portal data
   /{listName}:
     parameters:
     - name: listName
@@ -75,6 +85,11 @@ paths:
           description: Not found
         '500':
           description: Error while retrieving data
+      operationId: getByListName
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.eclipse.org/foundation/mailing-list
+      description: Production endpoint for the membership portal data
   /projects:
     get:
       tags:
@@ -90,6 +105,11 @@ paths:
                 $ref: '#/components/schemas/MailingListMapping'
         '500':
           description: Error while retrieving data
+      operationId: getProjects
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.eclipse.org/foundation/mailing-list
+      description: Production endpoint for the membership portal data
   /projects/available:
     get:
       tags:
@@ -105,6 +125,11 @@ paths:
                 $ref: '#/components/schemas/MailingListMapping'
         '500':
           description: Error while retrieving data
+      operationId: getProjectsAvailable
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.eclipse.org/foundation/mailing-list
+      description: Production endpoint for the membership portal data
   /projects/{projectID}:
     parameters:
     - name: projectID
@@ -127,28 +152,238 @@ paths:
                 $ref: '#/components/schemas/MailingLists'
         '500':
           description: Error while retrieving data
-components:
-  securitySchemes:
-    openId:
-      type: openIdConnect
-      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
-  schemas:
-    NullableString:
-      description: A nullable String type value
-      type:
-      - 'null'
-      - string
-    DateTime:
-      type: string
-      format: datetime
-      description: |
-        Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+      operationId: getProjectsByProjectID
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.eclipse.org/foundation/mailing-list
+      description: Production endpoint for the membership portal data
+  /foundation/mailing-list:
+    get:
+      tags:
+      - Mailing Lists
+      summary: Fetch Mailing lists
+      description: '### Overview
 
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        Retrieve metadata for all the mailing lists.
+
+
+        ### Result definition
+
+
+        + **list_name:** name of the mailing list
+
+
+        + **list_description:** description of the mailing list
+
+
+        + **project_id:** Id of the project related to the mailing list
+
+
+        + **list_short_description:** short description of the mailing list
+
+
+        + **is_disabled:** if the mailing list is disabled
+
+
+        + **is_deleted:** if the mailing list is deleted
+
+
+        + **is_subscribable:** if the mailing list is subscribable
+
+
+        + **create_date:** the date the mailing list was created
+
+
+        + **url:** url of the mailing list
+
+
+        + **email:** email of the mailing list'
+      operationId: FetchMailingLists
+      parameters:
+      - name: search
+        in: query
+        description: A keyword to search for in a mailing list name
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The index of the page to get, defaults to 1.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pagesize
+        in: query
+        description: The number of records to get per page, defaults to 20. Maximum value is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: order_by
+        in: query
+        description: The order by name in which the results will be returned. ASC by default
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                  example: <https://api.eclipse.org/foundation/mailing-list?page=1&amp;pagesize=20>; rel="next", <https://api.eclipse.org/foundation/mailing-list?page=99&amp;pagesize=5>; rel="last", <https://api.eclipse.org/foundation/mailing-list?page=1&amp;pagesize=5>; rel="first", <https://api.eclipse.org/foundation/mailing-list?page=1&amp;pagesize=5>; rel="self"
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FetchMailinglistsresponse'
+                description: ''
+              example:
+              - list_name: dash-dev
+                list_description: Tools for Committer Community
+                project_id: ''
+                list_short_description: null
+                is_disabled: 0
+                is_deleted: 0
+                is_subscribable: 1
+                create_date: null
+                url: https://accounts.eclipse.org/mailing-list/dash-dev
+                email: dash-dev@eclipse.org
+      deprecated: false
+    servers:
+    - url: https://api.eclipse.org
+      description: The production API server
+  /foundation/mailing-list/{mailing_list_id}:
+    get:
+      tags:
+      - Mailing Lists
+      summary: Retrieve Mailing List
+      description: '### Overview
+
+
+        Retrieve information for a specific mailing list
+
+
+        ### Result definition
+
+
+        + **list_name:** name of the mailing list
+
+
+        + **list_description:** description of the mailing list
+
+
+        + **project_id:** Id of the project related to the mailing list
+
+
+        + **list_short_description:** short description of the mailing list
+
+
+        + **is_disabled:** if the mailing list is disabled
+
+
+        + **is_deleted:** if the mailing list is deleted
+
+
+        + **is_subscribable:** if the mailing list is subscribable
+
+
+        + **create_date:** the date the mailing list was created
+
+
+        + **url:** url of the mailing list
+
+
+        + **email:** email of the mailing list'
+      operationId: RetrieveMailingList
+      parameters:
+      - name: name
+        in: query
+        description: Name of the mailing list
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: mailing_list_id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetrieveMailingListresponse'
+                description: ''
+              example:
+              - list_name: dash-dev
+                list_description: Tools for Committer Community
+                project_id: ''
+                list_short_description: null
+                is_disabled: 0
+                is_deleted: 0
+                is_subscribable: 1
+                create_date: null
+                url: https://accounts.eclipse.org/mailing-list/dash-dev
+                email: dash-dev@eclipse.org
+      deprecated: false
+    servers:
+    - url: https://api.eclipse.org
+      description: The production API server
+components:
+  schemas:
     MailingLists:
       type: array
       items:
         $ref: '#/components/schemas/MailingList'
+    MailingListMapping:
+      type: object
+      propertyNames:
+        pattern: ^\d+$
+        description: Project IDs the mailing lists are mapped to
+      additionalProperties:
+        $ref: '#/components/schemas/MailingLists'
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
     MailingList:
       type: object
       additionalProperties: false
@@ -211,10 +446,142 @@ components:
           - 'null'
           - integer
           description: The number of subscribers for the given list. Only included on singular calls.
-    MailingListMapping:
+    NullableString:
+      description: A nullable String type value
+      type:
+      - 'null'
+      - string
+    RetrieveMailingListresponse:
+      title: RetrieveMailingListresponse
+      required:
+      - list_name
+      - list_description
+      - project_id
+      - list_short_description
+      - is_disabled
+      - is_deleted
+      - is_subscribable
+      - create_date
+      - url
+      - email
       type: object
-      propertyNames:
-        pattern: ^\d+$
-        description: Project IDs the mailing lists are mapped to
-      additionalProperties:
-        $ref: '#/components/schemas/MailingLists'
+      properties:
+        list_name:
+          type: string
+        list_description:
+          type: string
+        project_id:
+          type: string
+        list_short_description:
+          type:
+          - string
+          - 'null'
+        is_disabled:
+          type: string
+        is_deleted:
+          type: string
+        is_subscribable:
+          type: string
+        create_date:
+          type:
+          - string
+          - 'null'
+        url:
+          type: string
+        email:
+          type: string
+      example:
+        list_name: dash-dev
+        list_description: Tools for Committer Community
+        project_id: ''
+        list_short_description: null
+        is_disabled: 0
+        is_deleted: 0
+        is_subscribable: 1
+        create_date: null
+        url: https://accounts.eclipse.org/mailing-list/dash-dev
+        email: dash-dev@eclipse.org
+    FetchMailinglistsresponse:
+      title: FetchMailinglistsresponse
+      required:
+      - list_name
+      - list_description
+      - project_id
+      - list_short_description
+      - is_disabled
+      - is_deleted
+      - is_subscribable
+      - create_date
+      - url
+      - email
+      type: object
+      properties:
+        list_name:
+          type: string
+        list_description:
+          type: string
+        project_id:
+          type: string
+        list_short_description:
+          type:
+          - string
+          - 'null'
+        is_disabled:
+          type: string
+        is_deleted:
+          type: string
+        is_subscribable:
+          type: string
+        create_date:
+          type:
+          - string
+          - 'null'
+        url:
+          type: string
+        email:
+          type: string
+      example:
+        list_name: dash-dev
+        list_description: Tools for Committer Community
+        project_id: ''
+        list_short_description: null
+        is_disabled: 0
+        is_deleted: 0
+        is_subscribable: 1
+        create_date: null
+        url: https://accounts.eclipse.org/mailing-list/dash-dev
+        email: dash-dev@eclipse.org
+  headers:
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/foundation/.well-known/openid-configuration
+    oauth2:
+      description: 'Get access to data while protecting your account credentials.
+
+        OAuth2 is also a safer and more secure way to give you access.
+
+        '
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.php55.dev.docker/oauth2/authorize
+          tokenUrl: https://accounts.php55.dev.docker/oauth2/token
+          scopes:
+            write: Grants write access
+            read: Grants read access
+x-refined-from:
+- eclipse-mailing-lists-api-openapi.json
+- eclipse-restful-api-openapi.json

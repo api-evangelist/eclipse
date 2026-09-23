@@ -1,0 +1,39 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Hellosign Event Callbacks API
+  description: Access information on Eclipse Foundation Hellosign paperwork.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/foundation/hellosign
+  description: Production endpoint for Eclipse Foundation hellosign data.
+tags:
+- name: Hellosign Event Callbacks
+paths:
+  /callback:
+    post:
+      summary: Hellosign Events callback
+      description: Callback URL that will be registered with Hellosign for recieving updates on changes to signature requests created through this API.
+      operationId: hellosignRequestEventsCallback
+      tags:
+      - Hellosign Event Callbacks
+      security: []
+      responses:
+        '200':
+          description: Success
+          content:
+            plain/text:
+              schema:
+                type: string
+              example: Hello API Event Received
+        '404':
+          description: Not found
+        '500':
+          description: Error while retrieving data
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.eclipse.org/auth/realms/document-signature/.well-known/openid-configuration

@@ -1,0 +1,373 @@
+openapi: 3.2.0
+info:
+  version: 1.1.0
+  title: Eclipse Foundation Git ECA ECA Validation API
+  description: Collection of API endpoints used in the validation and management of external Git services, such as Gitlab and Github.
+  contact:
+    name: IT support
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/git-eca-rest-api/-/issues
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+servers:
+- url: https://api.eclipse.org/git
+  description: Production endpoint for the Git ECA validation API
+tags:
+- name: ECA Validation
+  description: Definitions in relation to the validation of Git commits through ECA signage
+paths:
+  /eca:
+    post:
+      operationId: validate
+      tags:
+      - ECA Validation
+      summary: ECA validation
+      description: Validates a list of commits for a merge request.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+        '500':
+          description: Error while retrieving data
+  /eca/status/{fingerprint}:
+    parameters:
+    - name: fingerprint
+      in: path
+      description: Unique ID for the request group
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getCommitValidation
+      tags:
+      - ECA Validation
+      summary: Historic ECA validation status
+      description: Returns a set of validation messages for the given unique fingerprint
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitValidationStatuses'
+        '500':
+          description: Error while retrieving data
+  /eca/status/{fingerprint}/ui:
+    parameters:
+    - name: fingerprint
+      in: path
+      description: Unique ID for the request group
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getCommitValidationUI
+      tags:
+      - ECA Validation
+      summary: Historic ECA validation status in a HTML format
+      description: Returns an HTMl page containing validation messages
+      responses:
+        '200':
+          description: Success. An HTML page containing status info
+        '404':
+          description: Not Found
+        '500':
+          description: Error while retrieving data
+  /eca/lookup:
+    parameters:
+    - name: q
+      in: query
+      description: Query string containing either email or username. Email is only valid for logged in committers/project leads
+      schema:
+        type: string
+    - name: email
+      in: query
+      deprecated: true
+      description: Email is only valid for logged in committers/project leads. For removal at the end of 2024.
+      schema:
+        type: string
+    get:
+      operationId: getUserStatus
+      tags:
+      - ECA Validation
+      summary: User status lookup
+      description: Returns wether or not the user has a signed ECA
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: User exists with no ECA
+        '404':
+          description: User not found
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    ValidationResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - time
+      - trackedProject
+      - strictMode
+      - fingerprint
+      - errorCount
+      - passed
+      - commits
+      properties:
+        time:
+          $ref: '#/components/schemas/DateTime'
+          description: Time of the request validation for logging/tracking purposes.
+        trackedProject:
+          type: boolean
+          description: Whether the project is tracked in PMI and is an Eclipse project.
+        strictMode:
+          type: boolean
+          description: Whether strict mode was enforced for the validation.
+        fingerprint:
+          type: string
+          description: The unique fingerprint to use when looking up commit data
+        errorCount:
+          type: integer
+          description: The number of errors encountered while validating the request
+        passed:
+          type: boolean
+          description: Whether the current request is valid in relation to ECA signage.
+        commits:
+          type: object
+          propertyNames:
+            description: The commit hash of the commit that was validated
+          additionalProperties:
+            $ref: '#/components/schemas/Commit'
+    CommitValidationStatus:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - commit_hash
+      - project
+      - repo_url
+      - provider
+      - creation_date
+      - last_modified
+      - errors
+      properties:
+        id:
+          type: integer
+          description: internal ID of the commit for tracking
+        commit_hash:
+          type: string
+          description: the SHA of the commit that was validated
+        user_mail:
+          type:
+          - string
+          - 'null'
+          description: the email of the user associated with the status
+        estimated_loc:
+          type: integer
+          description: the estimated number of lines of code changed by commit if available.
+        project:
+          type: string
+          description: The short project ID of the project that was detected for the commit, if it exists.
+        repo_url:
+          type: string
+          description: the outward facing URL of the repo the commit belongs to.
+        provider:
+          type: string
+          description: The provider for which the commit is being validated for
+          enum:
+          - github
+          - gitlab
+          - gerrit
+        creation_date:
+          $ref: '#/components/schemas/DateTime'
+          description: Time that the commit was first attempted to be validated
+        last_modified:
+          $ref: '#/components/schemas/DateTime'
+          description: The latest tracked time of validation.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitValidationMessage'
+    ValidationRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - provider
+      - repoUrl
+      - strictMode
+      - commits
+      properties:
+        provider:
+          type: string
+          description: The provider for which the commit is being validated for
+          enum:
+          - github
+          - gitlab
+          - gerrit
+        repoUrl:
+          type: string
+          description: the outward facing URL of the repo the commit belongs to.
+        strictMode:
+          type: boolean
+          description: Whether to strictly apply validation regardless of project matching
+        estimatedLoc:
+          type:
+          - integer
+          - 'null'
+          description: The estimated LOC changed by the set of commits sent for validation.
+        commits:
+          type: array
+          minimum: 1
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - hash
+            - author
+            - committer
+            - parents
+            properties:
+              hash:
+                type: string
+                description: The hash of the commit. Used for messaging and logging.
+              body:
+                $ref: '#/components/schemas/NullableString'
+                description: The body message of the commit if available
+              subject:
+                $ref: '#/components/schemas/NullableString'
+                description: The subject of the commit
+              author:
+                $ref: '#/components/schemas/GitUser'
+                description: The author of the Git commit
+              committer:
+                $ref: '#/components/schemas/GitUser'
+                description: The committer of the Git commit
+              last_modification_date:
+                $ref: '#/components/schemas/NullableDateTime'
+                description: Last time that the commit was updated
+              head:
+                type:
+                - boolean
+                - 'null'
+                description: True if the current commit is the head commit, false otherwise
+              parents:
+                type: array
+                items:
+                  type: string
+                  description: Parent commit hashes, multiple will be present for merge commits
+    GitUser:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - mail
+      properties:
+        name:
+          type: string
+          description: The name of the git user
+        mail:
+          type: string
+          description: the email address of the user
+        external_id:
+          $ref: '#/components/schemas/NullableString'
+          description: the email address of the user
+    CommitValidationStatuses:
+      type: array
+      items:
+        $ref: '#/components/schemas/CommitValidationStatus'
+    NullableString:
+      description: A nullable String type value
+      type:
+      - 'null'
+      - string
+    CommitMessage:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: the internal status code for the message
+        message:
+          type: string
+          description: Information about the commit message. This can either be information about the validation process to report or the source of an error to be corrected.
+    NullableDateTime:
+      type:
+      - string
+      - 'null'
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    DateTime:
+      type: string
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    Commit:
+      type: object
+      additionalProperties: false
+      required:
+      - errors
+      - warnings
+      - messages
+      properties:
+        messages:
+          type: array
+          description: List of informational messages about the validation of the current commit.
+          items:
+            $ref: '#/components/schemas/CommitMessage'
+        warnings:
+          type: array
+          description: List of non-fatal issues encountered in the validation of the current commit
+          items:
+            $ref: '#/components/schemas/CommitMessage'
+        errors:
+          type: array
+          description: List of errors encountered in the validation of the current commit
+          items:
+            $ref: '#/components/schemas/CommitMessage'
+    CommitValidationMessage:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - status_code
+      - author_email
+      properties:
+        id:
+          type: integer
+          description: internal ID of the commit message for tracking
+        status_code:
+          type: integer
+          description: error code associated with the commit
+        eclipse_id:
+          $ref: '#/components/schemas/NullableString'
+          description: the Eclipse Foundation ID of the user
+        author_email:
+          type: string
+          description: Email address of the author of the commit for additional information
+        committer_email:
+          type: string
+          description: Email address of the committer of the commit for additional information
+        provider_id:
+          $ref: '#/components/schemas/NullableString'
+          description: the outward facing URL of the repo the commit belongs to.

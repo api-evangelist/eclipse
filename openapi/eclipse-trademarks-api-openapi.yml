@@ -1,0 +1,114 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Eclipse Foundation Info Trademarks API
+  description: Access information on the Eclipse Foundation, such as trademarks, councils, and board members.
+  license:
+    name: Eclipse Public License - 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  contact:
+    url: https://gitlab.eclipse.org/eclipsefdn/it/api/eclipsefdn-info-api/-/issues
+servers:
+- url: https://api.eclipse.org/foundation/info
+  description: Production endpoint for the Eclipse Foundation information
+tags:
+- name: Trademarks
+  description: Eclipse Foundation Trademarks
+paths:
+  /trademarks:
+    parameters:
+    - name: type
+      in: query
+      description: The type of trademark to include
+      schema:
+        type: string
+        enum:
+        - R
+        - T
+    get:
+      tags:
+      - Trademarks
+      summary: Trademarks List
+      description: Fetches all public Trademarks data.
+      operationId: getTrademarks
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trademarks'
+        '500':
+          description: Error while retrieving data
+  /trademarks/{category}:
+    parameters:
+    - name: category
+      in: path
+      description: The category grouping to filter trademarks to
+      required: true
+      schema:
+        type: string
+    - name: type
+      in: query
+      description: The type of trademark to include
+      schema:
+        type: string
+        enum:
+        - R
+        - T
+    get:
+      tags:
+      - Trademarks
+      summary: Trademarks List by category
+      description: Fetches all public Trademarks data for the given category.
+      operationId: getTrademarksByCategory
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trademarks'
+        '500':
+          description: Error while retrieving data
+components:
+  schemas:
+    Trademarks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Trademark'
+    Trademark:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - category
+      properties:
+        id:
+          type: string
+          description: Machine ID to represent the trademark internally
+          example: technology.asciidoc
+        name:
+          type: string
+          description: Display name of the trademark
+          example: Asciidoc
+        category:
+          type: string
+          description: The grouping for the trademark in question
+          example: wg
+        demarcation:
+          type:
+          - string
+          - 'null'
+          description: Raw encoded character for the mark character
+          example: null
+        type:
+          type:
+          - string
+          - 'null'
+          description: The type of trademark this is, either R for registered or T for trademarked
+          enum:
+          - R
+          - T
+          example: R
