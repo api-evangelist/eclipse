@@ -206,6 +206,76 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ProspectivePaperwork:
+      type: object
+      additionalProperties: false
+      required:
+      - parameters
+      properties:
+        parameters:
+          type: object
+          additionalProperties: false
+          required:
+          - project_id
+          - election_nid
+          - forge
+          - election_status
+          - spec_project_working_group
+          properties:
+            project_id:
+              type: string
+              description: The project id for the prospective paperwork.
+            election_nid:
+              type: integer
+              description: Election id
+            forge:
+              type: string
+              description: The paperwork forge.
+            election_status:
+              type: integer
+              description: The current election status. 2 is approved
+            spec_project_working_group:
+              type: integer
+              description: Working groupd id.
+    ResultUrl:
+      type: object
+      additionalProperties: false
+      required:
+      - url
+      properties:
+        url:
+          type: string
+          description: URL containing the result of the paperwork creation/update.
+    PaperworkList:
+      type: array
+      minItems: 1
+      maxItems: 1
+      items:
+        type: object
+        properties:
+          result:
+            type: array
+            items:
+              $ref: '#/components/schemas/Paperwork'
+    PaperworkUpdate:
+      type: object
+      additionalProperties: false
+      required:
+      - parameters
+      properties:
+        parameters:
+          type: object
+          additionalProperties: false
+          required:
+          - committer_paperwork_nid
+          - committer_paperwork_status
+          properties:
+            committer_paperwork_nid:
+              type: integer
+              description: Committer paperwork numerical id.
+            committer_paperwork_status:
+              type: integer
+              description: The paperwork status
     Paperwork:
       type: object
       additionalProperties: false
@@ -261,76 +331,6 @@ components:
         spec_project_working_group_tid:
           type: integer
           description: Working group id.
-    PaperworkUpdate:
-      type: object
-      additionalProperties: false
-      required:
-      - parameters
-      properties:
-        parameters:
-          type: object
-          additionalProperties: false
-          required:
-          - committer_paperwork_nid
-          - committer_paperwork_status
-          properties:
-            committer_paperwork_nid:
-              type: integer
-              description: Committer paperwork numerical id.
-            committer_paperwork_status:
-              type: integer
-              description: The paperwork status
-    ProspectivePaperwork:
-      type: object
-      additionalProperties: false
-      required:
-      - parameters
-      properties:
-        parameters:
-          type: object
-          additionalProperties: false
-          required:
-          - project_id
-          - election_nid
-          - forge
-          - election_status
-          - spec_project_working_group
-          properties:
-            project_id:
-              type: string
-              description: The project id for the prospective paperwork.
-            election_nid:
-              type: integer
-              description: Election id
-            forge:
-              type: string
-              description: The paperwork forge.
-            election_status:
-              type: integer
-              description: The current election status. 2 is approved
-            spec_project_working_group:
-              type: integer
-              description: Working groupd id.
-    ResultUrl:
-      type: object
-      additionalProperties: false
-      required:
-      - url
-      properties:
-        url:
-          type: string
-          description: URL containing the result of the paperwork creation/update.
-    PaperworkList:
-      type: array
-      minItems: 1
-      maxItems: 1
-      items:
-        type: object
-        properties:
-          result:
-            type: array
-            items:
-              $ref: '#/components/schemas/Paperwork'
   securitySchemes:
     openId:
       type: openIdConnect

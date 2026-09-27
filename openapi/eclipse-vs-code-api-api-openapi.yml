@@ -592,37 +592,6 @@ paths:
                 format: int32
 components:
   schemas:
-    ResultItem:
-      type: object
-      properties:
-        extensions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Extension'
-        resultMetadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultMetadata'
-    ExtensionQueryResult:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultItem'
-    ExtensionQueryParam:
-      type: object
-      description: Parameters of the extension query
-      properties:
-        filters:
-          type: array
-          description: List of query filters
-          items:
-            $ref: '#/components/schemas/Filter'
-        flags:
-          type: integer
-          format: int32
-          description: Flags to indicate what metadata to include in the query response
     Extension:
       allOf:
       - $ref: '#/components/schemas/Result'
@@ -832,26 +801,27 @@ components:
       - timestamp
       - verified
       - version
-    ResultMetadataItem:
+    ResultItem:
       type: object
       properties:
-        name:
-          type: string
-        count:
-          type: integer
-          format: int64
-    Badge:
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+        resultMetadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultMetadata'
+    ExtensionReplacement:
       type: object
-      description: A badge to be shown in the sidebar of the extension page in the registry
+      description: Metadata of an extension replacement
       properties:
         url:
           type: string
-          description: Image URL of the badge
-        href:
+          description: URL of the extension replacement
+        displayName:
           type: string
-          description: The link users will follow when clicking the badge
-        description:
-          type: string
+          description: Name to be displayed in user interfaces
     ExtensionReference:
       type: object
       description: A reference to another extension in the registry
@@ -869,6 +839,73 @@ components:
       - extension
       - namespace
       - url
+    Result:
+      type: object
+      description: Generic result indicator
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+    ExtensionQueryParam:
+      type: object
+      description: Parameters of the extension query
+      properties:
+        filters:
+          type: array
+          description: List of query filters
+          items:
+            $ref: '#/components/schemas/Filter'
+        flags:
+          type: integer
+          format: int32
+          description: Flags to indicate what metadata to include in the query response
+    ResultMetadata:
+      type: object
+      properties:
+        metadataType:
+          type: string
+        metadataItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultMetadataItem'
+    Badge:
+      type: object
+      description: A badge to be shown in the sidebar of the extension page in the registry
+      properties:
+        url:
+          type: string
+          description: Image URL of the badge
+        href:
+          type: string
+          description: The link users will follow when clicking the badge
+        description:
+          type: string
+    Criterion:
+      type: object
+      description: Filter criteria
+      properties:
+        filterType:
+          type: integer
+          format: int32
+          description: Filter type<br/><br/>values:<br/>* 1 TAG<br/>* 4 EXTENSION_ID<br/>* 5 CATEGORY<br/>* 7 EXTENSION_NAME<br/>* 8 TARGET<br/>* 9 FEATURED<br/>* 10 SEARCH_TEXT<br/>* 12 EXCLUDE_WITH_FLAGS
+          enum:
+          - '1'
+          - '4'
+          - '5'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '12'
+        value:
+          type: string
+          description: Filter value
     VersionTargetPlatformsJson:
       type: object
       properties:
@@ -906,16 +943,6 @@ components:
         removed:
           type: boolean
           description: Whether this extension version for this target platform has been removed (soft-deleted)
-    ExtensionReplacement:
-      type: object
-      description: Metadata of an extension replacement
-      properties:
-        url:
-          type: string
-          description: URL of the extension replacement
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
     User:
       type: object
       description: User data
@@ -946,19 +973,6 @@ components:
           description: Authentication provider (e.g. github)
       required:
       - loginName
-    Result:
-      type: object
-      description: Generic result indicator
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
     Filter:
       type: object
       description: Query filter
@@ -994,32 +1008,18 @@ components:
           enum:
           - '0'
           - '1'
-    ResultMetadata:
+    ExtensionQueryResult:
       type: object
       properties:
-        metadataType:
-          type: string
-        metadataItems:
+        results:
           type: array
           items:
-            $ref: '#/components/schemas/ResultMetadataItem'
-    Criterion:
+            $ref: '#/components/schemas/ResultItem'
+    ResultMetadataItem:
       type: object
-      description: Filter criteria
       properties:
-        filterType:
-          type: integer
-          format: int32
-          description: Filter type<br/><br/>values:<br/>* 1 TAG<br/>* 4 EXTENSION_ID<br/>* 5 CATEGORY<br/>* 7 EXTENSION_NAME<br/>* 8 TARGET<br/>* 9 FEATURED<br/>* 10 SEARCH_TEXT<br/>* 12 EXCLUDE_WITH_FLAGS
-          enum:
-          - '1'
-          - '4'
-          - '5'
-          - '7'
-          - '8'
-          - '9'
-          - '10'
-          - '12'
-        value:
+        name:
           type: string
-          description: Filter value
+        count:
+          type: integer
+          format: int64

@@ -232,6 +232,34 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
+    OrganizationContacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationContact'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    EnhancedPersons:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnhancedPersonData'
+    Error:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
     OrganizationContact:
       type: object
       properties:
@@ -251,10 +279,6 @@ components:
           - string
           - 'null'
           description: Placeholder
-    OrganizationContacts:
-      type: array
-      items:
-        $ref: '#/components/schemas/OrganizationContact'
     ContactRemovalRequest:
       type: object
       properties:
@@ -267,24 +291,6 @@ components:
         reason:
           type: string
           description: the reason the user should be removed from the organization
-    EnhancedPersons:
-      type: array
-      items:
-        $ref: '#/components/schemas/EnhancedPersonData'
-    Error:
-      type: object
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
     EnhancedPersonData:
       type: object
       required:
@@ -312,12 +318,6 @@ components:
           description: list of relation codes that are active for the current user
           items:
             type: string
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
   securitySchemes:
     openId:
       type: openIdConnect

@@ -145,7 +145,30 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
   schemas:
+    InterestGroupResources:
+      title: InterestGroupResources
+      type: object
+      properties:
+        website:
+          type: string
+          description: URL to the interest group's website, or empty string.
+        members:
+          type: string
+          description: URL to the interest group's members page, or empty string.
+      example:
+        website: ''
+        members: ''
     TextContent:
       title: TextContent
       type: object
@@ -160,35 +183,6 @@ components:
       example:
         summary: Short summary.
         full: <p>Full HTML content.</p>
-    InterestGroupGitlabInfo:
-      title: InterestGroupGitlabInfo
-      type: object
-      description: GitLab group information derived from the interest group's Foundation DB project ID.
-      properties:
-        project_group:
-          type: string
-          description: GitLab project group namespace (e.g. `eclipse-ig/some-group`).
-        ignored_sub_groups:
-          type: array
-          items:
-            type: string
-          description: Currently always empty for interest groups.
-      example:
-        project_group: eclipse-ig/some-group
-        ignored_sub_groups: []
-    InterestGroupResources:
-      title: InterestGroupResources
-      type: object
-      properties:
-        website:
-          type: string
-          description: URL to the interest group's website, or empty string.
-        members:
-          type: string
-          description: URL to the interest group's members page, or empty string.
-      example:
-        website: ''
-        members: ''
     InterestGroupUser:
       title: InterestGroupUser
       type: object
@@ -274,13 +268,19 @@ components:
           website: ''
           members: ''
         mailing_list: ''
-  responses:
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
+    InterestGroupGitlabInfo:
+      title: InterestGroupGitlabInfo
+      type: object
+      description: GitLab group information derived from the interest group's Foundation DB project ID.
+      properties:
+        project_group:
+          type: string
+          description: GitLab project group namespace (e.g. `eclipse-ig/some-group`).
+        ignored_sub_groups:
+          type: array
+          items:
+            type: string
+          description: Currently always empty for interest groups.
+      example:
+        project_group: eclipse-ig/some-group
+        ignored_sub_groups: []

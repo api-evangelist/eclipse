@@ -364,10 +364,6 @@ paths:
       description: The production API server
 components:
   schemas:
-    MailingLists:
-      type: array
-      items:
-        $ref: '#/components/schemas/MailingList'
     MailingListMapping:
       type: object
       propertyNames:
@@ -375,15 +371,15 @@ components:
         description: Project IDs the mailing lists are mapped to
       additionalProperties:
         $ref: '#/components/schemas/MailingLists'
-    DateTime:
-      type: string
-      format: datetime
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
+    NullableString:
+      description: A nullable String type value
+      type:
+      - 'null'
+      - string
+    MailingLists:
+      type: array
+      items:
+        $ref: '#/components/schemas/MailingList'
     MailingList:
       type: object
       additionalProperties: false
@@ -446,11 +442,15 @@ components:
           - 'null'
           - integer
           description: The number of subscribers for the given list. Only included on singular calls.
-    NullableString:
-      description: A nullable String type value
-      type:
-      - 'null'
-      - string
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
     RetrieveMailingListresponse:
       title: RetrieveMailingListresponse
       required:
@@ -552,6 +552,10 @@ components:
         url: https://accounts.eclipse.org/mailing-list/dash-dev
         email: dash-dev@eclipse.org
   headers:
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
     X-RateLimit-Reset:
       schema:
         type: string
@@ -560,10 +564,6 @@ components:
       schema:
         type: string
       example: 1000
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
   securitySchemes:
     openId:
       type: openIdConnect

@@ -972,45 +972,19 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CsrfTokenJson:
-      type: object
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        value:
-          type: string
-        header:
-          type: string
-    UsageStatsListJson:
-      type: object
-      properties:
-        stats:
-          type: array
-          items:
-            $ref: '#/components/schemas/UsageStatsJson'
-        dailyP95:
-          type: integer
-          format: int64
-    Badge:
-      type: object
-      description: A badge to be shown in the sidebar of the extension page in the registry
-      properties:
-        url:
-          type: string
-          description: Image URL of the badge
-        href:
-          type: string
-          description: The link users will follow when clicking the badge
-        description:
-          type: string
-    CustomerJson:
+    ReviewList:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          reviews:
+            type: array
+            items:
+              $ref: '#/components/schemas/Review'
+      description: List of reviews of an extension
+      required:
+      - reviews
+    TierJson:
       type: object
       properties:
         success:
@@ -1024,18 +998,43 @@ components:
           description: Indicates an error; when this is present, all other properties should be ignored
         name:
           type: string
-        tier:
-          $ref: '#/components/schemas/TierJson'
-        state:
+        description:
           type: string
-        cidrBlocks:
-          type: array
-          items:
-            type: string
+        tierType:
+          type: string
+        capacity:
+          type: integer
+          format: int32
+        duration:
+          type: integer
+          format: int64
+        refillStrategy:
+          type: string
       required:
       - name
-      - state
-    AccessTokenJson:
+      - refillStrategy
+      - tierType
+    ErrorJson:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Result:
+      type: object
+      description: Generic result indicator
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+    LoginProvidersJson:
       type: object
       properties:
         success:
@@ -1047,77 +1046,51 @@ components:
         error:
           type: string
           description: Indicates an error; when this is present, all other properties should be ignored
-        id:
-          type: integer
-          format: int64
-        value:
-          type: string
-        createdTimestamp:
-          type: string
-        accessedTimestamp:
-          type: string
-        expiresTimestamp:
-          type: string
-        notified:
-          type: boolean
-        description:
-          type: string
-        deleteTokenUrl:
-          type: string
-    ErrorJson:
+        loginProviders:
+          type: object
+          additionalProperties:
+            type: string
+    VersionTargetPlatformsJson:
       type: object
       properties:
-        message:
-          type: string
-        code:
-          type: string
-    TargetPlatformVersion:
-      type: object
-      description: Combination of target platform and version of an extension
-      properties:
-        targetPlatform:
-          type: string
-          description: Name of the target platform
-          enum:
-          - win32-x64
-          - win32-ia32
-          - win32-arm64
-          - linux-x64
-          - linux-arm64
-          - linux-armhf
-          - alpine-x64
-          - alpine-arm64
-          - darwin-x64
-          - darwin-arm64
-          - web
-          - universal
         version:
           type: string
-          description: Version of the extension
-      required:
-      - version
-    Review:
+        targetPlatforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetPlatformActive'
+        canDelete:
+          type: boolean
+    User:
       type: object
-      description: A review of an extension
+      description: User data
       properties:
-        user:
-          $ref: '#/components/schemas/User'
-          description: Data of the user who posted this review
-        timestamp:
+        success:
           type: string
-          description: Date and time when this review was posted (ISO-8601)
-        comment:
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
           type: string
-        rating:
-          type: integer
-          format: int32
-          description: Number of stars
-          maximum: 5
-          minimum: 0
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        loginName:
+          type: string
+          description: Login name
+        fullName:
+          type: string
+          description: Full name
+        avatarUrl:
+          type: string
+          description: URL to the user's avatar image
+        homepage:
+          type: string
+          description: URL to the user's profile page
+        provider:
+          type: string
+          description: Authentication provider (e.g. github)
       required:
-      - rating
-      - timestamp
-      - user
+      - loginName
     VersionReference:
       type: object
       description: Essential metadata of an extension version
@@ -1153,90 +1126,15 @@ components:
           additionalProperties:
             type: string
           description: Map of engine names to the respective version constraints
-    SearchResult:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          offset:
-            type: integer
-            format: int32
-            description: Number of skipped entries according to the search query
-            minimum: 0
-          totalSize:
-            type: integer
-            format: int32
-            description: Total number of entries that match the search query
-            minimum: 0
-          extensions:
-            type: array
-            description: List of matching entries, limited to the size specified in the search query
-            items:
-              $ref: '#/components/schemas/SearchEntry'
-      description: List of extensions matching a search query
-      required:
-      - extensions
-      - offset
-      - totalSize
-    User:
-      type: object
-      description: User data
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        loginName:
-          type: string
-          description: Login name
-        fullName:
-          type: string
-          description: Full name
-        avatarUrl:
-          type: string
-          description: URL to the user's avatar image
-        homepage:
-          type: string
-          description: URL to the user's profile page
-        provider:
-          type: string
-          description: Authentication provider (e.g. github)
-      required:
-      - loginName
-    LoginProvidersJson:
+    NamespaceMembershipJson:
       type: object
       properties:
-        success:
+        namespace:
           type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
+        role:
           type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        loginProviders:
-          type: object
-          additionalProperties:
-            type: string
-    Result:
-      type: object
-      description: Generic result indicator
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
+        user:
+          $ref: '#/components/schemas/User'
     Extension:
       allOf:
       - $ref: '#/components/schemas/Result'
@@ -1446,6 +1344,138 @@ components:
       - timestamp
       - verified
       - version
+    Review:
+      type: object
+      description: A review of an extension
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+          description: Data of the user who posted this review
+        timestamp:
+          type: string
+          description: Date and time when this review was posted (ISO-8601)
+        comment:
+          type: string
+        rating:
+          type: integer
+          format: int32
+          description: Number of stars
+          maximum: 5
+          minimum: 0
+      required:
+      - rating
+      - timestamp
+      - user
+    TargetPlatformVersion:
+      type: object
+      description: Combination of target platform and version of an extension
+      properties:
+        targetPlatform:
+          type: string
+          description: Name of the target platform
+          enum:
+          - win32-x64
+          - win32-ia32
+          - win32-arm64
+          - linux-x64
+          - linux-arm64
+          - linux-armhf
+          - alpine-x64
+          - alpine-arm64
+          - darwin-x64
+          - darwin-arm64
+          - web
+          - universal
+        version:
+          type: string
+          description: Version of the extension
+      required:
+      - version
+    AccessTokenJson:
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        id:
+          type: integer
+          format: int64
+        value:
+          type: string
+        createdTimestamp:
+          type: string
+        accessedTimestamp:
+          type: string
+        expiresTimestamp:
+          type: string
+        notified:
+          type: boolean
+        description:
+          type: string
+        deleteTokenUrl:
+          type: string
+    Namespace:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          name:
+            type: string
+            description: Name of the namespace
+          extensions:
+            type: object
+            additionalProperties:
+              type: string
+            description: Map of extension names to their metadata URLs (not required for creating)
+          verified:
+            type: boolean
+            description: Indicates whether the namespace has an owner (not required for creating)
+      description: Metadata of a namespace
+      required:
+      - name
+      - verified
+    CsrfTokenJson:
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        value:
+          type: string
+        header:
+          type: string
+    NamespaceMembershipList:
+      type: object
+      description: Metadata of a namespace member list
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        namespaceMemberships:
+          type: array
+          description: List of memberships
+          items:
+            $ref: '#/components/schemas/NamespaceMembershipJson'
+      required:
+      - namespaceMemberships
     NamespaceDetails:
       type: object
       description: Details of a namespace
@@ -1494,109 +1524,6 @@ components:
       - displayName
       - name
       - verified
-    UsageStatsJson:
-      type: object
-      properties:
-        windowStart:
-          type: integer
-          format: int64
-        duration:
-          type: integer
-          format: int64
-        count:
-          type: integer
-          format: int64
-    Namespace:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          name:
-            type: string
-            description: Name of the namespace
-          extensions:
-            type: object
-            additionalProperties:
-              type: string
-            description: Map of extension names to their metadata URLs (not required for creating)
-          verified:
-            type: boolean
-            description: Indicates whether the namespace has an owner (not required for creating)
-      description: Metadata of a namespace
-      required:
-      - name
-      - verified
-    ReviewList:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          reviews:
-            type: array
-            items:
-              $ref: '#/components/schemas/Review'
-      description: List of reviews of an extension
-      required:
-      - reviews
-    TierJson:
-      type: object
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        name:
-          type: string
-        description:
-          type: string
-        tierType:
-          type: string
-        capacity:
-          type: integer
-          format: int32
-        duration:
-          type: integer
-          format: int64
-        refillStrategy:
-          type: string
-      required:
-      - name
-      - refillStrategy
-      - tierType
-    NamespaceMembershipJson:
-      type: object
-      properties:
-        namespace:
-          type: string
-        role:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-    NamespaceMembershipList:
-      type: object
-      description: Metadata of a namespace member list
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        namespaceMemberships:
-          type: array
-          description: List of memberships
-          items:
-            $ref: '#/components/schemas/NamespaceMembershipJson'
-      required:
-      - namespaceMemberships
     ExtensionReference:
       type: object
       description: A reference to another extension in the registry
@@ -1614,6 +1541,18 @@ components:
       - extension
       - namespace
       - url
+    Badge:
+      type: object
+      description: A badge to be shown in the sidebar of the extension page in the registry
+      properties:
+        url:
+          type: string
+          description: Image URL of the badge
+        href:
+          type: string
+          description: The link users will follow when clicking the badge
+        description:
+          type: string
     TargetPlatformActive:
       type: object
       description: Target platform of an extension version and whether it is active
@@ -1640,16 +1579,16 @@ components:
         removed:
           type: boolean
           description: Whether this extension version for this target platform has been removed (soft-deleted)
-    ExtensionReplacement:
+    UsageStatsListJson:
       type: object
-      description: Metadata of an extension replacement
       properties:
-        url:
-          type: string
-          description: URL of the extension replacement
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
+        stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageStatsJson'
+        dailyP95:
+          type: integer
+          format: int64
     SearchEntry:
       type: object
       description: Summary of metadata of an extension
@@ -1718,17 +1657,78 @@ components:
       - url
       - verified
       - version
-    VersionTargetPlatformsJson:
+    UsageStatsJson:
       type: object
       properties:
-        version:
+        windowStart:
+          type: integer
+          format: int64
+        duration:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int64
+    ExtensionReplacement:
+      type: object
+      description: Metadata of an extension replacement
+      properties:
+        url:
           type: string
-        targetPlatforms:
+          description: URL of the extension replacement
+        displayName:
+          type: string
+          description: Name to be displayed in user interfaces
+    SearchResult:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          offset:
+            type: integer
+            format: int32
+            description: Number of skipped entries according to the search query
+            minimum: 0
+          totalSize:
+            type: integer
+            format: int32
+            description: Total number of entries that match the search query
+            minimum: 0
+          extensions:
+            type: array
+            description: List of matching entries, limited to the size specified in the search query
+            items:
+              $ref: '#/components/schemas/SearchEntry'
+      description: List of extensions matching a search query
+      required:
+      - extensions
+      - offset
+      - totalSize
+    CustomerJson:
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        name:
+          type: string
+        tier:
+          $ref: '#/components/schemas/TierJson'
+        state:
+          type: string
+        cidrBlocks:
           type: array
           items:
-            $ref: '#/components/schemas/TargetPlatformActive'
-        canDelete:
-          type: boolean
+            type: string
+      required:
+      - name
+      - state
     QueryResult:
       allOf:
       - $ref: '#/components/schemas/Result'

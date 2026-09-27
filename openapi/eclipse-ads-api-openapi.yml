@@ -180,13 +180,24 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CreateAdsError:
+    Pager:
       type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
       properties:
-        message:
-          type: string
-        status:
+        current_page:
           type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string
     RetrieveAdsResponse:
       type: object
       required:
@@ -221,6 +232,33 @@ components:
           type: array
           items:
             type: string
+    CreateAdsRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - host
+      - source
+      - publish_to
+      - format
+      properties:
+        host:
+          type: string
+        source:
+          type: string
+        publish_to:
+          type: string
+        format:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 1
+    CreateAdsError:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
     CreateAdsResponse:
       type: object
       required:
@@ -256,44 +294,6 @@ components:
           type: string
         publish_to:
           type: string
-    Pager:
-      type: object
-      required:
-      - current_page
-      - total_items
-      - total_pages
-      - items_per_page
-      properties:
-        current_page:
-          type: integer
-          format: int32
-        total_items:
-          type: string
-        total_pages:
-          type: integer
-          format: int32
-        items_per_page:
-          type: string
-    CreateAdsRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - host
-      - source
-      - publish_to
-      - format
-      properties:
-        host:
-          type: string
-        source:
-          type: string
-        publish_to:
-          type: string
-        format:
-          type: object
-          additionalProperties:
-            type: integer
-            minimum: 1
   parameters:
     PageSize:
       name: pagesize

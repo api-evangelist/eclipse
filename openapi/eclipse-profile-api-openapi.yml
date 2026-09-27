@@ -38,6 +38,18 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Eca:
+      type: object
+      properties:
+        signed:
+          type: boolean
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
+      example:
+        signed: true
+        can_contribute_spec_project: true
     Country:
       type: object
       properties:
@@ -53,14 +65,6 @@ components:
       example:
         code: CA
         name: Canada
-    ProfilePublisherAgreement:
-      type: object
-      properties:
-        version:
-          type: string
-          description: the agreement document version.
-      example:
-        version: '1'
     EfUser:
       type: object
       properties:
@@ -173,18 +177,14 @@ components:
           - type: string
           - type: 'null'
           description: The user's Marketplace favorites URL.
-    Eca:
+    ProfilePublisherAgreement:
       type: object
       properties:
-        signed:
-          type: boolean
-          description: Flag determining whether user has signed ECA.
-        can_contribute_spec_project:
-          type: boolean
-          description: Flag determining whether users can contribute to a spec project.
+        version:
+          type: string
+          description: the agreement document version.
       example:
-        signed: true
-        can_contribute_spec_project: true
+        version: '1'
     EfUsers:
       type: array
       items:

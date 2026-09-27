@@ -304,6 +304,66 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
+    SlimOrganization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - logos
+      - is_active_member
+      - website
+      properties:
+        organization_id:
+          type: integer
+          description: The unique ID for the given organization
+        name:
+          type: string
+          description: The display name of the organization
+        website:
+          type:
+          - string
+          - 'null'
+          description: The website for the given organization, used for linking back to the member
+        is_active_member:
+          type: boolean
+          description: Whether the organization is an active or historic member.
+        logos:
+          type: object
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    EnhancedPersons:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnhancedPersonData'
+    Organizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organization'
     Projects:
       type: array
       items:
@@ -328,6 +388,139 @@ components:
           - SMALL
           - LARGE
           - PRINT
+    SlimOrganizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/SlimOrganization'
+    Project:
+      type: object
+      properties:
+        project_id:
+          $ref: '#/components/schemas/ObjectID'
+        parent_project_id:
+          $ref: '#/components/schemas/ObjectID'
+        name:
+          type: string
+          description: Placeholder
+        level:
+          type: string
+          description: Placeholder
+        description:
+          type: string
+          description: Placeholder
+        url_download:
+          type: string
+          description: Placeholder
+        url_index:
+          type: string
+          description: Placeholder
+        date_active:
+          $ref: '#/components/schemas/DateTime'
+        sort_order:
+          type: string
+          description: Placeholder
+        bugs_name:
+          type: string
+          description: Placeholder
+        project_phase:
+          type: string
+          description: Placeholder
+        disk_quota_gb:
+          type: integer
+          description: Placeholder
+        is_active:
+          type: boolean
+          description: Placeholder
+        is_component:
+          type: boolean
+          description: Placeholder
+        is_standard:
+          type: boolean
+          description: Placeholder
+    WorkingGroupParticipationAgreement:
+      type: object
+      properties:
+        document_id:
+          $ref: '#/components/schemas/ObjectID'
+        pdf:
+          type: string
+          description: Link to the PDF version of the participation agreement
+    Organization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - description
+      - website
+      - logos
+      - levels
+      - wgpas
+      - member_since
+      - renewal_date
+      - is_active_member
+      properties:
+        organization_id:
+          type: integer
+        name:
+          type: string
+        renewal_date:
+          type: string
+        member_since:
+          type: string
+        is_active_member:
+          type: boolean
+          description: True if the organization is an active member
+        levels:
+          type: array
+          items:
+            type: object
+            properties:
+              level:
+                type: string
+              description:
+                type: string
+        description:
+          type:
+          - object
+          - 'null'
+          properties:
+            short:
+              type: string
+            full:
+              type: string
+        website:
+          type:
+          - string
+          - 'null'
+        logos:
+          type:
+          - object
+          - 'null'
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+        wgpas:
+          type: array
+          items:
+            type: object
+            properties:
+              document_id:
+                $ref: '#/components/schemas/ObjectID'
+              level:
+                type: string
+              working_group:
+                type: string
+              description:
+                type: string
     OrganizationInfoUpdateRequest:
       type: object
       properties:
@@ -337,6 +530,33 @@ components:
         company_url:
           type: string
           description: URL for the product
+    EnhancedPersonData:
+      type: object
+      required:
+      - id
+      - first_name
+      - last_name
+      - relations
+      properties:
+        id:
+          type: string
+          description: Description of the stored URL/product
+        first_name:
+          type: string
+          description: First name of the user
+        last_name:
+          type: string
+          description: Last name of the user
+        email:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Email of the user. Only included if the current user has elevated permissions for the current organization.
+        relations:
+          type: array
+          description: list of relation codes that are active for the current user
+          items:
+            type: string
     WorkingGroup:
       type: object
       properties:
@@ -475,226 +695,6 @@ components:
                       items:
                         type: string
                         description: Ticket linking to the request from the organization to add the resources/agents to this project.
-    Organizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/Organization'
-    Organization:
-      type: object
-      additionalProperties: false
-      required:
-      - organization_id
-      - name
-      - description
-      - website
-      - logos
-      - levels
-      - wgpas
-      - member_since
-      - renewal_date
-      - is_active_member
-      properties:
-        organization_id:
-          type: integer
-        name:
-          type: string
-        renewal_date:
-          type: string
-        member_since:
-          type: string
-        is_active_member:
-          type: boolean
-          description: True if the organization is an active member
-        levels:
-          type: array
-          items:
-            type: object
-            properties:
-              level:
-                type: string
-              description:
-                type: string
-        description:
-          type:
-          - object
-          - 'null'
-          properties:
-            short:
-              type: string
-            full:
-              type: string
-        website:
-          type:
-          - string
-          - 'null'
-        logos:
-          type:
-          - object
-          - 'null'
-          properties:
-            print:
-              type:
-              - string
-              - 'null'
-              description: URL of full resolution logo
-            web:
-              type:
-              - string
-              - 'null'
-              description: URL of compressed web logo
-        wgpas:
-          type: array
-          items:
-            type: object
-            properties:
-              document_id:
-                $ref: '#/components/schemas/ObjectID'
-              level:
-                type: string
-              working_group:
-                type: string
-              description:
-                type: string
-    Project:
-      type: object
-      properties:
-        project_id:
-          $ref: '#/components/schemas/ObjectID'
-        parent_project_id:
-          $ref: '#/components/schemas/ObjectID'
-        name:
-          type: string
-          description: Placeholder
-        level:
-          type: string
-          description: Placeholder
-        description:
-          type: string
-          description: Placeholder
-        url_download:
-          type: string
-          description: Placeholder
-        url_index:
-          type: string
-          description: Placeholder
-        date_active:
-          $ref: '#/components/schemas/DateTime'
-        sort_order:
-          type: string
-          description: Placeholder
-        bugs_name:
-          type: string
-          description: Placeholder
-        project_phase:
-          type: string
-          description: Placeholder
-        disk_quota_gb:
-          type: integer
-          description: Placeholder
-        is_active:
-          type: boolean
-          description: Placeholder
-        is_component:
-          type: boolean
-          description: Placeholder
-        is_standard:
-          type: boolean
-          description: Placeholder
-    EnhancedPersons:
-      type: array
-      items:
-        $ref: '#/components/schemas/EnhancedPersonData'
-    SlimOrganizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/SlimOrganization'
-    SlimOrganization:
-      type: object
-      additionalProperties: false
-      required:
-      - organization_id
-      - name
-      - logos
-      - is_active_member
-      - website
-      properties:
-        organization_id:
-          type: integer
-          description: The unique ID for the given organization
-        name:
-          type: string
-          description: The display name of the organization
-        website:
-          type:
-          - string
-          - 'null'
-          description: The website for the given organization, used for linking back to the member
-        is_active_member:
-          type: boolean
-          description: Whether the organization is an active or historic member.
-        logos:
-          type: object
-          properties:
-            print:
-              type:
-              - string
-              - 'null'
-              description: URL of full resolution logo
-            web:
-              type:
-              - string
-              - 'null'
-              description: URL of compressed web logo
-    WorkingGroupParticipationAgreement:
-      type: object
-      properties:
-        document_id:
-          $ref: '#/components/schemas/ObjectID'
-        pdf:
-          type: string
-          description: Link to the PDF version of the participation agreement
-    DateTime:
-      type: string
-      format: datetime
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
-    EnhancedPersonData:
-      type: object
-      required:
-      - id
-      - first_name
-      - last_name
-      - relations
-      properties:
-        id:
-          type: string
-          description: Description of the stored URL/product
-        first_name:
-          type: string
-          description: First name of the user
-        last_name:
-          type: string
-          description: Last name of the user
-        email:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Email of the user. Only included if the current user has elevated permissions for the current organization.
-        relations:
-          type: array
-          description: list of relation codes that are active for the current user
-          items:
-            type: string
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
   securitySchemes:
     openId:
       type: openIdConnect

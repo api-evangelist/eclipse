@@ -48,6 +48,15 @@ components:
       type:
       - 'null'
       - string
+    DateTime:
+      type: string
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
     CommitValidationMessage:
       type: object
       additionalProperties: false
@@ -74,15 +83,6 @@ components:
         provider_id:
           $ref: '#/components/schemas/NullableString'
           description: the outward facing URL of the repo the commit belongs to.
-    DateTime:
-      type: string
-      format: date-time
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
     CommitValidationStatus:
       type: object
       additionalProperties: false

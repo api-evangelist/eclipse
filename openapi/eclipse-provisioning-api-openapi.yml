@@ -56,6 +56,21 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ProvisioningRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - organization
+      properties:
+        organization:
+          type: object
+          additionalProperties: false
+          required:
+          - id
+          properties:
+            id:
+              type: integer
+              description: The organization id.
     PaperworkResult:
       type: object
       additionalProperties: false
@@ -73,21 +88,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/PaperworkResult'
-    ProvisioningRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - organization
-      properties:
-        organization:
-          type: object
-          additionalProperties: false
-          required:
-          - id
-          properties:
-            id:
-              type: integer
-              description: The organization id.
   securitySchemes:
     openId:
       type: openIdConnect

@@ -88,29 +88,10 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The URL
-        friendly_message:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The friendly message for the error
+    SpecialInterestGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/SpecialInterestGroup'
     SpecialInterestGroup:
       type: object
       properties:
@@ -151,10 +132,29 @@ components:
         associated_working_group:
           type: string
           description: The alias of the associated Working Group
-    SpecialInterestGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/SpecialInterestGroup'
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The URL
+        friendly_message:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The friendly message for the error
   securitySchemes:
     openId:
       type: openIdConnect

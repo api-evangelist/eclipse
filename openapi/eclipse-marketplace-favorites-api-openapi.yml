@@ -461,16 +461,56 @@ paths:
       deprecated: false
 components:
   schemas:
-    RenameFavoriteListrequest:
-      title: RenameFavoriteListrequest
+    User1:
+      title: User1
       required:
-      - list_name
+      - uid
+      - name
+      - full_name
+      - picture
+      - mpc_list_name
+      - timestamp
+      - profile_url
+      - html_profile_url
+      - mpc_favorites_url
+      - html_mpc_favorites_url
+      - count
       type: object
       properties:
-        list_name:
+        uid:
+          type: string
+        name:
+          type: string
+        full_name:
+          type: string
+        picture:
+          type: string
+        mpc_list_name:
+          type: string
+        timestamp:
+          type: string
+        profile_url:
+          type: string
+        html_profile_url:
+          type: string
+        mpc_favorites_url:
+          type: string
+        html_mpc_favorites_url:
+          type: string
+        count:
           type: string
       example:
-        list_name: New list name
+        uid: 3470
+        name: xxieuk4
+        full_name: Xie Xie
+        picture: https://secure.gravatar.com/avatar/c026fd755eb489e0005df10f11cfc1d3.jpg?d=mm&s=185&r=G
+        mpc_list_name: Favorites for Xie Xie
+        timestamp: 1461163708
+        profile_url: https://api.eclipse.org/account/profile/xxieuk4
+        html_profile_url: https://accounts.eclipse.org/users/xxieuk4
+        mpc_favorites_url: https://api.eclipse.org/marketplace/favorites/?name=xxieuk4
+        html_mpc_favorites_url: https://marketplace.eclipse.org/user/xxieuk4/favorites
+        count: 6
     RetrieveFavoritesresponse:
       title: RetrieveFavoritesresponse
       required:
@@ -539,42 +579,6 @@ components:
           html_mpc_favorites_url: https://marketplace.eclipse.org/user/fzadroznyr0g/favorites
         result:
           count: 494
-    SearchFavoritesresponse:
-      title: SearchFavoritesresponse
-      required:
-      - mpc_favorites
-      - result
-      type: object
-      properties:
-        mpc_favorites:
-          type: array
-          items:
-            $ref: '#/components/schemas/MpcFavorite'
-          description: ''
-        result:
-          $ref: '#/components/schemas/Result'
-      example:
-        mpc_favorites:
-        - content_id: 27025
-          count: 677
-          timestamp: 1496973302
-        - content_id: 979
-          count: 675
-          timestamp: 1496687525
-        - content_id: 1099
-          count: 630
-          timestamp: 1496955226
-        - content_id: 171
-          count: 572
-          timestamp: 1496728909
-        - content_id: 1336
-          count: 555
-          timestamp: 1496679696
-        result:
-          count: 1466
-          range:
-            since: 0
-            until: 1497023920
     AddFavoriteresponse:
       title: AddFavoriteresponse
       required:
@@ -615,6 +619,51 @@ components:
           range:
             since: 0
             until: 1497030093
+    MpcFavorite:
+      title: MpcFavorite
+      required:
+      - content_id
+      - count
+      - timestamp
+      type: object
+      properties:
+        content_id:
+          type: string
+        count:
+          type: string
+        timestamp:
+          type: string
+      example:
+        content_id: 27025
+        count: 677
+        timestamp: 1496973302
+    RenameFavoriteListrequest:
+      title: RenameFavoriteListrequest
+      required:
+      - list_name
+      type: object
+      properties:
+        list_name:
+          type: string
+      example:
+        list_name: New list name
+    Result:
+      title: Result
+      required:
+      - count
+      - range
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+        range:
+          $ref: '#/components/schemas/Range'
+      example:
+        count: 1466
+        range:
+          since: 0
+          until: 1497023920
     User2:
       title: User2
       required:
@@ -699,6 +748,42 @@ components:
         html_profile_url: https://accounts.eclipse.org/users/webdev
         mpc_favorites_url: https://api.eclipse.org/marketplace/favorites/?name=webdev
         html_mpc_favorites_url: https://marketplace.eclipse.org/user/webdev/favorites
+    SearchFavoritesresponse:
+      title: SearchFavoritesresponse
+      required:
+      - mpc_favorites
+      - result
+      type: object
+      properties:
+        mpc_favorites:
+          type: array
+          items:
+            $ref: '#/components/schemas/MpcFavorite'
+          description: ''
+        result:
+          $ref: '#/components/schemas/Result'
+      example:
+        mpc_favorites:
+        - content_id: 27025
+          count: 677
+          timestamp: 1496973302
+        - content_id: 979
+          count: 675
+          timestamp: 1496687525
+        - content_id: 1099
+          count: 630
+          timestamp: 1496955226
+        - content_id: 171
+          count: 572
+          timestamp: 1496728909
+        - content_id: 1336
+          count: 555
+          timestamp: 1496679696
+        result:
+          count: 1466
+          range:
+            since: 0
+            until: 1497023920
     Result1:
       title: Result1
       required:
@@ -710,6 +795,22 @@ components:
           format: int32
       example:
         count: 494
+    Range:
+      title: Range
+      required:
+      - since
+      - until
+      type: object
+      properties:
+        since:
+          type: integer
+          format: int32
+        until:
+          type: integer
+          format: int32
+      example:
+        since: 0
+        until: 1497023920
     RandomFavoritesresponse:
       title: RandomFavoritesresponse
       required:
@@ -783,108 +884,11 @@ components:
           count: 7
         result:
           count: 5
-    Result:
-      title: Result
-      required:
-      - count
-      - range
-      type: object
-      properties:
-        count:
-          type: integer
-          format: int32
-        range:
-          $ref: '#/components/schemas/Range'
-      example:
-        count: 1466
-        range:
-          since: 0
-          until: 1497023920
-    User1:
-      title: User1
-      required:
-      - uid
-      - name
-      - full_name
-      - picture
-      - mpc_list_name
-      - timestamp
-      - profile_url
-      - html_profile_url
-      - mpc_favorites_url
-      - html_mpc_favorites_url
-      - count
-      type: object
-      properties:
-        uid:
-          type: string
-        name:
-          type: string
-        full_name:
-          type: string
-        picture:
-          type: string
-        mpc_list_name:
-          type: string
-        timestamp:
-          type: string
-        profile_url:
-          type: string
-        html_profile_url:
-          type: string
-        mpc_favorites_url:
-          type: string
-        html_mpc_favorites_url:
-          type: string
-        count:
-          type: string
-      example:
-        uid: 3470
-        name: xxieuk4
-        full_name: Xie Xie
-        picture: https://secure.gravatar.com/avatar/c026fd755eb489e0005df10f11cfc1d3.jpg?d=mm&s=185&r=G
-        mpc_list_name: Favorites for Xie Xie
-        timestamp: 1461163708
-        profile_url: https://api.eclipse.org/account/profile/xxieuk4
-        html_profile_url: https://accounts.eclipse.org/users/xxieuk4
-        mpc_favorites_url: https://api.eclipse.org/marketplace/favorites/?name=xxieuk4
-        html_mpc_favorites_url: https://marketplace.eclipse.org/user/xxieuk4/favorites
-        count: 6
-    Range:
-      title: Range
-      required:
-      - since
-      - until
-      type: object
-      properties:
-        since:
-          type: integer
-          format: int32
-        until:
-          type: integer
-          format: int32
-      example:
-        since: 0
-        until: 1497023920
-    MpcFavorite:
-      title: MpcFavorite
-      required:
-      - content_id
-      - count
-      - timestamp
-      type: object
-      properties:
-        content_id:
-          type: string
-        count:
-          type: string
-        timestamp:
-          type: string
-      example:
-        content_id: 27025
-        count: 677
-        timestamp: 1496973302
   headers:
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
     X-RateLimit-Reset:
       schema:
         type: string
@@ -893,10 +897,6 @@ components:
       schema:
         type: string
       example: 1000
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
   securitySchemes:
     oauth2:
       description: 'Get access to data while protecting your account credentials.

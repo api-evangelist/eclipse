@@ -164,19 +164,6 @@ components:
         Comments:
           type: string
           description: Comments on the agreement.
-    AgreementSigningRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - version
-      - github_handle
-      properties:
-        version:
-          type: string
-          description: The version number of the document/agreement.
-        github_handle:
-          type: string
-          description: The GitHub username of the user. This must match what the Eclipse Foundation has on file for the user to successfully sign the puglisher agreement.
     Error:
       type: object
       additionalProperties: false
@@ -200,6 +187,19 @@ components:
           - type: string
           - type: 'null'
           description: The optional client-friendly error message
+    AgreementSigningRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - version
+      - github_handle
+      properties:
+        version:
+          type: string
+          description: The version number of the document/agreement.
+        github_handle:
+          type: string
+          description: The GitHub username of the user. This must match what the Eclipse Foundation has on file for the user to successfully sign the puglisher agreement.
   securitySchemes:
     OAuth2:
       type: oauth2

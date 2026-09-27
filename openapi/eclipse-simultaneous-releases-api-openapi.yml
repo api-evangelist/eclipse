@@ -80,6 +80,38 @@ paths:
       deprecated: true
 components:
   schemas:
+    SimultaneousReleaseProject:
+      title: SimultaneousReleaseProject
+      type: object
+      description: A project's contribution to a simultaneous release.
+      properties:
+        project_name:
+          type: string
+          description: Project node title.
+        new_and_noteworthy_url:
+          type:
+          - string
+          - 'null'
+          description: URL to the project's New and Noteworthy page for this release. May be null or empty if not configured.
+      example:
+        project_name: Eclipse Platform
+        new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
+    SimultaneousReleasesMap:
+      title: SimultaneousReleasesMap
+      type: object
+      description: A map of simultaneous release URL slugs (e.g. `2023-12`) to their release data.
+      additionalProperties:
+        $ref: '#/components/schemas/SimultaneousReleaseEntry'
+      example:
+        2023-12:
+          release_date: 1701388800
+          previous_release:
+            release_name: 2023-09
+            release_url: https://projects.eclipse.org/api/simultaneous_release/2023-09
+          projects:
+            eclipse.platform:
+              project_name: Eclipse Platform
+              new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
     SimultaneousReleaseEntry:
       title: SimultaneousReleaseEntry
       type: object
@@ -112,38 +144,6 @@ components:
           eclipse.platform:
             project_name: Eclipse Platform
             new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
-    SimultaneousReleasesMap:
-      title: SimultaneousReleasesMap
-      type: object
-      description: A map of simultaneous release URL slugs (e.g. `2023-12`) to their release data.
-      additionalProperties:
-        $ref: '#/components/schemas/SimultaneousReleaseEntry'
-      example:
-        2023-12:
-          release_date: 1701388800
-          previous_release:
-            release_name: 2023-09
-            release_url: https://projects.eclipse.org/api/simultaneous_release/2023-09
-          projects:
-            eclipse.platform:
-              project_name: Eclipse Platform
-              new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
-    SimultaneousReleaseProject:
-      title: SimultaneousReleaseProject
-      type: object
-      description: A project's contribution to a simultaneous release.
-      properties:
-        project_name:
-          type: string
-          description: Project node title.
-        new_and_noteworthy_url:
-          type:
-          - string
-          - 'null'
-          description: URL to the project's New and Noteworthy page for this release. May be null or empty if not configured.
-      example:
-        project_name: Eclipse Platform
-        new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
   responses:
     NotFound:
       description: Resource not found.

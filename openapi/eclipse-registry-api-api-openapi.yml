@@ -2327,135 +2327,21 @@ paths:
                 format: int32
 components:
   schemas:
-    Badge:
-      type: object
-      description: A badge to be shown in the sidebar of the extension page in the registry
-      properties:
-        url:
-          type: string
-          description: Image URL of the badge
-        href:
-          type: string
-          description: The link users will follow when clicking the badge
-        description:
-          type: string
-    VersionReferences:
-      type: object
-      description: List of version references matching an extension
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        offset:
-          type: integer
-          format: int32
-          description: Number of skipped entries according to the version references request
-          minimum: 0
-        totalSize:
-          type: integer
-          format: int32
-          description: Total number of version references the extension has
-          minimum: 0
-        versions:
-          type: array
-          description: Essential metadata of all available versions, limited to the size specified in the version references request
-          items:
-            $ref: '#/components/schemas/VersionReference'
-      required:
-      - offset
-      - totalSize
-      - versions
-    Review:
-      type: object
-      description: A review of an extension
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-          description: Data of the user who posted this review
-        timestamp:
-          type: string
-          description: Date and time when this review was posted (ISO-8601)
-        comment:
-          type: string
-        rating:
-          type: integer
-          format: int32
-          description: Number of stars
-          maximum: 5
-          minimum: 0
-      required:
-      - rating
-      - timestamp
-      - user
-    VersionReference:
-      type: object
-      description: Essential metadata of an extension version
-      properties:
-        url:
-          type: string
-          description: URL to get the full metadata of this version
-        files:
-          type: object
-          additionalProperties:
-            type: string
-          description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
-        version:
-          type: string
-        targetPlatform:
-          type: string
-          description: Name of the target platform
-          enum:
-          - win32-x64
-          - win32-ia32
-          - win32-arm64
-          - linux-x64
-          - linux-arm64
-          - linux-armhf
-          - alpine-x64
-          - alpine-arm64
-          - darwin-x64
-          - darwin-arm64
-          - web
-          - universal
-        engines:
-          type: object
-          additionalProperties:
-            type: string
-          description: Map of engine names to the respective version constraints
-    SearchResult:
+    ReviewList:
       allOf:
       - $ref: '#/components/schemas/Result'
       - type: object
         properties:
-          offset:
-            type: integer
-            format: int32
-            description: Number of skipped entries according to the search query
-            minimum: 0
-          totalSize:
-            type: integer
-            format: int32
-            description: Total number of entries that match the search query
-            minimum: 0
-          extensions:
+          reviews:
             type: array
-            description: List of matching entries, limited to the size specified in the search query
             items:
-              $ref: '#/components/schemas/SearchEntry'
-      description: List of extensions matching a search query
+              $ref: '#/components/schemas/Review'
+      description: List of reviews of an extension
       required:
-      - extensions
-      - offset
-      - totalSize
-    RegistryVersion:
+      - reviews
+    Result:
       type: object
-      description: Configuration of the registry service
+      description: Generic result indicator
       properties:
         success:
           type: string
@@ -2466,15 +2352,17 @@ components:
         error:
           type: string
           description: Indicates an error; when this is present, all other properties should be ignored
+    VersionTargetPlatformsJson:
+      type: object
+      properties:
         version:
           type: string
-          description: Registry version
-        maxExtensionSize:
-          type: integer
-          format: int64
-          description: Maximum allowed extension package size in bytes
-      required:
-      - version
+        targetPlatforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetPlatformActive'
+        canDelete:
+          type: boolean
     User:
       type: object
       description: User data
@@ -2505,19 +2393,6 @@ components:
           description: Authentication provider (e.g. github)
       required:
       - loginName
-    Result:
-      type: object
-      description: Generic result indicator
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
     Extension:
       allOf:
       - $ref: '#/components/schemas/Result'
@@ -2727,9 +2602,9 @@ components:
       - timestamp
       - verified
       - version
-    NamespaceDetails:
+    VersionReferences:
       type: object
-      description: Details of a namespace
+      description: List of version references matching an extension
       properties:
         success:
           type: string
@@ -2740,41 +2615,79 @@ components:
         error:
           type: string
           description: Indicates an error; when this is present, all other properties should be ignored
-        name:
+        offset:
+          type: integer
+          format: int32
+          description: Number of skipped entries according to the version references request
+          minimum: 0
+        totalSize:
+          type: integer
+          format: int32
+          description: Total number of version references the extension has
+          minimum: 0
+        versions:
+          type: array
+          description: Essential metadata of all available versions, limited to the size specified in the version references request
+          items:
+            $ref: '#/components/schemas/VersionReference'
+      required:
+      - offset
+      - totalSize
+      - versions
+    Review:
+      type: object
+      description: A review of an extension
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+          description: Data of the user who posted this review
+        timestamp:
           type: string
-          description: Name of the namespace
-        displayName:
+          description: Date and time when this review was posted (ISO-8601)
+        comment:
           type: string
-          description: Display name of the namespace
-        description:
+        rating:
+          type: integer
+          format: int32
+          description: Number of stars
+          maximum: 5
+          minimum: 0
+      required:
+      - rating
+      - timestamp
+      - user
+    Versions:
+      type: object
+      description: Map of versions matching an extension
+      properties:
+        success:
           type: string
-          description: Description of the namespace
-        logo:
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
           type: string
-          description: Logo URL of the namespace
-        website:
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
           type: string
-          description: Website URL of the namespace
-        supportLink:
-          type: string
-          description: Support URL of the namespace
-        socialLinks:
+          description: Indicates an error; when this is present, all other properties should be ignored
+        offset:
+          type: integer
+          format: int32
+          description: Number of skipped entries according to the versions request
+          minimum: 0
+        totalSize:
+          type: integer
+          format: int32
+          description: Total number of versions the extension has
+          minimum: 0
+        versions:
           type: object
           additionalProperties:
             type: string
-          description: Map of social network names to their profile URLs
-        extensions:
-          type: array
-          description: Map of extension names to their metadata URLs
-          items:
-            $ref: '#/components/schemas/SearchEntry'
-        verified:
-          type: boolean
-          description: Indicates whether the namespace has an owner
+          description: Map of versions, limited to the size specified in the versions request
       required:
-      - displayName
-      - name
-      - verified
+      - offset
+      - totalSize
+      - versions
     Namespace:
       allOf:
       - $ref: '#/components/schemas/Result'
@@ -2795,18 +2708,7 @@ components:
       required:
       - name
       - verified
-    ReviewList:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          reviews:
-            type: array
-            items:
-              $ref: '#/components/schemas/Review'
-      description: List of reviews of an extension
-      required:
-      - reviews
+    StreamingResponseBody: {}
     QueryParam:
       type: object
       description: Parameters of the metadata query
@@ -2860,6 +2762,54 @@ components:
           default: 0
           description: Number of entries to skip (usually a multiple of the page size)
           minimum: 0
+    NamespaceDetails:
+      type: object
+      description: Details of a namespace
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        name:
+          type: string
+          description: Name of the namespace
+        displayName:
+          type: string
+          description: Display name of the namespace
+        description:
+          type: string
+          description: Description of the namespace
+        logo:
+          type: string
+          description: Logo URL of the namespace
+        website:
+          type: string
+          description: Website URL of the namespace
+        supportLink:
+          type: string
+          description: Support URL of the namespace
+        socialLinks:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of social network names to their profile URLs
+        extensions:
+          type: array
+          description: Map of extension names to their metadata URLs
+          items:
+            $ref: '#/components/schemas/SearchEntry'
+        verified:
+          type: boolean
+          description: Indicates whether the namespace has an owner
+      required:
+      - displayName
+      - name
+      - verified
     ExtensionReference:
       type: object
       description: A reference to another extension in the registry
@@ -2877,6 +2827,18 @@ components:
       - extension
       - namespace
       - url
+    Badge:
+      type: object
+      description: A badge to be shown in the sidebar of the extension page in the registry
+      properties:
+        url:
+          type: string
+          description: Image URL of the badge
+        href:
+          type: string
+          description: The link users will follow when clicking the badge
+        description:
+          type: string
     TargetPlatformActive:
       type: object
       description: Target platform of an extension version and whether it is active
@@ -2903,16 +2865,6 @@ components:
         removed:
           type: boolean
           description: Whether this extension version for this target platform has been removed (soft-deleted)
-    ExtensionReplacement:
-      type: object
-      description: Metadata of an extension replacement
-      properties:
-        url:
-          type: string
-          description: URL of the extension replacement
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
     SearchEntry:
       type: object
       description: Summary of metadata of an extension
@@ -2981,21 +2933,44 @@ components:
       - url
       - verified
       - version
-    StreamingResponseBody: {}
-    VersionTargetPlatformsJson:
+    ExtensionReplacement:
       type: object
+      description: Metadata of an extension replacement
       properties:
-        version:
+        url:
           type: string
-        targetPlatforms:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetPlatformActive'
-        canDelete:
-          type: boolean
-    Versions:
+          description: URL of the extension replacement
+        displayName:
+          type: string
+          description: Name to be displayed in user interfaces
+    SearchResult:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          offset:
+            type: integer
+            format: int32
+            description: Number of skipped entries according to the search query
+            minimum: 0
+          totalSize:
+            type: integer
+            format: int32
+            description: Total number of entries that match the search query
+            minimum: 0
+          extensions:
+            type: array
+            description: List of matching entries, limited to the size specified in the search query
+            items:
+              $ref: '#/components/schemas/SearchEntry'
+      description: List of extensions matching a search query
+      required:
+      - extensions
+      - offset
+      - totalSize
+    RegistryVersion:
       type: object
-      description: Map of versions matching an extension
+      description: Configuration of the registry service
       properties:
         success:
           type: string
@@ -3006,25 +2981,50 @@ components:
         error:
           type: string
           description: Indicates an error; when this is present, all other properties should be ignored
-        offset:
+        version:
+          type: string
+          description: Registry version
+        maxExtensionSize:
           type: integer
-          format: int32
-          description: Number of skipped entries according to the versions request
-          minimum: 0
-        totalSize:
-          type: integer
-          format: int32
-          description: Total number of versions the extension has
-          minimum: 0
-        versions:
+          format: int64
+          description: Maximum allowed extension package size in bytes
+      required:
+      - version
+    VersionReference:
+      type: object
+      description: Essential metadata of an extension version
+      properties:
+        url:
+          type: string
+          description: URL to get the full metadata of this version
+        files:
           type: object
           additionalProperties:
             type: string
-          description: Map of versions, limited to the size specified in the versions request
-      required:
-      - offset
-      - totalSize
-      - versions
+          description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
+        version:
+          type: string
+        targetPlatform:
+          type: string
+          description: Name of the target platform
+          enum:
+          - win32-x64
+          - win32-ia32
+          - win32-arm64
+          - linux-x64
+          - linux-arm64
+          - linux-armhf
+          - alpine-x64
+          - alpine-arm64
+          - darwin-x64
+          - darwin-arm64
+          - web
+          - universal
+        engines:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of engine names to the respective version constraints
     QueryResult:
       allOf:
       - $ref: '#/components/schemas/Result'

@@ -50,6 +50,25 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    City:
+      type: object
+      additionalProperties: false
+      required:
+      - geoname_id
+      - names
+      properties:
+        geoname_id:
+          type: integer
+          description: The MaxMind API unique ID for a geographic location.
+        names:
+          type: object
+          description: The locale of the country name
+          additionalProperties:
+            type: string
+            description: Name of the country in the given locale.
+          example:
+            en: Ottawa
+            pt-BR: Otava
     Error:
       type: object
       additionalProperties: false
@@ -73,22 +92,3 @@ components:
           - type: string
           - type: 'null'
           description: The friendly message for the error
-    City:
-      type: object
-      additionalProperties: false
-      required:
-      - geoname_id
-      - names
-      properties:
-        geoname_id:
-          type: integer
-          description: The MaxMind API unique ID for a geographic location.
-        names:
-          type: object
-          description: The locale of the country name
-          additionalProperties:
-            type: string
-            description: Name of the country in the given locale.
-          example:
-            en: Ottawa
-            pt-BR: Otava

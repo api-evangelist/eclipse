@@ -139,10 +139,6 @@ paths:
           description: Unauthorized
 components:
   schemas:
-    EfHellosignRequests:
-      type: array
-      items:
-        $ref: '#/components/schemas/EfHellosignRequest'
     EfSignatureTemplates:
       type: array
       items:
@@ -192,6 +188,72 @@ components:
             description: Previous internal IDs used for this template, used for backwards compatibility
             items:
               type: string
+    EfHellosignRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfHellosignRequest'
+    EfTemplateDocument:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - version
+      - message
+      properties:
+        id:
+          type: string
+          description: the ID of the document
+        version:
+          type: integer
+          format: double
+          description: the version number associated with the document
+        message:
+          type: string
+          description: the message to include in logs created for the mutation of these documents
+    HellosignSignatureRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - signers
+      - template_name
+      properties:
+        signers:
+          type: array
+          description: List of users that will be added as signers for the new document
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - mail
+            - name
+            - fullname
+            - role
+            properties:
+              mail:
+                type: string
+                description: The email address of the user to associate with the new request.
+              name:
+                type: string
+                description: The user name for the given user
+              fullname:
+                type: string
+                description: The legal name to use for the signature request for current user
+              role:
+                type: string
+                description: The Hellosign role associated with the current user (e.g. client)
+        template_name:
+          type: string
+          description: The name of the Hellosign template to create signature requests for
+        subject:
+          type:
+          - string
+          - 'null'
+          description: The subject of the message to the user in the signature request
+        message:
+          type:
+          - string
+          - 'null'
+          description: The message to include with the signature request
     EfHellosignRequest:
       type: object
       additionalProperties: false
@@ -259,68 +321,6 @@ components:
                 type: string
                 format: date-time
                 description: The standardized time that the event was recieved by the system
-    EfTemplateDocument:
-      type: object
-      additionalProperties: false
-      required:
-      - id
-      - version
-      - message
-      properties:
-        id:
-          type: string
-          description: the ID of the document
-        version:
-          type: integer
-          format: double
-          description: the version number associated with the document
-        message:
-          type: string
-          description: the message to include in logs created for the mutation of these documents
-    HellosignSignatureRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - signers
-      - template_name
-      properties:
-        signers:
-          type: array
-          description: List of users that will be added as signers for the new document
-          items:
-            type: object
-            additionalProperties: false
-            required:
-            - mail
-            - name
-            - fullname
-            - role
-            properties:
-              mail:
-                type: string
-                description: The email address of the user to associate with the new request.
-              name:
-                type: string
-                description: The user name for the given user
-              fullname:
-                type: string
-                description: The legal name to use for the signature request for current user
-              role:
-                type: string
-                description: The Hellosign role associated with the current user (e.g. client)
-        template_name:
-          type: string
-          description: The name of the Hellosign template to create signature requests for
-        subject:
-          type:
-          - string
-          - 'null'
-          description: The subject of the message to the user in the signature request
-        message:
-          type:
-          - string
-          - 'null'
-          description: The message to include with the signature request
   securitySchemes:
     openId:
       type: openIdConnect

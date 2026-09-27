@@ -61,26 +61,19 @@ paths:
                   items_per_page: '20'
       deprecated: false
 components:
-  parameters:
-    PageSize:
-      name: pagesize
-      in: query
-      description: The number of records to get per page, defaults to 20. Maximum value is 100.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
-    Page:
-      name: page
-      in: query
-      description: The number of the page.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
   schemas:
+    EditionFeaturedProject:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        body:
+          type: string
+        logo:
+          type: string
+          format: uri
     Edition:
       type: object
       required:
@@ -109,16 +102,19 @@ components:
           - string
           - 'null'
           format: uri
-    EditionFeaturedProject:
+    EditionFeaturedCommitter:
       type: object
       required:
-      - id
+      - body
       properties:
-        id:
+        name:
           type: string
         body:
           type: string
-        logo:
+        picture:
+          type: string
+          format: uri
+        url:
           type: string
           format: uri
     Pager:
@@ -139,18 +135,22 @@ components:
           format: int32
         items_per_page:
           type: string
-    EditionFeaturedCommitter:
-      type: object
-      required:
-      - body
-      properties:
-        name:
-          type: string
-        body:
-          type: string
-        picture:
-          type: string
-          format: uri
-        url:
-          type: string
-          format: uri
+  parameters:
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32

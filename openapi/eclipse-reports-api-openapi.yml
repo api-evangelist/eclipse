@@ -67,29 +67,6 @@ paths:
           description: Error while processing request
 components:
   schemas:
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
-        friendly_message:
-          type:
-          - string
-          - 'null'
-          description: The optional friendly message for the error
     PrivateProjectData:
       type: object
       additionalProperties: false
@@ -125,6 +102,29 @@ components:
           - string
           - 'null'
           description: the project deletion date if it was deleted
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          type:
+          - string
+          - 'null'
+          description: The optional friendly message for the error
     PrivateProjectEvents:
       type: array
       items:

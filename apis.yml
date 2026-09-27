@@ -14,21 +14,21 @@ description: 'The Eclipse Foundation is a non-profit (Belgian AISBL) that provid
 type: Index
 deliveryModel:
   model: saas
-  open_source: true
-  commercial: false
+  license_evidence:
+    not_product:
+    - eclipse-openvsx/openvsx
+    - eclipse/openvsx
+  open_source: unknown
+  commercial: true
   callable_host: true
-  label: Hosted service · open source · you call their endpoint
-  confidence: high
+  label: Hosted service · you call their endpoint
+  confidence: low
   source:
   - openapi
   - pricing
-  - license
-  generated: '2026-09-07'
-  method: searched
-  note: Corrected 2026-09-07. The Eclipse Foundation is a non-profit AISBL, not a commercial vendor; the
-    APIs are free and their implementations are published under EPL-2.0 on gitlab.eclipse.org/eclipsefdn
-    and github.com/eclipse-openvsx. Open VSX is additionally self-hostable, and its own CLI targets any
-    deployment via OVSX_REGISTRY_URL.
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 accessModel:
   pricing: free
   onboarding: self-service
@@ -52,7 +52,7 @@ url: https://raw.githubusercontent.com/api-evangelist/eclipse/refs/heads/main/ap
 tags:
 - Eclipse Foundation
 - Foundations
-- Open-Source
+- Open Source
 - Standards
 - Developer Tools
 - Extensions
@@ -75,6 +75,7 @@ tags_raw:
 - Java
 - IDE
 - Project Metadata
+- Open-Source
 created: '2024-01-01'
 modified: '2026-09-16'
 specificationVersion: '0.23'

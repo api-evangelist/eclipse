@@ -129,6 +129,21 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ContactType:
+      type: string
+      description: The type of contact that is being stored
+      enum:
+      - COMPANY
+      - WORKING_GROUP
+      - MARKETING
+      - ACCOUNTING
+      - SIGNING
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     FormWorkingGroup:
       type: object
       properties:
@@ -146,24 +161,6 @@ components:
           $ref: '#/components/schemas/DateTime'
         contact:
           $ref: '#/components/schemas/Contact'
-    ContactType:
-      type: string
-      description: The type of contact that is being stored
-      enum:
-      - COMPANY
-      - WORKING_GROUP
-      - MARKETING
-      - ACCOUNTING
-      - SIGNING
-    DateTime:
-      type: string
-      format: datetime
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
     FormWorkingGroups:
       type: array
       items:
@@ -189,12 +186,15 @@ components:
           description: Job title of the contact
         type:
           $ref: '#/components/schemas/ContactType'
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
   securitySchemes:
     openId:
       type: openIdConnect

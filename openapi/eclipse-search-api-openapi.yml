@@ -54,6 +54,24 @@ paths:
       - Search
 components:
   schemas:
+    MarketplaceSearch:
+      type: object
+      description: XML root <marketplace> with a <search> element listing matching nodes.
+      properties:
+        search:
+          type: object
+          properties:
+            count:
+              type: integer
+            term:
+              type: string
+            url:
+              type: string
+              format: uri
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MarketplaceNode'
     MarketplaceNode:
       type: object
       properties:
@@ -114,21 +132,3 @@ components:
         supporturl:
           type: string
           format: uri
-    MarketplaceSearch:
-      type: object
-      description: XML root <marketplace> with a <search> element listing matching nodes.
-      properties:
-        search:
-          type: object
-          properties:
-            count:
-              type: integer
-            term:
-              type: string
-            url:
-              type: string
-              format: uri
-            nodes:
-              type: array
-              items:
-                $ref: '#/components/schemas/MarketplaceNode'

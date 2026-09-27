@@ -104,6 +104,62 @@ paths:
           description: Error while processing data
 components:
   schemas:
+    GithubWebhookEvent:
+      type: object
+      properties:
+        installation:
+          type: object
+          description: Information about the Github App installation making this request
+          properties:
+            id:
+              type: string
+              description: The ID of the app installation that is making the validation request on behalf of the repository/user.
+        repository:
+          type: object
+          description: Information about the repository that triggered this request
+          properties:
+            full_name:
+              type: string
+              description: The full name of the repository, including organization.
+            html_url:
+              type: string
+              description: The link to the repository the event was triggered by
+        pull_request:
+          type: object
+          description: Information on the pull request that triggered this workflow.
+          properties:
+            number:
+              type: int
+              description: The numeric ID of the pull request that triggered the flow
+            head:
+              type: object
+              properties:
+                sha:
+                  type: string
+                  description: The SHA hash of the head of the pull request.
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          type:
+          - string
+          - 'null'
+          description: The optional friendly message for the error
     SystemHook:
       type: object
       additionalProperties: false
@@ -167,71 +223,6 @@ components:
           - 'null'
           - string
           description: The old path with namespace, only used in 'project_rename' hooks
-    GithubWebhookEvent:
-      type: object
-      properties:
-        installation:
-          type: object
-          description: Information about the Github App installation making this request
-          properties:
-            id:
-              type: string
-              description: The ID of the app installation that is making the validation request on behalf of the repository/user.
-        repository:
-          type: object
-          description: Information about the repository that triggered this request
-          properties:
-            full_name:
-              type: string
-              description: The full name of the repository, including organization.
-            html_url:
-              type: string
-              description: The link to the repository the event was triggered by
-        pull_request:
-          type: object
-          description: Information on the pull request that triggered this workflow.
-          properties:
-            number:
-              type: int
-              description: The numeric ID of the pull request that triggered the flow
-            head:
-              type: object
-              properties:
-                sha:
-                  type: string
-                  description: The SHA hash of the head of the pull request.
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
-        friendly_message:
-          type:
-          - string
-          - 'null'
-          description: The optional friendly message for the error
-    DateTime:
-      type: string
-      format: date-time
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
     RevalidationRequest:
       type: object
       additionalProperties: false
@@ -241,3 +232,12 @@ components:
         h-form-captcha-response:
           type: string
           description: the hCaptcha challenge response.
+    DateTime:
+      type: string
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '

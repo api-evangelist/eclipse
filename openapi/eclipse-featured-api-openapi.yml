@@ -37,6 +37,22 @@ paths:
       - Featured
 components:
   schemas:
+    MarketplaceCategoryListing:
+      type: object
+      description: XML root <marketplace> with a <category> wrapper that contains <node> children.
+      properties:
+        category:
+          type: object
+          properties:
+            name:
+              type: string
+            url:
+              type: string
+              format: uri
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MarketplaceNode'
     MarketplaceNode:
       type: object
       properties:
@@ -97,19 +113,3 @@ components:
         supporturl:
           type: string
           format: uri
-    MarketplaceCategoryListing:
-      type: object
-      description: XML root <marketplace> with a <category> wrapper that contains <node> children.
-      properties:
-        category:
-          type: object
-          properties:
-            name:
-              type: string
-            url:
-              type: string
-              format: uri
-            nodes:
-              type: array
-              items:
-                $ref: '#/components/schemas/MarketplaceNode'

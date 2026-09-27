@@ -155,48 +155,38 @@ paths:
           description: Success
 components:
   schemas:
-    UserDatas:
+    PublisherAgreement:
+      type: object
+      additionalProperties: false
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'
+    Eca:
+      type: object
+      additionalProperties: false
+      required:
+      - signed
+      - can_contribute_spec_project
+      properties:
+        signed:
+          type: boolean
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
+      example:
+        signed: true
+        can_contribute_spec_project: true
+    Error:
       type: array
       items:
-        $ref: '#/components/schemas/UserData'
-      example:
-      - uid: '606609'
-        name: zacharysabourin
-        mail: zachary.sabourin@eclipse-foundation.org
-        picture: https://secure.gravatar.com/avatar/fbbbb03860062596a5cf11105dcc7d47.jpg?d=mm&s=185&r=G
-        eca:
-          signed: true
-          can_contribute_spec_project: true
-        is_committer: true
-        first_name: Zachary
-        last_name: Sabourin
-        github_handle: zacharysabourin
-        twitter_handle: sometwitteruser
-        publisher_agreements:
-          open-vsx:
-            version: '1'
-        org: Eclipse Foundation
-        org_id: null
-        job_title: Web Developer
-        website: https://google.com
-        country:
-          code: CA
-          name: Canada
-        bio: This is my bio. Hello!
-        interests:
-        - MTG
-        - Warhammer
-        - Bass guitar
-        working_groups_interests:
-        - adoptium
-        - oniro
-        opt_in:
-          copilot: true
-        eca_url: https://api.eclipse.org/account/profile/zacharysabourin/eca
-        projects_url: https://api.eclipse.org/account/profile/zacharysabourin/projects
-        gerrit_url: ''
-        mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
-        mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
+        type: string
+      description: An array containing a single message indicating the error
     Country:
       type: object
       properties:
@@ -212,17 +202,6 @@ components:
       example:
         code: CA
         name: Canada
-    PublisherAgreement:
-      type: object
-      additionalProperties: false
-      required:
-      - version
-      properties:
-        version:
-          type: string
-          description: the agreement document version.
-      example:
-        version: '1'
     UserData:
       type: object
       additionalProperties: false
@@ -413,27 +392,48 @@ components:
         gerrit_url: ''
         mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
         mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
-    Error:
+    UserDatas:
       type: array
       items:
-        type: string
-      description: An array containing a single message indicating the error
-    Eca:
-      type: object
-      additionalProperties: false
-      required:
-      - signed
-      - can_contribute_spec_project
-      properties:
-        signed:
-          type: boolean
-          description: Flag determining whether user has signed ECA.
-        can_contribute_spec_project:
-          type: boolean
-          description: Flag determining whether users can contribute to a spec project.
+        $ref: '#/components/schemas/UserData'
       example:
-        signed: true
-        can_contribute_spec_project: true
+      - uid: '606609'
+        name: zacharysabourin
+        mail: zachary.sabourin@eclipse-foundation.org
+        picture: https://secure.gravatar.com/avatar/fbbbb03860062596a5cf11105dcc7d47.jpg?d=mm&s=185&r=G
+        eca:
+          signed: true
+          can_contribute_spec_project: true
+        is_committer: true
+        first_name: Zachary
+        last_name: Sabourin
+        github_handle: zacharysabourin
+        twitter_handle: sometwitteruser
+        publisher_agreements:
+          open-vsx:
+            version: '1'
+        org: Eclipse Foundation
+        org_id: null
+        job_title: Web Developer
+        website: https://google.com
+        country:
+          code: CA
+          name: Canada
+        bio: This is my bio. Hello!
+        interests:
+        - MTG
+        - Warhammer
+        - Bass guitar
+        working_groups_interests:
+        - adoptium
+        - oniro
+        opt_in:
+          copilot: true
+        eca_url: https://api.eclipse.org/account/profile/zacharysabourin/eca
+        projects_url: https://api.eclipse.org/account/profile/zacharysabourin/projects
+        gerrit_url: ''
+        mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
+        mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
   securitySchemes:
     OAuth2:
       type: oauth2

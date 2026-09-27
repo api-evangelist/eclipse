@@ -32,12 +32,18 @@ paths:
                 $ref: '#/components/schemas/Catalogs'
 components:
   schemas:
-    PseudoBool:
-      type: integer
-      description: Boolean value represented by a 1 for true, 0 for false
-      enum:
-      - 1
-      - 0
+    Catalogs:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        catalogs:
+          type: array
+          xml:
+            name: catalogs
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Catalog'
     Catalog:
       type: object
       properties:
@@ -117,15 +123,9 @@ components:
                   description: Seconds since epoch timestamp for when news source was updated
                   xml:
                     attribute: true
-    Catalogs:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        catalogs:
-          type: array
-          xml:
-            name: catalogs
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Catalog'
+    PseudoBool:
+      type: integer
+      description: Boolean value represented by a 1 for true, 0 for false
+      enum:
+      - 1
+      - 0

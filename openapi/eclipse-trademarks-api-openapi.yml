@@ -73,10 +73,6 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    Trademarks:
-      type: array
-      items:
-        $ref: '#/components/schemas/Trademark'
     Trademark:
       type: object
       additionalProperties: false
@@ -112,3 +108,7 @@ components:
           - R
           - T
           example: R
+    Trademarks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Trademark'

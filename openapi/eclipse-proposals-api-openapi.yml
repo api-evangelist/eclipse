@@ -212,6 +212,29 @@ components:
         result_end: 20
         result_size: 20
         total_result_size: 150
+    ProposalsIndexResponse:
+      title: ProposalsIndexResponse
+      type: object
+      description: Paginated proposals list. Unlike the projects index, this endpoint preserves the pagination metadata in the response body alongside the `result` array.
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proposal'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      example:
+        result:
+        - id: 789
+          project_id: technology.new-project
+          name: New Eclipse Project Proposal
+        pagination:
+          page: 1
+          pagesize: 20
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 1
     Proposal:
       title: Proposal
       type: object
@@ -311,29 +334,29 @@ components:
         repo_type: Git
         repos:
         - https://github.com/eclipse/new-project
-    ProposalsIndexResponse:
-      title: ProposalsIndexResponse
+    Committer:
+      title: Committer
       type: object
-      description: Paginated proposals list. Unlike the projects index, this endpoint preserves the pagination metadata in the response body alongside the `result` array.
+      description: A person with a role on an Eclipse project (committer, contributor, or project lead).
+      required:
+      - username
+      - url
       properties:
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Proposal'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+        username:
+          type:
+          - string
+          - 'null'
+          description: Eclipse account username (may be null for proposals where the person has no account yet).
+        full_name:
+          type: string
+          description: Display name of the person.
+        url:
+          type: string
+          description: Absolute URL to the person's profile on api.eclipse.org.
       example:
-        result:
-        - id: 789
-          project_id: technology.new-project
-          name: New Eclipse Project Proposal
-        pagination:
-          page: 1
-          pagesize: 20
-          result_start: 1
-          result_end: 1
-          result_size: 1
-          total_result_size: 1
+        username: acommitter
+        full_name: A Committer
+        url: https://api.eclipse.org/account/profile/acommitter
     WorkingGroup:
       title: WorkingGroup
       required:
@@ -362,29 +385,6 @@ components:
       example:
         name: Jakarta EE
         id: jakarta-ee
-    Committer:
-      title: Committer
-      type: object
-      description: A person with a role on an Eclipse project (committer, contributor, or project lead).
-      required:
-      - username
-      - url
-      properties:
-        username:
-          type:
-          - string
-          - 'null'
-          description: Eclipse account username (may be null for proposals where the person has no account yet).
-        full_name:
-          type: string
-          description: Display name of the person.
-        url:
-          type: string
-          description: Absolute URL to the person's profile on api.eclipse.org.
-      example:
-        username: acommitter
-        full_name: A Committer
-        url: https://api.eclipse.org/account/profile/acommitter
   responses:
     NotFound:
       description: Resource not found.

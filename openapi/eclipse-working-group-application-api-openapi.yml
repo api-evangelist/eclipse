@@ -121,10 +121,6 @@ paths:
           description: Error while creating the application
 components:
   schemas:
-    WorkingGroupApplications:
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkingGroupApplication'
     WorkingGroupApplication:
       type: object
       properties:
@@ -197,6 +193,10 @@ components:
           - INPROGRESS
           - SUBMITTED
           - COMPLETE
+    WorkingGroupApplications:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroupApplication'
   securitySchemes:
     openId:
       type: openIdConnect

@@ -28,15 +28,13 @@ paths:
                 $ref: '#/components/schemas/Markets'
 components:
   schemas:
-    Market:
-      allOf:
-      - $ref: '#/components/schemas/BaseNode'
-      - type: object
-        xml:
-          name: market
-        properties:
-          category:
-            $ref: '#/components/schemas/BaseCategory'
+    Markets:
+      type: array
+      xml:
+        name: marketplace
+        wrapped: true
+      items:
+        $ref: '#/components/schemas/Market'
     BaseCategory:
       allOf:
       - $ref: '#/components/schemas/BaseNode'
@@ -48,13 +46,6 @@ components:
             type: integer
             xml:
               attribute: true
-    Markets:
-      type: array
-      xml:
-        name: marketplace
-        wrapped: true
-      items:
-        $ref: '#/components/schemas/Market'
     BaseNode:
       type: object
       properties:
@@ -73,6 +64,15 @@ components:
           description: Title
           xml:
             attribute: true
+    Market:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: market
+        properties:
+          category:
+            $ref: '#/components/schemas/BaseCategory'
   parameters:
     client:
       name: client

@@ -188,21 +188,12 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ConstraintViolation:
-      type: object
-      properties:
-        root_id:
-          $ref: '#/components/schemas/ObjectID'
-          description: ID of the object that was validated.
-        path:
-          type: string
-          description: path to the property that had an error.
-        type:
-          type: string
-          description: name of the type of object that had errors (i.e, Contact, FormOrganization, MembershipForm etc.).
-        value:
-          type: object
-          description: the bad value in question.
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     MembershipForms:
       type: array
       items:
@@ -241,6 +232,30 @@ components:
           description: The EU country the organization is registered under for VAT.
         updated_date:
           $ref: '#/components/schemas/DateTime'
+    ConstraintViolation:
+      type: object
+      properties:
+        root_id:
+          $ref: '#/components/schemas/ObjectID'
+          description: ID of the object that was validated.
+        path:
+          type: string
+          description: path to the property that had an error.
+        type:
+          type: string
+          description: name of the type of object that had errors (i.e, Contact, FormOrganization, MembershipForm etc.).
+        value:
+          type: object
+          description: the bad value in question.
+    FormState:
+      type: string
+      description: the current form state
+      enum:
+      - SUBMITTED
+      - INPROGRESS
+      - COMPLETE
+      - CONFIRMED
+      - REJECTED
     ConstraintViolations:
       type: array
       items:
@@ -254,21 +269,6 @@ components:
         More on this standard can be read at https://tools.ietf.org/html/rfc3339.
 
         '
-    FormState:
-      type: string
-      description: the current form state
-      enum:
-      - SUBMITTED
-      - INPROGRESS
-      - COMPLETE
-      - CONFIRMED
-      - REJECTED
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
   securitySchemes:
     openId:
       type: openIdConnect

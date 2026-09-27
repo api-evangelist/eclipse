@@ -904,29 +904,19 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    UsageStatsListJson:
-      type: object
-      properties:
-        stats:
-          type: array
-          items:
-            $ref: '#/components/schemas/UsageStatsJson'
-        dailyP95:
-          type: integer
-          format: int64
-    Badge:
-      type: object
-      description: A badge to be shown in the sidebar of the extension page in the registry
-      properties:
-        url:
-          type: string
-          description: Image URL of the badge
-        href:
-          type: string
-          description: The link users will follow when clicking the badge
-        description:
-          type: string
-    CustomerJson:
+    ReviewList:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          reviews:
+            type: array
+            items:
+              $ref: '#/components/schemas/Review'
+      description: List of reviews of an extension
+      required:
+      - reviews
+    TierJson:
       type: object
       properties:
         success:
@@ -940,48 +930,25 @@ components:
           description: Indicates an error; when this is present, all other properties should be ignored
         name:
           type: string
-        tier:
-          $ref: '#/components/schemas/TierJson'
-        state:
+        description:
           type: string
-        cidrBlocks:
-          type: array
-          items:
-            type: string
-      required:
-      - name
-      - state
-    Review:
-      type: object
-      description: A review of an extension
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-          description: Data of the user who posted this review
-        timestamp:
+        tierType:
           type: string
-          description: Date and time when this review was posted (ISO-8601)
-        comment:
-          type: string
-        rating:
+        capacity:
           type: integer
           format: int32
-          description: Number of stars
-          maximum: 5
-          minimum: 0
+        duration:
+          type: integer
+          format: int64
+        refillStrategy:
+          type: string
       required:
-      - rating
-      - timestamp
-      - user
-    CustomerListJson:
+      - name
+      - refillStrategy
+      - tierType
+    Result:
       type: object
-      properties:
-        customers:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerJson'
-    RateLimitTokenJson:
-      type: object
+      description: Generic result indicator
       properties:
         success:
           type: string
@@ -992,15 +959,47 @@ components:
         error:
           type: string
           description: Indicates an error; when this is present, all other properties should be ignored
-        id:
-          type: integer
-          format: int64
-        value:
+    VersionTargetPlatformsJson:
+      type: object
+      properties:
+        version:
           type: string
-        createdTimestamp:
+        targetPlatforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetPlatformActive'
+        canDelete:
+          type: boolean
+    User:
+      type: object
+      description: User data
+      properties:
+        success:
           type: string
-        description:
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
           type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        loginName:
+          type: string
+          description: Login name
+        fullName:
+          type: string
+          description: Full name
+        avatarUrl:
+          type: string
+          description: URL to the user's avatar image
+        homepage:
+          type: string
+          description: URL to the user's profile page
+        provider:
+          type: string
+          description: Authentication provider (e.g. github)
+      required:
+      - loginName
     VersionReference:
       type: object
       description: Essential metadata of an extension version
@@ -1036,74 +1035,15 @@ components:
           additionalProperties:
             type: string
           description: Map of engine names to the respective version constraints
-    SearchResult:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          offset:
-            type: integer
-            format: int32
-            description: Number of skipped entries according to the search query
-            minimum: 0
-          totalSize:
-            type: integer
-            format: int32
-            description: Total number of entries that match the search query
-            minimum: 0
-          extensions:
-            type: array
-            description: List of matching entries, limited to the size specified in the search query
-            items:
-              $ref: '#/components/schemas/SearchEntry'
-      description: List of extensions matching a search query
-      required:
-      - extensions
-      - offset
-      - totalSize
-    User:
+    NamespaceMembershipJson:
       type: object
-      description: User data
       properties:
-        success:
+        namespace:
           type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
+        role:
           type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        loginName:
-          type: string
-          description: Login name
-        fullName:
-          type: string
-          description: Full name
-        avatarUrl:
-          type: string
-          description: URL to the user's avatar image
-        homepage:
-          type: string
-          description: URL to the user's profile page
-        provider:
-          type: string
-          description: Authentication provider (e.g. github)
-      required:
-      - loginName
-    Result:
-      type: object
-      description: Generic result indicator
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
+        user:
+          $ref: '#/components/schemas/User'
     CustomerMembershipJson:
       type: object
       properties:
@@ -1320,6 +1260,49 @@ components:
       - timestamp
       - verified
       - version
+    RateLimitTokenJson:
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        id:
+          type: integer
+          format: int64
+        value:
+          type: string
+        createdTimestamp:
+          type: string
+        description:
+          type: string
+    Review:
+      type: object
+      description: A review of an extension
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+          description: Data of the user who posted this review
+        timestamp:
+          type: string
+          description: Date and time when this review was posted (ISO-8601)
+        comment:
+          type: string
+        rating:
+          type: integer
+          format: int32
+          description: Number of stars
+          maximum: 5
+          minimum: 0
+      required:
+      - rating
+      - timestamp
+      - user
     Namespace:
       allOf:
       - $ref: '#/components/schemas/Result'
@@ -1340,76 +1323,6 @@ components:
       required:
       - name
       - verified
-    UsageStatsJson:
-      type: object
-      properties:
-        windowStart:
-          type: integer
-          format: int64
-        duration:
-          type: integer
-          format: int64
-        count:
-          type: integer
-          format: int64
-    ReviewList:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          reviews:
-            type: array
-            items:
-              $ref: '#/components/schemas/Review'
-      description: List of reviews of an extension
-      required:
-      - reviews
-    TierListJson:
-      type: object
-      properties:
-        tiers:
-          type: array
-          items:
-            $ref: '#/components/schemas/TierJson'
-    TierJson:
-      type: object
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        name:
-          type: string
-        description:
-          type: string
-        tierType:
-          type: string
-        capacity:
-          type: integer
-          format: int32
-        duration:
-          type: integer
-          format: int64
-        refillStrategy:
-          type: string
-      required:
-      - name
-      - refillStrategy
-      - tierType
-    NamespaceMembershipJson:
-      type: object
-      properties:
-        namespace:
-          type: string
-        role:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
     NamespaceMembershipList:
       type: object
       description: Metadata of a namespace member list
@@ -1447,6 +1360,18 @@ components:
       - extension
       - namespace
       - url
+    Badge:
+      type: object
+      description: A badge to be shown in the sidebar of the extension page in the registry
+      properties:
+        url:
+          type: string
+          description: Image URL of the badge
+        href:
+          type: string
+          description: The link users will follow when clicking the badge
+        description:
+          type: string
     TargetPlatformActive:
       type: object
       description: Target platform of an extension version and whether it is active
@@ -1473,16 +1398,16 @@ components:
         removed:
           type: boolean
           description: Whether this extension version for this target platform has been removed (soft-deleted)
-    ExtensionReplacement:
+    UsageStatsListJson:
       type: object
-      description: Metadata of an extension replacement
       properties:
-        url:
-          type: string
-          description: URL of the extension replacement
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
+        stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageStatsJson'
+        dailyP95:
+          type: integer
+          format: int64
     SearchEntry:
       type: object
       description: Summary of metadata of an extension
@@ -1551,17 +1476,92 @@ components:
       - url
       - verified
       - version
-    VersionTargetPlatformsJson:
+    UsageStatsJson:
       type: object
       properties:
-        version:
+        windowStart:
+          type: integer
+          format: int64
+        duration:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int64
+    ExtensionReplacement:
+      type: object
+      description: Metadata of an extension replacement
+      properties:
+        url:
           type: string
-        targetPlatforms:
+          description: URL of the extension replacement
+        displayName:
+          type: string
+          description: Name to be displayed in user interfaces
+    CustomerListJson:
+      type: object
+      properties:
+        customers:
           type: array
           items:
-            $ref: '#/components/schemas/TargetPlatformActive'
-        canDelete:
-          type: boolean
+            $ref: '#/components/schemas/CustomerJson'
+    SearchResult:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          offset:
+            type: integer
+            format: int32
+            description: Number of skipped entries according to the search query
+            minimum: 0
+          totalSize:
+            type: integer
+            format: int32
+            description: Total number of entries that match the search query
+            minimum: 0
+          extensions:
+            type: array
+            description: List of matching entries, limited to the size specified in the search query
+            items:
+              $ref: '#/components/schemas/SearchEntry'
+      description: List of extensions matching a search query
+      required:
+      - extensions
+      - offset
+      - totalSize
+    TierListJson:
+      type: object
+      properties:
+        tiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TierJson'
+    CustomerJson:
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        name:
+          type: string
+        tier:
+          $ref: '#/components/schemas/TierJson'
+        state:
+          type: string
+        cidrBlocks:
+          type: array
+          items:
+            type: string
+      required:
+      - name
+      - state
     CustomerMembershipList:
       type: object
       description: Metadata of a customer member list

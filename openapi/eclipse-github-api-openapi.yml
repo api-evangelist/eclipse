@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Eclipse Project Management Infrastructure (PMI) RESTful Git…
+  title: Eclipse Project Management Infrastructure (PMI) RESTful…
   description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
   contact: {}
   version: '1.0'
@@ -76,6 +76,18 @@ paths:
                   specification_project: true
 components:
   schemas:
+    GithubIndexResponse:
+      title: GithubIndexResponse
+      type: object
+      description: A map of Eclipse project IDs to their GitHub repository data. Keys are project IDs (e.g. `ee4j.batch`).
+      additionalProperties:
+        $ref: '#/components/schemas/GithubProjectEntry'
+      example:
+        ee4j.batch:
+          repos:
+          - eclipse-ee4j/batch-api
+          - eclipse-ee4j/batch-tck
+          specification_project: true
     GithubProjectEntry:
       title: GithubProjectEntry
       type: object
@@ -94,15 +106,3 @@ components:
         - eclipse-ee4j/batch-api
         - eclipse-ee4j/batch-tck
         specification_project: true
-    GithubIndexResponse:
-      title: GithubIndexResponse
-      type: object
-      description: A map of Eclipse project IDs to their GitHub repository data. Keys are project IDs (e.g. `ee4j.batch`).
-      additionalProperties:
-        $ref: '#/components/schemas/GithubProjectEntry'
-      example:
-        ee4j.batch:
-          repos:
-          - eclipse-ee4j/batch-api
-          - eclipse-ee4j/batch-tck
-          specification_project: true

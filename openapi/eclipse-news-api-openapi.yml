@@ -99,24 +99,6 @@ paths:
       x-operation-id-source: derived
 components:
   parameters:
-    PageSize:
-      name: pagesize
-      in: query
-      description: The number of records to get per page, defaults to 20. Maximum value is 100.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
-    Page:
-      name: page
-      in: query
-      description: The number of the page.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
     PublishToFilter:
       name: parameters[publish_to]
       in: query
@@ -154,7 +136,35 @@ components:
         - science
         - tangle_ee
       example: eclipse_org
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
   schemas:
+    NewsAuthor:
+      type: object
+      properties:
+        full_name:
+          type: string
+        username:
+          type: string
+        picture:
+          type: string
+          format: uri
     News:
       type: object
       required:
@@ -211,13 +221,3 @@ components:
           format: int32
         items_per_page:
           type: string
-    NewsAuthor:
-      type: object
-      properties:
-        full_name:
-          type: string
-        username:
-          type: string
-        picture:
-          type: string
-          format: uri

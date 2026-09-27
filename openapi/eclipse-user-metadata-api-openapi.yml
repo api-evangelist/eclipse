@@ -139,63 +139,22 @@ paths:
       deprecated: false
 components:
   schemas:
-    PeopleProject:
+    Eca:
       type: object
       additionalProperties: false
       required:
-      - ActiveDate
-      - EditBugs
-      - SortOrder
-      - ProjectName
-      - Url
-      - SpecificationProject
-      - Relation
+      - signed
+      - can_contribute_spec_project
       properties:
-        ActiveDate:
-          type: string
-          description: The active date for this record
-        InactiveDate:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The inactive date for this record
-        EditBugs:
-          type: string
-          description: Edit bugs status. 1 for true, 0 for false
-        SortOrder:
-          type: string
-          description: The sort order for this record
-        ProjectName:
-          type: string
-          description: The project's name
-        Url:
-          type: string
-          description: The project URL
-        SpecificationProject:
+        signed:
           type: boolean
-          description: The active date for tis record
-        Relation:
-          $ref: '#/components/schemas/Relation'
-    PeopleProjects:
-      type: array
-      description: Map of projects that the user is associated with.
-      items:
-        $ref: '#/components/schemas/PeopleProject'
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
       example:
-      - active_date: '2022-09-21T00:00:00Z'
-        inactive_date: ''
-        edit_bugs: '0'
-        sort_order: ''
-        project_name: Eclise USS SDK
-        url: https://projects.eclipse.org/projects/technology.usssdk
-        specification_project: false
-        relation:
-          relation: CM
-          description: commiter
-          is_active: '1'
-          type:
-            type: PR
-            description: Person - Project
+        signed: true
+        can_contribute_spec_project: true
     PeopleProjectMap:
       type: object
       propertyNames:
@@ -218,85 +177,26 @@ components:
             type:
               type: PR
               description: Person - Project
-    Subscriptions:
-      type: object
-      additionalProperties: false
-      required:
-      - mailing_list_subscriptions
-      properties:
-        mailing_list_subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/MailingList'
+    PeopleProjects:
+      type: array
+      description: Map of projects that the user is associated with.
+      items:
+        $ref: '#/components/schemas/PeopleProject'
       example:
-        mailing_list_subscriptions:
-        - list_name: cross-project-issues-dev
-          list_description: Cross project issues
-        - list_name: epp
-          list_description: Eclipse Packaging Project
-    Error:
-      type: array
-      items:
-        type: string
-      description: An array containing a single message indicating the error
-    EmploymentHistories:
-      type: array
-      items:
-        $ref: '#/components/schemas/EmploymentHistory'
-    EmploymentHistory:
-      type: object
-      additionalProperties: false
-      required:
-      - organization_id
-      - organization_name
-      - start
-      properties:
-        organization_id:
-          type: number
-          description: Internal numerical ID of organization
-        organization_name:
-          type: string
-          description: The legal name of the organization
-        start:
-          type: string
-          description: Start or entry date of the user employment
-        end:
+      - active_date: '2022-09-21T00:00:00Z'
+        inactive_date: ''
+        edit_bugs: '0'
+        sort_order: ''
+        project_name: Eclise USS SDK
+        url: https://projects.eclipse.org/projects/technology.usssdk
+        specification_project: false
+        relation:
+          relation: CM
+          description: commiter
+          is_active: '1'
           type:
-          - 'null'
-          - string
-          description: Termination or change date for employment
-    MailingList:
-      type: object
-      additionalProperties: false
-      required:
-      - list_name
-      - list_description
-      properties:
-        list_name:
-          type: string
-          description: The mailing list name.
-        list_description:
-          type: string
-          description: The mailing list description.
-      example:
-        list_name: cross-project-issues-dev
-        list_description: Cross project issues
-    Eca:
-      type: object
-      additionalProperties: false
-      required:
-      - signed
-      - can_contribute_spec_project
-      properties:
-        signed:
-          type: boolean
-          description: Flag determining whether user has signed ECA.
-        can_contribute_spec_project:
-          type: boolean
-          description: Flag determining whether users can contribute to a spec project.
-      example:
-        signed: true
-        can_contribute_spec_project: true
+            type: PR
+            description: Person - Project
     Relation:
       type: object
       additionalProperties: false
@@ -335,6 +235,106 @@ components:
         Type:
           Type: PR
           Description: Person - Project
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
+    EmploymentHistories:
+      type: array
+      items:
+        $ref: '#/components/schemas/EmploymentHistory'
+    MailingList:
+      type: object
+      additionalProperties: false
+      required:
+      - list_name
+      - list_description
+      properties:
+        list_name:
+          type: string
+          description: The mailing list name.
+        list_description:
+          type: string
+          description: The mailing list description.
+      example:
+        list_name: cross-project-issues-dev
+        list_description: Cross project issues
+    EmploymentHistory:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - organization_name
+      - start
+      properties:
+        organization_id:
+          type: number
+          description: Internal numerical ID of organization
+        organization_name:
+          type: string
+          description: The legal name of the organization
+        start:
+          type: string
+          description: Start or entry date of the user employment
+        end:
+          type:
+          - 'null'
+          - string
+          description: Termination or change date for employment
+    Subscriptions:
+      type: object
+      additionalProperties: false
+      required:
+      - mailing_list_subscriptions
+      properties:
+        mailing_list_subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailingList'
+      example:
+        mailing_list_subscriptions:
+        - list_name: cross-project-issues-dev
+          list_description: Cross project issues
+        - list_name: epp
+          list_description: Eclipse Packaging Project
+    PeopleProject:
+      type: object
+      additionalProperties: false
+      required:
+      - ActiveDate
+      - EditBugs
+      - SortOrder
+      - ProjectName
+      - Url
+      - SpecificationProject
+      - Relation
+      properties:
+        ActiveDate:
+          type: string
+          description: The active date for this record
+        InactiveDate:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The inactive date for this record
+        EditBugs:
+          type: string
+          description: Edit bugs status. 1 for true, 0 for false
+        SortOrder:
+          type: string
+          description: The sort order for this record
+        ProjectName:
+          type: string
+          description: The project's name
+        Url:
+          type: string
+          description: The project URL
+        SpecificationProject:
+          type: boolean
+          description: The active date for tis record
+        Relation:
+          $ref: '#/components/schemas/Relation'
   securitySchemes:
     OAuth2:
       type: oauth2
