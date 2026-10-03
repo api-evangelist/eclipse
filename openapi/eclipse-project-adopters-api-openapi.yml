@@ -38,10 +38,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    AdoptedProjects:
-      type: array
-      items:
-        $ref: '#/components/schemas/AdoptedProject'
     Adopter:
       type: object
       additionalProperties: false
@@ -95,3 +91,7 @@ components:
         url:
           type: string
           description: The project URL under projects.eclipse.org.
+    AdoptedProjects:
+      type: array
+      items:
+        $ref: '#/components/schemas/AdoptedProject'

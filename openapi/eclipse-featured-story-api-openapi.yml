@@ -74,76 +74,16 @@ paths:
       operationId: getApiFeaturedStory
       x-operation-id-source: derived
 components:
-  schemas:
-    FeaturedStory:
-      type: object
-      required:
-      - title
-      - type
-      - layout
-      - start-date
-      - end-date
-      - publish_to
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        start-date:
-          type: string
-          format: date-time
-        end-date:
-          type: string
-          format: date-time
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeaturedStoryLink'
-        layout:
-          type: string
-        type:
-          type: string
-        body:
-          type: string
-        image:
-          type: string
-          format: uri
-        publish_to:
-          type: array
-          items:
-            type: string
-    FeaturedStoryLink:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-        title:
-          type: string
-        original_url:
-          type: string
-          format: uri
-        original_title:
-          type: string
-    Pager:
-      type: object
-      required:
-      - current_page
-      - total_items
-      - total_pages
-      - items_per_page
-      properties:
-        current_page:
-          type: integer
-          format: int32
-        total_items:
-          type: string
-        total_pages:
-          type: integer
-          format: int32
-        items_per_page:
-          type: string
   parameters:
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
     PublishToFilter:
       name: parameters[publish_to]
       in: query
@@ -190,12 +130,72 @@ components:
       schema:
         type: integer
         format: int32
-    Page:
-      name: page
-      in: query
-      description: The number of the page.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
+  schemas:
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string
+    FeaturedStoryLink:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        title:
+          type: string
+        original_url:
+          type: string
+          format: uri
+        original_title:
+          type: string
+    FeaturedStory:
+      type: object
+      required:
+      - title
+      - type
+      - layout
+      - start-date
+      - end-date
+      - publish_to
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        start-date:
+          type: string
+          format: date-time
+        end-date:
+          type: string
+          format: date-time
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeaturedStoryLink'
+        layout:
+          type: string
+        type:
+          type: string
+        body:
+          type: string
+        image:
+          type: string
+          format: uri
+        publish_to:
+          type: array
+          items:
+            type: string

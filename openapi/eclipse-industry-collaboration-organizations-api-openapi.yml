@@ -69,10 +69,6 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    Organizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/Organization'
     Organization:
       type: object
       additionalProperties: false
@@ -155,6 +151,10 @@ components:
       - string
       - 'null'
       minimum: 1
+    Organizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organization'
   securitySchemes:
     openId:
       type: openIdConnect

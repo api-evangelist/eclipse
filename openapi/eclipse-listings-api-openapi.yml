@@ -330,84 +330,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/PopularListings'
 components:
-  parameters:
-    limit:
-      name: limit
-      in: query
-      description: The number of result returned for a listing (favorites, recent, search, etc.) integer between 0 and 20, default to 10.
-      schema:
-        type: integer
-    product:
-      name: product
-      in: query
-      description: The product id of the target Eclipse, e.g. org.eclipse.sdk.ide or epp.package.java
-      schema:
-        type: string
-    os:
-      name: os
-      in: query
-      description: Operating system of the user.
-      schema:
-        type: string
-        enum:
-        - linux
-        - freebsd
-        - solaris
-        - win32
-        - win64
-        - windows
-        - macosx
-    ws:
-      name: ws
-      in: query
-      description: Window system of the user.
-      schema:
-        type: string
-        enum:
-        - gtk
-        - win32
-        - cocoa
-    client:
-      name: client
-      in: query
-      description: This variable is usually sent from MPC to alter the default list. It's available for the Most Popular Listings, Top Favorited Listings, Recently Updated Listings and Featured Listings. Only installable listings owned by an Eclipse member company will be returned.
-      schema:
-        type: string
-        enum:
-        - org.eclipse.epp.mpc.core
-        - org.eclipse.smarthome
-        - org.eclipse.kura
-    page-number:
-      name: page_num
-      in: query
-      description: used for pagination to access additional results in a listing, the index start at 1. To get the second page of results use page_num=2
-      schema:
-        type: integer
-    product-version:
-      name: product_version
-      in: query
-      description: The version of the running product of the target Eclipse, identical to the version of the product's branding plugin
-      schema:
-        type: string
-    platform-version:
-      name: platform_version
-      in: query
-      description: (since Kepler/MPC 1.2) The version of the org.eclipse.platform bundle of the target Eclipse
-      schema:
-        type: string
-    runtime-version:
-      name: runtime_version
-      in: query
-      description: The version of the org.eclipse.core.runtime bundle of the target Eclipse
-      schema:
-        type: string
   schemas:
-    BaseTag:
-      allOf:
-      - $ref: '#/components/schemas/BaseNode'
-      - type: object
-        xml:
-          name: tag
+    PopularListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        popular:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    FavoritedListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        favorites:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
     Listing:
       allOf:
       - $ref: '#/components/schemas/BaseNode'
@@ -532,6 +489,29 @@ components:
               - Linux/GTK
               xml:
                 name: platform
+    BaseTag:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: tag
+    FeaturedListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        featured:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
     SearchResults:
       type: object
       xml:
@@ -560,12 +540,12 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Listing'
-    FavoritedListings:
+    RecentListings:
       type: object
       xml:
         name: marketplace
       properties:
-        favorites:
+        recent:
           type: object
           properties:
             count:
@@ -577,17 +557,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Listing'
-    BaseCategory:
-      allOf:
-      - $ref: '#/components/schemas/BaseNode'
-      - type: object
-        xml:
-          name: category
-        properties:
-          count:
-            type: integer
-            xml:
-              attribute: true
     BaseNode:
       type: object
       properties:
@@ -623,54 +592,85 @@ components:
                   attribute: true
               node:
                 $ref: '#/components/schemas/Listing'
-    FeaturedListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        featured:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
-    PopularListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        popular:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
-    RecentListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        recent:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
+    BaseCategory:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: category
+        properties:
+          count:
+            type: integer
+            xml:
+              attribute: true
+  parameters:
+    platform-version:
+      name: platform_version
+      in: query
+      description: (since Kepler/MPC 1.2) The version of the org.eclipse.platform bundle of the target Eclipse
+      schema:
+        type: string
+    ws:
+      name: ws
+      in: query
+      description: Window system of the user.
+      schema:
+        type: string
+        enum:
+        - gtk
+        - win32
+        - cocoa
+    product-version:
+      name: product_version
+      in: query
+      description: The version of the running product of the target Eclipse, identical to the version of the product's branding plugin
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      description: The number of result returned for a listing (favorites, recent, search, etc.) integer between 0 and 20, default to 10.
+      schema:
+        type: integer
+    product:
+      name: product
+      in: query
+      description: The product id of the target Eclipse, e.g. org.eclipse.sdk.ide or epp.package.java
+      schema:
+        type: string
+    page-number:
+      name: page_num
+      in: query
+      description: used for pagination to access additional results in a listing, the index start at 1. To get the second page of results use page_num=2
+      schema:
+        type: integer
+    os:
+      name: os
+      in: query
+      description: Operating system of the user.
+      schema:
+        type: string
+        enum:
+        - linux
+        - freebsd
+        - solaris
+        - win32
+        - win64
+        - windows
+        - macosx
+    client:
+      name: client
+      in: query
+      description: This variable is usually sent from MPC to alter the default list. It's available for the Most Popular Listings, Top Favorited Listings, Recently Updated Listings and Featured Listings. Only installable listings owned by an Eclipse member company will be returned.
+      schema:
+        type: string
+        enum:
+        - org.eclipse.epp.mpc.core
+        - org.eclipse.smarthome
+        - org.eclipse.kura
+    runtime-version:
+      name: runtime_version
+      in: query
+      description: The version of the org.eclipse.core.runtime bundle of the target Eclipse
+      schema:
+        type: string

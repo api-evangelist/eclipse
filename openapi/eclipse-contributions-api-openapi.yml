@@ -48,15 +48,6 @@ components:
       type:
       - 'null'
       - string
-    DateTime:
-      type: string
-      format: date-time
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
     CommitValidationMessage:
       type: object
       additionalProperties: false
@@ -133,3 +124,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CommitValidationMessage'
+    DateTime:
+      type: string
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '

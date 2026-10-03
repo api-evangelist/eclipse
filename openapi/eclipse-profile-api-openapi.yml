@@ -38,6 +38,18 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ProfilePublisherAgreement:
+      type: object
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'
+    EfUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfUser'
     Eca:
       type: object
       properties:
@@ -50,21 +62,6 @@ components:
       example:
         signed: true
         can_contribute_spec_project: true
-    Country:
-      type: object
-      properties:
-        code:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The country code.
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-      example:
-        code: CA
-        name: Canada
     EfUser:
       type: object
       properties:
@@ -177,18 +174,21 @@ components:
           - type: string
           - type: 'null'
           description: The user's Marketplace favorites URL.
-    ProfilePublisherAgreement:
+    Country:
       type: object
       properties:
-        version:
-          type: string
-          description: the agreement document version.
+        code:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The country code.
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
       example:
-        version: '1'
-    EfUsers:
-      type: array
-      items:
-        $ref: '#/components/schemas/EfUser'
+        code: CA
+        name: Canada
   securitySchemes:
     OAuth2:
       type: oauth2

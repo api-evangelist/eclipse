@@ -139,6 +139,140 @@ paths:
       deprecated: false
 components:
   schemas:
+    Subscriptions:
+      type: object
+      additionalProperties: false
+      required:
+      - mailing_list_subscriptions
+      properties:
+        mailing_list_subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailingList'
+      example:
+        mailing_list_subscriptions:
+        - list_name: cross-project-issues-dev
+          list_description: Cross project issues
+        - list_name: epp
+          list_description: Eclipse Packaging Project
+    Relation:
+      type: object
+      additionalProperties: false
+      required:
+      - Relation
+      - Description
+      - IsActive
+      - Type
+      properties:
+        Relation:
+          type: string
+          description: The relation code.
+        Description:
+          type: string
+          description: The relation description.
+        IsActive:
+          type: string
+          description: The active flag for the relation. 1 for true, 0 for false.
+        Type:
+          type: object
+          additionalProperties: false
+          required:
+          - Type
+          - Description
+          properties:
+            Type:
+              type: string
+              description: The type code.
+            Description:
+              type: string
+              description: The type description.
+      example:
+        Relation: CM
+        Description: commiter
+        IsActive: '1'
+        Type:
+          Type: PR
+          Description: Person - Project
+    EmploymentHistory:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - organization_name
+      - start
+      properties:
+        organization_id:
+          type: number
+          description: Internal numerical ID of organization
+        organization_name:
+          type: string
+          description: The legal name of the organization
+        start:
+          type: string
+          description: Start or entry date of the user employment
+        end:
+          type:
+          - 'null'
+          - string
+          description: Termination or change date for employment
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
+    MailingList:
+      type: object
+      additionalProperties: false
+      required:
+      - list_name
+      - list_description
+      properties:
+        list_name:
+          type: string
+          description: The mailing list name.
+        list_description:
+          type: string
+          description: The mailing list description.
+      example:
+        list_name: cross-project-issues-dev
+        list_description: Cross project issues
+    PeopleProject:
+      type: object
+      additionalProperties: false
+      required:
+      - ActiveDate
+      - EditBugs
+      - SortOrder
+      - ProjectName
+      - Url
+      - SpecificationProject
+      - Relation
+      properties:
+        ActiveDate:
+          type: string
+          description: The active date for this record
+        InactiveDate:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The inactive date for this record
+        EditBugs:
+          type: string
+          description: Edit bugs status. 1 for true, 0 for false
+        SortOrder:
+          type: string
+          description: The sort order for this record
+        ProjectName:
+          type: string
+          description: The project's name
+        Url:
+          type: string
+          description: The project URL
+        SpecificationProject:
+          type: boolean
+          description: The active date for tis record
+        Relation:
+          $ref: '#/components/schemas/Relation'
     Eca:
       type: object
       additionalProperties: false
@@ -155,6 +289,10 @@ components:
       example:
         signed: true
         can_contribute_spec_project: true
+    EmploymentHistories:
+      type: array
+      items:
+        $ref: '#/components/schemas/EmploymentHistory'
     PeopleProjectMap:
       type: object
       propertyNames:
@@ -197,144 +335,6 @@ components:
           type:
             type: PR
             description: Person - Project
-    Relation:
-      type: object
-      additionalProperties: false
-      required:
-      - Relation
-      - Description
-      - IsActive
-      - Type
-      properties:
-        Relation:
-          type: string
-          description: The relation code.
-        Description:
-          type: string
-          description: The relation description.
-        IsActive:
-          type: string
-          description: The active flag for the relation. 1 for true, 0 for false.
-        Type:
-          type: object
-          additionalProperties: false
-          required:
-          - Type
-          - Description
-          properties:
-            Type:
-              type: string
-              description: The type code.
-            Description:
-              type: string
-              description: The type description.
-      example:
-        Relation: CM
-        Description: commiter
-        IsActive: '1'
-        Type:
-          Type: PR
-          Description: Person - Project
-    Error:
-      type: array
-      items:
-        type: string
-      description: An array containing a single message indicating the error
-    EmploymentHistories:
-      type: array
-      items:
-        $ref: '#/components/schemas/EmploymentHistory'
-    MailingList:
-      type: object
-      additionalProperties: false
-      required:
-      - list_name
-      - list_description
-      properties:
-        list_name:
-          type: string
-          description: The mailing list name.
-        list_description:
-          type: string
-          description: The mailing list description.
-      example:
-        list_name: cross-project-issues-dev
-        list_description: Cross project issues
-    EmploymentHistory:
-      type: object
-      additionalProperties: false
-      required:
-      - organization_id
-      - organization_name
-      - start
-      properties:
-        organization_id:
-          type: number
-          description: Internal numerical ID of organization
-        organization_name:
-          type: string
-          description: The legal name of the organization
-        start:
-          type: string
-          description: Start or entry date of the user employment
-        end:
-          type:
-          - 'null'
-          - string
-          description: Termination or change date for employment
-    Subscriptions:
-      type: object
-      additionalProperties: false
-      required:
-      - mailing_list_subscriptions
-      properties:
-        mailing_list_subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/MailingList'
-      example:
-        mailing_list_subscriptions:
-        - list_name: cross-project-issues-dev
-          list_description: Cross project issues
-        - list_name: epp
-          list_description: Eclipse Packaging Project
-    PeopleProject:
-      type: object
-      additionalProperties: false
-      required:
-      - ActiveDate
-      - EditBugs
-      - SortOrder
-      - ProjectName
-      - Url
-      - SpecificationProject
-      - Relation
-      properties:
-        ActiveDate:
-          type: string
-          description: The active date for this record
-        InactiveDate:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The inactive date for this record
-        EditBugs:
-          type: string
-          description: Edit bugs status. 1 for true, 0 for false
-        SortOrder:
-          type: string
-          description: The sort order for this record
-        ProjectName:
-          type: string
-          description: The project's name
-        Url:
-          type: string
-          description: The project URL
-        SpecificationProject:
-          type: boolean
-          description: The active date for tis record
-        Relation:
-          $ref: '#/components/schemas/Relation'
   securitySchemes:
     OAuth2:
       type: oauth2

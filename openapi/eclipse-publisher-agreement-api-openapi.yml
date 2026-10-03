@@ -120,6 +120,29 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The URL
+        friendly_message:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The optional client-friendly error message
     PublisherAgreement:
       type: object
       additionalProperties: false
@@ -164,29 +187,6 @@ components:
         Comments:
           type: string
           description: Comments on the agreement.
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The URL
-        friendly_message:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The optional client-friendly error message
     AgreementSigningRequest:
       type: object
       additionalProperties: false

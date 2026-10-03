@@ -304,43 +304,18 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    SlimOrganization:
+    Projects:
+      type: array
+      items:
+        $ref: '#/components/schemas/Project'
+    WorkingGroupParticipationAgreement:
       type: object
-      additionalProperties: false
-      required:
-      - organization_id
-      - name
-      - logos
-      - is_active_member
-      - website
       properties:
-        organization_id:
-          type: integer
-          description: The unique ID for the given organization
-        name:
+        document_id:
+          $ref: '#/components/schemas/ObjectID'
+        pdf:
           type: string
-          description: The display name of the organization
-        website:
-          type:
-          - string
-          - 'null'
-          description: The website for the given organization, used for linking back to the member
-        is_active_member:
-          type: boolean
-          description: Whether the organization is an active or historic member.
-        logos:
-          type: object
-          properties:
-            print:
-              type:
-              - string
-              - 'null'
-              description: URL of full resolution logo
-            web:
-              type:
-              - string
-              - 'null'
-              description: URL of compressed web logo
+          description: Link to the PDF version of the participation agreement
     DateTime:
       type: string
       format: datetime
@@ -350,28 +325,10 @@ components:
         More on this standard can be read at https://tools.ietf.org/html/rfc3339.
 
         '
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
     EnhancedPersons:
       type: array
       items:
         $ref: '#/components/schemas/EnhancedPersonData'
-    Organizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/Organization'
-    Projects:
-      type: array
-      items:
-        $ref: '#/components/schemas/Project'
-    WorkingGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkingGroup'
     OrganizationLogoUpdateRequest:
       type: object
       properties:
@@ -388,63 +345,19 @@ components:
           - SMALL
           - LARGE
           - PRINT
-    SlimOrganizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/SlimOrganization'
-    Project:
+    OrganizationInfoUpdateRequest:
       type: object
       properties:
-        project_id:
-          $ref: '#/components/schemas/ObjectID'
-        parent_project_id:
-          $ref: '#/components/schemas/ObjectID'
-        name:
-          type: string
-          description: Placeholder
-        level:
-          type: string
-          description: Placeholder
         description:
           type: string
-          description: Placeholder
-        url_download:
+          description: Description of the stored URL/product
+        company_url:
           type: string
-          description: Placeholder
-        url_index:
-          type: string
-          description: Placeholder
-        date_active:
-          $ref: '#/components/schemas/DateTime'
-        sort_order:
-          type: string
-          description: Placeholder
-        bugs_name:
-          type: string
-          description: Placeholder
-        project_phase:
-          type: string
-          description: Placeholder
-        disk_quota_gb:
-          type: integer
-          description: Placeholder
-        is_active:
-          type: boolean
-          description: Placeholder
-        is_component:
-          type: boolean
-          description: Placeholder
-        is_standard:
-          type: boolean
-          description: Placeholder
-    WorkingGroupParticipationAgreement:
-      type: object
-      properties:
-        document_id:
-          $ref: '#/components/schemas/ObjectID'
-        pdf:
-          type: string
-          description: Link to the PDF version of the participation agreement
+          description: URL for the product
+    WorkingGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroup'
     Organization:
       type: object
       additionalProperties: false
@@ -521,106 +434,12 @@ components:
                 type: string
               description:
                 type: string
-    OrganizationInfoUpdateRequest:
-      type: object
-      properties:
-        description:
-          type: string
-          description: Description of the stored URL/product
-        company_url:
-          type: string
-          description: URL for the product
-    EnhancedPersonData:
-      type: object
-      required:
-      - id
-      - first_name
-      - last_name
-      - relations
-      properties:
-        id:
-          type: string
-          description: Description of the stored URL/product
-        first_name:
-          type: string
-          description: First name of the user
-        last_name:
-          type: string
-          description: Last name of the user
-        email:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: Email of the user. Only included if the current user has elevated permissions for the current organization.
-        relations:
-          type: array
-          description: list of relation codes that are active for the current user
-          items:
-            type: string
-    WorkingGroup:
-      type: object
-      properties:
-        alias:
-          type: string
-          description: internal alias for the working group
-        title:
-          type: string
-          description: Public-facing or official name of the working group
-        status:
-          type: string
-          description: Current status of the working group (e.g. incubating, active, archived)
-        logo:
-          type: string
-          description: image link for the working groups logo
-        description:
-          type: string
-          description: Short description of the working group
-        resources:
-          type: object
-          properties:
-            charter:
-              type: string
-              description: Link to the charter for the current working group
-            contact_form:
-              type: string
-              description: URL link to the contact form
-            members:
-              type: string
-              description: URL to the members list for the given working group
-            participation_agreements:
-              type: object
-              properties:
-                individual:
-                  anyOf:
-                  - type: 'null'
-                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
-                organization:
-                  anyOf:
-                  - type: 'null'
-                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
-                sponsorship:
-                  type: string
-                  description: link to the sponsorship agreement document
-                sponsorship_document:
-                  type:
-                  - string
-                  - 'null'
-                  description: Sponsorship agreement document in Foundation for formalized sponsorship
-            website:
-              type: string
-              description: the URL for the homepage of this working group
-        levels:
-          type: array
-          items:
-            type: object
-            description: Definition of the participation level for the working group, including its relation code
-            properties:
-              relation:
-                type: string
-                description: code representing the relation, used internally when using common relation types
-              description:
-                type: string
-                description: the label for the participation level
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     OrganizationCBI:
       type: object
       properties:
@@ -695,6 +514,187 @@ components:
                       items:
                         type: string
                         description: Ticket linking to the request from the organization to add the resources/agents to this project.
+    WorkingGroup:
+      type: object
+      properties:
+        alias:
+          type: string
+          description: internal alias for the working group
+        title:
+          type: string
+          description: Public-facing or official name of the working group
+        status:
+          type: string
+          description: Current status of the working group (e.g. incubating, active, archived)
+        logo:
+          type: string
+          description: image link for the working groups logo
+        description:
+          type: string
+          description: Short description of the working group
+        resources:
+          type: object
+          properties:
+            charter:
+              type: string
+              description: Link to the charter for the current working group
+            contact_form:
+              type: string
+              description: URL link to the contact form
+            members:
+              type: string
+              description: URL to the members list for the given working group
+            participation_agreements:
+              type: object
+              properties:
+                individual:
+                  anyOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                organization:
+                  anyOf:
+                  - type: 'null'
+                  - $ref: '#/components/schemas/WorkingGroupParticipationAgreement'
+                sponsorship:
+                  type: string
+                  description: link to the sponsorship agreement document
+                sponsorship_document:
+                  type:
+                  - string
+                  - 'null'
+                  description: Sponsorship agreement document in Foundation for formalized sponsorship
+            website:
+              type: string
+              description: the URL for the homepage of this working group
+        levels:
+          type: array
+          items:
+            type: object
+            description: Definition of the participation level for the working group, including its relation code
+            properties:
+              relation:
+                type: string
+                description: code representing the relation, used internally when using common relation types
+              description:
+                type: string
+                description: the label for the participation level
+    SlimOrganizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/SlimOrganization'
+    EnhancedPersonData:
+      type: object
+      required:
+      - id
+      - first_name
+      - last_name
+      - relations
+      properties:
+        id:
+          type: string
+          description: Description of the stored URL/product
+        first_name:
+          type: string
+          description: First name of the user
+        last_name:
+          type: string
+          description: Last name of the user
+        email:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: Email of the user. Only included if the current user has elevated permissions for the current organization.
+        relations:
+          type: array
+          description: list of relation codes that are active for the current user
+          items:
+            type: string
+    SlimOrganization:
+      type: object
+      additionalProperties: false
+      required:
+      - organization_id
+      - name
+      - logos
+      - is_active_member
+      - website
+      properties:
+        organization_id:
+          type: integer
+          description: The unique ID for the given organization
+        name:
+          type: string
+          description: The display name of the organization
+        website:
+          type:
+          - string
+          - 'null'
+          description: The website for the given organization, used for linking back to the member
+        is_active_member:
+          type: boolean
+          description: Whether the organization is an active or historic member.
+        logos:
+          type: object
+          properties:
+            print:
+              type:
+              - string
+              - 'null'
+              description: URL of full resolution logo
+            web:
+              type:
+              - string
+              - 'null'
+              description: URL of compressed web logo
+    Organizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organization'
+    Project:
+      type: object
+      properties:
+        project_id:
+          $ref: '#/components/schemas/ObjectID'
+        parent_project_id:
+          $ref: '#/components/schemas/ObjectID'
+        name:
+          type: string
+          description: Placeholder
+        level:
+          type: string
+          description: Placeholder
+        description:
+          type: string
+          description: Placeholder
+        url_download:
+          type: string
+          description: Placeholder
+        url_index:
+          type: string
+          description: Placeholder
+        date_active:
+          $ref: '#/components/schemas/DateTime'
+        sort_order:
+          type: string
+          description: Placeholder
+        bugs_name:
+          type: string
+          description: Placeholder
+        project_phase:
+          type: string
+          description: Placeholder
+        disk_quota_gb:
+          type: integer
+          description: Placeholder
+        is_active:
+          type: boolean
+          description: Placeholder
+        is_component:
+          type: boolean
+          description: Placeholder
+        is_standard:
+          type: boolean
+          description: Placeholder
   securitySchemes:
     openId:
       type: openIdConnect

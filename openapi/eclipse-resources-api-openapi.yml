@@ -60,6 +60,15 @@ paths:
       x-operation-id-source: derived
 components:
   parameters:
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
     PublishToFilter:
       name: parameters[publish_to]
       in: query
@@ -106,34 +115,7 @@ components:
       schema:
         type: integer
         format: int32
-    Page:
-      name: page
-      in: query
-      description: The number of the page.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
   schemas:
-    Pager:
-      type: object
-      required:
-      - current_page
-      - total_items
-      - total_pages
-      - items_per_page
-      properties:
-        current_page:
-          type: integer
-          format: int32
-        total_items:
-          type: string
-        total_pages:
-          type: integer
-          format: int32
-        items_per_page:
-          type: string
     ResourceAuthor:
       type: object
       properties:
@@ -172,3 +154,21 @@ components:
           type: array
           items:
             type: string
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string

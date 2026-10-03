@@ -121,97 +121,16 @@ paths:
       operationId: getApiEvents
       x-operation-id-source: derived
 components:
-  schemas:
-    EventsGeoLoc:
-      type: object
-      properties:
-        lat:
-          type: string
-        lon:
-          type: string
-    Events:
-      type: object
-      required:
-      - title
-      - type
-      - attendance_type
-      - ef_participation
-      - date
-      - end-date
-      - field_content_publish_to
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-        image:
-          type: string
-          format: uri
-        attendance_type:
-          type: string
-        ef_participation:
-          type: string
-        title:
-          type: string
-        date:
-          type: string
-          format: date-time
-        end-date:
-          type: string
-          format: date-time
-        locationName:
-          type: string
-        description:
-          type: string
-        infoLink:
-          type: boolean
-        registration:
-          type: string
-          format: uri
-        address:
-          $ref: '#/components/schemas/EventsAddress'
-        field_content_publish_to:
-          type: array
-          items:
-            type: string
-    Pager:
-      type: object
-      required:
-      - current_page
-      - total_items
-      - total_pages
-      - items_per_page
-      properties:
-        current_page:
-          type: integer
-          format: int32
-        total_items:
-          type: string
-        total_pages:
-          type: integer
-          format: int32
-        items_per_page:
-          type: string
-    EventsAddress:
-      type: object
-      properties:
-        street:
-          type: string
-        country:
-          type:
-          - string
-          - 'null'
-        city:
-          type:
-          - string
-          - 'null'
-        zip:
-          type:
-          - string
-          - 'null'
-        geoLoc:
-          $ref: '#/components/schemas/EventsGeoLoc'
   parameters:
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
     PublishToFilter:
       name: parameters[publish_to]
       in: query
@@ -258,12 +177,93 @@ components:
       schema:
         type: integer
         format: int32
-    Page:
-      name: page
-      in: query
-      description: The number of the page.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
+  schemas:
+    Events:
+      type: object
+      required:
+      - title
+      - type
+      - attendance_type
+      - ef_participation
+      - date
+      - end-date
+      - field_content_publish_to
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        image:
+          type: string
+          format: uri
+        attendance_type:
+          type: string
+        ef_participation:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+          format: date-time
+        end-date:
+          type: string
+          format: date-time
+        locationName:
+          type: string
+        description:
+          type: string
+        infoLink:
+          type: boolean
+        registration:
+          type: string
+          format: uri
+        address:
+          $ref: '#/components/schemas/EventsAddress'
+        field_content_publish_to:
+          type: array
+          items:
+            type: string
+    EventsGeoLoc:
+      type: object
+      properties:
+        lat:
+          type: string
+        lon:
+          type: string
+    EventsAddress:
+      type: object
+      properties:
+        street:
+          type: string
+        country:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        zip:
+          type:
+          - string
+          - 'null'
+        geoLoc:
+          $ref: '#/components/schemas/EventsGeoLoc'
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string

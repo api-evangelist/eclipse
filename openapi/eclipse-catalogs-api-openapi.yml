@@ -32,6 +32,12 @@ paths:
                 $ref: '#/components/schemas/Catalogs'
 components:
   schemas:
+    PseudoBool:
+      type: integer
+      description: Boolean value represented by a 1 for true, 0 for false
+      enum:
+      - 1
+      - 0
     Catalogs:
       type: object
       xml:
@@ -123,9 +129,3 @@ components:
                   description: Seconds since epoch timestamp for when news source was updated
                   xml:
                     attribute: true
-    PseudoBool:
-      type: integer
-      description: Boolean value represented by a 1 for true, 0 for false
-      enum:
-      - 1
-      - 0

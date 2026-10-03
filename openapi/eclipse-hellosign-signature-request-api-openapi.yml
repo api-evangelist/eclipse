@@ -188,10 +188,6 @@ components:
             description: Previous internal IDs used for this template, used for backwards compatibility
             items:
               type: string
-    EfHellosignRequests:
-      type: array
-      items:
-        $ref: '#/components/schemas/EfHellosignRequest'
     EfTemplateDocument:
       type: object
       additionalProperties: false
@@ -321,6 +317,10 @@ components:
                 type: string
                 format: date-time
                 description: The standardized time that the event was recieved by the system
+    EfHellosignRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfHellosignRequest'
   securitySchemes:
     openId:
       type: openIdConnect

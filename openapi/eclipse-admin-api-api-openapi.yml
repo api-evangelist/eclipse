@@ -709,21 +709,17 @@ paths:
                 format: int32
 components:
   schemas:
-    ReviewList:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          reviews:
-            type: array
-            items:
-              $ref: '#/components/schemas/Review'
-      description: List of reviews of an extension
-      required:
-      - reviews
-    Result:
+    TopNamespaceExtensionVersions:
       type: object
-      description: Generic result indicator
+      properties:
+        namespace:
+          type: string
+        extensionVersions:
+          type: integer
+          format: int32
+    BulkPublisherRevokeResponse:
+      type: object
+      description: List of responses for the bulk publisher revocation request
       properties:
         success:
           type: string
@@ -734,47 +730,28 @@ components:
         error:
           type: string
           description: Indicates an error; when this is present, all other properties should be ignored
-    User:
-      type: object
-      description: User data
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        loginName:
-          type: string
-          description: Login name
-        fullName:
-          type: string
-          description: Full name
-        avatarUrl:
-          type: string
-          description: URL to the user's avatar image
-        homepage:
-          type: string
-          description: URL to the user's profile page
-        provider:
-          type: string
-          description: Authentication provider (e.g. github)
-      required:
-      - loginName
-    VersionTargetPlatformsJson:
+        responses:
+          type: object
+          additionalProperties:
+            oneOf:
+            - $ref: '#/components/schemas/Result'
+            - $ref: '#/components/schemas/Extension'
+            - $ref: '#/components/schemas/Namespace'
+            - $ref: '#/components/schemas/NamespaceMembershipList'
+            - $ref: '#/components/schemas/QueryResult'
+            - $ref: '#/components/schemas/ReviewList'
+            - $ref: '#/components/schemas/SearchResult'
+            - $ref: '#/components/schemas/User'
+          description: Results for each of the attempted revoke operations matched on the login name of the user
+    PublishersByExtensionsPublished:
       type: object
       properties:
-        version:
-          type: string
-        targetPlatforms:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetPlatformActive'
-        canDelete:
-          type: boolean
+        extensionsPublished:
+          type: integer
+          format: int32
+        publishers:
+          type: integer
+          format: int32
     BulkPublisherRevokeRequest:
       type: object
       description: List of publishers to revoke contributions for
@@ -1011,6 +988,23 @@ components:
       - timestamp
       - verified
       - version
+    ExtensionReference:
+      type: object
+      description: A reference to another extension in the registry
+      properties:
+        url:
+          type: string
+          description: URL to get metadata of the referenced extension
+        namespace:
+          type: string
+          description: Namespace of the referenced extension
+        extension:
+          type: string
+          description: Name of the referenced extension
+      required:
+      - extension
+      - namespace
+      - url
     Review:
       type: object
       description: A review of an extension
@@ -1033,72 +1027,20 @@ components:
       - rating
       - timestamp
       - user
-    TargetPlatformVersion:
+    VersionTargetPlatformsJson:
       type: object
-      description: Combination of target platform and version of an extension
       properties:
-        targetPlatform:
-          type: string
-          description: Name of the target platform
-          enum:
-          - win32-x64
-          - win32-ia32
-          - win32-arm64
-          - linux-x64
-          - linux-arm64
-          - linux-armhf
-          - alpine-x64
-          - alpine-arm64
-          - darwin-x64
-          - darwin-arm64
-          - web
-          - universal
         version:
           type: string
-          description: Version of the extension
-      required:
-      - version
-    Namespace:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          name:
-            type: string
-            description: Name of the namespace
-          extensions:
-            type: object
-            additionalProperties:
-              type: string
-            description: Map of extension names to their metadata URLs (not required for creating)
-          verified:
-            type: boolean
-            description: Indicates whether the namespace has an owner (not required for creating)
-      description: Metadata of a namespace
-      required:
-      - name
-      - verified
-    ExtensionsByRating:
+        targetPlatforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetPlatformActive'
+        canDelete:
+          type: boolean
+    User:
       type: object
-      properties:
-        rating:
-          type: integer
-          format: int32
-        extensions:
-          type: integer
-          format: int32
-    PublishersByExtensionsPublished:
-      type: object
-      properties:
-        extensionsPublished:
-          type: integer
-          format: int32
-        publishers:
-          type: integer
-          format: int32
-    NamespaceMembershipList:
-      type: object
-      description: Metadata of a namespace member list
+      description: User data
       properties:
         success:
           type: string
@@ -1109,50 +1051,23 @@ components:
         error:
           type: string
           description: Indicates an error; when this is present, all other properties should be ignored
-        namespaceMemberships:
-          type: array
-          description: List of memberships
-          items:
-            $ref: '#/components/schemas/NamespaceMembershipJson'
-      required:
-      - namespaceMemberships
-    PublisherRevocationTarget:
-      type: object
-      description: Coordinate for a publisher that should be have its' contributions revoked
-      properties:
         loginName:
           type: string
+          description: Login name
+        fullName:
+          type: string
+          description: Full name
+        avatarUrl:
+          type: string
+          description: URL to the user's avatar image
+        homepage:
+          type: string
+          description: URL to the user's profile page
         provider:
           type: string
-    ExtensionReference:
-      type: object
-      description: A reference to another extension in the registry
-      properties:
-        url:
-          type: string
-          description: URL to get metadata of the referenced extension
-        namespace:
-          type: string
-          description: Namespace of the referenced extension
-        extension:
-          type: string
-          description: Name of the referenced extension
+          description: Authentication provider (e.g. github)
       required:
-      - extension
-      - namespace
-      - url
-    Badge:
-      type: object
-      description: A badge to be shown in the sidebar of the extension page in the registry
-      properties:
-        url:
-          type: string
-          description: Image URL of the badge
-        href:
-          type: string
-          description: The link users will follow when clicking the badge
-        description:
-          type: string
+      - loginName
     TargetPlatformActive:
       type: object
       description: Target platform of an extension version and whether it is active
@@ -1247,59 +1162,7 @@ components:
       - url
       - verified
       - version
-    ExtensionReplacement:
-      type: object
-      description: Metadata of an extension replacement
-      properties:
-        url:
-          type: string
-          description: URL of the extension replacement
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
-    TopMostDownloadedExtensions:
-      type: object
-      properties:
-        extensionIdentifier:
-          type: string
-        downloads:
-          type: integer
-          format: int64
-    TopMostActivePublishingUsers:
-      type: object
-      properties:
-        userLoginName:
-          type: string
-        publishedExtensionVersions:
-          type: integer
-          format: int32
-    BulkPublisherRevokeResponse:
-      type: object
-      description: List of responses for the bulk publisher revocation request
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        responses:
-          type: object
-          additionalProperties:
-            oneOf:
-            - $ref: '#/components/schemas/Result'
-            - $ref: '#/components/schemas/Extension'
-            - $ref: '#/components/schemas/Namespace'
-            - $ref: '#/components/schemas/NamespaceMembershipList'
-            - $ref: '#/components/schemas/QueryResult'
-            - $ref: '#/components/schemas/ReviewList'
-            - $ref: '#/components/schemas/SearchResult'
-            - $ref: '#/components/schemas/User'
-          description: Results for each of the attempted revoke operations matched on the login name of the user
-    SearchResult:
+    QueryResult:
       allOf:
       - $ref: '#/components/schemas/Result'
       - type: object
@@ -1307,31 +1170,30 @@ components:
           offset:
             type: integer
             format: int32
-            description: Number of skipped entries according to the search query
+            description: Number of skipped entries according to the query
             minimum: 0
           totalSize:
             type: integer
             format: int32
-            description: Total number of entries that match the search query
+            description: Total number of entries that match the query
             minimum: 0
           extensions:
             type: array
-            description: List of matching entries, limited to the size specified in the search query
+            description: Extensions that match the given query (may be empty)
             items:
-              $ref: '#/components/schemas/SearchEntry'
-      description: List of extensions matching a search query
+              $ref: '#/components/schemas/Extension'
+      description: Metadata query result
       required:
-      - extensions
       - offset
       - totalSize
-    TopNamespaceExtensionVersions:
+    PublisherRevocationTarget:
       type: object
+      description: Coordinate for a publisher that should be have its' contributions revoked
       properties:
-        namespace:
+        loginName:
           type: string
-        extensionVersions:
-          type: integer
-          format: int32
+        provider:
+          type: string
     AdminStatisticsJson:
       type: object
       properties:
@@ -1392,6 +1254,76 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TopMostDownloadedExtensions'
+    Badge:
+      type: object
+      description: A badge to be shown in the sidebar of the extension page in the registry
+      properties:
+        url:
+          type: string
+          description: Image URL of the badge
+        href:
+          type: string
+          description: The link users will follow when clicking the badge
+        description:
+          type: string
+    NamespaceMembershipList:
+      type: object
+      description: Metadata of a namespace member list
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        namespaceMemberships:
+          type: array
+          description: List of memberships
+          items:
+            $ref: '#/components/schemas/NamespaceMembershipJson'
+      required:
+      - namespaceMemberships
+    ReviewList:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          reviews:
+            type: array
+            items:
+              $ref: '#/components/schemas/Review'
+      description: List of reviews of an extension
+      required:
+      - reviews
+    TopMostDownloadedExtensions:
+      type: object
+      properties:
+        extensionIdentifier:
+          type: string
+        downloads:
+          type: integer
+          format: int64
+    ExtensionReplacement:
+      type: object
+      description: Metadata of an extension replacement
+      properties:
+        url:
+          type: string
+          description: URL of the extension replacement
+        displayName:
+          type: string
+          description: Name to be displayed in user interfaces
+    TopMostActivePublishingUsers:
+      type: object
+      properties:
+        userLoginName:
+          type: string
+        publishedExtensionVersions:
+          type: integer
+          format: int32
     VersionReference:
       type: object
       description: Essential metadata of an extension version
@@ -1427,7 +1359,65 @@ components:
           additionalProperties:
             type: string
           description: Map of engine names to the respective version constraints
-    QueryResult:
+    Result:
+      type: object
+      description: Generic result indicator
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+    Namespace:
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          name:
+            type: string
+            description: Name of the namespace
+          extensions:
+            type: object
+            additionalProperties:
+              type: string
+            description: Map of extension names to their metadata URLs (not required for creating)
+          verified:
+            type: boolean
+            description: Indicates whether the namespace has an owner (not required for creating)
+      description: Metadata of a namespace
+      required:
+      - name
+      - verified
+    TargetPlatformVersion:
+      type: object
+      description: Combination of target platform and version of an extension
+      properties:
+        targetPlatform:
+          type: string
+          description: Name of the target platform
+          enum:
+          - win32-x64
+          - win32-ia32
+          - win32-arm64
+          - linux-x64
+          - linux-arm64
+          - linux-armhf
+          - alpine-x64
+          - alpine-arm64
+          - darwin-x64
+          - darwin-arm64
+          - web
+          - universal
+        version:
+          type: string
+          description: Version of the extension
+      required:
+      - version
+    SearchResult:
       allOf:
       - $ref: '#/components/schemas/Result'
       - type: object
@@ -1435,19 +1425,29 @@ components:
           offset:
             type: integer
             format: int32
-            description: Number of skipped entries according to the query
+            description: Number of skipped entries according to the search query
             minimum: 0
           totalSize:
             type: integer
             format: int32
-            description: Total number of entries that match the query
+            description: Total number of entries that match the search query
             minimum: 0
           extensions:
             type: array
-            description: Extensions that match the given query (may be empty)
+            description: List of matching entries, limited to the size specified in the search query
             items:
-              $ref: '#/components/schemas/Extension'
-      description: Metadata query result
+              $ref: '#/components/schemas/SearchEntry'
+      description: List of extensions matching a search query
       required:
+      - extensions
       - offset
       - totalSize
+    ExtensionsByRating:
+      type: object
+      properties:
+        rating:
+          type: integer
+          format: int32
+        extensions:
+          type: integer
+          format: int32

@@ -152,6 +152,12 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Contact'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     ContactType:
       type: string
       description: The type of contact that is being stored
@@ -161,12 +167,6 @@ components:
       - MARKETING
       - ACCOUNTING
       - SIGNING
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
   securitySchemes:
     openId:
       type: openIdConnect

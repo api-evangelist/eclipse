@@ -109,6 +109,16 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    FormOrganizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/FormOrganization'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     FormOrganization:
       type: object
       properties:
@@ -162,16 +172,6 @@ components:
             postal_code:
               type: string
               description: The postal code of the physical address of the organization
-    FormOrganizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/FormOrganization'
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
   securitySchemes:
     openId:
       type: openIdConnect

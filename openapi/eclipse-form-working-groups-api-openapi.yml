@@ -129,42 +129,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ContactType:
-      type: string
-      description: The type of contact that is being stored
-      enum:
-      - COMPANY
-      - WORKING_GROUP
-      - MARKETING
-      - ACCOUNTING
-      - SIGNING
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
-    FormWorkingGroup:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/ObjectID'
-        form_id:
-          $ref: '#/components/schemas/ObjectID'
-        working_group:
-          type: string
-          description: The ID of the working group relationship to be formed
-        participation_level:
-          type: string
-          description: The desired participation level desired within the new working group
-        effective_date:
-          $ref: '#/components/schemas/DateTime'
-        contact:
-          $ref: '#/components/schemas/Contact'
-    FormWorkingGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/FormWorkingGroup'
     Contact:
       type: object
       properties:
@@ -195,6 +159,42 @@ components:
         More on this standard can be read at https://tools.ietf.org/html/rfc3339.
 
         '
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    FormWorkingGroup:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectID'
+        form_id:
+          $ref: '#/components/schemas/ObjectID'
+        working_group:
+          type: string
+          description: The ID of the working group relationship to be formed
+        participation_level:
+          type: string
+          description: The desired participation level desired within the new working group
+        effective_date:
+          $ref: '#/components/schemas/DateTime'
+        contact:
+          $ref: '#/components/schemas/Contact'
+    ContactType:
+      type: string
+      description: The type of contact that is being stored
+      enum:
+      - COMPANY
+      - WORKING_GROUP
+      - MARKETING
+      - ACCOUNTING
+      - SIGNING
+    FormWorkingGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/FormWorkingGroup'
   securitySchemes:
     openId:
       type: openIdConnect

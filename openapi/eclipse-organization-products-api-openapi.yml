@@ -142,10 +142,6 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    OrganizationProducts:
-      type: array
-      items:
-        $ref: '#/components/schemas/OrganizationProduct'
     OrganizationProduct:
       type: object
       properties:
@@ -166,6 +162,10 @@ components:
         product_url:
           type: string
           description: URL for the produtc
+    OrganizationProducts:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationProduct'
   securitySchemes:
     openId:
       type: openIdConnect

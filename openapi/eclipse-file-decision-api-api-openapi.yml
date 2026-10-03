@@ -419,6 +419,83 @@ paths:
                 format: int32
 components:
   schemas:
+    FileDecisionResponse:
+      type: object
+      description: Response for file decision create/update operations
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        processed:
+          type: integer
+          format: int32
+          description: Total number of file hashes processed
+          example: 5
+        successful:
+          type: integer
+          format: int32
+          description: Number of decisions applied successfully
+          example: 4
+        failed:
+          type: integer
+          format: int32
+          description: Number of decisions that failed
+          example: 1
+        results:
+          type: array
+          description: Detailed results for each file hash
+          items:
+            $ref: '#/components/schemas/FileDecisionResult'
+    FileDecisionDeleteResult:
+      type: object
+      description: Individual result for a file decision delete operation
+      properties:
+        fileId:
+          type: integer
+          format: int64
+          description: The file ID that was processed
+        success:
+          type: boolean
+          description: Whether the deletion was successful
+        error:
+          type: string
+          description: Error message if the deletion failed
+    FileDecisionDeleteResponse:
+      type: object
+      description: Response for file decision delete operations
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        processed:
+          type: integer
+          format: int32
+          description: Total number of file IDs processed
+        successful:
+          type: integer
+          format: int32
+          description: Number of deletions completed successfully
+        failed:
+          type: integer
+          format: int32
+          description: Number of deletions that failed
+        results:
+          type: array
+          description: Detailed results for each file ID
+          items:
+            $ref: '#/components/schemas/FileDecisionDeleteResult'
     FileDecisionResult:
       type: object
       description: Individual result for a file decision create/update operation
@@ -435,6 +512,75 @@ components:
           type: string
           description: Error message if the operation failed
           example: File hash not found
+    FileDecisionRequest:
+      type: object
+      description: Request body for creating/updating file decisions
+      properties:
+        fileHashes:
+          type: array
+          description: List of file hashes to apply the decision to
+          items:
+            type: string
+        decision:
+          type: string
+          description: 'Decision to apply: ''allowed'' or ''blocked'''
+    FileDecisionCounts:
+      type: object
+      description: Counts of allowed and blocked files
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        allowed:
+          type: integer
+          format: int32
+          description: Total count of allowed files
+        blocked:
+          type: integer
+          format: int32
+          description: Total count of blocked files
+        total:
+          type: integer
+          format: int32
+          description: Total count of all files
+    FilesResponse:
+      type: object
+      description: Paginated list of file decisions
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        offset:
+          type: integer
+          format: int32
+          description: Number of skipped entries
+          minimum: 0
+        totalSize:
+          type: integer
+          format: int32
+          description: Total number of files matching the query
+          minimum: 0
+        files:
+          type: array
+          description: List of file decisions
+          items:
+            $ref: '#/components/schemas/FileDecision'
+      required:
+      - files
+      - offset
+      - totalSize
     FileDecision:
       type: object
       description: File allow/block list decision
@@ -487,97 +633,6 @@ components:
         version:
           type: string
           description: Extension version when decision was made
-    FilesResponse:
-      type: object
-      description: Paginated list of file decisions
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        offset:
-          type: integer
-          format: int32
-          description: Number of skipped entries
-          minimum: 0
-        totalSize:
-          type: integer
-          format: int32
-          description: Total number of files matching the query
-          minimum: 0
-        files:
-          type: array
-          description: List of file decisions
-          items:
-            $ref: '#/components/schemas/FileDecision'
-      required:
-      - files
-      - offset
-      - totalSize
-    FileDecisionDeleteResult:
-      type: object
-      description: Individual result for a file decision delete operation
-      properties:
-        fileId:
-          type: integer
-          format: int64
-          description: The file ID that was processed
-        success:
-          type: boolean
-          description: Whether the deletion was successful
-        error:
-          type: string
-          description: Error message if the deletion failed
-    FileDecisionRequest:
-      type: object
-      description: Request body for creating/updating file decisions
-      properties:
-        fileHashes:
-          type: array
-          description: List of file hashes to apply the decision to
-          items:
-            type: string
-        decision:
-          type: string
-          description: 'Decision to apply: ''allowed'' or ''blocked'''
-    FileDecisionResponse:
-      type: object
-      description: Response for file decision create/update operations
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        processed:
-          type: integer
-          format: int32
-          description: Total number of file hashes processed
-          example: 5
-        successful:
-          type: integer
-          format: int32
-          description: Number of decisions applied successfully
-          example: 4
-        failed:
-          type: integer
-          format: int32
-          description: Number of decisions that failed
-          example: 1
-        results:
-          type: array
-          description: Detailed results for each file hash
-          items:
-            $ref: '#/components/schemas/FileDecisionResult'
     FileDecisionDeleteRequest:
       type: object
       description: Request body for deleting file decisions
@@ -588,58 +643,3 @@ components:
           items:
             type: integer
             format: int64
-    FileDecisionCounts:
-      type: object
-      description: Counts of allowed and blocked files
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        allowed:
-          type: integer
-          format: int32
-          description: Total count of allowed files
-        blocked:
-          type: integer
-          format: int32
-          description: Total count of blocked files
-        total:
-          type: integer
-          format: int32
-          description: Total count of all files
-    FileDecisionDeleteResponse:
-      type: object
-      description: Response for file decision delete operations
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        processed:
-          type: integer
-          format: int32
-          description: Total number of file IDs processed
-        successful:
-          type: integer
-          format: int32
-          description: Number of deletions completed successfully
-        failed:
-          type: integer
-          format: int32
-          description: Number of deletions that failed
-        results:
-          type: array
-          description: Detailed results for each file ID
-          items:
-            $ref: '#/components/schemas/FileDecisionDeleteResult'

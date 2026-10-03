@@ -243,62 +243,6 @@ paths:
           description: Error while modifying data.
 components:
   schemas:
-    UserDeleteRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - id
-      - uid
-      - name
-      - mail
-      - host
-      - status
-      - created
-      - changed
-      - url
-      properties:
-        id:
-          type: string
-          description: The request id
-        uid:
-          type: string
-          description: The user uid
-        name:
-          type: string
-          description: The user's ef username
-        mail:
-          type: string
-          description: The user email
-        host:
-          type: string
-          description: The request host name
-        status:
-          type: string
-          description: The current request status. Ex, 0, 1, or 2
-        created:
-          type: string
-          description: The epoch time stamp of the creation of the request
-        changed:
-          type: string
-          description: The epoch time stamp of the last change made to the request
-        url:
-          type: string
-          description: The URL pointing to the resource
-      example:
-        id: '1'
-        uid: '606609'
-        name: zacharysabourin
-        mail: zachary.sabourin@eclipse-foundation.org
-        host: projects.eclipse.org
-        status: '0'
-        created: '1686086484'
-        changed: '1686086484'
-        url: https://api.eclipse.org/account/user_delete_request/1
-    Error:
-      type: array
-      items:
-        type: string
-      description: An array containing a single message indicating the error
     PaginatedUserDeleteRequests:
       type: object
       additionalProperties: false
@@ -404,11 +348,62 @@ components:
           result_end: 6
           result_size: 6
           total_result_size: '6'
-    UserDeleteRequests:
+    Error:
       type: array
-      description: The list of UserDeleteRequest objects found
       items:
-        $ref: '#/components/schemas/UserDeleteRequest'
+        type: string
+      description: An array containing a single message indicating the error
+    UserDeleteRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - uid
+      - name
+      - mail
+      - host
+      - status
+      - created
+      - changed
+      - url
+      properties:
+        id:
+          type: string
+          description: The request id
+        uid:
+          type: string
+          description: The user uid
+        name:
+          type: string
+          description: The user's ef username
+        mail:
+          type: string
+          description: The user email
+        host:
+          type: string
+          description: The request host name
+        status:
+          type: string
+          description: The current request status. Ex, 0, 1, or 2
+        created:
+          type: string
+          description: The epoch time stamp of the creation of the request
+        changed:
+          type: string
+          description: The epoch time stamp of the last change made to the request
+        url:
+          type: string
+          description: The URL pointing to the resource
+      example:
+        id: '1'
+        uid: '606609'
+        name: zacharysabourin
+        mail: zachary.sabourin@eclipse-foundation.org
+        host: projects.eclipse.org
+        status: '0'
+        created: '1686086484'
+        changed: '1686086484'
+        url: https://api.eclipse.org/account/user_delete_request/1
     RequestStatusUpdate:
       type: object
       additionalProperties: false
@@ -420,6 +415,11 @@ components:
           description: The desired status for updating the delete request.
       example:
         status: 2
+    UserDeleteRequests:
+      type: array
+      description: The list of UserDeleteRequest objects found
+      items:
+        $ref: '#/components/schemas/UserDeleteRequest'
   securitySchemes:
     OAuth2:
       type: oauth2

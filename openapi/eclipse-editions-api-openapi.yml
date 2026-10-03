@@ -61,6 +61,25 @@ paths:
                   items_per_page: '20'
       deprecated: false
 components:
+  parameters:
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
   schemas:
     EditionFeaturedProject:
       type: object
@@ -72,6 +91,39 @@ components:
         body:
           type: string
         logo:
+          type: string
+          format: uri
+    Pager:
+      type: object
+      required:
+      - current_page
+      - total_items
+      - total_pages
+      - items_per_page
+      properties:
+        current_page:
+          type: integer
+          format: int32
+        total_items:
+          type: string
+        total_pages:
+          type: integer
+          format: int32
+        items_per_page:
+          type: string
+    EditionFeaturedCommitter:
+      type: object
+      required:
+      - body
+      properties:
+        name:
+          type: string
+        body:
+          type: string
+        picture:
+          type: string
+          format: uri
+        url:
           type: string
           format: uri
     Edition:
@@ -102,55 +154,3 @@ components:
           - string
           - 'null'
           format: uri
-    EditionFeaturedCommitter:
-      type: object
-      required:
-      - body
-      properties:
-        name:
-          type: string
-        body:
-          type: string
-        picture:
-          type: string
-          format: uri
-        url:
-          type: string
-          format: uri
-    Pager:
-      type: object
-      required:
-      - current_page
-      - total_items
-      - total_pages
-      - items_per_page
-      properties:
-        current_page:
-          type: integer
-          format: int32
-        total_items:
-          type: string
-        total_pages:
-          type: integer
-          format: int32
-        items_per_page:
-          type: string
-  parameters:
-    PageSize:
-      name: pagesize
-      in: query
-      description: The number of records to get per page, defaults to 20. Maximum value is 100.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
-    Page:
-      name: page
-      in: query
-      description: The number of the page.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32

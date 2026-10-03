@@ -145,44 +145,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
   schemas:
-    InterestGroupResources:
-      title: InterestGroupResources
-      type: object
-      properties:
-        website:
-          type: string
-          description: URL to the interest group's website, or empty string.
-        members:
-          type: string
-          description: URL to the interest group's members page, or empty string.
-      example:
-        website: ''
-        members: ''
-    TextContent:
-      title: TextContent
-      type: object
-      description: A long-text field with a plain-text summary and an HTML-rendered full version.
-      properties:
-        summary:
-          type: string
-          description: Plain-text summary (may be empty).
-        full:
-          type: string
-          description: Full content rendered as HTML.
-      example:
-        summary: Short summary.
-        full: <p>Full HTML content.</p>
     InterestGroupUser:
       title: InterestGroupUser
       type: object
@@ -284,3 +247,40 @@ components:
       example:
         project_group: eclipse-ig/some-group
         ignored_sub_groups: []
+    TextContent:
+      title: TextContent
+      type: object
+      description: A long-text field with a plain-text summary and an HTML-rendered full version.
+      properties:
+        summary:
+          type: string
+          description: Plain-text summary (may be empty).
+        full:
+          type: string
+          description: Full content rendered as HTML.
+      example:
+        summary: Short summary.
+        full: <p>Full HTML content.</p>
+    InterestGroupResources:
+      title: InterestGroupResources
+      type: object
+      properties:
+        website:
+          type: string
+          description: URL to the interest group's website, or empty string.
+        members:
+          type: string
+          description: URL to the interest group's members page, or empty string.
+      example:
+        website: ''
+        members: ''
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

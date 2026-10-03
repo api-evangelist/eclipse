@@ -155,17 +155,11 @@ paths:
           description: Success
 components:
   schemas:
-    PublisherAgreement:
-      type: object
-      additionalProperties: false
-      required:
-      - version
-      properties:
-        version:
-          type: string
-          description: the agreement document version.
-      example:
-        version: '1'
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
     Eca:
       type: object
       additionalProperties: false
@@ -182,11 +176,6 @@ components:
       example:
         signed: true
         can_contribute_spec_project: true
-    Error:
-      type: array
-      items:
-        type: string
-      description: An array containing a single message indicating the error
     Country:
       type: object
       properties:
@@ -434,6 +423,17 @@ components:
         gerrit_url: ''
         mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
         mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
+    PublisherAgreement:
+      type: object
+      additionalProperties: false
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'
   securitySchemes:
     OAuth2:
       type: oauth2

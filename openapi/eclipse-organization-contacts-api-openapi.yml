@@ -232,16 +232,6 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    OrganizationContacts:
-      type: array
-      items:
-        $ref: '#/components/schemas/OrganizationContact'
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
     EnhancedPersons:
       type: array
       items:
@@ -260,37 +250,12 @@ components:
           - string
           - 'null'
           description: The URL
-    OrganizationContact:
-      type: object
-      properties:
-        organization_id:
-          type: integer
-          description: the target organization id
-        person_id:
-          $ref: '#/components/schemas/ObjectID'
-        relation:
-          type: string
-          description: the relation of the contact to the organization
-        comments:
-          type: string
-          description: System comments about the entry
-        title:
-          type:
-          - string
-          - 'null'
-          description: Placeholder
-    ContactRemovalRequest:
-      type: object
-      properties:
-        organization_id:
-          type: integer
-          description: the target organization to remove user from
-        username:
-          type: string
-          description: the user that should be removed from the organization
-        reason:
-          type: string
-          description: the reason the user should be removed from the organization
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     EnhancedPersonData:
       type: object
       required:
@@ -318,6 +283,41 @@ components:
           description: list of relation codes that are active for the current user
           items:
             type: string
+    OrganizationContacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationContact'
+    ContactRemovalRequest:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the target organization to remove user from
+        username:
+          type: string
+          description: the user that should be removed from the organization
+        reason:
+          type: string
+          description: the reason the user should be removed from the organization
+    OrganizationContact:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the target organization id
+        person_id:
+          $ref: '#/components/schemas/ObjectID'
+        relation:
+          type: string
+          description: the relation of the contact to the organization
+        comments:
+          type: string
+          description: System comments about the entry
+        title:
+          type:
+          - string
+          - 'null'
+          description: Placeholder
   securitySchemes:
     openId:
       type: openIdConnect

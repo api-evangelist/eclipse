@@ -33,10 +33,6 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    BoardMembers:
-      type: array
-      items:
-        $ref: '#/components/schemas/BoardMember'
     BoardMember:
       type: object
       additionalProperties: false
@@ -79,3 +75,7 @@ components:
               type: string
               description: The human readable name for the relation
               example: Board Representative - Belgium
+    BoardMembers:
+      type: array
+      items:
+        $ref: '#/components/schemas/BoardMember'

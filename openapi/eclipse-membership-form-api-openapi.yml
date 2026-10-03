@@ -188,16 +188,19 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
-    MembershipForms:
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    ConstraintViolations:
       type: array
       items:
-        $ref: '#/components/schemas/MembershipForm'
+        $ref: '#/components/schemas/ConstraintViolation'
     MembershipForm:
       type: object
       properties:
@@ -232,6 +235,16 @@ components:
           description: The EU country the organization is registered under for VAT.
         updated_date:
           $ref: '#/components/schemas/DateTime'
+    MembershipForms:
+      type: array
+      items:
+        $ref: '#/components/schemas/MembershipForm'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     ConstraintViolation:
       type: object
       properties:
@@ -256,19 +269,6 @@ components:
       - COMPLETE
       - CONFIRMED
       - REJECTED
-    ConstraintViolations:
-      type: array
-      items:
-        $ref: '#/components/schemas/ConstraintViolation'
-    DateTime:
-      type: string
-      format: datetime
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T"15":"59":60-"08":00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
   securitySchemes:
     openId:
       type: openIdConnect
