@@ -5270,6 +5270,9 @@ apis:
   - type: Documentation
     url: https://webdev.eclipse.org/docs/api/eclipse-openvsx-api
 common:
+- type: CapabilityMap
+  url: capabilities/eclipse-capability-edges.yml
+  name: Eclipse Foundation Business Capability Map
 - type: Overlay
   url: overlays/eclipse-marketplace-rest-api-overlay.yaml
 - type: Overlay

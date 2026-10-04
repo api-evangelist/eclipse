@@ -1,0 +1,64 @@
+slug: eclipse
+provider: Eclipse Foundation
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: rate-limit-api
+  spec_file: eclipse-rate-limit-api-api-openapi.yml
+  capability_id: BC-4270.50
+  capability_id_l1: BC-4270
+  capability_name: API Consumption Governance
+  confidence: 0.85
+  evidence: PUT /admin/ratelimit/tiers/{name} "Update tier", POST /admin/ratelimit/customers/{name}/tokens
+    "Create rate limit token", schemas TierListJson, CustomerJson, RateLimitTokenJson, UsageStatsJson
+  reason: Operations administer rate-limit tiers per customer, issue rate-limit tokens and expose usage
+    stats — exactly quotas, rate limits, usage analytics and mapping of API consumption to plan tiers.
+- tag: Board Members
+  spec_file: eclipse-board-members-api-openapi.yml
+  capability_id: BC-110.10
+  capability_id_l1: BC-110
+  capability_name: Board & Committee Management
+  confidence: 0.75
+  evidence: 'GET /board-members getBoardMembers Board of Directors list; schemas: BoardMember, BoardMembers'
+  reason: The operation exposes the Foundation's Board of Directors composition, which is board governance
+    information. Read-only disclosure rather than full board process management, hence not top confidence.
+- tag: CVE
+  spec_file: eclipse-cve-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.7
+  evidence: GET /cve CveList CVE List; GET /cve/rss.xml getCveRSSFeed CVE RSS feed
+  reason: Operations publish and list CVE (Common Vulnerabilities and Exposures) records for Eclipse projects
+    — vulnerability identification and disclosure. It is a publication feed rather than scanning/remediation
+    workflow, so confidence is moderate.
+- tag: ECA Validation
+  spec_file: eclipse-eca-validation-api-openapi.yml
+  capability_id: BC-4200.60
+  capability_id_l1: BC-4200
+  capability_name: Open Source Stewardship
+  confidence: 0.7
+  evidence: POST /eca validate ECA validation; GET /eca/status/{fingerprint} getCommitValidation Historic
+    ECA validation status; schemas Commit, GitUser, ValidationRequest
+  reason: Validates commits against the Eclipse Contributor Agreement for external Git services — inbound
+    open-source contribution licensing/compliance stewardship, a core open source stewardship practice.
+- tag: Releases
+  spec_file: eclipse-releases-api-openapi.yml
+  capability_id: BC-4210.30
+  capability_id_l1: BC-4210
+  capability_name: Release Engineering Management
+  confidence: 0.7
+  evidence: '"Active releases", "Release Versions"; schemas Release, Releases, ReleasePackage, ReleaseFile'
+  reason: The surface exposes software release types, versions, packages and downloadable files — release/version
+    stewardship of software builds, which is Release Engineering Management rather than any commercial
+    capability.
