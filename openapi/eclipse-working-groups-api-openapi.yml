@@ -317,28 +317,24 @@ paths:
       description: Production endpoint for Eclipse Foundation working group data
 components:
   schemas:
-    WorkingGroupParticipationAgreement:
-      type: object
-      properties:
-        document_id:
-          $ref: '#/components/schemas/ObjectID'
-        pdf:
-          type: string
-          description: Link to the PDF version of the participation agreement
     OrganizationWorkingGroupRepresentatives:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/BasicPersons'
-    WorkingGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkingGroup'
     ObjectID:
       description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
       type:
       - string
       - 'null'
       minimum: 1
+    BasicPersons:
+      type: array
+      items:
+        $ref: '#/components/schemas/BasicPersonData'
+    WorkingGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroup'
     BasicPersonData:
       type: object
       properties:
@@ -420,21 +416,79 @@ components:
               description:
                 type: string
                 description: the label for the participation level
-    BasicPersons:
-      type: array
-      items:
-        $ref: '#/components/schemas/BasicPersonData'
-    WorkingGroupParticipationAgreement_2:
-      type:
-      - object
-      - 'null'
-      additionalProperties: false
+    WorkingGroupParticipationAgreement:
+      type: object
       properties:
         document_id:
           $ref: '#/components/schemas/ObjectID'
         pdf:
           type: string
           description: Link to the PDF version of the participation agreement
+    CommitteeMember:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - username
+      description: A committee member representative.
+      properties:
+        name:
+          type: string
+          description: The name of the representative.
+        username:
+          type: string
+          description: The representative's EF username.
+        organization:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/MemberOrganization'
+    MemberOrganization:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - organization_id
+      - logos
+      - is_active_member
+      description: A member representative's organization info.
+      properties:
+        name:
+          type: string
+          description: The organization name.
+        organization_id:
+          type: integer
+          description: The organization id.
+        logos:
+          $ref: '#/components/schemas/MemberOrganizationLogos'
+        is_active_member:
+          type: boolean
+          description: Whether the organization is an active member of the Eclipse Foundation.
+    MemberOrganizationLogos:
+      type: object
+      description: A member organization's logo data
+      properties:
+        print:
+          type:
+          - string
+          - 'null'
+          description: The print logo URL.
+        web:
+          type:
+          - string
+          - 'null'
+          description: The web logo URL.
+    WorkingGroupLevels:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroupLevel'
+    WorkingGroupParticipationAgreements:
+      type: object
+      additionalProperties: false
+      properties:
+        individual:
+          $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
+        organization:
+          $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
     Error:
       type: object
       additionalProperties: false
@@ -458,14 +512,6 @@ components:
           - type: string
           - type: 'null'
           description: The friendly message for the error
-    WorkingGroupParticipationAgreements:
-      type: object
-      additionalProperties: false
-      properties:
-        individual:
-          $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
-        organization:
-          $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
     WorkingGroupLevel:
       type: object
       additionalProperties: false
@@ -530,78 +576,6 @@ components:
           anyOf:
           - type: 'null'
           - $ref: '#/components/schemas/CommitteeRole'
-    MemberOrganizationLogos:
-      type: object
-      description: A member organization's logo data
-      properties:
-        print:
-          type:
-          - string
-          - 'null'
-          description: The print logo URL.
-        web:
-          type:
-          - string
-          - 'null'
-          description: The web logo URL.
-    WorkingGroupMailingLists:
-      additionalProperties:
-        type: array
-        items:
-          type: string
-    WorkingGroup_2:
-      type: object
-      additionalProperties: false
-      required:
-      - alias
-      - title
-      - status
-      - logo
-      - description
-      - resources
-      - levels
-      properties:
-        alias:
-          type: string
-          description: internal alias for the working group
-        title:
-          type: string
-          description: Public-facing or official name of the working group
-        status:
-          type: string
-          description: Current status of the working group (e.g. incubating, active, archived)
-        logo:
-          type: string
-          description: image link for the working groups logo
-        description:
-          type: string
-          description: Short description of the working group
-        resources:
-          $ref: '#/components/schemas/WorkingGroupResources'
-        levels:
-          $ref: '#/components/schemas/WorkingGroupLevels'
-        committee_mailing_lists:
-          oneOf:
-          - $ref: '#/components/schemas/WorkingGroupMailingLists'
-          - type: 'null'
-    CommitteeMember:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - username
-      description: A committee member representative.
-      properties:
-        name:
-          type: string
-          description: The name of the representative.
-        username:
-          type: string
-          description: The representative's EF username.
-        organization:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/MemberOrganization'
     CommitteeRole:
       type: object
       additionalProperties: false
@@ -621,31 +595,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CommitteeMember'
-    WorkingGroupLevels:
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkingGroupLevel'
-    MemberOrganization:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - organization_id
-      - logos
-      - is_active_member
-      description: A member representative's organization info.
-      properties:
-        name:
+    WorkingGroupMailingLists:
+      additionalProperties:
+        type: array
+        items:
           type: string
-          description: The organization name.
-        organization_id:
-          type: integer
-          description: The organization id.
-        logos:
-          $ref: '#/components/schemas/MemberOrganizationLogos'
-        is_active_member:
-          type: boolean
-          description: Whether the organization is an active member of the Eclipse Foundation.
     WorkingGroupResources:
       type: object
       additionalProperties: false
@@ -711,6 +665,52 @@ components:
                   - string
                   - 'null'
           - type: 'null'
+    WorkingGroup_2:
+      type: object
+      additionalProperties: false
+      required:
+      - alias
+      - title
+      - status
+      - logo
+      - description
+      - resources
+      - levels
+      properties:
+        alias:
+          type: string
+          description: internal alias for the working group
+        title:
+          type: string
+          description: Public-facing or official name of the working group
+        status:
+          type: string
+          description: Current status of the working group (e.g. incubating, active, archived)
+        logo:
+          type: string
+          description: image link for the working groups logo
+        description:
+          type: string
+          description: Short description of the working group
+        resources:
+          $ref: '#/components/schemas/WorkingGroupResources'
+        levels:
+          $ref: '#/components/schemas/WorkingGroupLevels'
+        committee_mailing_lists:
+          oneOf:
+          - $ref: '#/components/schemas/WorkingGroupMailingLists'
+          - type: 'null'
+    WorkingGroupParticipationAgreement_2:
+      type:
+      - object
+      - 'null'
+      additionalProperties: false
+      properties:
+        document_id:
+          $ref: '#/components/schemas/ObjectID'
+        pdf:
+          type: string
+          description: Link to the PDF version of the participation agreement
   securitySchemes:
     openId:
       type: openIdConnect

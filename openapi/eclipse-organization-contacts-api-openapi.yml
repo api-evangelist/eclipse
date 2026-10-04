@@ -232,24 +232,45 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
+    OrganizationContact:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the target organization id
+        person_id:
+          $ref: '#/components/schemas/ObjectID'
+        relation:
+          type: string
+          description: the relation of the contact to the organization
+        comments:
+          type: string
+          description: System comments about the entry
+        title:
+          type:
+          - string
+          - 'null'
+          description: Placeholder
+    OrganizationContacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationContact'
+    ContactRemovalRequest:
+      type: object
+      properties:
+        organization_id:
+          type: integer
+          description: the target organization to remove user from
+        username:
+          type: string
+          description: the user that should be removed from the organization
+        reason:
+          type: string
+          description: the reason the user should be removed from the organization
     EnhancedPersons:
       type: array
       items:
         $ref: '#/components/schemas/EnhancedPersonData'
-    Error:
-      type: object
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
     ObjectID:
       description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
       type:
@@ -283,41 +304,20 @@ components:
           description: list of relation codes that are active for the current user
           items:
             type: string
-    OrganizationContacts:
-      type: array
-      items:
-        $ref: '#/components/schemas/OrganizationContact'
-    ContactRemovalRequest:
+    Error:
       type: object
       properties:
-        organization_id:
+        status_code:
           type: integer
-          description: the target organization to remove user from
-        username:
+          description: HTTP response code
+        message:
           type: string
-          description: the user that should be removed from the organization
-        reason:
-          type: string
-          description: the reason the user should be removed from the organization
-    OrganizationContact:
-      type: object
-      properties:
-        organization_id:
-          type: integer
-          description: the target organization id
-        person_id:
-          $ref: '#/components/schemas/ObjectID'
-        relation:
-          type: string
-          description: the relation of the contact to the organization
-        comments:
-          type: string
-          description: System comments about the entry
-        title:
+          description: Message containing error information
+        url:
           type:
           - string
           - 'null'
-          description: Placeholder
+          description: The URL
   securitySchemes:
     openId:
       type: openIdConnect

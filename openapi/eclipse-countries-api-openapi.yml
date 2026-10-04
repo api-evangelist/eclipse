@@ -50,6 +50,29 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The friendly message for the error
     Country:
       type: object
       additionalProperties: false
@@ -77,26 +100,3 @@ components:
         is_in_european_union:
           type: boolean
           description: TRUE if the current country is in the European Union, and false otherwise.
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
-        friendly_message:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The friendly message for the error

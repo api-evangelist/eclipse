@@ -146,26 +146,22 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    InterestGroupUser:
-      title: InterestGroupUser
+    InterestGroupGitlabInfo:
+      title: InterestGroupGitlabInfo
       type: object
-      description: A user associated with an interest group.
+      description: GitLab group information derived from the interest group's Foundation DB project ID.
       properties:
-        username:
+        project_group:
           type: string
-        full_name:
-          type: string
-        url:
-          type: string
-          description: Absolute URL to the person's profile on api.eclipse.org.
-        organization:
-          type: object
-          description: TODO - structure depends on FoundationDB organisation data; treat as opaque object.
+          description: GitLab project group namespace (e.g. `eclipse-ig/some-group`).
+        ignored_sub_groups:
+          type: array
+          items:
+            type: string
+          description: Currently always empty for interest groups.
       example:
-        username: aigmember
-        full_name: An IG Member
-        url: https://api.eclipse.org/account/profile/aigmember
-        organization: {}
+        project_group: eclipse-ig/some-group
+        ignored_sub_groups: []
     InterestGroup:
       title: InterestGroup
       type: object
@@ -231,22 +227,19 @@ components:
           website: ''
           members: ''
         mailing_list: ''
-    InterestGroupGitlabInfo:
-      title: InterestGroupGitlabInfo
+    InterestGroupResources:
+      title: InterestGroupResources
       type: object
-      description: GitLab group information derived from the interest group's Foundation DB project ID.
       properties:
-        project_group:
+        website:
           type: string
-          description: GitLab project group namespace (e.g. `eclipse-ig/some-group`).
-        ignored_sub_groups:
-          type: array
-          items:
-            type: string
-          description: Currently always empty for interest groups.
+          description: URL to the interest group's website, or empty string.
+        members:
+          type: string
+          description: URL to the interest group's members page, or empty string.
       example:
-        project_group: eclipse-ig/some-group
-        ignored_sub_groups: []
+        website: ''
+        members: ''
     TextContent:
       title: TextContent
       type: object
@@ -261,19 +254,26 @@ components:
       example:
         summary: Short summary.
         full: <p>Full HTML content.</p>
-    InterestGroupResources:
-      title: InterestGroupResources
+    InterestGroupUser:
+      title: InterestGroupUser
       type: object
+      description: A user associated with an interest group.
       properties:
-        website:
+        username:
           type: string
-          description: URL to the interest group's website, or empty string.
-        members:
+        full_name:
           type: string
-          description: URL to the interest group's members page, or empty string.
+        url:
+          type: string
+          description: Absolute URL to the person's profile on api.eclipse.org.
+        organization:
+          type: object
+          description: TODO - structure depends on FoundationDB organisation data; treat as opaque object.
       example:
-        website: ''
-        members: ''
+        username: aigmember
+        full_name: An IG Member
+        url: https://api.eclipse.org/account/profile/aigmember
+        organization: {}
   responses:
     NotFound:
       description: Resource not found.

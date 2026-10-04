@@ -80,6 +80,18 @@ components:
       type: string
       description: A string containing encoded key-value tuples.
       example: token=test-token&team_id=T123&team_domain=eclipsefoundation&channel_id=CHAN123&channel_name=webdev&user_id=USER123&user_name=tester&command=%2Fm
+    SlackAttachment:
+      type: object
+      properties:
+        title:
+          type: string
+          description: the attachment title
+        title_link:
+          type: string
+          description: A URL to embed in the title
+        text:
+          type: string
+          description: The content of the attachment. A markdown formatted string in this case
     SlackResponse:
       type: object
       properties:
@@ -103,18 +115,6 @@ components:
           text: '*Company Representative:* Test User
 
             '
-    SlackAttachment:
-      type: object
-      properties:
-        title:
-          type: string
-          description: the attachment title
-        title_link:
-          type: string
-          description: A URL to embed in the title
-        text:
-          type: string
-          description: The content of the attachment. A markdown formatted string in this case
     SlackRequest_2:
       type: object
       additionalProperties: false
@@ -136,6 +136,23 @@ components:
         text: zacharysabourin
         token: auth_token
         team_domain: my_team
+    SlackAttachment_2:
+      type: object
+      additionalProperties: false
+      required:
+      - title
+      - title_link
+      - text
+      properties:
+        title:
+          type: string
+          description: the attachment title
+        title_link:
+          type: string
+          description: A URL to embed in the title
+        text:
+          type: string
+          text: The content of the attachment. A markdown formatted string in this case
     SlackResponse_2:
       type: object
       additionalProperties: false
@@ -161,23 +178,6 @@ components:
         - title: Zachary Sabourin(Eclipse Foundation)
           title_link: https://accounts.eclipse.org/user/606609.
           text: "*ECA Status:* Valid\\*Name:* zacharysabourin\\*Mail:* email@test.com\\*Committer:* No\\*Github handle:* https://github.com/zacharysabourin\\*Job title:* Web Developer\\*Bio:* I'm fascinated by the power of technology and I'm always trying to learn new things! When I'm not working or learning, I enjoy exploring my many interests or going on walks. \n\n\"Be yourself; everyone else is already taken\" -Oscar Wilde\n\n*Interests*Video games, bass guitar, Music, Magic: the Gathering, PodCasts"
-    SlackAttachment_2:
-      type: object
-      additionalProperties: false
-      required:
-      - title
-      - title_link
-      - text
-      properties:
-        title:
-          type: string
-          description: the attachment title
-        title_link:
-          type: string
-          description: A URL to embed in the title
-        text:
-          type: string
-          text: The content of the attachment. A markdown formatted string in this case
   securitySchemes:
     OAuth2:
       type: oauth2

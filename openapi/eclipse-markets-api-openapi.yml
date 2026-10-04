@@ -37,13 +37,6 @@ components:
         properties:
           category:
             $ref: '#/components/schemas/BaseCategory'
-    Markets:
-      type: array
-      xml:
-        name: marketplace
-        wrapped: true
-      items:
-        $ref: '#/components/schemas/Market'
     BaseNode:
       type: object
       properties:
@@ -62,6 +55,13 @@ components:
           description: Title
           xml:
             attribute: true
+    Markets:
+      type: array
+      xml:
+        name: marketplace
+        wrapped: true
+      items:
+        $ref: '#/components/schemas/Market'
     BaseCategory:
       allOf:
       - $ref: '#/components/schemas/BaseNode'

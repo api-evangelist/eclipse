@@ -179,7 +179,46 @@ paths:
       operationId: getApiAds
       x-operation-id-source: derived
 components:
+  parameters:
+    PageSize:
+      name: pagesize
+      in: query
+      description: The number of records to get per page, defaults to 20. Maximum value is 100.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+    Page:
+      name: page
+      in: query
+      description: The number of the page.
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
   schemas:
+    CreateAdsRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - host
+      - source
+      - publish_to
+      - format
+      properties:
+        host:
+          type: string
+        source:
+          type: string
+        publish_to:
+          type: string
+        format:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 1
     RetrieveAdsResponse:
       type: object
       required:
@@ -214,6 +253,13 @@ components:
           type: array
           items:
             type: string
+    CreateAdsError:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
     CreateAdsResponse:
       type: object
       required:
@@ -249,26 +295,6 @@ components:
           type: string
         publish_to:
           type: string
-    CreateAdsRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - host
-      - source
-      - publish_to
-      - format
-      properties:
-        host:
-          type: string
-        source:
-          type: string
-        publish_to:
-          type: string
-        format:
-          type: object
-          additionalProperties:
-            type: integer
-            minimum: 1
     Pager:
       type: object
       required:
@@ -287,29 +313,3 @@ components:
           format: int32
         items_per_page:
           type: string
-    CreateAdsError:
-      type: object
-      properties:
-        message:
-          type: string
-        status:
-          type: integer
-  parameters:
-    Page:
-      name: page
-      in: query
-      description: The number of the page.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32
-    PageSize:
-      name: pagesize
-      in: query
-      description: The number of records to get per page, defaults to 20. Maximum value is 100.
-      style: form
-      explode: true
-      schema:
-        type: integer
-        format: int32

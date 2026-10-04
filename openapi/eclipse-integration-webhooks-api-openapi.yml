@@ -104,38 +104,6 @@ paths:
           description: Error while processing data
 components:
   schemas:
-    DateTime:
-      type: string
-      format: date-time
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
-        friendly_message:
-          type:
-          - string
-          - 'null'
-          description: The optional friendly message for the error
     SystemHook:
       type: object
       additionalProperties: false
@@ -199,6 +167,15 @@ components:
           - 'null'
           - string
           description: The old path with namespace, only used in 'project_rename' hooks
+    RevalidationRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - h-form-captcha-response
+      properties:
+        h-form-captcha-response:
+          type: string
+          description: the hCaptcha challenge response.
     GithubWebhookEvent:
       type: object
       properties:
@@ -232,12 +209,35 @@ components:
                 sha:
                   type: string
                   description: The SHA hash of the head of the pull request.
-    RevalidationRequest:
+    DateTime:
+      type: string
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    Error:
       type: object
       additionalProperties: false
       required:
-      - h-form-captcha-response
+      - status_code
+      - message
       properties:
-        h-form-captcha-response:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
           type: string
-          description: the hCaptcha challenge response.
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          type:
+          - string
+          - 'null'
+          description: The optional friendly message for the error

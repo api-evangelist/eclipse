@@ -71,6 +71,10 @@ components:
             id:
               type: integer
               description: The organization id.
+    PaperworkResults:
+      type: array
+      items:
+        $ref: '#/components/schemas/PaperworkResult'
     PaperworkResult:
       type: object
       additionalProperties: false
@@ -84,10 +88,6 @@ components:
         body:
           type: string
           description: Message indicating the project retired from, and the date.
-    PaperworkResults:
-      type: array
-      items:
-        $ref: '#/components/schemas/PaperworkResult'
   securitySchemes:
     openId:
       type: openIdConnect

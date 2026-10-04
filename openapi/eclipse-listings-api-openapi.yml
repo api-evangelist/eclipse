@@ -331,40 +331,6 @@ paths:
                 $ref: '#/components/schemas/PopularListings'
 components:
   schemas:
-    PopularListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        popular:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
-    FavoritedListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        favorites:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
     Listing:
       allOf:
       - $ref: '#/components/schemas/BaseNode'
@@ -512,51 +478,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Listing'
-    SearchResults:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        search:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            term:
-              type: string
-              description: Search keyword
-              xml:
-                attribute: true
-            url:
-              type: string
-              format: url
-              description: URL for site search page with term filled
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
-    RecentListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        recent:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
     BaseNode:
       type: object
       properties:
@@ -575,6 +496,23 @@ components:
           description: Title
           xml:
             attribute: true
+    FavoritedListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        favorites:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
     CategoryWithListings:
       type: object
       xml:
@@ -603,41 +541,75 @@ components:
             type: integer
             xml:
               attribute: true
+    SearchResults:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        search:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            term:
+              type: string
+              description: Search keyword
+              xml:
+                attribute: true
+            url:
+              type: string
+              format: url
+              description: URL for site search page with term filled
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    PopularListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        popular:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    RecentListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        recent:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
   parameters:
-    platform-version:
-      name: platform_version
-      in: query
-      description: (since Kepler/MPC 1.2) The version of the org.eclipse.platform bundle of the target Eclipse
-      schema:
-        type: string
-    ws:
-      name: ws
-      in: query
-      description: Window system of the user.
-      schema:
-        type: string
-        enum:
-        - gtk
-        - win32
-        - cocoa
-    product-version:
-      name: product_version
-      in: query
-      description: The version of the running product of the target Eclipse, identical to the version of the product's branding plugin
-      schema:
-        type: string
     limit:
       name: limit
       in: query
       description: The number of result returned for a listing (favorites, recent, search, etc.) integer between 0 and 20, default to 10.
       schema:
         type: integer
-    product:
-      name: product
-      in: query
-      description: The product id of the target Eclipse, e.g. org.eclipse.sdk.ide or epp.package.java
-      schema:
-        type: string
     page-number:
       name: page_num
       in: query
@@ -658,6 +630,22 @@ components:
         - win64
         - windows
         - macosx
+    product:
+      name: product
+      in: query
+      description: The product id of the target Eclipse, e.g. org.eclipse.sdk.ide or epp.package.java
+      schema:
+        type: string
+    ws:
+      name: ws
+      in: query
+      description: Window system of the user.
+      schema:
+        type: string
+        enum:
+        - gtk
+        - win32
+        - cocoa
     client:
       name: client
       in: query
@@ -668,6 +656,18 @@ components:
         - org.eclipse.epp.mpc.core
         - org.eclipse.smarthome
         - org.eclipse.kura
+    platform-version:
+      name: platform_version
+      in: query
+      description: (since Kepler/MPC 1.2) The version of the org.eclipse.platform bundle of the target Eclipse
+      schema:
+        type: string
+    product-version:
+      name: product_version
+      in: query
+      description: The version of the running product of the target Eclipse, identical to the version of the product's branding plugin
+      schema:
+        type: string
     runtime-version:
       name: runtime_version
       in: query

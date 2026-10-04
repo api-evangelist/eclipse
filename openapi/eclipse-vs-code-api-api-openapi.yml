@@ -592,6 +592,34 @@ paths:
                 format: int32
 components:
   schemas:
+    ExtensionReference:
+      type: object
+      description: A reference to another extension in the registry
+      properties:
+        url:
+          type: string
+          description: URL to get metadata of the referenced extension
+        namespace:
+          type: string
+          description: Namespace of the referenced extension
+        extension:
+          type: string
+          description: Name of the referenced extension
+      required:
+      - extension
+      - namespace
+      - url
+    VersionTargetPlatformsJson:
+      type: object
+      properties:
+        version:
+          type: string
+        targetPlatforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetPlatformActive'
+        canDelete:
+          type: boolean
     ResultItem:
       type: object
       properties:
@@ -638,6 +666,63 @@ components:
           enum:
           - '0'
           - '1'
+    ResultMetadataItem:
+      type: object
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
+          format: int64
+    User:
+      type: object
+      description: User data
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        loginName:
+          type: string
+          description: Login name
+        fullName:
+          type: string
+          description: Full name
+        avatarUrl:
+          type: string
+          description: URL to the user's avatar image
+        homepage:
+          type: string
+          description: URL to the user's profile page
+        provider:
+          type: string
+          description: Authentication provider (e.g. github)
+      required:
+      - loginName
+    ExtensionReplacement:
+      type: object
+      description: Metadata of an extension replacement
+      properties:
+        url:
+          type: string
+          description: URL of the extension replacement
+        displayName:
+          type: string
+          description: Name to be displayed in user interfaces
+    ResultMetadata:
+      type: object
+      properties:
+        metadataType:
+          type: string
+        metadataItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultMetadataItem'
     Extension:
       allOf:
       - $ref: '#/components/schemas/Result'
@@ -847,85 +932,19 @@ components:
       - timestamp
       - verified
       - version
-    ExtensionReference:
+    ExtensionQueryParam:
       type: object
-      description: A reference to another extension in the registry
+      description: Parameters of the extension query
       properties:
-        url:
-          type: string
-          description: URL to get metadata of the referenced extension
-        namespace:
-          type: string
-          description: Namespace of the referenced extension
-        extension:
-          type: string
-          description: Name of the referenced extension
-      required:
-      - extension
-      - namespace
-      - url
-    ResultMetadataItem:
-      type: object
-      properties:
-        name:
-          type: string
-        count:
-          type: integer
-          format: int64
-    VersionTargetPlatformsJson:
-      type: object
-      properties:
-        version:
-          type: string
-        targetPlatforms:
+        filters:
           type: array
+          description: List of query filters
           items:
-            $ref: '#/components/schemas/TargetPlatformActive'
-        canDelete:
-          type: boolean
-    Result:
-      type: object
-      description: Generic result indicator
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-    User:
-      type: object
-      description: User data
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        loginName:
-          type: string
-          description: Login name
-        fullName:
-          type: string
-          description: Full name
-        avatarUrl:
-          type: string
-          description: URL to the user's avatar image
-        homepage:
-          type: string
-          description: URL to the user's profile page
-        provider:
-          type: string
-          description: Authentication provider (e.g. github)
-      required:
-      - loginName
+            $ref: '#/components/schemas/Filter'
+        flags:
+          type: integer
+          format: int32
+          description: Flags to indicate what metadata to include in the query response
     ExtensionQueryResult:
       type: object
       properties:
@@ -959,37 +978,19 @@ components:
         removed:
           type: boolean
           description: Whether this extension version for this target platform has been removed (soft-deleted)
-    Badge:
+    Result:
       type: object
-      description: A badge to be shown in the sidebar of the extension page in the registry
+      description: Generic result indicator
       properties:
-        url:
+        success:
           type: string
-          description: Image URL of the badge
-        href:
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
           type: string
-          description: The link users will follow when clicking the badge
-        description:
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
           type: string
-    ResultMetadata:
-      type: object
-      properties:
-        metadataType:
-          type: string
-        metadataItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultMetadataItem'
-    ExtensionReplacement:
-      type: object
-      description: Metadata of an extension replacement
-      properties:
-        url:
-          type: string
-          description: URL of the extension replacement
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
+          description: Indicates an error; when this is present, all other properties should be ignored
     Criterion:
       type: object
       description: Filter criteria
@@ -1010,16 +1011,15 @@ components:
         value:
           type: string
           description: Filter value
-    ExtensionQueryParam:
+    Badge:
       type: object
-      description: Parameters of the extension query
+      description: A badge to be shown in the sidebar of the extension page in the registry
       properties:
-        filters:
-          type: array
-          description: List of query filters
-          items:
-            $ref: '#/components/schemas/Filter'
-        flags:
-          type: integer
-          format: int32
-          description: Flags to indicate what metadata to include in the query response
+        url:
+          type: string
+          description: Image URL of the badge
+        href:
+          type: string
+          description: The link users will follow when clicking the badge
+        description:
+          type: string

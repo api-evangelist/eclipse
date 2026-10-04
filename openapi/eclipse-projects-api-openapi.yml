@@ -560,6 +560,10 @@ paths:
       description: The production API server
 components:
   schemas:
+    Organizations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organization'
     Organization:
       type: object
       additionalProperties: false
@@ -642,10 +646,32 @@ components:
       - string
       - 'null'
       minimum: 1
-    Organizations:
-      type: array
-      items:
-        $ref: '#/components/schemas/Organization'
+    AdoptedProject:
+      type: object
+      additionalProperties: false
+      required:
+      - adopters
+      - logo
+      - name
+      - project_id
+      - url
+      properties:
+        adopters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Adopter'
+        logo:
+          type: string
+          description: The URL containing the project logo.
+        name:
+          type: string
+          description: The name of the project.
+        project_id:
+          type: string
+          description: The id of the project.
+        url:
+          type: string
+          description: The project URL under projects.eclipse.org.
     Adopter:
       type: object
       additionalProperties: false
@@ -673,32 +699,6 @@ components:
         name:
           type: string
           description: The adopter's company name.
-    AdoptedProject:
-      type: object
-      additionalProperties: false
-      required:
-      - adopters
-      - logo
-      - name
-      - project_id
-      - url
-      properties:
-        adopters:
-          type: array
-          items:
-            $ref: '#/components/schemas/Adopter'
-        logo:
-          type: string
-          description: The URL containing the project logo.
-        name:
-          type: string
-          description: The name of the project.
-        project_id:
-          type: string
-          description: The id of the project.
-        url:
-          type: string
-          description: The project URL under projects.eclipse.org.
     SecurityTeamGroups:
       title: SecurityTeamGroups
       type: object
@@ -711,6 +711,185 @@ components:
       example:
         include_committers: true
         include_project_leads: false
+    Review:
+      title: Review
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Drupal node ID of the review.
+        slides_url:
+          type: string
+          description: Absolute URL of the review page on projects.eclipse.org.
+        review_date:
+          type: string
+          description: Review end date value from `field_review_end_date`.
+        review_name:
+          type: string
+          description: Human-readable review name with the trailing ` Review` suffix stripped.
+        status:
+          type: string
+          description: 'Review outcome. Known values: `fail`, `success`, `withdrawn`, `ongoing`. Any unrecognised stored value is normalised to `unknown_state`.'
+          enum:
+          - fail
+          - success
+          - withdrawn
+          - ongoing
+          - unknown_state
+        date:
+          type: string
+          description: Alias for `review_date`.
+        summary:
+          type: string
+          description: Body summary field value, or the full body text if no summary is available.
+      example:
+        id: 456
+        slides_url: https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0
+        review_date: '2022-04-13'
+        review_name: Release 3.0
+        status: success
+        date: '2022-04-13'
+        summary: The committer team proposes releasing Jakarta Batch 3.0.
+    WorkingGroup:
+      title: WorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
+    DevList:
+      title: DevList
+      type: object
+      description: A project mailing list.
+      properties:
+        name:
+          type: string
+          description: Mailing list name (also the local part of the email address).
+        email:
+          type: string
+          description: Full mailing list e-mail address.
+        url:
+          type: string
+          description: URL to the mailing list archive on accounts.eclipse.org.
+      example:
+        name: ee4j-batch-dev
+        email: ee4j-batch-dev@eclipse.org
+        url: https://accounts.eclipse.org/mailing-list/ee4j-batch-dev
+    GithubRepo:
+      title: GithubRepo
+      required:
+      - url
+      type: object
+      properties:
+        url:
+          type: string
+          description: Full GitHub repository URL.
+      example:
+        url: https://github.com/eclipse-ee4j/batch-api
+    Committer:
+      title: Committer
+      type: object
+      description: A person with a role on an Eclipse project (committer, contributor, or project lead).
+      required:
+      - username
+      - url
+      properties:
+        username:
+          type:
+          - string
+          - 'null'
+          description: Eclipse account username (may be null for proposals where the person has no account yet).
+        full_name:
+          type: string
+          description: Display name of the person.
+        url:
+          type: string
+          description: Absolute URL to the person's profile on api.eclipse.org.
+      example:
+        username: acommitter
+        full_name: A Committer
+        url: https://api.eclipse.org/account/profile/acommitter
+    SlsaInfo:
+      title: SlsaInfo
+      type: object
+      properties:
+        build_level:
+          type: string
+          description: SLSA build level achieved by the project (empty string if not set).
+      example:
+        build_level: '2'
+    SecurityTeam:
+      title: SecurityTeam
+      type: object
+      properties:
+        individual_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Committer'
+          description: Individually named security team members who are not already covered by the group roles.
+        groups:
+          $ref: '#/components/schemas/SecurityTeamGroups'
+      example:
+        individual_members: []
+        groups:
+          include_committers: true
+          include_project_leads: false
+    License:
+      title: License
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full license name.
+        short_name:
+          type: string
+          description: Abbreviated license identifier (e.g. `EPL-2.0`).
+        url:
+          type: string
+          description: URL to the license text.
+      example:
+        name: Eclipse Public License 2.0
+        short_name: EPL-2.0
+        url: https://www.eclipse.org/legal/epl-2.0/
+    ReviewsResponse:
+      title: ReviewsResponse
+      type: object
+      properties:
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
+          description: Paginated list of reviews for the project.
+      example:
+        reviews:
+        - id: 456
+          slides_url: https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0
+          review_date: '2022-04-13'
+          review_name: Release 3.0
+          status: success
+          date: '2022-04-13'
+          summary: The committer team proposes releasing Jakarta Batch 3.0.
+    SpecProjectWorkingGroup:
+      title: SpecProjectWorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
     GithubInfo:
       title: GithubInfo
       type: object
@@ -726,20 +905,16 @@ components:
       example:
         org: eclipse-ee4j
         ignored_repos: []
-    WorkingGroup:
-      title: WorkingGroup
-      required:
-      - name
-      - id
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-      example:
-        name: Jakarta EE
-        id: jakarta-ee
+    RetrieveaProjectresponse:
+      title: RetrieveaProjectresponse
+      description: Full project data returned by the single-project endpoint. Identical to FetchProjectsresponse but also includes the `description` field containing the full HTML-rendered project description.
+      allOf:
+      - $ref: '#/components/schemas/FetchProjectsresponse'
+      - type: object
+        properties:
+          description:
+            type: string
+            description: Full HTML-rendered project description body.
     FetchProjectsresponse:
       title: FetchProjectsresponse
       type: object
@@ -953,20 +1128,24 @@ components:
           groups:
             include_committers: true
             include_project_leads: false
-    SpecProjectWorkingGroup:
-      title: SpecProjectWorkingGroup
-      required:
-      - name
-      - id
+    ReleasesResponse:
+      title: ReleasesResponse
       type: object
       properties:
-        name:
-          type: string
-        id:
-          type: string
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Release'
+          description: Paginated list of releases for the project.
       example:
-        name: Jakarta EE
-        id: jakarta-ee
+        releases:
+        - name: '3.0'
+          url: https://projects.eclipse.org/projects/ee4j.batch/releases/3.0
+          date: '2022-05-31'
+          type: 1
+          downloads:
+            tracked: false
+            associated_files: []
     Release:
       title: Release
       type: object
@@ -1008,91 +1187,6 @@ components:
       example:
         project_group: ''
         ignored_sub_groups: []
-    DevList:
-      title: DevList
-      type: object
-      description: A project mailing list.
-      properties:
-        name:
-          type: string
-          description: Mailing list name (also the local part of the email address).
-        email:
-          type: string
-          description: Full mailing list e-mail address.
-        url:
-          type: string
-          description: URL to the mailing list archive on accounts.eclipse.org.
-      example:
-        name: ee4j-batch-dev
-        email: ee4j-batch-dev@eclipse.org
-        url: https://accounts.eclipse.org/mailing-list/ee4j-batch-dev
-    Review:
-      title: Review
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Drupal node ID of the review.
-        slides_url:
-          type: string
-          description: Absolute URL of the review page on projects.eclipse.org.
-        review_date:
-          type: string
-          description: Review end date value from `field_review_end_date`.
-        review_name:
-          type: string
-          description: Human-readable review name with the trailing ` Review` suffix stripped.
-        status:
-          type: string
-          description: 'Review outcome. Known values: `fail`, `success`, `withdrawn`, `ongoing`. Any unrecognised stored value is normalised to `unknown_state`.'
-          enum:
-          - fail
-          - success
-          - withdrawn
-          - ongoing
-          - unknown_state
-        date:
-          type: string
-          description: Alias for `review_date`.
-        summary:
-          type: string
-          description: Body summary field value, or the full body text if no summary is available.
-      example:
-        id: 456
-        slides_url: https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0
-        review_date: '2022-04-13'
-        review_name: Release 3.0
-        status: success
-        date: '2022-04-13'
-        summary: The committer team proposes releasing Jakarta Batch 3.0.
-    License:
-      title: License
-      type: object
-      properties:
-        name:
-          type: string
-          description: Full license name.
-        short_name:
-          type: string
-          description: Abbreviated license identifier (e.g. `EPL-2.0`).
-        url:
-          type: string
-          description: URL to the license text.
-      example:
-        name: Eclipse Public License 2.0
-        short_name: EPL-2.0
-        url: https://www.eclipse.org/legal/epl-2.0/
-    GithubRepo:
-      title: GithubRepo
-      required:
-      - url
-      type: object
-      properties:
-        url:
-          type: string
-          description: Full GitHub repository URL.
-      example:
-        url: https://github.com/eclipse-ee4j/batch-api
     ReleaseDownloads:
       title: ReleaseDownloads
       type: object
@@ -1108,100 +1202,6 @@ components:
       example:
         tracked: false
         associated_files: []
-    SecurityTeam:
-      title: SecurityTeam
-      type: object
-      properties:
-        individual_members:
-          type: array
-          items:
-            $ref: '#/components/schemas/Committer'
-          description: Individually named security team members who are not already covered by the group roles.
-        groups:
-          $ref: '#/components/schemas/SecurityTeamGroups'
-      example:
-        individual_members: []
-        groups:
-          include_committers: true
-          include_project_leads: false
-    ReviewsResponse:
-      title: ReviewsResponse
-      type: object
-      properties:
-        reviews:
-          type: array
-          items:
-            $ref: '#/components/schemas/Review'
-          description: Paginated list of reviews for the project.
-      example:
-        reviews:
-        - id: 456
-          slides_url: https://projects.eclipse.org/projects/ee4j.batch/reviews/release-review-3.0
-          review_date: '2022-04-13'
-          review_name: Release 3.0
-          status: success
-          date: '2022-04-13'
-          summary: The committer team proposes releasing Jakarta Batch 3.0.
-    Committer:
-      title: Committer
-      type: object
-      description: A person with a role on an Eclipse project (committer, contributor, or project lead).
-      required:
-      - username
-      - url
-      properties:
-        username:
-          type:
-          - string
-          - 'null'
-          description: Eclipse account username (may be null for proposals where the person has no account yet).
-        full_name:
-          type: string
-          description: Display name of the person.
-        url:
-          type: string
-          description: Absolute URL to the person's profile on api.eclipse.org.
-      example:
-        username: acommitter
-        full_name: A Committer
-        url: https://api.eclipse.org/account/profile/acommitter
-    ReleasesResponse:
-      title: ReleasesResponse
-      type: object
-      properties:
-        releases:
-          type: array
-          items:
-            $ref: '#/components/schemas/Release'
-          description: Paginated list of releases for the project.
-      example:
-        releases:
-        - name: '3.0'
-          url: https://projects.eclipse.org/projects/ee4j.batch/releases/3.0
-          date: '2022-05-31'
-          type: 1
-          downloads:
-            tracked: false
-            associated_files: []
-    RetrieveaProjectresponse:
-      title: RetrieveaProjectresponse
-      description: Full project data returned by the single-project endpoint. Identical to FetchProjectsresponse but also includes the `description` field containing the full HTML-rendered project description.
-      allOf:
-      - $ref: '#/components/schemas/FetchProjectsresponse'
-      - type: object
-        properties:
-          description:
-            type: string
-            description: Full HTML-rendered project description body.
-    SlsaInfo:
-      title: SlsaInfo
-      type: object
-      properties:
-        build_level:
-          type: string
-          description: SLSA build level achieved by the project (empty string if not set).
-      example:
-        build_level: '2'
     RetrieveaProjectresponse_2:
       title: RetrieveaProjectresponse
       type: object

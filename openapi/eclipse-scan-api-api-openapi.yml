@@ -579,62 +579,6 @@ paths:
                 format: int32
 components:
   schemas:
-    ScanDecisionResponse:
-      type: object
-      description: Response for security decisions on scans
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        processed:
-          type: integer
-          format: int32
-          description: Total number of scan IDs processed
-        successful:
-          type: integer
-          format: int32
-          description: Number of decisions applied successfully
-        failed:
-          type: integer
-          format: int32
-          description: Number of decisions that failed
-        results:
-          type: array
-          description: Detailed results for each scan ID
-          items:
-            $ref: '#/components/schemas/ScanDecisionResult'
-    ScanFilterOptions:
-      type: object
-      description: Lists of unique values that can be used to filter scan results
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        validationTypes:
-          type: array
-          description: List of unique validation types from all scans.
-          items:
-            type: string
-        threatScannerNames:
-          type: array
-          description: List of unique threat scanner names.
-          items:
-            type: string
-      required:
-      - threatScannerNames
-      - validationTypes
     ScanDecisionResult:
       type: object
       description: Individual result in a scan decision response
@@ -670,6 +614,32 @@ components:
         enforcedFlag:
           type: boolean
           description: Whether this validation failure is enforced
+    ScanFilterOptions:
+      type: object
+      description: Lists of unique values that can be used to filter scan results
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        validationTypes:
+          type: array
+          description: List of unique validation types from all scans.
+          items:
+            type: string
+        threatScannerNames:
+          type: array
+          description: List of unique threat scanner names.
+          items:
+            type: string
+      required:
+      - threatScannerNames
+      - validationTypes
     CheckResult:
       type: object
       description: Result of a single check or scan execution
@@ -726,43 +696,6 @@ components:
         dateDecided:
           type: string
           description: When the admin decision was made (UTC)
-    ScanDecisionRequest:
-      type: object
-      description: Request body for making security decisions on quarantined scans
-      properties:
-        scanIds:
-          type: array
-          description: List of scan IDs to apply the decision to (can be single or multiple)
-          items:
-            type: string
-        decision:
-          type: string
-          description: Security decision to apply to all specified scans
-    ScannerJob:
-      type: object
-      description: Lifecycle state of a scanner job for an extension scan
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the scanner job
-        scannerType:
-          type: string
-          description: Identifies the scanner type that runs this job
-        status:
-          type: string
-          description: 'Current lifecycle status: QUEUED, PROCESSING, SUBMITTED, COMPLETE, FAILED, REMOVED'
-        createdAt:
-          type: string
-          description: When the job was created (UTC)
-        updatedAt:
-          type: string
-          description: When the job was last updated (UTC)
-        errorMessage:
-          type: string
-          description: Error message if the job failed or was removed
-        externalUrl:
-          type: string
-          description: Deep link to the external scanner's own dashboard for this job. Only populated for async scanners that configure external-url-template.
     Threat:
       type: object
       description: Security threat detected by scanner
@@ -797,6 +730,59 @@ components:
         enforcedFlag:
           type: boolean
           description: Whether this threat is enforced (affects extension status)
+    ScanStatistics:
+      type: object
+      description: Total counts for scan statuses and quarantine decisions
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        ERROR:
+          type: integer
+          format: int64
+          description: Indicates an error; when this is present, all other properties should be ignored
+        STARTED:
+          type: integer
+          format: int64
+        VALIDATING:
+          type: integer
+          format: int64
+        SCANNING:
+          type: integer
+          format: int64
+        PASSED:
+          type: integer
+          format: int64
+        QUARANTINED:
+          type: integer
+          format: int64
+        AUTO_REJECTED:
+          type: integer
+          format: int64
+        ALLOWED:
+          type: integer
+          format: int64
+        BLOCKED:
+          type: integer
+          format: int64
+        NEEDS_REVIEW:
+          type: integer
+          format: int64
+    ScanDecisionRequest:
+      type: object
+      description: Request body for making security decisions on quarantined scans
+      properties:
+        scanIds:
+          type: array
+          description: List of scan IDs to apply the decision to (can be single or multiple)
+          items:
+            type: string
+        decision:
+          type: string
+          description: Security decision to apply to all specified scans
     ScanResult:
       type: object
       description: Extension scan result with status and validation details
@@ -884,9 +870,34 @@ components:
         errorMessage:
           type: string
           description: Error message if the scan failed with an error
-    ScanStatistics:
+    ScannerJob:
       type: object
-      description: Total counts for scan statuses and quarantine decisions
+      description: Lifecycle state of a scanner job for an extension scan
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the scanner job
+        scannerType:
+          type: string
+          description: Identifies the scanner type that runs this job
+        status:
+          type: string
+          description: 'Current lifecycle status: QUEUED, PROCESSING, SUBMITTED, COMPLETE, FAILED, REMOVED'
+        createdAt:
+          type: string
+          description: When the job was created (UTC)
+        updatedAt:
+          type: string
+          description: When the job was last updated (UTC)
+        errorMessage:
+          type: string
+          description: Error message if the job failed or was removed
+        externalUrl:
+          type: string
+          description: Deep link to the external scanner's own dashboard for this job. Only populated for async scanners that configure external-url-template.
+    ScanDecisionResponse:
+      type: object
+      description: Response for security decisions on scans
       properties:
         success:
           type: string
@@ -894,34 +905,23 @@ components:
         warning:
           type: string
           description: Indicates a warning; when this is present, other properties can still be used
-        ERROR:
-          type: integer
-          format: int64
+        error:
+          type: string
           description: Indicates an error; when this is present, all other properties should be ignored
-        STARTED:
+        processed:
           type: integer
-          format: int64
-        VALIDATING:
+          format: int32
+          description: Total number of scan IDs processed
+        successful:
           type: integer
-          format: int64
-        SCANNING:
+          format: int32
+          description: Number of decisions applied successfully
+        failed:
           type: integer
-          format: int64
-        PASSED:
-          type: integer
-          format: int64
-        QUARANTINED:
-          type: integer
-          format: int64
-        AUTO_REJECTED:
-          type: integer
-          format: int64
-        ALLOWED:
-          type: integer
-          format: int64
-        BLOCKED:
-          type: integer
-          format: int64
-        NEEDS_REVIEW:
-          type: integer
-          format: int64
+          format: int32
+          description: Number of decisions that failed
+        results:
+          type: array
+          description: Detailed results for each scan ID
+          items:
+            $ref: '#/components/schemas/ScanDecisionResult'

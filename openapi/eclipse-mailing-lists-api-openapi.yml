@@ -364,15 +364,6 @@ paths:
       description: The production API server
 components:
   schemas:
-    MailingLists:
-      type: array
-      items:
-        $ref: '#/components/schemas/MailingList'
-    NullableString:
-      description: A nullable String type value
-      type:
-      - 'null'
-      - string
     DateTime:
       type: string
       format: datetime
@@ -382,6 +373,22 @@ components:
         More on this standard can be read at https://tools.ietf.org/html/rfc3339.
 
         '
+    MailingLists:
+      type: array
+      items:
+        $ref: '#/components/schemas/MailingList'
+    NullableString:
+      description: A nullable String type value
+      type:
+      - 'null'
+      - string
+    MailingListMapping:
+      type: object
+      propertyNames:
+        pattern: ^\d+$
+        description: Project IDs the mailing lists are mapped to
+      additionalProperties:
+        $ref: '#/components/schemas/MailingLists'
     MailingList:
       type: object
       additionalProperties: false
@@ -444,13 +451,6 @@ components:
           - 'null'
           - integer
           description: The number of subscribers for the given list. Only included on singular calls.
-    MailingListMapping:
-      type: object
-      propertyNames:
-        pattern: ^\d+$
-        description: Project IDs the mailing lists are mapped to
-      additionalProperties:
-        $ref: '#/components/schemas/MailingLists'
     RetrieveMailingListresponse:
       title: RetrieveMailingListresponse
       required:
@@ -556,14 +556,14 @@ components:
       schema:
         type: string
       example: 964
-    X-RateLimit-Reset:
-      schema:
-        type: string
-      example: 3553
     X-RateLimit-Limit:
       schema:
         type: string
       example: 1000
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
   securitySchemes:
     openId:
       type: openIdConnect

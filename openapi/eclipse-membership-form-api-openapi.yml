@@ -197,6 +197,12 @@ components:
         More on this standard can be read at https://tools.ietf.org/html/rfc3339.
 
         '
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     ConstraintViolations:
       type: array
       items:
@@ -235,16 +241,19 @@ components:
           description: The EU country the organization is registered under for VAT.
         updated_date:
           $ref: '#/components/schemas/DateTime'
+    FormState:
+      type: string
+      description: the current form state
+      enum:
+      - SUBMITTED
+      - INPROGRESS
+      - COMPLETE
+      - CONFIRMED
+      - REJECTED
     MembershipForms:
       type: array
       items:
         $ref: '#/components/schemas/MembershipForm'
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
     ConstraintViolation:
       type: object
       properties:
@@ -260,15 +269,6 @@ components:
         value:
           type: object
           description: the bad value in question.
-    FormState:
-      type: string
-      description: the current form state
-      enum:
-      - SUBMITTED
-      - INPROGRESS
-      - COMPLETE
-      - CONFIRMED
-      - REJECTED
   securitySchemes:
     openId:
       type: openIdConnect

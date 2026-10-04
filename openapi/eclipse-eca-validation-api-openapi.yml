@@ -111,20 +111,22 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    DateTime:
-      type: string
-      format: date-time
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
-    NullableString:
-      description: A nullable String type value
-      type:
-      - 'null'
-      - string
+    GitUser:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - mail
+      properties:
+        name:
+          type: string
+          description: The name of the git user
+        mail:
+          type: string
+          description: the email address of the user
+        external_id:
+          $ref: '#/components/schemas/NullableString'
+          description: the email address of the user
     ValidationRequest:
       type: object
       additionalProperties: false
@@ -192,10 +194,31 @@ components:
                 items:
                   type: string
                   description: Parent commit hashes, multiple will be present for merge commits
-    NullableDateTime:
-      type:
-      - string
-      - 'null'
+    Commit:
+      type: object
+      additionalProperties: false
+      required:
+      - errors
+      - warnings
+      - messages
+      properties:
+        messages:
+          type: array
+          description: List of informational messages about the validation of the current commit.
+          items:
+            $ref: '#/components/schemas/CommitMessage'
+        warnings:
+          type: array
+          description: List of non-fatal issues encountered in the validation of the current commit
+          items:
+            $ref: '#/components/schemas/CommitMessage'
+        errors:
+          type: array
+          description: List of errors encountered in the validation of the current commit
+          items:
+            $ref: '#/components/schemas/CommitMessage'
+    DateTime:
+      type: string
       format: date-time
       description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
 
@@ -229,29 +252,26 @@ components:
         provider_id:
           $ref: '#/components/schemas/NullableString'
           description: the outward facing URL of the repo the commit belongs to.
-    Commit:
-      type: object
-      additionalProperties: false
-      required:
-      - errors
-      - warnings
-      - messages
-      properties:
-        messages:
-          type: array
-          description: List of informational messages about the validation of the current commit.
-          items:
-            $ref: '#/components/schemas/CommitMessage'
-        warnings:
-          type: array
-          description: List of non-fatal issues encountered in the validation of the current commit
-          items:
-            $ref: '#/components/schemas/CommitMessage'
-        errors:
-          type: array
-          description: List of errors encountered in the validation of the current commit
-          items:
-            $ref: '#/components/schemas/CommitMessage'
+    NullableDateTime:
+      type:
+      - string
+      - 'null'
+      format: date-time
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    NullableString:
+      description: A nullable String type value
+      type:
+      - 'null'
+      - string
+    CommitValidationStatuses:
+      type: array
+      items:
+        $ref: '#/components/schemas/CommitValidationStatus'
     ValidationResponse:
       type: object
       additionalProperties: false
@@ -338,26 +358,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CommitValidationMessage'
-    GitUser:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - mail
-      properties:
-        name:
-          type: string
-          description: The name of the git user
-        mail:
-          type: string
-          description: the email address of the user
-        external_id:
-          $ref: '#/components/schemas/NullableString'
-          description: the email address of the user
-    CommitValidationStatuses:
-      type: array
-      items:
-        $ref: '#/components/schemas/CommitValidationStatus'
     CommitMessage:
       type: object
       additionalProperties: false

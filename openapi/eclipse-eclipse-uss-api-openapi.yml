@@ -384,19 +384,6 @@ paths:
           description: ''
       deprecated: false
 components:
-  headers:
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
-    X-RateLimit-Reset:
-      schema:
-        type: string
-      example: 3553
-    X-RateLimit-Limit:
-      schema:
-        type: string
-      example: 1000
   schemas:
     SearchBlobsresponse:
       title: SearchBlobsresponse
@@ -464,6 +451,19 @@ components:
         changed: 1497030093
         key: mpc_favorites
         url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
+  headers:
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
   securitySchemes:
     oauth2:
       description: 'Get access to data while protecting your account credentials.

@@ -38,18 +38,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ProfilePublisherAgreement:
-      type: object
-      properties:
-        version:
-          type: string
-          description: the agreement document version.
-      example:
-        version: '1'
-    EfUsers:
-      type: array
-      items:
-        $ref: '#/components/schemas/EfUser'
     Eca:
       type: object
       properties:
@@ -62,6 +50,18 @@ components:
       example:
         signed: true
         can_contribute_spec_project: true
+    EfUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfUser'
+    ProfilePublisherAgreement:
+      type: object
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'
     EfUser:
       type: object
       properties:

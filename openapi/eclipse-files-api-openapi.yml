@@ -39,11 +39,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    NullableString:
-      description: A nullable String type value
-      oneOf:
-      - type: 'null'
-      - type: string
     File:
       type: object
       additionalProperties: false
@@ -78,3 +73,8 @@ components:
         sha512sum:
           $ref: '#/components/schemas/NullableString'
           description: placeholder
+    NullableString:
+      description: A nullable String type value
+      oneOf:
+      - type: 'null'
+      - type: string

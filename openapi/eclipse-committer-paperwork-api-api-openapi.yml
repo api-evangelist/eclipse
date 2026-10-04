@@ -261,25 +261,6 @@ components:
         spec_project_working_group_tid:
           type: integer
           description: Working group id.
-    PaperworkUpdate:
-      type: object
-      additionalProperties: false
-      required:
-      - parameters
-      properties:
-        parameters:
-          type: object
-          additionalProperties: false
-          required:
-          - committer_paperwork_nid
-          - committer_paperwork_status
-          properties:
-            committer_paperwork_nid:
-              type: integer
-              description: Committer paperwork numerical id.
-            committer_paperwork_status:
-              type: integer
-              description: The paperwork status
     ResultUrl:
       type: object
       additionalProperties: false
@@ -289,6 +270,17 @@ components:
         url:
           type: string
           description: URL containing the result of the paperwork creation/update.
+    PaperworkList:
+      type: array
+      minItems: 1
+      maxItems: 1
+      items:
+        type: object
+        properties:
+          result:
+            type: array
+            items:
+              $ref: '#/components/schemas/Paperwork'
     ProspectivePaperwork:
       type: object
       additionalProperties: false
@@ -320,17 +312,25 @@ components:
             spec_project_working_group:
               type: integer
               description: Working groupd id.
-    PaperworkList:
-      type: array
-      minItems: 1
-      maxItems: 1
-      items:
-        type: object
-        properties:
-          result:
-            type: array
-            items:
-              $ref: '#/components/schemas/Paperwork'
+    PaperworkUpdate:
+      type: object
+      additionalProperties: false
+      required:
+      - parameters
+      properties:
+        parameters:
+          type: object
+          additionalProperties: false
+          required:
+          - committer_paperwork_nid
+          - committer_paperwork_status
+          properties:
+            committer_paperwork_nid:
+              type: integer
+              description: Committer paperwork numerical id.
+            committer_paperwork_status:
+              type: integer
+              description: The paperwork status
   securitySchemes:
     openId:
       type: openIdConnect

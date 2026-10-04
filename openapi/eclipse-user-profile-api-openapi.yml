@@ -155,11 +155,6 @@ paths:
           description: Success
 components:
   schemas:
-    Error:
-      type: array
-      items:
-        type: string
-      description: An array containing a single message indicating the error
     Eca:
       type: object
       additionalProperties: false
@@ -176,21 +171,6 @@ components:
       example:
         signed: true
         can_contribute_spec_project: true
-    Country:
-      type: object
-      properties:
-        code:
-          oneOf:
-          - type: string
-          - type: 'null'
-          description: The country code.
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-      example:
-        code: CA
-        name: Canada
     UserData:
       type: object
       additionalProperties: false
@@ -381,6 +361,17 @@ components:
         gerrit_url: ''
         mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
         mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
+    PublisherAgreement:
+      type: object
+      additionalProperties: false
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'
     UserDatas:
       type: array
       items:
@@ -423,17 +414,26 @@ components:
         gerrit_url: ''
         mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
         mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
-    PublisherAgreement:
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
+    Country:
       type: object
-      additionalProperties: false
-      required:
-      - version
       properties:
-        version:
-          type: string
-          description: the agreement document version.
+        code:
+          oneOf:
+          - type: string
+          - type: 'null'
+          description: The country code.
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
       example:
-        version: '1'
+        code: CA
+        name: Canada
   securitySchemes:
     OAuth2:
       type: oauth2

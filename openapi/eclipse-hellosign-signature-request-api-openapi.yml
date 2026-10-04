@@ -139,55 +139,10 @@ paths:
           description: Unauthorized
 components:
   schemas:
-    EfSignatureTemplates:
+    EfHellosignRequests:
       type: array
       items:
-        type: object
-        additionalProperties: false
-        required:
-        - name
-        - template_id
-        - template_name
-        - comment
-        - document
-        - related_documents
-        - revoked_documents
-        - mcca
-        - aliases
-        properties:
-          name:
-            type: string
-            description: the internal name used for lookups and identification
-          template_id:
-            type: string
-            description: The external ID linked to this template, used when targeting upstream services
-          template_name:
-            type: string
-            description: Display name for the current template
-          comment:
-            type: string
-            description: Value used in log events related to general operations of this template in the signature workflow
-          document:
-            description: the main document that is created or updated as part of a workflow using this template
-            $ref: '#/components/schemas/EfTemplateDocument'
-          related_documents:
-            type: array
-            description: List of related documents that should be updated but not created when this template is used
-            items:
-              $ref: '#/components/schemas/EfTemplateDocument'
-          revoked_documents:
-            type: array
-            description: list of document IDs that should be revoked if present when workflows using this template are completed.
-            items:
-              type: string
-          mcca:
-            type: boolean
-            description: Whether the current template targets MCCA type document events and can target organizations as well as individuals.
-          aliases:
-            type: array
-            description: Previous internal IDs used for this template, used for backwards compatibility
-            items:
-              type: string
+        $ref: '#/components/schemas/EfHellosignRequest'
     EfTemplateDocument:
       type: object
       additionalProperties: false
@@ -206,50 +161,6 @@ components:
         message:
           type: string
           description: the message to include in logs created for the mutation of these documents
-    HellosignSignatureRequest:
-      type: object
-      additionalProperties: false
-      required:
-      - signers
-      - template_name
-      properties:
-        signers:
-          type: array
-          description: List of users that will be added as signers for the new document
-          items:
-            type: object
-            additionalProperties: false
-            required:
-            - mail
-            - name
-            - fullname
-            - role
-            properties:
-              mail:
-                type: string
-                description: The email address of the user to associate with the new request.
-              name:
-                type: string
-                description: The user name for the given user
-              fullname:
-                type: string
-                description: The legal name to use for the signature request for current user
-              role:
-                type: string
-                description: The Hellosign role associated with the current user (e.g. client)
-        template_name:
-          type: string
-          description: The name of the Hellosign template to create signature requests for
-        subject:
-          type:
-          - string
-          - 'null'
-          description: The subject of the message to the user in the signature request
-        message:
-          type:
-          - string
-          - 'null'
-          description: The message to include with the signature request
     EfHellosignRequest:
       type: object
       additionalProperties: false
@@ -317,10 +228,99 @@ components:
                 type: string
                 format: date-time
                 description: The standardized time that the event was recieved by the system
-    EfHellosignRequests:
+    EfSignatureTemplates:
       type: array
       items:
-        $ref: '#/components/schemas/EfHellosignRequest'
+        type: object
+        additionalProperties: false
+        required:
+        - name
+        - template_id
+        - template_name
+        - comment
+        - document
+        - related_documents
+        - revoked_documents
+        - mcca
+        - aliases
+        properties:
+          name:
+            type: string
+            description: the internal name used for lookups and identification
+          template_id:
+            type: string
+            description: The external ID linked to this template, used when targeting upstream services
+          template_name:
+            type: string
+            description: Display name for the current template
+          comment:
+            type: string
+            description: Value used in log events related to general operations of this template in the signature workflow
+          document:
+            description: the main document that is created or updated as part of a workflow using this template
+            $ref: '#/components/schemas/EfTemplateDocument'
+          related_documents:
+            type: array
+            description: List of related documents that should be updated but not created when this template is used
+            items:
+              $ref: '#/components/schemas/EfTemplateDocument'
+          revoked_documents:
+            type: array
+            description: list of document IDs that should be revoked if present when workflows using this template are completed.
+            items:
+              type: string
+          mcca:
+            type: boolean
+            description: Whether the current template targets MCCA type document events and can target organizations as well as individuals.
+          aliases:
+            type: array
+            description: Previous internal IDs used for this template, used for backwards compatibility
+            items:
+              type: string
+    HellosignSignatureRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - signers
+      - template_name
+      properties:
+        signers:
+          type: array
+          description: List of users that will be added as signers for the new document
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - mail
+            - name
+            - fullname
+            - role
+            properties:
+              mail:
+                type: string
+                description: The email address of the user to associate with the new request.
+              name:
+                type: string
+                description: The user name for the given user
+              fullname:
+                type: string
+                description: The legal name to use for the signature request for current user
+              role:
+                type: string
+                description: The Hellosign role associated with the current user (e.g. client)
+        template_name:
+          type: string
+          description: The name of the Hellosign template to create signature requests for
+        subject:
+          type:
+          - string
+          - 'null'
+          description: The subject of the message to the user in the signature request
+        message:
+          type:
+          - string
+          - 'null'
+          description: The message to include with the signature request
   securitySchemes:
     openId:
       type: openIdConnect

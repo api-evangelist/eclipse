@@ -80,6 +80,22 @@ paths:
       deprecated: true
 components:
   schemas:
+    SimultaneousReleaseProject:
+      title: SimultaneousReleaseProject
+      type: object
+      description: A project's contribution to a simultaneous release.
+      properties:
+        project_name:
+          type: string
+          description: Project node title.
+        new_and_noteworthy_url:
+          type:
+          - string
+          - 'null'
+          description: URL to the project's New and Noteworthy page for this release. May be null or empty if not configured.
+      example:
+        project_name: Eclipse Platform
+        new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
     SimultaneousReleaseEntry:
       title: SimultaneousReleaseEntry
       type: object
@@ -128,22 +144,6 @@ components:
             eclipse.platform:
               project_name: Eclipse Platform
               new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
-    SimultaneousReleaseProject:
-      title: SimultaneousReleaseProject
-      type: object
-      description: A project's contribution to a simultaneous release.
-      properties:
-        project_name:
-          type: string
-          description: Project node title.
-        new_and_noteworthy_url:
-          type:
-          - string
-          - 'null'
-          description: URL to the project's New and Noteworthy page for this release. May be null or empty if not configured.
-      example:
-        project_name: Eclipse Platform
-        new_and_noteworthy_url: https://eclipse.dev/platform/noteworthy/4.29/
   responses:
     NotFound:
       description: Resource not found.

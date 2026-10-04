@@ -175,56 +175,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Release:
-      type: object
-      additionalProperties: false
-      required:
-      - release_name
-      - release_version
-      - packages
-      properties:
-        release_name:
-          type: string
-          description: The name of the release for the packages
-        release_version:
-          type: string
-          description: The version of the release for the packages
-        packages:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ReleasePackage'
-    NullableString:
-      description: A nullable String type value
-      oneOf:
-      - type: 'null'
-      - type: string
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
-        friendly_message:
-          type:
-          - string
-          - 'null'
-          description: The optional client-friendly message for the error
-    Releases:
-      type: array
-      items:
-        $ref: '#/components/schemas/Release'
     ReleasePackage:
       type: object
       additionalProperties: false
@@ -286,17 +236,10 @@ components:
               anyOf:
               - type: 'null'
               - $ref: '#/components/schemas/ReleaseFiles'
-    ReleaseFiles:
-      type: object
-      properties:
-        '32':
-          oneOf:
-          - $ref: '#/components/schemas/ReleaseFile'
-          - type: 'null'
-        '64':
-          oneOf:
-          - $ref: '#/components/schemas/ReleaseFile'
-          - type: 'null'
+    Releases:
+      type: array
+      items:
+        $ref: '#/components/schemas/Release'
     ReleaseFile:
       type: object
       additionalProperties: false
@@ -336,3 +279,60 @@ components:
             sha512:
               $ref: '#/components/schemas/NullableString'
               description: the sha512 checksum for the release file
+    NullableString:
+      description: A nullable String type value
+      oneOf:
+      - type: 'null'
+      - type: string
+    Release:
+      type: object
+      additionalProperties: false
+      required:
+      - release_name
+      - release_version
+      - packages
+      properties:
+        release_name:
+          type: string
+          description: The name of the release for the packages
+        release_version:
+          type: string
+          description: The version of the release for the packages
+        packages:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ReleasePackage'
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          type:
+          - string
+          - 'null'
+          description: The optional client-friendly message for the error
+    ReleaseFiles:
+      type: object
+      properties:
+        '32':
+          oneOf:
+          - $ref: '#/components/schemas/ReleaseFile'
+          - type: 'null'
+        '64':
+          oneOf:
+          - $ref: '#/components/schemas/ReleaseFile'
+          - type: 'null'

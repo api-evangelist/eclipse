@@ -127,6 +127,25 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    Contacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Contact'
+    ContactType:
+      type: string
+      description: The type of contact that is being stored
+      enum:
+      - COMPANY
+      - WORKING_GROUP
+      - MARKETING
+      - ACCOUNTING
+      - SIGNING
     Contact:
       type: object
       properties:
@@ -148,25 +167,6 @@ components:
           description: Job title of the contact
         type:
           $ref: '#/components/schemas/ContactType'
-    Contacts:
-      type: array
-      items:
-        $ref: '#/components/schemas/Contact'
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
-    ContactType:
-      type: string
-      description: The type of contact that is being stored
-      enum:
-      - COMPANY
-      - WORKING_GROUP
-      - MARKETING
-      - ACCOUNTING
-      - SIGNING
   securitySchemes:
     openId:
       type: openIdConnect

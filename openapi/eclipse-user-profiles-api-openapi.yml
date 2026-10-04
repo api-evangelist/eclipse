@@ -445,186 +445,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Relation:
-      title: Relation
-      required:
-      - Relation
-      - Description
-      - IsActive
-      - Type
-      type: object
-      properties:
-        Relation:
-          type: string
-        Description:
-          type: string
-        IsActive:
-          type: string
-        Type:
-          $ref: '#/components/schemas/Type'
-      example:
-        Relation: CM
-        Description: Committer
-        IsActive: 1
-        Type:
-          Type: PR
-          Description: Person - Project
-    Searchforauserresponse:
-      title: Searchforauserresponse
-      required:
-      - uid
-      - name
-      - mail
-      - eca
-      - is_committer
-      - friends
-      - first_name
-      - last_name
-      - twitter_handle
-      - org
-      - job_title
-      - website
-      - country
-      - bio
-      - interests
-      type: object
-      properties:
-        uid:
-          type: string
-        name:
-          type: string
-        mail:
-          type: string
-        eca:
-          $ref: '#/components/schemas/Eca'
-        is_committer:
-          type: boolean
-        friends:
-          $ref: '#/components/schemas/Friends'
-        first_name:
-          type: string
-        last_name:
-          type: string
-        twitter_handle:
-          type: string
-        org:
-          type: string
-        job_title:
-          type: string
-        website:
-          type: string
-        country:
-          $ref: '#/components/schemas/Country'
-        bio:
-          type: string
-        interests:
-          type: array
-          items:
-            type: string
-          description: ''
-      example:
-        uid: 9
-        name: cguindon
-        mail: chris.guindon@eclipse-foundation.org
-        eca:
-          signed: true
-        is_committer: true
-        friends:
-          friend_id: 6104
-        first_name: Christopher
-        last_name: Guindon
-        twitter_handle: chrisguindon
-        org: Eclipse Foundation
-        job_title: Lead Web Application Developper
-        website: http://www.chrisguindon.com/
-        country:
-          code: CA
-          name: Canada
-        bio: Hello world! When I am not at a computer, which is rare, I spend my time playing the drums, watching hockey or at the top of a hill snowboarding. I am also very passionate about music and live concerts!
-        interests:
-        - Snowboarding
-        - webdev
-        - php
-        - javascript
-        - Drums
-    Retrieveuserresponse:
-      title: Retrieveuserresponse
-      required:
-      - uid
-      - name
-      - mail
-      - eca
-      - is_committer
-      - friends
-      - first_name
-      - last_name
-      - twitter_handle
-      - org
-      - job_title
-      - website
-      - country
-      - bio
-      - interests
-      type: object
-      properties:
-        uid:
-          type: string
-        name:
-          type: string
-        mail:
-          type: string
-        eca:
-          $ref: '#/components/schemas/Eca'
-        is_committer:
-          type: boolean
-        friends:
-          $ref: '#/components/schemas/Friends'
-        first_name:
-          type: string
-        last_name:
-          type: string
-        twitter_handle:
-          type: string
-        org:
-          type: string
-        job_title:
-          type: string
-        website:
-          type: string
-        country:
-          $ref: '#/components/schemas/Country'
-        bio:
-          type: string
-        interests:
-          type: array
-          items:
-            type: string
-          description: ''
-      example:
-        uid: 9
-        name: cguindon
-        mail: chris.guindon@eclipse-foundation.org
-        eca:
-          signed: true
-        is_committer: true
-        friends:
-          friend_id: 6104
-        first_name: Christopher
-        last_name: Guindon
-        twitter_handle: chrisguindon
-        org: Eclipse Foundation
-        job_title: Lead Web Application Developper
-        website: http://www.chrisguindon.com/
-        country:
-          code: CA
-          name: Canada
-        bio: Hello world! When I am not at a computer, which is rare, I spend my time playing the drums, watching hockey or at the top of a hill snowboarding. I am also very passionate about music and live concerts!
-        interests:
-        - Snowboarding
-        - webdev
-        - php
-        - javascript
-        - Drums
     Gerritreviewcountresponse:
       title: Gerritreviewcountresponse
       required:
@@ -635,231 +455,6 @@ components:
           type: string
       example:
         merged_changes_count: 671
-    Forumpostsresponse:
-      title: Forumpostsresponse
-      required:
-      - id
-      - alias
-      - avatar_loc
-      - email
-      - posted_msg_count
-      - join_date
-      - location
-      - sig
-      - last_visit
-      - level_name
-      - level_img
-      - posts
-      type: object
-      properties:
-        id:
-          type: string
-        alias:
-          type: string
-        avatar_loc:
-          type:
-          - string
-          - 'null'
-        email:
-          type: string
-        posted_msg_count:
-          type: string
-        join_date:
-          type: string
-        location:
-          type:
-          - string
-          - 'null'
-        sig:
-          type:
-          - string
-          - 'null'
-        last_visit:
-          type: string
-        level_name:
-          type: string
-        level_img:
-          type:
-          - string
-          - 'null'
-        posts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Post'
-          description: ''
-      example:
-        id: 125133
-        alias: Christopher Guindon
-        avatar_loc: null
-        email: chris.guindon@eclipse-foundation.org
-        posted_msg_count: 2
-        join_date: 1329944087
-        location: null
-        sig: null
-        last_visit: 1489180635
-        level_name: Junior Member
-        level_img: null
-        posts:
-        - msg_id: 1385038
-          msg_thread_id: 781490
-          msg_poster_id: 125133
-          msg_reply_to: 0
-          msg_post_stamp: 1401828571
-          msg_update_stamp: 0
-          msg_updated_by: 0
-          msg_subject: sdfdsf
-          thread_id: 781490
-          thread_forum_id: 97
-          thread_root_msg_id: 1385038
-          thread_last_post_date: 1490969896
-          thread_replies: 6
-          thread_views: 8925
-          thread_rating: 0
-          thread_n_rating: 0
-          thread_last_post_id: 1758673
-          thread_orderexpiry: 0
-          thread_thread_opt: 0
-          thread_tdescr: ''
-          forum_name: Test
-          forum_cat_id: 3
-          forum_description: Forum for testing messages. This is <b>UNRELATED to testing with Eclipse</b>.  Use the <a href='http://www.eclipse.org/forums/eclipse.tptp'>Test and Performance forum</a> for those discussions instead.
-          forum_date_created: 1248707241
-          forum_thread_count: 975
-          forum_post_count: 1526
-          forum_last_post_id: 1764500
-          cat_name: General (non-technical)
-          cat_description: ' - Click +/- to expand/collapse'
-          read_last_view: null
-          last_msg_poster_id: 216471
-          last_msg_subject: 'Re: sdfdsf'
-          last_msg_post_stamp: 1490969896
-          last_msg_update_stamp: 0
-          last_poster_email: m.amjadi@engineer.com
-          last_poster_alias: Mohammad H. Amir Amjadi
-          root_msg_poster_id: 125133
-          root_msg_subject: sdfdsf
-          root_msg_post_stamp: 1401828571
-          root_msg_update_stamp: 0
-          root_poster_email: chris.guindon@eclipse-foundation.org
-          root_poster_alias: Christopher Guindon
-          last_user_msg_poster_id: 125133
-          last_user_msg_subject: sdfdsf
-          last_user_msg_stamp: 1401828571
-          msg4_update_stamp: 0
-          msg_group_post_stamp: 1479327581
-    FoundationInternal:
-      title: FoundationInternal
-      required:
-      - ActiveDate
-      - InactiveDate
-      - EditBugs
-      - ProjectName
-      - url
-      - Relation
-      type: object
-      properties:
-        ActiveDate:
-          type: string
-        InactiveDate:
-          type:
-          - string
-          - 'null'
-        EditBugs:
-          type: string
-        ProjectName:
-          type: string
-        url:
-          type: string
-        Relation:
-          $ref: '#/components/schemas/Relation'
-      example:
-        ActiveDate: '2012-12-21'
-        InactiveDate: null
-        EditBugs: 0
-        ProjectName: Internal Foundation Projects
-        url: ''
-        Relation:
-          Relation: CM
-          Description: Committer
-          IsActive: 1
-          Type:
-            Type: PR
-            Description: Person - Project
-    ProjectRelationshipresponse:
-      title: ProjectRelationshipresponse
-      required:
-      - technology.cbi
-      - technology.usssdk
-      - foundation-internal
-      type: object
-      properties:
-        technology.cbi:
-          type: array
-          items:
-            $ref: '#/components/schemas/TechnologyCbi'
-          description: ''
-        technology.usssdk:
-          type: array
-          items:
-            $ref: '#/components/schemas/TechnologyUsssdk'
-          description: ''
-        foundation-internal:
-          type: array
-          items:
-            $ref: '#/components/schemas/FoundationInternal'
-          description: ''
-      example:
-        technology.cbi:
-        - ActiveDate: '2014-12-15'
-          InactiveDate: null
-          EditBugs: 0
-          ProjectName: Common Build Infrastructure
-          url: https://projects.eclipse.org/projects/technology.cbi
-          Relation:
-            Relation: CM
-            Description: Committer
-            IsActive: 1
-            Type:
-              Type: PR
-              Description: Person - Project
-        technology.usssdk:
-        - ActiveDate: '2016-09-21'
-          InactiveDate: null
-          EditBugs: 0
-          ProjectName: Eclipse USS SDK
-          url: https://projects.eclipse.org/projects/technology.usssdk
-          Relation:
-            Relation: CM
-            Description: Committer
-            IsActive: 1
-            Type:
-              Type: PR
-              Description: Person - Project
-        - ActiveDate: '2016-09-21'
-          InactiveDate: null
-          EditBugs: 0
-          ProjectName: Eclipse USS SDK
-          url: https://projects.eclipse.org/projects/technology.usssdk
-          Relation:
-            Relation: PL
-            Description: Project Lead
-            IsActive: 1
-            Type:
-              Type: PR
-              Description: Person - Project
-        foundation-internal:
-        - ActiveDate: '2012-12-21'
-          InactiveDate: null
-          EditBugs: 0
-          ProjectName: Internal Foundation Projects
-          url: ''
-          Relation:
-            Relation: CM
-            Description: Committer
-            IsActive: 1
-            Type:
-              Type: PR
-              Description: Person - Project
     Post:
       title: Post
       required:
@@ -1056,161 +651,6 @@ components:
         last_user_msg_stamp: 1401828571
         msg4_update_stamp: 0
         msg_group_post_stamp: 1479327581
-    Type:
-      title: Type
-      required:
-      - Type
-      - Description
-      type: object
-      properties:
-        Type:
-          type: string
-        Description:
-          type: string
-      example:
-        Type: PR
-        Description: Person - Project
-    MailingListSubscriptionsresponse:
-      title: MailingListSubscriptionsresponse
-      required:
-      - mailing_list_subscriptions
-      type: object
-      properties:
-        mailing_list_subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/MailingListSubscription'
-          description: ''
-      example:
-        mailing_list_subscriptions:
-        - list_name: epp-dev
-          list_description: Eclipse Packaging Project
-        - list_name: eclipse.org-webdev
-          list_description: Eclipse.org Webdev notices and discussions
-    MailingListSubscription:
-      title: MailingListSubscription
-      required:
-      - list_name
-      - list_description
-      type: object
-      properties:
-        list_name:
-          type: string
-        list_description:
-          type: string
-      example:
-        list_name: epp-dev
-        list_description: Eclipse Packaging Project
-    Friends:
-      title: Friends
-      required:
-      - friend_id
-      type: object
-      properties:
-        friend_id:
-          type: string
-      example:
-        friend_id: 6104
-    TechnologyUsssdk:
-      title: TechnologyUsssdk
-      required:
-      - ActiveDate
-      - InactiveDate
-      - EditBugs
-      - ProjectName
-      - url
-      - Relation
-      type: object
-      properties:
-        ActiveDate:
-          type: string
-        InactiveDate:
-          type:
-          - string
-          - 'null'
-        EditBugs:
-          type: string
-        ProjectName:
-          type: string
-        url:
-          type: string
-        Relation:
-          $ref: '#/components/schemas/Relation'
-      example:
-        ActiveDate: '2016-09-21'
-        InactiveDate: null
-        EditBugs: 0
-        ProjectName: Eclipse USS SDK
-        url: https://projects.eclipse.org/projects/technology.usssdk
-        Relation:
-          Relation: CM
-          Description: Committer
-          IsActive: 1
-          Type:
-            Type: PR
-            Description: Person - Project
-    TechnologyCbi:
-      title: TechnologyCbi
-      required:
-      - ActiveDate
-      - InactiveDate
-      - EditBugs
-      - ProjectName
-      - url
-      - Relation
-      type: object
-      properties:
-        ActiveDate:
-          type: string
-        InactiveDate:
-          type:
-          - string
-          - 'null'
-        EditBugs:
-          type: string
-        ProjectName:
-          type: string
-        url:
-          type: string
-        Relation:
-          $ref: '#/components/schemas/Relation'
-      example:
-        ActiveDate: '2014-12-15'
-        InactiveDate: null
-        EditBugs: 0
-        ProjectName: Common Build Infrastructure
-        url: https://projects.eclipse.org/projects/technology.cbi
-        Relation:
-          Relation: CM
-          Description: Committer
-          IsActive: 1
-          Type:
-            Type: PR
-            Description: Person - Project
-    Eca:
-      title: Eca
-      required:
-      - signed
-      type: object
-      properties:
-        signed:
-          type: boolean
-      example:
-        signed: true
-    Country:
-      title: Country
-      required:
-      - code
-      - name
-      type: object
-      properties:
-        code:
-          type: string
-        name:
-          type: string
-      example:
-        code: CA
-        name: Canada
     Currentuserresponse:
       title: Currentuserresponse
       required:
@@ -1289,19 +729,579 @@ components:
         - php
         - javascript
         - Drums
+    FoundationInternal:
+      title: FoundationInternal
+      required:
+      - ActiveDate
+      - InactiveDate
+      - EditBugs
+      - ProjectName
+      - url
+      - Relation
+      type: object
+      properties:
+        ActiveDate:
+          type: string
+        InactiveDate:
+          type:
+          - string
+          - 'null'
+        EditBugs:
+          type: string
+        ProjectName:
+          type: string
+        url:
+          type: string
+        Relation:
+          $ref: '#/components/schemas/Relation'
+      example:
+        ActiveDate: '2012-12-21'
+        InactiveDate: null
+        EditBugs: 0
+        ProjectName: Internal Foundation Projects
+        url: ''
+        Relation:
+          Relation: CM
+          Description: Committer
+          IsActive: 1
+          Type:
+            Type: PR
+            Description: Person - Project
+    TechnologyUsssdk:
+      title: TechnologyUsssdk
+      required:
+      - ActiveDate
+      - InactiveDate
+      - EditBugs
+      - ProjectName
+      - url
+      - Relation
+      type: object
+      properties:
+        ActiveDate:
+          type: string
+        InactiveDate:
+          type:
+          - string
+          - 'null'
+        EditBugs:
+          type: string
+        ProjectName:
+          type: string
+        url:
+          type: string
+        Relation:
+          $ref: '#/components/schemas/Relation'
+      example:
+        ActiveDate: '2016-09-21'
+        InactiveDate: null
+        EditBugs: 0
+        ProjectName: Eclipse USS SDK
+        url: https://projects.eclipse.org/projects/technology.usssdk
+        Relation:
+          Relation: CM
+          Description: Committer
+          IsActive: 1
+          Type:
+            Type: PR
+            Description: Person - Project
+    ProjectRelationshipresponse:
+      title: ProjectRelationshipresponse
+      required:
+      - technology.cbi
+      - technology.usssdk
+      - foundation-internal
+      type: object
+      properties:
+        technology.cbi:
+          type: array
+          items:
+            $ref: '#/components/schemas/TechnologyCbi'
+          description: ''
+        technology.usssdk:
+          type: array
+          items:
+            $ref: '#/components/schemas/TechnologyUsssdk'
+          description: ''
+        foundation-internal:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoundationInternal'
+          description: ''
+      example:
+        technology.cbi:
+        - ActiveDate: '2014-12-15'
+          InactiveDate: null
+          EditBugs: 0
+          ProjectName: Common Build Infrastructure
+          url: https://projects.eclipse.org/projects/technology.cbi
+          Relation:
+            Relation: CM
+            Description: Committer
+            IsActive: 1
+            Type:
+              Type: PR
+              Description: Person - Project
+        technology.usssdk:
+        - ActiveDate: '2016-09-21'
+          InactiveDate: null
+          EditBugs: 0
+          ProjectName: Eclipse USS SDK
+          url: https://projects.eclipse.org/projects/technology.usssdk
+          Relation:
+            Relation: CM
+            Description: Committer
+            IsActive: 1
+            Type:
+              Type: PR
+              Description: Person - Project
+        - ActiveDate: '2016-09-21'
+          InactiveDate: null
+          EditBugs: 0
+          ProjectName: Eclipse USS SDK
+          url: https://projects.eclipse.org/projects/technology.usssdk
+          Relation:
+            Relation: PL
+            Description: Project Lead
+            IsActive: 1
+            Type:
+              Type: PR
+              Description: Person - Project
+        foundation-internal:
+        - ActiveDate: '2012-12-21'
+          InactiveDate: null
+          EditBugs: 0
+          ProjectName: Internal Foundation Projects
+          url: ''
+          Relation:
+            Relation: CM
+            Description: Committer
+            IsActive: 1
+            Type:
+              Type: PR
+              Description: Person - Project
+    Eca:
+      title: Eca
+      required:
+      - signed
+      type: object
+      properties:
+        signed:
+          type: boolean
+      example:
+        signed: true
+    Type:
+      title: Type
+      required:
+      - Type
+      - Description
+      type: object
+      properties:
+        Type:
+          type: string
+        Description:
+          type: string
+      example:
+        Type: PR
+        Description: Person - Project
+    Friends:
+      title: Friends
+      required:
+      - friend_id
+      type: object
+      properties:
+        friend_id:
+          type: string
+      example:
+        friend_id: 6104
+    Forumpostsresponse:
+      title: Forumpostsresponse
+      required:
+      - id
+      - alias
+      - avatar_loc
+      - email
+      - posted_msg_count
+      - join_date
+      - location
+      - sig
+      - last_visit
+      - level_name
+      - level_img
+      - posts
+      type: object
+      properties:
+        id:
+          type: string
+        alias:
+          type: string
+        avatar_loc:
+          type:
+          - string
+          - 'null'
+        email:
+          type: string
+        posted_msg_count:
+          type: string
+        join_date:
+          type: string
+        location:
+          type:
+          - string
+          - 'null'
+        sig:
+          type:
+          - string
+          - 'null'
+        last_visit:
+          type: string
+        level_name:
+          type: string
+        level_img:
+          type:
+          - string
+          - 'null'
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+          description: ''
+      example:
+        id: 125133
+        alias: Christopher Guindon
+        avatar_loc: null
+        email: chris.guindon@eclipse-foundation.org
+        posted_msg_count: 2
+        join_date: 1329944087
+        location: null
+        sig: null
+        last_visit: 1489180635
+        level_name: Junior Member
+        level_img: null
+        posts:
+        - msg_id: 1385038
+          msg_thread_id: 781490
+          msg_poster_id: 125133
+          msg_reply_to: 0
+          msg_post_stamp: 1401828571
+          msg_update_stamp: 0
+          msg_updated_by: 0
+          msg_subject: sdfdsf
+          thread_id: 781490
+          thread_forum_id: 97
+          thread_root_msg_id: 1385038
+          thread_last_post_date: 1490969896
+          thread_replies: 6
+          thread_views: 8925
+          thread_rating: 0
+          thread_n_rating: 0
+          thread_last_post_id: 1758673
+          thread_orderexpiry: 0
+          thread_thread_opt: 0
+          thread_tdescr: ''
+          forum_name: Test
+          forum_cat_id: 3
+          forum_description: Forum for testing messages. This is <b>UNRELATED to testing with Eclipse</b>.  Use the <a href='http://www.eclipse.org/forums/eclipse.tptp'>Test and Performance forum</a> for those discussions instead.
+          forum_date_created: 1248707241
+          forum_thread_count: 975
+          forum_post_count: 1526
+          forum_last_post_id: 1764500
+          cat_name: General (non-technical)
+          cat_description: ' - Click +/- to expand/collapse'
+          read_last_view: null
+          last_msg_poster_id: 216471
+          last_msg_subject: 'Re: sdfdsf'
+          last_msg_post_stamp: 1490969896
+          last_msg_update_stamp: 0
+          last_poster_email: m.amjadi@engineer.com
+          last_poster_alias: Mohammad H. Amir Amjadi
+          root_msg_poster_id: 125133
+          root_msg_subject: sdfdsf
+          root_msg_post_stamp: 1401828571
+          root_msg_update_stamp: 0
+          root_poster_email: chris.guindon@eclipse-foundation.org
+          root_poster_alias: Christopher Guindon
+          last_user_msg_poster_id: 125133
+          last_user_msg_subject: sdfdsf
+          last_user_msg_stamp: 1401828571
+          msg4_update_stamp: 0
+          msg_group_post_stamp: 1479327581
+    Country:
+      title: Country
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+      example:
+        code: CA
+        name: Canada
+    Searchforauserresponse:
+      title: Searchforauserresponse
+      required:
+      - uid
+      - name
+      - mail
+      - eca
+      - is_committer
+      - friends
+      - first_name
+      - last_name
+      - twitter_handle
+      - org
+      - job_title
+      - website
+      - country
+      - bio
+      - interests
+      type: object
+      properties:
+        uid:
+          type: string
+        name:
+          type: string
+        mail:
+          type: string
+        eca:
+          $ref: '#/components/schemas/Eca'
+        is_committer:
+          type: boolean
+        friends:
+          $ref: '#/components/schemas/Friends'
+        first_name:
+          type: string
+        last_name:
+          type: string
+        twitter_handle:
+          type: string
+        org:
+          type: string
+        job_title:
+          type: string
+        website:
+          type: string
+        country:
+          $ref: '#/components/schemas/Country'
+        bio:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        uid: 9
+        name: cguindon
+        mail: chris.guindon@eclipse-foundation.org
+        eca:
+          signed: true
+        is_committer: true
+        friends:
+          friend_id: 6104
+        first_name: Christopher
+        last_name: Guindon
+        twitter_handle: chrisguindon
+        org: Eclipse Foundation
+        job_title: Lead Web Application Developper
+        website: http://www.chrisguindon.com/
+        country:
+          code: CA
+          name: Canada
+        bio: Hello world! When I am not at a computer, which is rare, I spend my time playing the drums, watching hockey or at the top of a hill snowboarding. I am also very passionate about music and live concerts!
+        interests:
+        - Snowboarding
+        - webdev
+        - php
+        - javascript
+        - Drums
+    TechnologyCbi:
+      title: TechnologyCbi
+      required:
+      - ActiveDate
+      - InactiveDate
+      - EditBugs
+      - ProjectName
+      - url
+      - Relation
+      type: object
+      properties:
+        ActiveDate:
+          type: string
+        InactiveDate:
+          type:
+          - string
+          - 'null'
+        EditBugs:
+          type: string
+        ProjectName:
+          type: string
+        url:
+          type: string
+        Relation:
+          $ref: '#/components/schemas/Relation'
+      example:
+        ActiveDate: '2014-12-15'
+        InactiveDate: null
+        EditBugs: 0
+        ProjectName: Common Build Infrastructure
+        url: https://projects.eclipse.org/projects/technology.cbi
+        Relation:
+          Relation: CM
+          Description: Committer
+          IsActive: 1
+          Type:
+            Type: PR
+            Description: Person - Project
+    Retrieveuserresponse:
+      title: Retrieveuserresponse
+      required:
+      - uid
+      - name
+      - mail
+      - eca
+      - is_committer
+      - friends
+      - first_name
+      - last_name
+      - twitter_handle
+      - org
+      - job_title
+      - website
+      - country
+      - bio
+      - interests
+      type: object
+      properties:
+        uid:
+          type: string
+        name:
+          type: string
+        mail:
+          type: string
+        eca:
+          $ref: '#/components/schemas/Eca'
+        is_committer:
+          type: boolean
+        friends:
+          $ref: '#/components/schemas/Friends'
+        first_name:
+          type: string
+        last_name:
+          type: string
+        twitter_handle:
+          type: string
+        org:
+          type: string
+        job_title:
+          type: string
+        website:
+          type: string
+        country:
+          $ref: '#/components/schemas/Country'
+        bio:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        uid: 9
+        name: cguindon
+        mail: chris.guindon@eclipse-foundation.org
+        eca:
+          signed: true
+        is_committer: true
+        friends:
+          friend_id: 6104
+        first_name: Christopher
+        last_name: Guindon
+        twitter_handle: chrisguindon
+        org: Eclipse Foundation
+        job_title: Lead Web Application Developper
+        website: http://www.chrisguindon.com/
+        country:
+          code: CA
+          name: Canada
+        bio: Hello world! When I am not at a computer, which is rare, I spend my time playing the drums, watching hockey or at the top of a hill snowboarding. I am also very passionate about music and live concerts!
+        interests:
+        - Snowboarding
+        - webdev
+        - php
+        - javascript
+        - Drums
+    MailingListSubscription:
+      title: MailingListSubscription
+      required:
+      - list_name
+      - list_description
+      type: object
+      properties:
+        list_name:
+          type: string
+        list_description:
+          type: string
+      example:
+        list_name: epp-dev
+        list_description: Eclipse Packaging Project
+    MailingListSubscriptionsresponse:
+      title: MailingListSubscriptionsresponse
+      required:
+      - mailing_list_subscriptions
+      type: object
+      properties:
+        mailing_list_subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailingListSubscription'
+          description: ''
+      example:
+        mailing_list_subscriptions:
+        - list_name: epp-dev
+          list_description: Eclipse Packaging Project
+        - list_name: eclipse.org-webdev
+          list_description: Eclipse.org Webdev notices and discussions
+    Relation:
+      title: Relation
+      required:
+      - Relation
+      - Description
+      - IsActive
+      - Type
+      type: object
+      properties:
+        Relation:
+          type: string
+        Description:
+          type: string
+        IsActive:
+          type: string
+        Type:
+          $ref: '#/components/schemas/Type'
+      example:
+        Relation: CM
+        Description: Committer
+        IsActive: 1
+        Type:
+          Type: PR
+          Description: Person - Project
   headers:
-    X-RateLimit-Reset:
-      schema:
-        type: string
-      example: 3553
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
     X-RateLimit-Limit:
       schema:
         type: string
       example: 1000
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
   securitySchemes:
     oauth2:
       description: 'Get access to data while protecting your account credentials.

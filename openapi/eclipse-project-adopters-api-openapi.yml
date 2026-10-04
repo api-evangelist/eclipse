@@ -38,33 +38,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Adopter:
-      type: object
-      additionalProperties: false
-      required:
-      - projects
-      - homepage_url
-      - logo
-      - logo_white
-      - name
-      properties:
-        projects:
-          type: array
-          description: List of projects by their ID that the company adopts within a product
-          items:
-            type: string
-        homepage_url:
-          type: string
-          description: The URL containing the adopter's homepage.
-        logo:
-          type: string
-          description: The adopter's color logo.
-        logo_white:
-          type: string
-          description: The adopter's white logo.
-        name:
-          type: string
-          description: The adopter's company name.
     AdoptedProject:
       type: object
       additionalProperties: false
@@ -95,3 +68,30 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/AdoptedProject'
+    Adopter:
+      type: object
+      additionalProperties: false
+      required:
+      - projects
+      - homepage_url
+      - logo
+      - logo_white
+      - name
+      properties:
+        projects:
+          type: array
+          description: List of projects by their ID that the company adopts within a product
+          items:
+            type: string
+        homepage_url:
+          type: string
+          description: The URL containing the adopter's homepage.
+        logo:
+          type: string
+          description: The adopter's color logo.
+        logo_white:
+          type: string
+          description: The adopter's white logo.
+        name:
+          type: string
+          description: The adopter's company name.
