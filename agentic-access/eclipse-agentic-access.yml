@@ -1,4 +1,4 @@
-generated: '2026-09-16'
+generated: '2026-09-23'
 method: generated
 source: openapi/eclipse-admin-api-api-openapi.yml, openapi/eclipse-ads-api-openapi.yml, openapi/eclipse-board-members-api-openapi.yml,
   openapi/eclipse-catalogs-api-openapi.yml, openapi/eclipse-cities-api-openapi.yml, openapi/eclipse-committer-paperwork-api-api-openapi.yml,
@@ -38,12 +38,12 @@ description: Recommended x-agentic-access execution contracts, classified heuris
 summary:
   operations: 299
   by_action_class:
-    acting: 83
-    connected: 216
+    acting: 82
+    connected: 217
   by_consequence:
-    write: 76
+    write: 75
     safety-critical: 1
-    read: 216
+    read: 217
     physical: 6
   human_in_the_loop_required: 1
 operations:
@@ -167,18 +167,12 @@ operations:
   method: post
   operationId: postApiAds
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /api/ads
   method: get
   operationId: getApiAds
