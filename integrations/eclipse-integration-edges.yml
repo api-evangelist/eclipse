@@ -1,7 +1,13 @@
 generated: '2026-10-14'
 method: searched
 checked:
+- https://marketplace.odva.org/organizations
+- https://opcfoundation.org/products/
 - https://plugins.jetbrains.com/
+- https://repo.ros2.org/rosdistro_cache/humble-cache.yaml.gz
+- https://repo.ros2.org/rosdistro_cache/jazzy-cache.yaml.gz
+- https://repo.ros2.org/rosdistro_cache/kilted-cache.yaml.gz
+- https://repo.ros2.org/rosdistro_cache/rolling-cache.yaml.gz
 marketplace_apps: []
 edges:
 - partner_name: JetBrains Marketplace
@@ -19,5 +25,36 @@ edges:
   publisher_name: Eclipse Scout
   detected_by: sweep-devtools.py
   detected: '2026-10-14'
+- partner_name: Open Robotics (ROS package index)
+  partner: null
+  partner_match: register
+  type: register
+  direction: partner-built
+  category: ROS packages
+  evidence: https://github.com/eclipse-cyclonedds/cyclonedds.git
+  channel: standard-directory
+  relationship: standard-participant
+  contract_reference:
+    register: ROS 2 rosdistro (repo.ros2.org/rosdistro_cache)
+    spec_file: null
+    standard: ROS 2
+    role: ros-package-maintainer
+    matched_domain: eclipse.org
+    matched_by: domain
+    source_owner: eclipse-cyclonedds
+    distros:
+    - humble
+    - jazzy
+    - kilted
+    - rolling
+    packages: 2
+    sample_packages:
+    - cyclonedds
+    - ecal
+    signal_note: 'participation only: packages/distros are context, never read'
+    detected_by: sweep-industrial-robotics.py
+    detected: '2026-10-15'
+  detected_by: sweep-industrial-robotics.py
+  first_seen: '2026-10-15'
 source:
 - https://plugins.jetbrains.com/

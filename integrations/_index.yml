@@ -15,3 +15,34 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: eclipse-open-robotics-ros-package-index
+  label: Open Robotics (ROS package index)
+  partner_name: Open Robotics (ROS package index)
+  category: ROS packages
+  type: register
+  channel: standard-directory
+  evidence: https://github.com/eclipse-cyclonedds/cyclonedds.git
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: ROS 2 rosdistro (repo.ros2.org/rosdistro_cache)
+    spec_file: null
+    standard: ROS 2
+    role: ros-package-maintainer
+    matched_domain: eclipse.org
+    matched_by: domain
+    source_owner: eclipse-cyclonedds
+    distros:
+    - humble
+    - jazzy
+    - kilted
+    - rolling
+    packages: 2
+    sample_packages:
+    - cyclonedds
+    - ecal
+    signal_note: 'participation only: packages/distros are context, never read'
+    detected_by: sweep-industrial-robotics.py
+    detected: '2026-10-15'
+  status: not-a-workflow
+  arazzo: null
