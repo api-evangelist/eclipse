@@ -111,6 +111,10 @@ components:
           - type: string
           - type: 'null'
           description: The friendly message for the error
+    SpecialInterestGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/SpecialInterestGroup'
     SpecialInterestGroup:
       type: object
       properties:
@@ -151,10 +155,6 @@ components:
         associated_working_group:
           type: string
           description: The alias of the associated Working Group
-    SpecialInterestGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/SpecialInterestGroup'
   securitySchemes:
     openId:
       type: openIdConnect

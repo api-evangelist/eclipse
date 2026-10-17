@@ -364,6 +364,10 @@ paths:
       description: The production API server
 components:
   schemas:
+    MailingLists:
+      type: array
+      items:
+        $ref: '#/components/schemas/MailingList'
     DateTime:
       type: string
       format: datetime
@@ -373,22 +377,11 @@ components:
         More on this standard can be read at https://tools.ietf.org/html/rfc3339.
 
         '
-    MailingLists:
-      type: array
-      items:
-        $ref: '#/components/schemas/MailingList'
     NullableString:
       description: A nullable String type value
       type:
       - 'null'
       - string
-    MailingListMapping:
-      type: object
-      propertyNames:
-        pattern: ^\d+$
-        description: Project IDs the mailing lists are mapped to
-      additionalProperties:
-        $ref: '#/components/schemas/MailingLists'
     MailingList:
       type: object
       additionalProperties: false
@@ -451,56 +444,13 @@ components:
           - 'null'
           - integer
           description: The number of subscribers for the given list. Only included on singular calls.
-    RetrieveMailingListresponse:
-      title: RetrieveMailingListresponse
-      required:
-      - list_name
-      - list_description
-      - project_id
-      - list_short_description
-      - is_disabled
-      - is_deleted
-      - is_subscribable
-      - create_date
-      - url
-      - email
+    MailingListMapping:
       type: object
-      properties:
-        list_name:
-          type: string
-        list_description:
-          type: string
-        project_id:
-          type: string
-        list_short_description:
-          type:
-          - string
-          - 'null'
-        is_disabled:
-          type: string
-        is_deleted:
-          type: string
-        is_subscribable:
-          type: string
-        create_date:
-          type:
-          - string
-          - 'null'
-        url:
-          type: string
-        email:
-          type: string
-      example:
-        list_name: dash-dev
-        list_description: Tools for Committer Community
-        project_id: ''
-        list_short_description: null
-        is_disabled: 0
-        is_deleted: 0
-        is_subscribable: 1
-        create_date: null
-        url: https://accounts.eclipse.org/mailing-list/dash-dev
-        email: dash-dev@eclipse.org
+      propertyNames:
+        pattern: ^\d+$
+        description: Project IDs the mailing lists are mapped to
+      additionalProperties:
+        $ref: '#/components/schemas/MailingLists'
     FetchMailinglistsresponse:
       title: FetchMailinglistsresponse
       required:
@@ -551,19 +501,69 @@ components:
         create_date: null
         url: https://accounts.eclipse.org/mailing-list/dash-dev
         email: dash-dev@eclipse.org
+    RetrieveMailingListresponse:
+      title: RetrieveMailingListresponse
+      required:
+      - list_name
+      - list_description
+      - project_id
+      - list_short_description
+      - is_disabled
+      - is_deleted
+      - is_subscribable
+      - create_date
+      - url
+      - email
+      type: object
+      properties:
+        list_name:
+          type: string
+        list_description:
+          type: string
+        project_id:
+          type: string
+        list_short_description:
+          type:
+          - string
+          - 'null'
+        is_disabled:
+          type: string
+        is_deleted:
+          type: string
+        is_subscribable:
+          type: string
+        create_date:
+          type:
+          - string
+          - 'null'
+        url:
+          type: string
+        email:
+          type: string
+      example:
+        list_name: dash-dev
+        list_description: Tools for Committer Community
+        project_id: ''
+        list_short_description: null
+        is_disabled: 0
+        is_deleted: 0
+        is_subscribable: 1
+        create_date: null
+        url: https://accounts.eclipse.org/mailing-list/dash-dev
+        email: dash-dev@eclipse.org
   headers:
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
-    X-RateLimit-Limit:
-      schema:
-        type: string
-      example: 1000
     X-RateLimit-Reset:
       schema:
         type: string
       example: 3553
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
   securitySchemes:
     openId:
       type: openIdConnect

@@ -133,19 +133,6 @@ components:
       - string
       - 'null'
       minimum: 1
-    Contacts:
-      type: array
-      items:
-        $ref: '#/components/schemas/Contact'
-    ContactType:
-      type: string
-      description: The type of contact that is being stored
-      enum:
-      - COMPANY
-      - WORKING_GROUP
-      - MARKETING
-      - ACCOUNTING
-      - SIGNING
     Contact:
       type: object
       properties:
@@ -167,6 +154,19 @@ components:
           description: Job title of the contact
         type:
           $ref: '#/components/schemas/ContactType'
+    Contacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Contact'
+    ContactType:
+      type: string
+      description: The type of contact that is being stored
+      enum:
+      - COMPANY
+      - WORKING_GROUP
+      - MARKETING
+      - ACCOUNTING
+      - SIGNING
   securitySchemes:
     openId:
       type: openIdConnect

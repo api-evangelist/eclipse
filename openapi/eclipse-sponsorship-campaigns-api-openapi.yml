@@ -100,6 +100,22 @@ paths:
       deprecated: false
 components:
   schemas:
+    SponsorshipCampaignDates:
+      type: object
+      required:
+      - start
+      - end
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: Campaign start date and time (ISO 8601, UTC).
+          example: '2026-01-01T00:00:00Z'
+        end:
+          type: string
+          format: date-time
+          description: Campaign end date and time (ISO 8601, UTC).
+          example: '2026-03-31T23:59:59Z'
     SponsorshipCampaign:
       type: object
       required:
@@ -141,19 +157,3 @@ components:
             - openvsx
             - jakartaee
             - ecdtools
-    SponsorshipCampaignDates:
-      type: object
-      required:
-      - start
-      - end
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: Campaign start date and time (ISO 8601, UTC).
-          example: '2026-01-01T00:00:00Z'
-        end:
-          type: string
-          format: date-time
-          description: Campaign end date and time (ISO 8601, UTC).
-          example: '2026-03-31T23:59:59Z'

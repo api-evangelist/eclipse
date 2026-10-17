@@ -384,37 +384,20 @@ paths:
           description: ''
       deprecated: false
 components:
+  headers:
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
   schemas:
-    SearchBlobsresponse:
-      title: SearchBlobsresponse
-      required:
-      - application_token
-      - etag
-      - changed
-      - key
-      - url
-      - value
-      type: object
-      properties:
-        application_token:
-          type: string
-        etag:
-          type: string
-        changed:
-          type: string
-        key:
-          type: string
-        url:
-          type: string
-        value:
-          type: string
-      example:
-        application_token: MZ04RMOpksKN5GpxKXafq2MSjSP
-        etag: 9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb
-        changed: 1497030093
-        key: mpc_favorites
-        url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
-        value: MzI3NDQwNQ==
     UpdateCreateBlobsresponse:
       title: Update/CreateBlobsresponse
       required:
@@ -451,19 +434,36 @@ components:
         changed: 1497030093
         key: mpc_favorites
         url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
-  headers:
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
-    X-RateLimit-Limit:
-      schema:
-        type: string
-      example: 1000
-    X-RateLimit-Reset:
-      schema:
-        type: string
-      example: 3553
+    SearchBlobsresponse:
+      title: SearchBlobsresponse
+      required:
+      - application_token
+      - etag
+      - changed
+      - key
+      - url
+      - value
+      type: object
+      properties:
+        application_token:
+          type: string
+        etag:
+          type: string
+        changed:
+          type: string
+        key:
+          type: string
+        url:
+          type: string
+        value:
+          type: string
+      example:
+        application_token: MZ04RMOpksKN5GpxKXafq2MSjSP
+        etag: 9f76b4dde4cb5146daa5686a7f4376084dbe41bf9c9d4a12b722fe1062eb48eb
+        changed: 1497030093
+        key: mpc_favorites
+        url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
+        value: MzI3NDQwNQ==
   securitySchemes:
     oauth2:
       description: 'Get access to data while protecting your account credentials.

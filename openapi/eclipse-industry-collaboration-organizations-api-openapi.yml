@@ -73,6 +73,12 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Organization'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     Organization:
       type: object
       additionalProperties: false
@@ -149,12 +155,6 @@ components:
                 type: string
               description:
                 type: string
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
   securitySchemes:
     openId:
       type: openIdConnect

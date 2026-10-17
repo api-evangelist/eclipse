@@ -331,6 +331,115 @@ paths:
                 $ref: '#/components/schemas/PopularListings'
 components:
   schemas:
+    BaseNode:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier
+          xml:
+            attribute: true
+        url:
+          type: string
+          description: URL
+          xml:
+            attribute: true
+        name:
+          type: string
+          description: Title
+          xml:
+            attribute: true
+    FavoritedListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        favorites:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    RecentListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        recent:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    FeaturedListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        featured:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
+    CategoryWithListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        category:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/BaseCategory'
+          - type: object
+            properties:
+              marketId:
+                type: integer
+                xml:
+                  attribute: true
+              node:
+                $ref: '#/components/schemas/Listing'
+    BaseTag:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: tag
+    PopularListings:
+      type: object
+      xml:
+        name: marketplace
+      properties:
+        popular:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of results for the lookup
+              xml:
+                attribute: true
+            node:
+              type: array
+              items:
+                $ref: '#/components/schemas/Listing'
     Listing:
       allOf:
       - $ref: '#/components/schemas/BaseNode'
@@ -455,92 +564,6 @@ components:
               - Linux/GTK
               xml:
                 name: platform
-    BaseTag:
-      allOf:
-      - $ref: '#/components/schemas/BaseNode'
-      - type: object
-        xml:
-          name: tag
-    FeaturedListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        featured:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
-    BaseNode:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier
-          xml:
-            attribute: true
-        url:
-          type: string
-          description: URL
-          xml:
-            attribute: true
-        name:
-          type: string
-          description: Title
-          xml:
-            attribute: true
-    FavoritedListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        favorites:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
-    CategoryWithListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        category:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/BaseCategory'
-          - type: object
-            properties:
-              marketId:
-                type: integer
-                xml:
-                  attribute: true
-              node:
-                $ref: '#/components/schemas/Listing'
-    BaseCategory:
-      allOf:
-      - $ref: '#/components/schemas/BaseNode'
-      - type: object
-        xml:
-          name: category
-        properties:
-          count:
-            type: integer
-            xml:
-              attribute: true
     SearchResults:
       type: object
       xml:
@@ -569,53 +592,24 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Listing'
-    PopularListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        popular:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
-    RecentListings:
-      type: object
-      xml:
-        name: marketplace
-      properties:
-        recent:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of results for the lookup
-              xml:
-                attribute: true
-            node:
-              type: array
-              items:
-                $ref: '#/components/schemas/Listing'
+    BaseCategory:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: category
+        properties:
+          count:
+            type: integer
+            xml:
+              attribute: true
   parameters:
-    limit:
-      name: limit
+    platform-version:
+      name: platform_version
       in: query
-      description: The number of result returned for a listing (favorites, recent, search, etc.) integer between 0 and 20, default to 10.
+      description: (since Kepler/MPC 1.2) The version of the org.eclipse.platform bundle of the target Eclipse
       schema:
-        type: integer
-    page-number:
-      name: page_num
-      in: query
-      description: used for pagination to access additional results in a listing, the index start at 1. To get the second page of results use page_num=2
-      schema:
-        type: integer
+        type: string
     os:
       name: os
       in: query
@@ -630,6 +624,22 @@ components:
         - win64
         - windows
         - macosx
+    limit:
+      name: limit
+      in: query
+      description: The number of result returned for a listing (favorites, recent, search, etc.) integer between 0 and 20, default to 10.
+      schema:
+        type: integer
+    client:
+      name: client
+      in: query
+      description: This variable is usually sent from MPC to alter the default list. It's available for the Most Popular Listings, Top Favorited Listings, Recently Updated Listings and Featured Listings. Only installable listings owned by an Eclipse member company will be returned.
+      schema:
+        type: string
+        enum:
+        - org.eclipse.epp.mpc.core
+        - org.eclipse.smarthome
+        - org.eclipse.kura
     product:
       name: product
       in: query
@@ -646,20 +656,10 @@ components:
         - gtk
         - win32
         - cocoa
-    client:
-      name: client
+    runtime-version:
+      name: runtime_version
       in: query
-      description: This variable is usually sent from MPC to alter the default list. It's available for the Most Popular Listings, Top Favorited Listings, Recently Updated Listings and Featured Listings. Only installable listings owned by an Eclipse member company will be returned.
-      schema:
-        type: string
-        enum:
-        - org.eclipse.epp.mpc.core
-        - org.eclipse.smarthome
-        - org.eclipse.kura
-    platform-version:
-      name: platform_version
-      in: query
-      description: (since Kepler/MPC 1.2) The version of the org.eclipse.platform bundle of the target Eclipse
+      description: The version of the org.eclipse.core.runtime bundle of the target Eclipse
       schema:
         type: string
     product-version:
@@ -668,9 +668,9 @@ components:
       description: The version of the running product of the target Eclipse, identical to the version of the product's branding plugin
       schema:
         type: string
-    runtime-version:
-      name: runtime_version
+    page-number:
+      name: page_num
       in: query
-      description: The version of the org.eclipse.core.runtime bundle of the target Eclipse
+      description: used for pagination to access additional results in a listing, the index start at 1. To get the second page of results use page_num=2
       schema:
-        type: string
+        type: integer

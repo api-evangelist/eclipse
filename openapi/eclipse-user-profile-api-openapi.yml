@@ -155,22 +155,6 @@ paths:
           description: Success
 components:
   schemas:
-    Eca:
-      type: object
-      additionalProperties: false
-      required:
-      - signed
-      - can_contribute_spec_project
-      properties:
-        signed:
-          type: boolean
-          description: Flag determining whether user has signed ECA.
-        can_contribute_spec_project:
-          type: boolean
-          description: Flag determining whether users can contribute to a spec project.
-      example:
-        signed: true
-        can_contribute_spec_project: true
     UserData:
       type: object
       additionalProperties: false
@@ -361,17 +345,11 @@ components:
         gerrit_url: ''
         mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
         mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
-    PublisherAgreement:
-      type: object
-      additionalProperties: false
-      required:
-      - version
-      properties:
-        version:
-          type: string
-          description: the agreement document version.
-      example:
-        version: '1'
+    Error:
+      type: array
+      items:
+        type: string
+      description: An array containing a single message indicating the error
     UserDatas:
       type: array
       items:
@@ -414,11 +392,17 @@ components:
         gerrit_url: ''
         mailinglist_url: https://api.eclipse.org/account/profile/zacharysabourin/mailing-list
         mpc_favorites_url: https://marketplace.eclipse.org/user/zacharysabourin/favorites
-    Error:
-      type: array
-      items:
-        type: string
-      description: An array containing a single message indicating the error
+    PublisherAgreement:
+      type: object
+      additionalProperties: false
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          description: the agreement document version.
+      example:
+        version: '1'
     Country:
       type: object
       properties:
@@ -434,6 +418,22 @@ components:
       example:
         code: CA
         name: Canada
+    Eca:
+      type: object
+      additionalProperties: false
+      required:
+      - signed
+      - can_contribute_spec_project
+      properties:
+        signed:
+          type: boolean
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
+      example:
+        signed: true
+        can_contribute_spec_project: true
   securitySchemes:
     OAuth2:
       type: oauth2

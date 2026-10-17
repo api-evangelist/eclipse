@@ -175,6 +175,95 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Releases:
+      type: array
+      items:
+        $ref: '#/components/schemas/Release'
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - status_code
+      - message
+      properties:
+        status_code:
+          type: integer
+          description: HTTP response code
+        message:
+          type: string
+          description: Message containing error information
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL
+        friendly_message:
+          type:
+          - string
+          - 'null'
+          description: The optional client-friendly message for the error
+    Release:
+      type: object
+      additionalProperties: false
+      required:
+      - release_name
+      - release_version
+      - packages
+      properties:
+        release_name:
+          type: string
+          description: The name of the release for the packages
+        release_version:
+          type: string
+          description: The version of the release for the packages
+        packages:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ReleasePackage'
+    NullableString:
+      description: A nullable String type value
+      oneOf:
+      - type: 'null'
+      - type: string
+    ReleaseFile:
+      type: object
+      additionalProperties: false
+      required:
+      - url
+      - size
+      - file_url
+      - checksum
+      properties:
+        url:
+          type: string
+          description: The publicly available URL for the package
+        size:
+          type: string
+          description: the size of the file in bytes
+        file_id:
+          $ref: '#/components/schemas/NullableString'
+          description: The internal ID of the file
+        file_url:
+          type: string
+          description: the public facing URL for the file (no mirror)
+        download_count:
+          type:
+          - string
+          - 'null'
+          description: The number of times this file has been downloaded
+        checksum:
+          type: object
+          additionalProperties: false
+          properties:
+            sha1:
+              $ref: '#/components/schemas/NullableString'
+              description: the sha1 checksum for the release file
+            md5:
+              $ref: '#/components/schemas/NullableString'
+              description: the md5 checksum for the release file
+            sha512:
+              $ref: '#/components/schemas/NullableString'
+              description: the sha512 checksum for the release file
     ReleasePackage:
       type: object
       additionalProperties: false
@@ -236,95 +325,6 @@ components:
               anyOf:
               - type: 'null'
               - $ref: '#/components/schemas/ReleaseFiles'
-    Releases:
-      type: array
-      items:
-        $ref: '#/components/schemas/Release'
-    ReleaseFile:
-      type: object
-      additionalProperties: false
-      required:
-      - url
-      - size
-      - file_url
-      - checksum
-      properties:
-        url:
-          type: string
-          description: The publicly available URL for the package
-        size:
-          type: string
-          description: the size of the file in bytes
-        file_id:
-          $ref: '#/components/schemas/NullableString'
-          description: The internal ID of the file
-        file_url:
-          type: string
-          description: the public facing URL for the file (no mirror)
-        download_count:
-          type:
-          - string
-          - 'null'
-          description: The number of times this file has been downloaded
-        checksum:
-          type: object
-          additionalProperties: false
-          properties:
-            sha1:
-              $ref: '#/components/schemas/NullableString'
-              description: the sha1 checksum for the release file
-            md5:
-              $ref: '#/components/schemas/NullableString'
-              description: the md5 checksum for the release file
-            sha512:
-              $ref: '#/components/schemas/NullableString'
-              description: the sha512 checksum for the release file
-    NullableString:
-      description: A nullable String type value
-      oneOf:
-      - type: 'null'
-      - type: string
-    Release:
-      type: object
-      additionalProperties: false
-      required:
-      - release_name
-      - release_version
-      - packages
-      properties:
-        release_name:
-          type: string
-          description: The name of the release for the packages
-        release_version:
-          type: string
-          description: The version of the release for the packages
-        packages:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ReleasePackage'
-    Error:
-      type: object
-      additionalProperties: false
-      required:
-      - status_code
-      - message
-      properties:
-        status_code:
-          type: integer
-          description: HTTP response code
-        message:
-          type: string
-          description: Message containing error information
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL
-        friendly_message:
-          type:
-          - string
-          - 'null'
-          description: The optional client-friendly message for the error
     ReleaseFiles:
       type: object
       properties:

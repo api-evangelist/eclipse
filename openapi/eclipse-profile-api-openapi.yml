@@ -38,22 +38,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Eca:
-      type: object
-      properties:
-        signed:
-          type: boolean
-          description: Flag determining whether user has signed ECA.
-        can_contribute_spec_project:
-          type: boolean
-          description: Flag determining whether users can contribute to a spec project.
-      example:
-        signed: true
-        can_contribute_spec_project: true
-    EfUsers:
-      type: array
-      items:
-        $ref: '#/components/schemas/EfUser'
     ProfilePublisherAgreement:
       type: object
       properties:
@@ -189,6 +173,22 @@ components:
       example:
         code: CA
         name: Canada
+    Eca:
+      type: object
+      properties:
+        signed:
+          type: boolean
+          description: Flag determining whether user has signed ECA.
+        can_contribute_spec_project:
+          type: boolean
+          description: Flag determining whether users can contribute to a spec project.
+      example:
+        signed: true
+        can_contribute_spec_project: true
+    EfUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfUser'
   securitySchemes:
     OAuth2:
       type: oauth2

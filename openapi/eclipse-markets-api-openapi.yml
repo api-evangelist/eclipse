@@ -37,6 +37,17 @@ components:
         properties:
           category:
             $ref: '#/components/schemas/BaseCategory'
+    BaseCategory:
+      allOf:
+      - $ref: '#/components/schemas/BaseNode'
+      - type: object
+        xml:
+          name: category
+        properties:
+          count:
+            type: integer
+            xml:
+              attribute: true
     BaseNode:
       type: object
       properties:
@@ -62,17 +73,6 @@ components:
         wrapped: true
       items:
         $ref: '#/components/schemas/Market'
-    BaseCategory:
-      allOf:
-      - $ref: '#/components/schemas/BaseNode'
-      - type: object
-        xml:
-          name: category
-        properties:
-          count:
-            type: integer
-            xml:
-              attribute: true
   parameters:
     client:
       name: client
