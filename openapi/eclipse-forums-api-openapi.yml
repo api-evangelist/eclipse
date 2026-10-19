@@ -1,7 +1,86 @@
 openapi: 3.2.0
 info:
   title: Eclipse RESTful Forums API
-  description: This describes the resources that make up the official Eclipse Foundation REST API.
+  description: 'This describes the resources that make up the official Eclipse Foundation REST API.
+
+    You can contribute to this document via our git repository.
+
+    If you have any problems or requests please contact Christopher Guindon.
+
+    ### Other related REST APIs
+
+    Althought they are not directly related to this API, the Eclipse forge proposes several other access points and APIs for specific tools and purposes. Please see the following resources for more details:
+
+    - Eclipse Bugzilla **(Documentation)**
+
+    - Eclipse Gerrit **(Documentation)**
+
+    - Eclipse Jenkins **(Documentation)**
+
+    - Eclipse Marketplace **(Documentation)**
+
+    - Eclipse Project Management Infrastructure (PMI) **(Documentation)**
+
+
+    ### Rate Limit
+
+    This API currently limits users to 1000 authenticated requests and 1000 anonymous requests an hour.
+
+    ### Pagination
+
+    Information about pagination is provided in the Link header of an API call. For example, let’s make a curl request to the eclipse_profile API, to find out how many org_eclipse_oomph records exist for the user:
+
+    ```
+
+    curl -I \"https://api.eclipse.org/api/blob/KJBNCEW08231nkJKCEW32898239?page=1&pagesize=2\"
+
+    ```
+
+    The -I parameter indicates that we only care about the headers, not the content. In examining the result, you’ll notice some information in the Link header that looks like this:
+
+    ```
+
+    ; rel="next",
+
+    ; rel="last",
+
+    ; rel="first",
+
+    ; rel="self"
+
+    ```
+
+    Let’s break that down. rel=\"next\" says that the next page is page=2. This makes sense, since by default, all paginated queries start at page 1. rel=\"last\" provides some more information, stating that the last page of results is on page 27.
+
+    Keep in mind that you should always rely on these link relations provided to you. Don’t try to guess or construct your own URL.
+
+    ### Caching
+
+    Most responses return an ETag header. You can use the values of these headers to make subsequent requests to those resources using the If-None-Match or if-Match header. For example, if the resource has not changed on a GET, the server will return a 304 Not Modified.
+
+    The Etag for a blob resource is predictable. This is how we are currently generating them:
+
+    ```
+
+    function _generate_etag($value, $application_token, $key) {
+
+    $string = $value . $application_token . $key;
+
+    return hash(''sha256'', $string, FALSE);
+
+    }
+
+    ```
+
+
+    ### Error States
+
+    The common HTTP Response Status Codes are used.
+
+
+    # Authentication
+
+    Eclipse Api RESTful API uses OAuth2 Authorization for protected resources.'
   contact: {}
   version: '1.0'
 servers:
@@ -975,6 +1054,286 @@ paths:
       deprecated: false
 components:
   schemas:
+    Pagination:
+      title: Pagination
+      required:
+      - page
+      - pagesize
+      - result_start
+      - result_end
+      - result_size
+      - total_result_size
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        pagesize:
+          type: integer
+          format: int32
+        result_start:
+          type: integer
+          format: int32
+        result_end:
+          type: integer
+          format: int32
+        result_size:
+          type: integer
+          format: int32
+        total_result_size:
+          type: integer
+          format: int32
+      example:
+        page: 1
+        pagesize: 2
+        result_start: 1
+        result_end: 2
+        result_size: 2
+        total_result_size: 9
+    RetrieveTopicresponse:
+      title: RetrieveTopicresponse
+      required:
+      - id
+      - forum_id
+      - last_post_id
+      - last_post_date
+      - root_post_id
+      - replies
+      - views
+      - subject
+      - html_url
+      - posts_url
+      - forum_url
+      type: object
+      properties:
+        id:
+          type: string
+        forum_id:
+          type: string
+        last_post_id:
+          type: string
+        last_post_date:
+          type: string
+        root_post_id:
+          type: string
+        replies:
+          type: string
+        views:
+          type: string
+        subject:
+          type: string
+        html_url:
+          type: string
+        posts_url:
+          type: string
+        forum_url:
+          type: string
+      example:
+        id: 1091418
+        forum_id: 89
+        last_post_id: 1780973
+        last_post_date: 1517333817
+        root_post_id: 1780971
+        replies: 2
+        views: 52
+        subject: keep the parameter  value selected
+        html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+        posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+        forum_url: https://api.eclipse.org/forums/forum/89
+    FetchPostsresponse:
+      title: FetchPostsresponse
+      required:
+      - pagination
+      - result
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result7'
+          description: ''
+      example:
+        pagination:
+          page: 1
+          pagesize: 1
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 1645105
+        result:
+        - id: 1780973
+          subject: 'Re: keep the parameter  value selected'
+          topic_id: 1091418
+          poster_id: 219149
+          created_date: 1517333817
+          forum_id: 89
+          body: This is the body
+          html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
+          topic_url: https://api.eclipse.org/forums/topic/1091418
+          forum_url: https://api.eclipse.org/forums/forum/89
+          user_url: https://api.eclipse.org/forums/user/219149
+    RetrieveForumresponse:
+      title: RetrieveForumresponse
+      required:
+      - id
+      - category_id
+      - description
+      - name
+      - created_date
+      - topic_count
+      - post_count
+      - last_post_id
+      - html_url
+      - topics_url
+      - category_url
+      type: object
+      properties:
+        id:
+          type: string
+        category_id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        created_date:
+          type: string
+        topic_count:
+          type: string
+        post_count:
+          type: string
+        last_post_id:
+          type: string
+        html_url:
+          type: string
+        topics_url:
+          type: string
+        category_url:
+          type: string
+      example:
+        id: 89
+        category_id: 2
+        description: Eclipse forum for newcomers
+        name: Newcomers
+        created_date: 1248707078
+        topic_count: 22344
+        post_count: 62843
+        last_post_id: 1780973
+        html_url: https://www.eclipse.org/forums/index.php/f/89/
+        topics_url: https://api.eclipse.org/forums/topic?forum_id=89
+        category_url: https://api.eclipse.org/forums/category/2
+    Result4:
+      title: Result4
+      required:
+      - id
+      - name
+      - description
+      - html_url
+      - forums_url
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        html_url:
+          type: string
+        forums_url:
+          type: string
+      example:
+        id: 1
+        name: Eclipse Projects
+        description: ' - Eclipse Project Forums - click +/- to expand/collapse'
+        html_url: https://www.eclipse.org/forums/index.php/i/1/
+        forums_url: https://api.eclipse.org/forums/forum?category_id=1
+    FetchForumsresponse:
+      title: FetchForumsresponse
+      required:
+      - pagination
+      - result
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result5'
+          description: ''
+      example:
+        pagination:
+          page: 1
+          pagesize: 1
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 391
+        result:
+        - id: 89
+          category_id: 2
+          description: Eclipse forum for newcomers
+          name: Newcomers
+          created_date: 1248707078
+          topic_count: 22344
+          post_count: 62843
+          last_post_id: 1780973
+          html_url: https://www.eclipse.org/forums/index.php/f/89/
+          topics_url: https://api.eclipse.org/forums/topic?forum_id=89
+          category_url: https://api.eclipse.org/forums/category/2
+    Result6:
+      title: Result6
+      required:
+      - id
+      - forum_id
+      - last_post_id
+      - last_post_date
+      - root_post_id
+      - replies
+      - views
+      - subject
+      - html_url
+      - posts_url
+      - forum_url
+      type: object
+      properties:
+        id:
+          type: string
+        forum_id:
+          type: string
+        last_post_id:
+          type: string
+        last_post_date:
+          type: string
+        root_post_id:
+          type: string
+        replies:
+          type: string
+        views:
+          type: string
+        subject:
+          type: string
+        html_url:
+          type: string
+        posts_url:
+          type: string
+        forum_url:
+          type: string
+      example:
+        id: 1091418
+        forum_id: 89
+        last_post_id: 1780973
+        last_post_date: 1517333817
+        root_post_id: 1780971
+        replies: 2
+        views: 52
+        subject: keep the parameter  value selected
+        html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+        posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+        forum_url: https://api.eclipse.org/forums/forum/89
     RetrievePostresponse:
       title: RetrievePostresponse
       required:
@@ -1025,8 +1384,118 @@ components:
         topic_url: https://api.eclipse.org/forums/topic/1091418
         forum_url: https://api.eclipse.org/forums/forum/89
         user_url: https://api.eclipse.org/forums/user/219149
-    RetrieveForumresponse:
-      title: RetrieveForumresponse
+    Result7:
+      title: Result7
+      required:
+      - id
+      - subject
+      - topic_id
+      - poster_id
+      - created_date
+      - forum_id
+      - body
+      - html_url
+      - topic_url
+      - forum_url
+      - user_url
+      type: object
+      properties:
+        id:
+          type: string
+        subject:
+          type: string
+        topic_id:
+          type: string
+        poster_id:
+          type: string
+        created_date:
+          type: string
+        forum_id:
+          type: string
+        body:
+          type: string
+        html_url:
+          type: string
+        topic_url:
+          type: string
+        forum_url:
+          type: string
+        user_url:
+          type: string
+      example:
+        id: 1780973
+        subject: 'Re: keep the parameter  value selected'
+        topic_id: 1091418
+        poster_id: 219149
+        created_date: 1517333817
+        forum_id: 89
+        body: This is the body
+        html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
+        topic_url: https://api.eclipse.org/forums/topic/1091418
+        forum_url: https://api.eclipse.org/forums/forum/89
+        user_url: https://api.eclipse.org/forums/user/219149
+    FetchTopicsresponse:
+      title: FetchTopicsresponse
+      required:
+      - pagination
+      - result
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result6'
+          description: ''
+      example:
+        pagination:
+          page: 1
+          pagesize: 1
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 892958
+        result:
+        - id: 1091418
+          forum_id: 89
+          last_post_id: 1780973
+          last_post_date: 1517333817
+          root_post_id: 1780971
+          replies: 2
+          views: 52
+          subject: keep the parameter  value selected
+          html_url: https://www.eclipse.org/forums/index.php/t/1091418/
+          posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
+          forum_url: https://api.eclipse.org/forums/forum/89
+    RetrieveCategoryresponse:
+      title: RetrieveCategoryresponse
+      required:
+      - id
+      - name
+      - description
+      - html_url
+      - forums_url
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        html_url:
+          type: string
+        forums_url:
+          type: string
+      example:
+        id: 1
+        name: Eclipse Projects
+        description: ' - Eclipse Project Forums - click +/- to expand/collapse'
+        html_url: https://www.eclipse.org/forums/index.php/i/1/
+        forums_url: https://api.eclipse.org/forums/forum?category_id=1
+    Result5:
+      title: Result5
       required:
       - id
       - category_id
@@ -1121,68 +1590,6 @@ components:
         html_url: https://www.eclipse.org/forums/index.php?t=usrinfo&id=1
         account_url: https://api.eclipse.org/account/profile?mail=test@user.org
         posts_url: https://api.eclipse.org/forums/post?user_id=1
-    Pagination:
-      title: Pagination
-      required:
-      - page
-      - pagesize
-      - result_start
-      - result_end
-      - result_size
-      - total_result_size
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-        pagesize:
-          type: integer
-          format: int32
-        result_start:
-          type: integer
-          format: int32
-        result_end:
-          type: integer
-          format: int32
-        result_size:
-          type: integer
-          format: int32
-        total_result_size:
-          type: integer
-          format: int32
-      example:
-        page: 1
-        pagesize: 2
-        result_start: 1
-        result_end: 2
-        result_size: 2
-        total_result_size: 9
-    RetrieveCategoryresponse:
-      title: RetrieveCategoryresponse
-      required:
-      - id
-      - name
-      - description
-      - html_url
-      - forums_url
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        html_url:
-          type: string
-        forums_url:
-          type: string
-      example:
-        id: 1
-        name: Eclipse Projects
-        description: ' - Eclipse Project Forums - click +/- to expand/collapse'
-        html_url: https://www.eclipse.org/forums/index.php/i/1/
-        forums_url: https://api.eclipse.org/forums/forum?category_id=1
     FetchCategoriesresponse:
       title: FetchCategoriesresponse
       required:
@@ -1216,335 +1623,11 @@ components:
           description: ' - General Newcomer discussions'
           html_url: https://www.eclipse.org/forums/index.php/i/2/
           forums_url: https://api.eclipse.org/forums/forum?category_id=2
-    Result4:
-      title: Result4
-      required:
-      - id
-      - name
-      - description
-      - html_url
-      - forums_url
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        html_url:
-          type: string
-        forums_url:
-          type: string
-      example:
-        id: 1
-        name: Eclipse Projects
-        description: ' - Eclipse Project Forums - click +/- to expand/collapse'
-        html_url: https://www.eclipse.org/forums/index.php/i/1/
-        forums_url: https://api.eclipse.org/forums/forum?category_id=1
-    FetchForumsresponse:
-      title: FetchForumsresponse
-      required:
-      - pagination
-      - result
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Result5'
-          description: ''
-      example:
-        pagination:
-          page: 1
-          pagesize: 1
-          result_start: 1
-          result_end: 1
-          result_size: 1
-          total_result_size: 391
-        result:
-        - id: 89
-          category_id: 2
-          description: Eclipse forum for newcomers
-          name: Newcomers
-          created_date: 1248707078
-          topic_count: 22344
-          post_count: 62843
-          last_post_id: 1780973
-          html_url: https://www.eclipse.org/forums/index.php/f/89/
-          topics_url: https://api.eclipse.org/forums/topic?forum_id=89
-          category_url: https://api.eclipse.org/forums/category/2
-    FetchPostsresponse:
-      title: FetchPostsresponse
-      required:
-      - pagination
-      - result
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Result7'
-          description: ''
-      example:
-        pagination:
-          page: 1
-          pagesize: 1
-          result_start: 1
-          result_end: 1
-          result_size: 1
-          total_result_size: 1645105
-        result:
-        - id: 1780973
-          subject: 'Re: keep the parameter  value selected'
-          topic_id: 1091418
-          poster_id: 219149
-          created_date: 1517333817
-          forum_id: 89
-          body: This is the body
-          html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
-          topic_url: https://api.eclipse.org/forums/topic/1091418
-          forum_url: https://api.eclipse.org/forums/forum/89
-          user_url: https://api.eclipse.org/forums/user/219149
-    RetrieveTopicresponse:
-      title: RetrieveTopicresponse
-      required:
-      - id
-      - forum_id
-      - last_post_id
-      - last_post_date
-      - root_post_id
-      - replies
-      - views
-      - subject
-      - html_url
-      - posts_url
-      - forum_url
-      type: object
-      properties:
-        id:
-          type: string
-        forum_id:
-          type: string
-        last_post_id:
-          type: string
-        last_post_date:
-          type: string
-        root_post_id:
-          type: string
-        replies:
-          type: string
-        views:
-          type: string
-        subject:
-          type: string
-        html_url:
-          type: string
-        posts_url:
-          type: string
-        forum_url:
-          type: string
-      example:
-        id: 1091418
-        forum_id: 89
-        last_post_id: 1780973
-        last_post_date: 1517333817
-        root_post_id: 1780971
-        replies: 2
-        views: 52
-        subject: keep the parameter  value selected
-        html_url: https://www.eclipse.org/forums/index.php/t/1091418/
-        posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
-        forum_url: https://api.eclipse.org/forums/forum/89
-    FetchTopicsresponse:
-      title: FetchTopicsresponse
-      required:
-      - pagination
-      - result
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Result6'
-          description: ''
-      example:
-        pagination:
-          page: 1
-          pagesize: 1
-          result_start: 1
-          result_end: 1
-          result_size: 1
-          total_result_size: 892958
-        result:
-        - id: 1091418
-          forum_id: 89
-          last_post_id: 1780973
-          last_post_date: 1517333817
-          root_post_id: 1780971
-          replies: 2
-          views: 52
-          subject: keep the parameter  value selected
-          html_url: https://www.eclipse.org/forums/index.php/t/1091418/
-          posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
-          forum_url: https://api.eclipse.org/forums/forum/89
-    Result6:
-      title: Result6
-      required:
-      - id
-      - forum_id
-      - last_post_id
-      - last_post_date
-      - root_post_id
-      - replies
-      - views
-      - subject
-      - html_url
-      - posts_url
-      - forum_url
-      type: object
-      properties:
-        id:
-          type: string
-        forum_id:
-          type: string
-        last_post_id:
-          type: string
-        last_post_date:
-          type: string
-        root_post_id:
-          type: string
-        replies:
-          type: string
-        views:
-          type: string
-        subject:
-          type: string
-        html_url:
-          type: string
-        posts_url:
-          type: string
-        forum_url:
-          type: string
-      example:
-        id: 1091418
-        forum_id: 89
-        last_post_id: 1780973
-        last_post_date: 1517333817
-        root_post_id: 1780971
-        replies: 2
-        views: 52
-        subject: keep the parameter  value selected
-        html_url: https://www.eclipse.org/forums/index.php/t/1091418/
-        posts_url: https://api.eclipse.org/forums/post?topic_id=1091418
-        forum_url: https://api.eclipse.org/forums/forum/89
-    Result7:
-      title: Result7
-      required:
-      - id
-      - subject
-      - topic_id
-      - poster_id
-      - created_date
-      - forum_id
-      - body
-      - html_url
-      - topic_url
-      - forum_url
-      - user_url
-      type: object
-      properties:
-        id:
-          type: string
-        subject:
-          type: string
-        topic_id:
-          type: string
-        poster_id:
-          type: string
-        created_date:
-          type: string
-        forum_id:
-          type: string
-        body:
-          type: string
-        html_url:
-          type: string
-        topic_url:
-          type: string
-        forum_url:
-          type: string
-        user_url:
-          type: string
-      example:
-        id: 1780973
-        subject: 'Re: keep the parameter  value selected'
-        topic_id: 1091418
-        poster_id: 219149
-        created_date: 1517333817
-        forum_id: 89
-        body: This is the body
-        html_url: https://www.eclipse.org/forums/index.php?t=msg&th=1091418&goto=1780973&#msg_1780973
-        topic_url: https://api.eclipse.org/forums/topic/1091418
-        forum_url: https://api.eclipse.org/forums/forum/89
-        user_url: https://api.eclipse.org/forums/user/219149
-    Result5:
-      title: Result5
-      required:
-      - id
-      - category_id
-      - description
-      - name
-      - created_date
-      - topic_count
-      - post_count
-      - last_post_id
-      - html_url
-      - topics_url
-      - category_url
-      type: object
-      properties:
-        id:
-          type: string
-        category_id:
-          type: string
-        description:
-          type: string
-        name:
-          type: string
-        created_date:
-          type: string
-        topic_count:
-          type: string
-        post_count:
-          type: string
-        last_post_id:
-          type: string
-        html_url:
-          type: string
-        topics_url:
-          type: string
-        category_url:
-          type: string
-      example:
-        id: 89
-        category_id: 2
-        description: Eclipse forum for newcomers
-        name: Newcomers
-        created_date: 1248707078
-        topic_count: 22344
-        post_count: 62843
-        last_post_id: 1780973
-        html_url: https://www.eclipse.org/forums/index.php/f/89/
-        topics_url: https://api.eclipse.org/forums/topic?forum_id=89
-        category_url: https://api.eclipse.org/forums/category/2
   headers:
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
     X-RateLimit-Reset:
       schema:
         type: string
@@ -1553,10 +1636,6 @@ components:
       schema:
         type: string
       example: 1000
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
   securitySchemes:
     oauth2:
       description: 'Get access to data while protecting your account credentials.

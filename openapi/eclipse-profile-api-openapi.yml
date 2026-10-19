@@ -158,6 +158,10 @@ components:
           - type: string
           - type: 'null'
           description: The user's Marketplace favorites URL.
+    EfUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/EfUser'
     Country:
       type: object
       properties:
@@ -185,10 +189,6 @@ components:
       example:
         signed: true
         can_contribute_spec_project: true
-    EfUsers:
-      type: array
-      items:
-        $ref: '#/components/schemas/EfUser'
   securitySchemes:
     OAuth2:
       type: oauth2

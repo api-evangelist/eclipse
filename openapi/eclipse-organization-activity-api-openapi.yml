@@ -188,12 +188,6 @@ paths:
           description: Error while retrieving data
 components:
   schemas:
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
     OrganizationActivity:
       type: object
       properties:
@@ -205,6 +199,12 @@ components:
           - string
           - 'null'
           description: The activity period
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
     OrganizationYearlyActivity:
       type: object
       properties:

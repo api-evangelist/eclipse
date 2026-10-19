@@ -1,7 +1,86 @@
 openapi: 3.2.0
 info:
   title: Eclipse RESTful Eclipse USS API
-  description: This describes the resources that make up the official Eclipse Foundation REST API.
+  description: 'This describes the resources that make up the official Eclipse Foundation REST API.
+
+    You can contribute to this document via our git repository.
+
+    If you have any problems or requests please contact Christopher Guindon.
+
+    ### Other related REST APIs
+
+    Althought they are not directly related to this API, the Eclipse forge proposes several other access points and APIs for specific tools and purposes. Please see the following resources for more details:
+
+    - Eclipse Bugzilla **(Documentation)**
+
+    - Eclipse Gerrit **(Documentation)**
+
+    - Eclipse Jenkins **(Documentation)**
+
+    - Eclipse Marketplace **(Documentation)**
+
+    - Eclipse Project Management Infrastructure (PMI) **(Documentation)**
+
+
+    ### Rate Limit
+
+    This API currently limits users to 1000 authenticated requests and 1000 anonymous requests an hour.
+
+    ### Pagination
+
+    Information about pagination is provided in the Link header of an API call. For example, let’s make a curl request to the eclipse_profile API, to find out how many org_eclipse_oomph records exist for the user:
+
+    ```
+
+    curl -I \"https://api.eclipse.org/api/blob/KJBNCEW08231nkJKCEW32898239?page=1&pagesize=2\"
+
+    ```
+
+    The -I parameter indicates that we only care about the headers, not the content. In examining the result, you’ll notice some information in the Link header that looks like this:
+
+    ```
+
+    ; rel="next",
+
+    ; rel="last",
+
+    ; rel="first",
+
+    ; rel="self"
+
+    ```
+
+    Let’s break that down. rel=\"next\" says that the next page is page=2. This makes sense, since by default, all paginated queries start at page 1. rel=\"last\" provides some more information, stating that the last page of results is on page 27.
+
+    Keep in mind that you should always rely on these link relations provided to you. Don’t try to guess or construct your own URL.
+
+    ### Caching
+
+    Most responses return an ETag header. You can use the values of these headers to make subsequent requests to those resources using the If-None-Match or if-Match header. For example, if the resource has not changed on a GET, the server will return a 304 Not Modified.
+
+    The Etag for a blob resource is predictable. This is how we are currently generating them:
+
+    ```
+
+    function _generate_etag($value, $application_token, $key) {
+
+    $string = $value . $application_token . $key;
+
+    return hash(''sha256'', $string, FALSE);
+
+    }
+
+    ```
+
+
+    ### Error States
+
+    The common HTTP Response Status Codes are used.
+
+
+    # Authentication
+
+    Eclipse Api RESTful API uses OAuth2 Authorization for protected resources.'
   contact: {}
   version: '1.0'
 servers:
@@ -11,7 +90,35 @@ tags:
 - name: Eclipse USS
   description: 'The Eclipse User Storage Service (USS) allows Eclipse projects to store user-specific project information on the
 
-    Eclipse Foundation servers.'
+    Eclipse Foundation servers. The goal is to make it easy for our projects to offer a
+
+    better user experience by storing relevant information in a central location.
+
+
+    The BLOB resource is a way for projects to store binary objects based off a application_token/key value pair.
+
+
+    The “value” is always the last element in this JSON structure. All other things must come before that so that
+
+    the SDK implementation can parse and collect them into a Map and finally return a decoding InputStream to
+
+    deliver the “value” content back to the caller/application. The blob value is available when the
+
+    client retrieve a specific blob using an application_token and key.
+
+
+    We are using application_token and key to identify a blob. The Application token is a string that is assigned by the
+
+    Eclipse Management Organization.The key string must respect the following validation rules:
+
+
+    * 5-25 characters;
+
+
+    * letters: lowercase and uppercase/numbers/underscores are valid;
+
+
+    * each string should start with a letter.'
 paths:
   /uss/blob:
     get:
@@ -384,19 +491,6 @@ paths:
           description: ''
       deprecated: false
 components:
-  headers:
-    X-RateLimit-Reset:
-      schema:
-        type: string
-      example: 3553
-    X-RateLimit-Limit:
-      schema:
-        type: string
-      example: 1000
-    X-RateLimit-Remaining:
-      schema:
-        type: string
-      example: 964
   schemas:
     UpdateCreateBlobsresponse:
       title: Update/CreateBlobsresponse
@@ -464,6 +558,19 @@ components:
         key: mpc_favorites
         url: https://api.eclipse.org/account/profile/1/blob/MZ04RMOpksKN5GpxKXafq2MSjSP/mpc_favorites
         value: MzI3NDQwNQ==
+  headers:
+    X-RateLimit-Reset:
+      schema:
+        type: string
+      example: 3553
+    X-RateLimit-Remaining:
+      schema:
+        type: string
+      example: 964
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
   securitySchemes:
     oauth2:
       description: 'Get access to data while protecting your account credentials.

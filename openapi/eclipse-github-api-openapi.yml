@@ -1,7 +1,49 @@
 openapi: 3.2.0
 info:
   title: Eclipse Project Management Infrastructure (PMI) RESTful…
-  description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+  description: 'This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+
+    You can contribute to this document via our git repository.
+
+    If you have any problems or requests please submit an issue.
+
+
+    ### Rate Limit
+
+    This API currently limits users to 1000 authenticated requests and 1000 anonymous requests an hour.
+
+    ### Pagination
+
+    Information about pagination is provided in the Link header of an API call. For example, let''s make a curl request to the eclipse_profile API, to find out how many org_eclipse_oomph records exist for the user:
+
+    ```
+
+    curl -I \"https://projects.eclipse.org/api/projects?page=1&pagesize=20\"
+
+    ```
+
+    The -I parameter indicates that we only care about the headers, not the content. In examining the result, you''ll notice some information in the Link header that looks like this:
+
+    ```
+
+    ; rel="next",
+
+    ; rel="last",
+
+    ; rel="first",
+
+    ; rel="self"
+
+    ```
+
+    Let''s break that down. rel=\"next\" says that the next page is page=2. This makes sense, since by default, all paginated queries start at page 1. rel=\"last\" provides some more information, stating that the last page of results is on page 27.
+
+    Keep in mind that you should always rely on these link relations provided to you. Don''t try to guess or construct your own URL.
+
+
+    ### Error States
+
+    The common HTTP Response Status Codes are used.'
   contact: {}
   version: '1.0'
 servers:

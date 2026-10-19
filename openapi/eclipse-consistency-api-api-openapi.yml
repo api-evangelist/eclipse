@@ -1,0 +1,210 @@
+openapi: 3.2.0
+info:
+  termsOfService: https://www.eclipse.org/legal/termsofuse.php
+  license:
+    name: Eclipse Public License 2.0
+    url: https://www.eclipse.org/legal/epl-2.0/
+  version: '0.1'
+  title: Eclipse Consistency API
+servers:
+- url: https://open-vsx.org
+  description: Generated server url
+tags:
+- name: consistency-api
+paths:
+  /admin/consistency/{checkId}/fix:
+    post:
+      tags:
+      - consistency-api
+      summary: Fix every current finding of one consistency check
+      operationId: fixAll
+      parameters:
+      - name: checkId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
+                format: int32
+  /admin/consistency/{checkId}/fix/{entityId}:
+    post:
+      tags:
+      - consistency-api
+      summary: Fix a single finding of one consistency check
+      operationId: fixOne
+      parameters:
+      - name: checkId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
+                format: int32
+  /admin/consistency:
+    get:
+      tags:
+      - consistency-api
+      summary: Get an overview of every registered consistency check
+      operationId: listChecks
+      responses:
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
+                format: int32
+  /admin/consistency/{checkId}/findings:
+    get:
+      tags:
+      - consistency-api
+      summary: Get the current findings of one consistency check
+      operationId: findings
+      parameters:
+      - name: checkId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '403':
+          description: Administration role is required
+          headers:
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+        '429':
+          description: A client has sent too many requests in a given amount of time
+          headers:
+            X-RateLimit-Reset:
+              description: Number of seconds until the rate limit tokens will be fully filled to its maximum
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Remaining:
+              description: Remaining number of requests left in the current time window
+              schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
+                format: int32

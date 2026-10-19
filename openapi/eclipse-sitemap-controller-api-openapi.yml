@@ -24,10 +24,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/xml:
@@ -36,21 +38,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get sitemap
       x-summary-source: derived

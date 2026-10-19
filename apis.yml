@@ -5269,6 +5269,27 @@ apis:
     url: https://webdev.eclipse.org/docs/api/eclipse-openvsx-api
   - type: Documentation
     url: https://webdev.eclipse.org/docs/api/eclipse-openvsx-api
+- aid: eclipse:eclipse-consistency-api-api
+  name: Eclipse Foundation Consistency API
+  description: The consistency-api API from Eclipse Foundation — 4 operation(s) for consistency-api.
+  humanURL: https://marketplace.eclipse.org/
+  baseURL: https://marketplace.eclipse.org/api/p
+  tags:
+  - consistency-api
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-consistency-api-api-openapi.yml
+- aid: eclipse:eclipse-trusted-publishing-api-api
+  name: Eclipse Foundation Trusted Publishing API
+  description: >-
+    The trusted-publishing-api API from Eclipse Foundation — 5 operation(s) for trusted-publishing-api.
+  humanURL: https://marketplace.eclipse.org/
+  baseURL: https://marketplace.eclipse.org/api/p
+  tags:
+  - trusted-publishing-api
+  properties:
+  - type: OpenAPI
+    url: openapi/eclipse-trusted-publishing-api-api-openapi.yml
 common:
 - type: CapabilityMap
   url: capabilities/eclipse-capability-edges.yml

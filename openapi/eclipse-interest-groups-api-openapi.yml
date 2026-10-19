@@ -1,7 +1,49 @@
 openapi: 3.2.0
 info:
   title: Eclipse Project Management Infrastructure (PMI) RESTful…
-  description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+  description: 'This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+
+    You can contribute to this document via our git repository.
+
+    If you have any problems or requests please submit an issue.
+
+
+    ### Rate Limit
+
+    This API currently limits users to 1000 authenticated requests and 1000 anonymous requests an hour.
+
+    ### Pagination
+
+    Information about pagination is provided in the Link header of an API call. For example, let''s make a curl request to the eclipse_profile API, to find out how many org_eclipse_oomph records exist for the user:
+
+    ```
+
+    curl -I \"https://projects.eclipse.org/api/projects?page=1&pagesize=20\"
+
+    ```
+
+    The -I parameter indicates that we only care about the headers, not the content. In examining the result, you''ll notice some information in the Link header that looks like this:
+
+    ```
+
+    ; rel="next",
+
+    ; rel="last",
+
+    ; rel="first",
+
+    ; rel="self"
+
+    ```
+
+    Let''s break that down. rel=\"next\" says that the next page is page=2. This makes sense, since by default, all paginated queries start at page 1. rel=\"last\" provides some more information, stating that the last page of results is on page 27.
+
+    Keep in mind that you should always rely on these link relations provided to you. Don''t try to guess or construct your own URL.
+
+
+    ### Error States
+
+    The common HTTP Response Status Codes are used.'
   contact: {}
   version: '1.0'
 servers:
@@ -146,22 +188,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    InterestGroupGitlabInfo:
-      title: InterestGroupGitlabInfo
-      type: object
-      description: GitLab group information derived from the interest group's Foundation DB project ID.
-      properties:
-        project_group:
-          type: string
-          description: GitLab project group namespace (e.g. `eclipse-ig/some-group`).
-        ignored_sub_groups:
-          type: array
-          items:
-            type: string
-          description: Currently always empty for interest groups.
-      example:
-        project_group: eclipse-ig/some-group
-        ignored_sub_groups: []
     InterestGroupUser:
       title: InterestGroupUser
       type: object
@@ -182,20 +208,35 @@ components:
         full_name: An IG Member
         url: https://api.eclipse.org/account/profile/aigmember
         organization: {}
-    TextContent:
-      title: TextContent
+    InterestGroupResources:
+      title: InterestGroupResources
       type: object
-      description: A long-text field with a plain-text summary and an HTML-rendered full version.
       properties:
-        summary:
+        website:
           type: string
-          description: Plain-text summary (may be empty).
-        full:
+          description: URL to the interest group's website, or empty string.
+        members:
           type: string
-          description: Full content rendered as HTML.
+          description: URL to the interest group's members page, or empty string.
       example:
-        summary: Short summary.
-        full: <p>Full HTML content.</p>
+        website: ''
+        members: ''
+    InterestGroupGitlabInfo:
+      title: InterestGroupGitlabInfo
+      type: object
+      description: GitLab group information derived from the interest group's Foundation DB project ID.
+      properties:
+        project_group:
+          type: string
+          description: GitLab project group namespace (e.g. `eclipse-ig/some-group`).
+        ignored_sub_groups:
+          type: array
+          items:
+            type: string
+          description: Currently always empty for interest groups.
+      example:
+        project_group: eclipse-ig/some-group
+        ignored_sub_groups: []
     InterestGroup:
       title: InterestGroup
       type: object
@@ -261,19 +302,20 @@ components:
           website: ''
           members: ''
         mailing_list: ''
-    InterestGroupResources:
-      title: InterestGroupResources
+    TextContent:
+      title: TextContent
       type: object
+      description: A long-text field with a plain-text summary and an HTML-rendered full version.
       properties:
-        website:
+        summary:
           type: string
-          description: URL to the interest group's website, or empty string.
-        members:
+          description: Plain-text summary (may be empty).
+        full:
           type: string
-          description: URL to the interest group's members page, or empty string.
+          description: Full content rendered as HTML.
       example:
-        website: ''
-        members: ''
+        summary: Short summary.
+        full: <p>Full HTML content.</p>
   responses:
     NotFound:
       description: Resource not found.

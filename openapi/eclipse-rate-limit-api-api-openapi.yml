@@ -27,7 +27,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TierJson'
+              $ref: '#/components/schemas/Result'
         required: true
       responses:
         '200':
@@ -36,10 +36,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -48,21 +50,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Update tier
       x-summary-source: derived
@@ -83,10 +89,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -103,21 +111,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Delete tier
       x-summary-source: derived
@@ -139,10 +151,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -151,21 +165,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get customer
       x-summary-source: derived
@@ -183,7 +201,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerJson'
+              $ref: '#/components/schemas/Result'
         required: true
       responses:
         '200':
@@ -192,10 +210,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -204,21 +224,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Update customer
       x-summary-source: derived
@@ -239,10 +263,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -259,21 +285,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Delete customer
       x-summary-source: derived
@@ -286,7 +316,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TierJson'
+              $ref: '#/components/schemas/Result'
         required: true
       responses:
         '200':
@@ -295,10 +325,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -307,21 +339,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Create tier
       x-summary-source: derived
@@ -343,10 +379,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -357,21 +395,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get rate limit tokens
       x-summary-source: derived
@@ -397,10 +439,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -409,21 +453,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Create rate limit token
       x-summary-source: derived
@@ -455,10 +503,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -475,21 +525,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Remove customer member
       x-summary-source: derived
@@ -521,10 +575,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -541,21 +597,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Add customer member
       x-summary-source: derived
@@ -568,7 +628,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerJson'
+              $ref: '#/components/schemas/Result'
         required: true
       responses:
         '200':
@@ -577,10 +637,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -589,21 +651,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Create customer
       x-summary-source: derived
@@ -619,10 +685,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -631,21 +699,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get tiers
       x-summary-source: derived
@@ -667,10 +739,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -679,21 +753,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get customers for tier
       x-summary-source: derived
@@ -709,10 +787,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -721,21 +801,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get customers
       x-summary-source: derived
@@ -762,10 +846,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -774,21 +860,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get usage stats
       x-summary-source: derived
@@ -810,10 +900,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -822,21 +914,25 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Get customer members
       x-summary-source: derived
@@ -864,10 +960,12 @@ paths:
             X-RateLimit-Limit:
               description: Number of requests that can be made in a given amount of time
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
                 format: int32
           content:
             application/json:
@@ -884,47 +982,315 @@ paths:
         '429':
           description: A client has sent too many requests in a given amount of time
           headers:
-            X-RateLimit-Limit:
-              description: Number of requests that can be made in a given amount of time
-              schema:
-                format: int32
-            Retry-After:
-              description: Number of seconds to wait after receiving a 429 response
-              schema:
-                format: int32
             X-RateLimit-Reset:
               description: Number of seconds until the rate limit tokens will be fully filled to its maximum
               schema:
+                type: integer
                 format: int32
             X-RateLimit-Remaining:
               description: Remaining number of requests left in the current time window
               schema:
+                type: integer
+                format: int32
+            X-RateLimit-Limit:
+              description: Number of requests that can be made in a given amount of time
+              schema:
+                type: integer
+                format: int32
+            Retry-After:
+              description: Number of seconds to wait after receiving a 429 response
+              schema:
+                type: integer
                 format: int32
       summary: Deactivate rate limit token
       x-summary-source: derived
 components:
   schemas:
-    NamespaceMembershipJson:
+    TierListJson:
       type: object
       properties:
-        namespace:
-          type: string
-        role:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-    VersionTargetPlatformsJson:
-      type: object
-      properties:
-        version:
-          type: string
-        targetPlatforms:
+        tiers:
           type: array
           items:
-            $ref: '#/components/schemas/TargetPlatformActive'
-        canDelete:
+            $ref: '#/components/schemas/TierJson'
+    ReviewList:
+      required:
+      - reviews
+      type: object
+      description: List of reviews of an extension
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          reviews:
+            type: array
+            items:
+              $ref: '#/components/schemas/Review'
+    Badge:
+      type: object
+      properties:
+        url:
+          type: string
+          description: Image URL of the badge
+        href:
+          type: string
+          description: The link users will follow when clicking the badge
+        description:
+          type: string
+      description: A badge to be shown in the sidebar of the extension page in the registry
+    ExtensionReplacement:
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL of the extension replacement
+        displayName:
+          type: string
+          description: Name to be displayed in user interfaces
+      description: Metadata of an extension replacement
+    SearchEntry:
+      required:
+      - files
+      - name
+      - namespace
+      - timestamp
+      - url
+      - verified
+      - version
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL to get the full metadata of the extension
+        files:
+          type: object
+          additionalProperties:
+            type: string
+            description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
+          description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
+        name:
+          type: string
+          description: Name of the extension
+        namespace:
+          type: string
+          description: Namespace of the extension
+        version:
+          type: string
+          description: The latest published version
+        timestamp:
+          type: string
+          description: Date and time when this version was published (ISO-8601)
+        verified:
           type: boolean
+          description: The value 'true' means the publishing user is a privileged user or the publishing user is a member of the extension's namespace and the namespace has at least one owner.
+        allVersions:
+          type: array
+          description: 'Essential metadata of all available versions. Deprecated: only returns the last 100 versions. Use allVersionsUrl instead.'
+          deprecated: true
+          items:
+            $ref: '#/components/schemas/VersionReference'
+        allVersionsUrl:
+          type: string
+          description: URL to get essential metadata of all available versions.
+        averageRating:
+          maximum: 5
+          minimum: 0
+          type: number
+          description: Average rating
+          format: double
+        reviewCount:
+          minimum: 0
+          type: integer
+          description: Number of reviews
+          format: int64
+        downloadCount:
+          minimum: 0
+          type: integer
+          description: Number of downloads of the extension package
+          format: int32
+        displayName:
+          type: string
+          description: Name to be displayed in user interfaces
+        description:
+          type: string
+        deprecated:
+          type: boolean
+          description: Indicates whether the extension is deprecated
+      description: Summary of metadata of an extension
+    ExtensionReference:
+      required:
+      - extension
+      - namespace
+      - url
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL to get metadata of the referenced extension
+        namespace:
+          type: string
+          description: Namespace of the referenced extension
+        extension:
+          type: string
+          description: Name of the referenced extension
+      description: A reference to another extension in the registry
+    Namespace:
+      required:
+      - name
+      - verified
+      type: object
+      description: Metadata of a namespace
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          name:
+            type: string
+            description: Name of the namespace
+          extensions:
+            type: object
+            additionalProperties:
+              type: string
+              description: Map of extension names to their metadata URLs (not required for creating)
+            description: Map of extension names to their metadata URLs (not required for creating)
+          verified:
+            type: boolean
+            description: Indicates whether the namespace has an owner (not required for creating)
+    SearchResult:
+      required:
+      - extensions
+      - offset
+      - totalSize
+      type: object
+      description: List of extensions matching a search query
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          offset:
+            minimum: 0
+            type: integer
+            description: Number of skipped entries according to the search query
+            format: int32
+          totalSize:
+            minimum: 0
+            type: integer
+            description: Total number of entries that match the search query
+            format: int32
+          extensions:
+            type: array
+            description: List of matching entries, limited to the size specified in the search query
+            items:
+              $ref: '#/components/schemas/SearchEntry'
+    TargetPlatformActive:
+      type: object
+      properties:
+        targetPlatform:
+          type: string
+          description: Name of the target platform
+          enum:
+          - win32-x64
+          - win32-ia32
+          - win32-arm64
+          - linux-x64
+          - linux-arm64
+          - linux-armhf
+          - alpine-x64
+          - alpine-arm64
+          - darwin-x64
+          - darwin-arm64
+          - web
+          - universal
+        active:
+          type: boolean
+          description: Whether this extension version for this target platform is active
+        removed:
+          type: boolean
+          description: Whether this extension version for this target platform has been removed (soft-deleted)
+      description: Target platform of an extension version and whether it is active
+    UsageStatsListJson:
+      type: object
+      properties:
+        stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageStatsJson'
+        dailyP95:
+          type: integer
+          format: int64
+    Review:
+      required:
+      - rating
+      - timestamp
+      - user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        timestamp:
+          type: string
+          description: Date and time when this review was posted (ISO-8601)
+        comment:
+          type: string
+        rating:
+          maximum: 5
+          minimum: 0
+          type: integer
+          description: Number of stars
+          format: int32
+      description: A review of an extension
+    Result:
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+      description: Generic result indicator
+    QueryResult:
+      required:
+      - offset
+      - totalSize
+      type: object
+      description: Metadata query result
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          offset:
+            minimum: 0
+            type: integer
+            description: Number of skipped entries according to the query
+            format: int32
+          totalSize:
+            minimum: 0
+            type: integer
+            description: Total number of entries that match the query
+            format: int32
+          extensions:
+            type: array
+            description: Extensions that match the given query (may be empty)
+            items:
+              $ref: '#/components/schemas/Extension'
     Extension:
+      required:
+      - name
+      - namespace
+      - namespaceDisplayName
+      - namespaceUrl
+      - publishedBy
+      - publishedWithTrustedPublishing
+      - reviewsUrl
+      - timestamp
+      - verified
+      - version
+      type: object
+      description: Metadata of an extension
       allOf:
       - $ref: '#/components/schemas/Result'
       - type: object
@@ -939,6 +1305,7 @@ components:
             type: object
             additionalProperties:
               type: string
+              description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
             description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
           name:
             type: string
@@ -970,7 +1337,9 @@ components:
             description: Indicates whether this is a pre-release version
           publishedBy:
             $ref: '#/components/schemas/User'
-            description: Data of the user who published this version
+          publishedWithTrustedPublishing:
+            type: boolean
+            description: Indicates whether this version was published using trusted publishing
           reviewStatus:
             type: string
             description: 'Review/publishing status: published (active and visible to all), under_review (being reviewed), rejected (blocked)'
@@ -988,33 +1357,35 @@ components:
             type: object
             additionalProperties:
               type: string
+              description: 'Map of available versions to their metadata URLs. Deprecated: only returns the last 100 versions. Use allVersionsUrl instead.'
               deprecated: true
-            deprecated: true
             description: 'Map of available versions to their metadata URLs. Deprecated: only returns the last 100 versions. Use allVersionsUrl instead.'
+            deprecated: true
           allVersionsUrl:
             type: string
             description: URL to get a map of available versions to their metadata URLs.
           averageRating:
-            type: number
-            format: double
-            description: Average rating
             maximum: 5
             minimum: 0
+            type: number
+            description: Average rating
+            format: double
           downloadCount:
+            minimum: 0
             type: integer
-            format: int32
             description: Number of downloads of the extension package
-            minimum: 0
+            format: int32
           reviewCount:
-            type: integer
-            format: int64
-            description: Number of reviews
             minimum: 0
+            type: integer
+            description: Number of reviews
+            format: int64
           versionAlias:
             type: array
             description: Available version aliases ('latest' or 'pre-release')
             items:
               type: string
+              description: Available version aliases ('latest' or 'pre-release')
           timestamp:
             type: string
             description: Date and time when this version was published (ISO-8601)
@@ -1033,6 +1404,7 @@ components:
             type: object
             additionalProperties:
               type: string
+              description: Map of engine names to the respective version constraints
             description: Map of engine names to the respective version constraints
           categories:
             type: array
@@ -1043,6 +1415,7 @@ components:
             description: A list that indicates where the extension should run in remote configurations. Values are "ui" (run locally), "workspace" (run on remote machine) and "web"
             items:
               type: string
+              description: A list that indicates where the extension should run in remote configurations. Values are "ui" (run locally), "workspace" (run on remote machine) and "web"
           tags:
             type: array
             items:
@@ -1082,6 +1455,7 @@ components:
             description: Languages the extension has been translated in
             items:
               type: string
+              description: Languages the extension has been translated in
           qna:
             type: string
             description: URL of the extension's Q&A page
@@ -1104,6 +1478,7 @@ components:
             type: object
             additionalProperties:
               type: string
+              description: Map of download links by target platform
             description: Map of download links by target platform
           allTargetPlatformVersions:
             type: array
@@ -1118,403 +1493,23 @@ components:
             description: Indicates whether the extension is deprecated
           replacement:
             $ref: '#/components/schemas/ExtensionReplacement'
-            description: Reference to extension that replaces this extension when it's deprecated
           downloadable:
             type: boolean
             description: Whether to show downloads in user interfaces
-      description: Metadata of an extension
-      required:
-      - name
-      - namespace
-      - namespaceDisplayName
-      - namespaceUrl
-      - publishedBy
-      - reviewsUrl
-      - timestamp
-      - verified
-      - version
-    Review:
-      type: object
-      description: A review of an extension
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-          description: Data of the user who posted this review
-        timestamp:
-          type: string
-          description: Date and time when this review was posted (ISO-8601)
-        comment:
-          type: string
-        rating:
-          type: integer
-          format: int32
-          description: Number of stars
-          maximum: 5
-          minimum: 0
-      required:
-      - rating
-      - timestamp
-      - user
-    CustomerMembershipJson:
+    VersionTargetPlatformsJson:
       type: object
       properties:
-        customer:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-    CustomerListJson:
-      type: object
-      properties:
-        customers:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerJson'
-    SearchEntry:
-      type: object
-      description: Summary of metadata of an extension
-      properties:
-        url:
-          type: string
-          description: URL to get the full metadata of the extension
-        files:
-          type: object
-          additionalProperties:
-            type: string
-          description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
-        name:
-          type: string
-          description: Name of the extension
-        namespace:
-          type: string
-          description: Namespace of the extension
         version:
           type: string
-          description: The latest published version
-        timestamp:
-          type: string
-          description: Date and time when this version was published (ISO-8601)
-        verified:
+        targetPlatforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetPlatformActive'
+        canDelete:
           type: boolean
-          description: The value 'true' means the publishing user is a privileged user or the publishing user is a member of the extension's namespace and the namespace has at least one owner.
-        allVersions:
-          type: array
-          deprecated: true
-          description: 'Essential metadata of all available versions. Deprecated: only returns the last 100 versions. Use allVersionsUrl instead.'
-          items:
-            $ref: '#/components/schemas/VersionReference'
-        allVersionsUrl:
-          type: string
-          description: URL to get essential metadata of all available versions.
-        averageRating:
-          type: number
-          format: double
-          description: Average rating
-          maximum: 5
-          minimum: 0
-        reviewCount:
-          type: integer
-          format: int64
-          description: Number of reviews
-          minimum: 0
-        downloadCount:
-          type: integer
-          format: int32
-          description: Number of downloads of the extension package
-          minimum: 0
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
-        description:
-          type: string
-        deprecated:
-          type: boolean
-          description: Indicates whether the extension is deprecated
-      required:
-      - files
-      - name
-      - namespace
-      - timestamp
-      - url
-      - verified
-      - version
-    ExtensionReplacement:
-      type: object
-      description: Metadata of an extension replacement
-      properties:
-        url:
-          type: string
-          description: URL of the extension replacement
-        displayName:
-          type: string
-          description: Name to be displayed in user interfaces
-    Namespace:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          name:
-            type: string
-            description: Name of the namespace
-          extensions:
-            type: object
-            additionalProperties:
-              type: string
-            description: Map of extension names to their metadata URLs (not required for creating)
-          verified:
-            type: boolean
-            description: Indicates whether the namespace has an owner (not required for creating)
-      description: Metadata of a namespace
-      required:
-      - name
-      - verified
-    TargetPlatformActive:
-      type: object
-      description: Target platform of an extension version and whether it is active
-      properties:
-        targetPlatform:
-          type: string
-          description: Name of the target platform
-          enum:
-          - win32-x64
-          - win32-ia32
-          - win32-arm64
-          - linux-x64
-          - linux-arm64
-          - linux-armhf
-          - alpine-x64
-          - alpine-arm64
-          - darwin-x64
-          - darwin-arm64
-          - web
-          - universal
-        active:
-          type: boolean
-          description: Whether this extension version for this target platform is active
-        removed:
-          type: boolean
-          description: Whether this extension version for this target platform has been removed (soft-deleted)
-    CustomerMembershipList:
-      type: object
-      description: Metadata of a customer member list
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        customerMemberships:
-          type: array
-          description: List of memberships
-          items:
-            $ref: '#/components/schemas/CustomerMembershipJson'
-      required:
-      - customerMemberships
-    RateLimitTokenJson:
-      type: object
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        id:
-          type: integer
-          format: int64
-        value:
-          type: string
-        createdTimestamp:
-          type: string
-        description:
-          type: string
-    User:
-      type: object
-      description: User data
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        loginName:
-          type: string
-          description: Login name
-        fullName:
-          type: string
-          description: Full name
-        avatarUrl:
-          type: string
-          description: URL to the user's avatar image
-        homepage:
-          type: string
-          description: URL to the user's profile page
-        provider:
-          type: string
-          description: Authentication provider (e.g. github)
-      required:
-      - loginName
-    Result:
-      type: object
-      description: Generic result indicator
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-    UsageStatsListJson:
-      type: object
-      properties:
-        stats:
-          type: array
-          items:
-            $ref: '#/components/schemas/UsageStatsJson'
-        dailyP95:
-          type: integer
-          format: int64
-    UsageStatsJson:
-      type: object
-      properties:
-        windowStart:
-          type: integer
-          format: int64
-        duration:
-          type: integer
-          format: int64
-        count:
-          type: integer
-          format: int64
-    NamespaceMembershipList:
-      type: object
-      description: Metadata of a namespace member list
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        namespaceMemberships:
-          type: array
-          description: List of memberships
-          items:
-            $ref: '#/components/schemas/NamespaceMembershipJson'
-      required:
-      - namespaceMemberships
-    SearchResult:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          offset:
-            type: integer
-            format: int32
-            description: Number of skipped entries according to the search query
-            minimum: 0
-          totalSize:
-            type: integer
-            format: int32
-            description: Total number of entries that match the search query
-            minimum: 0
-          extensions:
-            type: array
-            description: List of matching entries, limited to the size specified in the search query
-            items:
-              $ref: '#/components/schemas/SearchEntry'
-      description: List of extensions matching a search query
-      required:
-      - extensions
-      - offset
-      - totalSize
-    QueryResult:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          offset:
-            type: integer
-            format: int32
-            description: Number of skipped entries according to the query
-            minimum: 0
-          totalSize:
-            type: integer
-            format: int32
-            description: Total number of entries that match the query
-            minimum: 0
-          extensions:
-            type: array
-            description: Extensions that match the given query (may be empty)
-            items:
-              $ref: '#/components/schemas/Extension'
-      description: Metadata query result
-      required:
-      - offset
-      - totalSize
-    CustomerJson:
-      type: object
-      properties:
-        success:
-          type: string
-          description: Indicates success of the operation (omitted if a more specific result type is returned)
-        warning:
-          type: string
-          description: Indicates a warning; when this is present, other properties can still be used
-        error:
-          type: string
-          description: Indicates an error; when this is present, all other properties should be ignored
-        name:
-          type: string
-        tier:
-          $ref: '#/components/schemas/TierJson'
-        state:
-          type: string
-        cidrBlocks:
-          type: array
-          items:
-            type: string
-      required:
-      - name
-      - state
-    TierListJson:
-      type: object
-      properties:
-        tiers:
-          type: array
-          items:
-            $ref: '#/components/schemas/TierJson'
-    Badge:
-      type: object
-      description: A badge to be shown in the sidebar of the extension page in the registry
-      properties:
-        url:
-          type: string
-          description: Image URL of the badge
-        href:
-          type: string
-          description: The link users will follow when clicking the badge
-        description:
-          type: string
+      description: Map of target platforms by extension version
     VersionReference:
       type: object
-      description: Essential metadata of an extension version
       properties:
         url:
           type: string
@@ -1523,6 +1518,7 @@ components:
           type: object
           additionalProperties:
             type: string
+            description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
           description: Map of file types (download, manifest, icon, readme, license, changelog) to their respective URLs
         version:
           type: string
@@ -1546,20 +1542,14 @@ components:
           type: object
           additionalProperties:
             type: string
+            description: Map of engine names to the respective version constraints
           description: Map of engine names to the respective version constraints
-    ReviewList:
-      allOf:
-      - $ref: '#/components/schemas/Result'
-      - type: object
-        properties:
-          reviews:
-            type: array
-            items:
-              $ref: '#/components/schemas/Review'
-      description: List of reviews of an extension
-      required:
-      - reviews
+      description: Essential metadata of an extension version
     TierJson:
+      required:
+      - name
+      - refillStrategy
+      - tierType
       type: object
       properties:
         success:
@@ -1585,24 +1575,150 @@ components:
           format: int64
         refillStrategy:
           type: string
+    NamespaceMembershipList:
       required:
-      - name
-      - refillStrategy
-      - tierType
-    ExtensionReference:
+      - namespaceMemberships
       type: object
-      description: A reference to another extension in the registry
       properties:
-        url:
+        success:
           type: string
-          description: URL to get metadata of the referenced extension
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        namespaceMemberships:
+          type: array
+          description: List of memberships
+          items:
+            $ref: '#/components/schemas/NamespaceMembershipJson'
+      description: Metadata of a namespace member list
+    CustomerListJson:
+      type: object
+      properties:
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerJson'
+    RateLimitTokenJson:
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        id:
+          type: integer
+          format: int64
+        value:
+          type: string
+        createdTimestamp:
+          type: string
+        description:
+          type: string
+    NamespaceMembershipJson:
+      type: object
+      properties:
         namespace:
           type: string
-          description: Namespace of the referenced extension
-        extension:
+        role:
           type: string
-          description: Name of the referenced extension
+        user:
+          $ref: '#/components/schemas/User'
+      description: List of memberships
+    CustomerJson:
       required:
-      - extension
-      - namespace
-      - url
+      - name
+      - state
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        name:
+          type: string
+        tier:
+          $ref: '#/components/schemas/TierJson'
+        state:
+          type: string
+        cidrBlocks:
+          type: array
+          items:
+            type: string
+    UsageStatsJson:
+      type: object
+      properties:
+        windowStart:
+          type: integer
+          format: int64
+        duration:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int64
+    CustomerMembershipJson:
+      type: object
+      properties:
+        customer:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      description: List of memberships
+    User:
+      required:
+      - loginName
+      type: object
+      description: User data
+      allOf:
+      - $ref: '#/components/schemas/Result'
+      - type: object
+        properties:
+          loginName:
+            type: string
+            description: Login name
+          fullName:
+            type: string
+            description: Full name
+          avatarUrl:
+            type: string
+            description: URL to the user's avatar image
+          homepage:
+            type: string
+            description: URL to the user's profile page
+          provider:
+            type: string
+            description: Authentication provider (e.g. github)
+    CustomerMembershipList:
+      required:
+      - customerMemberships
+      type: object
+      properties:
+        success:
+          type: string
+          description: Indicates success of the operation (omitted if a more specific result type is returned)
+        warning:
+          type: string
+          description: Indicates a warning; when this is present, other properties can still be used
+        error:
+          type: string
+          description: Indicates an error; when this is present, all other properties should be ignored
+        customerMemberships:
+          type: array
+          description: List of memberships
+          items:
+            $ref: '#/components/schemas/CustomerMembershipJson'
+      description: Metadata of a customer member list

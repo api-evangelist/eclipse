@@ -139,6 +139,44 @@ paths:
       deprecated: false
 components:
   schemas:
+    Subscriptions:
+      type: object
+      additionalProperties: false
+      required:
+      - mailing_list_subscriptions
+      properties:
+        mailing_list_subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailingList'
+      example:
+        mailing_list_subscriptions:
+        - list_name: cross-project-issues-dev
+          list_description: Cross project issues
+        - list_name: epp
+          list_description: Eclipse Packaging Project
+    PeopleProjectMap:
+      type: object
+      propertyNames:
+        description: The project ID
+      additionalProperties:
+        $ref: '#/components/schemas/PeopleProjects'
+      example:
+        technology.usssdk:
+        - active_date: '2022-09-21T00:00:00Z'
+          inactive_date: ''
+          edit_bugs: '0'
+          sort_order: ''
+          project_name: Eclise USS SDK
+          url: https://projects.eclipse.org/projects/technology.usssdk
+          specification_project: false
+          relation:
+            relation: CM
+            description: commiter
+            is_active: '1'
+            type:
+              type: PR
+              description: Person - Project
     EmploymentHistory:
       type: object
       additionalProperties: false
@@ -161,69 +199,11 @@ components:
           - 'null'
           - string
           description: Termination or change date for employment
-    EmploymentHistories:
-      type: array
-      items:
-        $ref: '#/components/schemas/EmploymentHistory'
-    Relation:
-      type: object
-      additionalProperties: false
-      required:
-      - Relation
-      - Description
-      - IsActive
-      - Type
-      properties:
-        Relation:
-          type: string
-          description: The relation code.
-        Description:
-          type: string
-          description: The relation description.
-        IsActive:
-          type: string
-          description: The active flag for the relation. 1 for true, 0 for false.
-        Type:
-          type: object
-          additionalProperties: false
-          required:
-          - Type
-          - Description
-          properties:
-            Type:
-              type: string
-              description: The type code.
-            Description:
-              type: string
-              description: The type description.
-      example:
-        Relation: CM
-        Description: commiter
-        IsActive: '1'
-        Type:
-          Type: PR
-          Description: Person - Project
     Error:
       type: array
       items:
         type: string
       description: An array containing a single message indicating the error
-    Subscriptions:
-      type: object
-      additionalProperties: false
-      required:
-      - mailing_list_subscriptions
-      properties:
-        mailing_list_subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/MailingList'
-      example:
-        mailing_list_subscriptions:
-        - list_name: cross-project-issues-dev
-          list_description: Cross project issues
-        - list_name: epp
-          list_description: Eclipse Packaging Project
     MailingList:
       type: object
       additionalProperties: false
@@ -240,6 +220,10 @@ components:
       example:
         list_name: cross-project-issues-dev
         list_description: Cross project issues
+    EmploymentHistories:
+      type: array
+      items:
+        $ref: '#/components/schemas/EmploymentHistory'
     PeopleProject:
       type: object
       additionalProperties: false
@@ -293,6 +277,44 @@ components:
       example:
         signed: true
         can_contribute_spec_project: true
+    Relation:
+      type: object
+      additionalProperties: false
+      required:
+      - Relation
+      - Description
+      - IsActive
+      - Type
+      properties:
+        Relation:
+          type: string
+          description: The relation code.
+        Description:
+          type: string
+          description: The relation description.
+        IsActive:
+          type: string
+          description: The active flag for the relation. 1 for true, 0 for false.
+        Type:
+          type: object
+          additionalProperties: false
+          required:
+          - Type
+          - Description
+          properties:
+            Type:
+              type: string
+              description: The type code.
+            Description:
+              type: string
+              description: The type description.
+      example:
+        Relation: CM
+        Description: commiter
+        IsActive: '1'
+        Type:
+          Type: PR
+          Description: Person - Project
     PeopleProjects:
       type: array
       description: Map of projects that the user is associated with.
@@ -313,28 +335,6 @@ components:
           type:
             type: PR
             description: Person - Project
-    PeopleProjectMap:
-      type: object
-      propertyNames:
-        description: The project ID
-      additionalProperties:
-        $ref: '#/components/schemas/PeopleProjects'
-      example:
-        technology.usssdk:
-        - active_date: '2022-09-21T00:00:00Z'
-          inactive_date: ''
-          edit_bugs: '0'
-          sort_order: ''
-          project_name: Eclise USS SDK
-          url: https://projects.eclipse.org/projects/technology.usssdk
-          specification_project: false
-          relation:
-            relation: CM
-            description: commiter
-            is_active: '1'
-            type:
-              type: PR
-              description: Person - Project
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -368,20 +368,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/MailingList'
-    DateTime:
-      type: string
-      format: datetime
-      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
-
-
-        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
-
-        '
-    NullableString:
-      description: A nullable String type value
-      type:
-      - 'null'
-      - string
     MailingList:
       type: object
       additionalProperties: false
@@ -451,8 +437,22 @@ components:
         description: Project IDs the mailing lists are mapped to
       additionalProperties:
         $ref: '#/components/schemas/MailingLists'
-    FetchMailinglistsresponse:
-      title: FetchMailinglistsresponse
+    NullableString:
+      description: A nullable String type value
+      type:
+      - 'null'
+      - string
+    DateTime:
+      type: string
+      format: datetime
+      description: 'Date string in the RFC 3339 format. Example, `1990-12-31T15:59:60-08:00`.
+
+
+        More on this standard can be read at https://tools.ietf.org/html/rfc3339.
+
+        '
+    RetrieveMailingListresponse:
+      title: RetrieveMailingListresponse
       required:
       - list_name
       - list_description
@@ -501,8 +501,8 @@ components:
         create_date: null
         url: https://accounts.eclipse.org/mailing-list/dash-dev
         email: dash-dev@eclipse.org
-    RetrieveMailingListresponse:
-      title: RetrieveMailingListresponse
+    FetchMailinglistsresponse:
+      title: FetchMailinglistsresponse
       required:
       - list_name
       - list_description
@@ -556,14 +556,14 @@ components:
       schema:
         type: string
       example: 3553
-    X-RateLimit-Limit:
-      schema:
-        type: string
-      example: 1000
     X-RateLimit-Remaining:
       schema:
         type: string
       example: 964
+    X-RateLimit-Limit:
+      schema:
+        type: string
+      example: 1000
   securitySchemes:
     openId:
       type: openIdConnect

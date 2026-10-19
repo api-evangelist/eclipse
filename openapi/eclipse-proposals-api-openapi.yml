@@ -1,7 +1,49 @@
 openapi: 3.2.0
 info:
   title: Eclipse Project Management Infrastructure (PMI) RESTful…
-  description: This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+  description: 'This describes the resources that make up the Eclipse Project Management Infrastructure (PMI) REST API.
+
+    You can contribute to this document via our git repository.
+
+    If you have any problems or requests please submit an issue.
+
+
+    ### Rate Limit
+
+    This API currently limits users to 1000 authenticated requests and 1000 anonymous requests an hour.
+
+    ### Pagination
+
+    Information about pagination is provided in the Link header of an API call. For example, let''s make a curl request to the eclipse_profile API, to find out how many org_eclipse_oomph records exist for the user:
+
+    ```
+
+    curl -I \"https://projects.eclipse.org/api/projects?page=1&pagesize=20\"
+
+    ```
+
+    The -I parameter indicates that we only care about the headers, not the content. In examining the result, you''ll notice some information in the Link header that looks like this:
+
+    ```
+
+    ; rel="next",
+
+    ; rel="last",
+
+    ; rel="first",
+
+    ; rel="self"
+
+    ```
+
+    Let''s break that down. rel=\"next\" says that the next page is page=2. This makes sense, since by default, all paginated queries start at page 1. rel=\"last\" provides some more information, stating that the last page of results is on page 27.
+
+    Keep in mind that you should always rely on these link relations provided to you. Don''t try to guess or construct your own URL.
+
+
+    ### Error States
+
+    The common HTTP Response Status Codes are used.'
   contact: {}
   version: '1.0'
 servers:
@@ -182,6 +224,20 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    SpecProjectWorkingGroup:
+      title: SpecProjectWorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
     Committer:
       title: Committer
       type: object
@@ -205,87 +261,6 @@ components:
         username: acommitter
         full_name: A Committer
         url: https://api.eclipse.org/account/profile/acommitter
-    SpecProjectWorkingGroup:
-      title: SpecProjectWorkingGroup
-      required:
-      - name
-      - id
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-      example:
-        name: Jakarta EE
-        id: jakarta-ee
-    Pagination:
-      title: Pagination
-      type: object
-      description: Pagination metadata included in some list responses.
-      properties:
-        page:
-          type: integer
-          description: Current page number (1-based).
-        pagesize:
-          type: integer
-          description: Maximum number of results per page.
-        result_start:
-          type: integer
-          description: One-based index of the first result on this page.
-        result_end:
-          type: integer
-          description: One-based index of the last result on this page. -1 when the page is empty.
-        result_size:
-          type: integer
-          description: Number of results on this page.
-        total_result_size:
-          type: integer
-          description: Total number of results across all pages.
-      example:
-        page: 1
-        pagesize: 20
-        result_start: 1
-        result_end: 20
-        result_size: 20
-        total_result_size: 150
-    WorkingGroup:
-      title: WorkingGroup
-      required:
-      - name
-      - id
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-      example:
-        name: Jakarta EE
-        id: jakarta-ee
-    ProposalsIndexResponse:
-      title: ProposalsIndexResponse
-      type: object
-      description: Paginated proposals list. Unlike the projects index, this endpoint preserves the pagination metadata in the response body alongside the `result` array.
-      properties:
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Proposal'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-      example:
-        result:
-        - id: 789
-          project_id: technology.new-project
-          name: New Eclipse Project Proposal
-        pagination:
-          page: 1
-          pagesize: 20
-          result_start: 1
-          result_end: 1
-          result_size: 1
-          total_result_size: 1
     Proposal:
       title: Proposal
       type: object
@@ -385,6 +360,73 @@ components:
         repo_type: Git
         repos:
         - https://github.com/eclipse/new-project
+    Pagination:
+      title: Pagination
+      type: object
+      description: Pagination metadata included in some list responses.
+      properties:
+        page:
+          type: integer
+          description: Current page number (1-based).
+        pagesize:
+          type: integer
+          description: Maximum number of results per page.
+        result_start:
+          type: integer
+          description: One-based index of the first result on this page.
+        result_end:
+          type: integer
+          description: One-based index of the last result on this page. -1 when the page is empty.
+        result_size:
+          type: integer
+          description: Number of results on this page.
+        total_result_size:
+          type: integer
+          description: Total number of results across all pages.
+      example:
+        page: 1
+        pagesize: 20
+        result_start: 1
+        result_end: 20
+        result_size: 20
+        total_result_size: 150
+    ProposalsIndexResponse:
+      title: ProposalsIndexResponse
+      type: object
+      description: Paginated proposals list. Unlike the projects index, this endpoint preserves the pagination metadata in the response body alongside the `result` array.
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proposal'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      example:
+        result:
+        - id: 789
+          project_id: technology.new-project
+          name: New Eclipse Project Proposal
+        pagination:
+          page: 1
+          pagesize: 20
+          result_start: 1
+          result_end: 1
+          result_size: 1
+          total_result_size: 1
+    WorkingGroup:
+      title: WorkingGroup
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+      example:
+        name: Jakarta EE
+        id: jakarta-ee
   responses:
     NotFound:
       description: Resource not found.

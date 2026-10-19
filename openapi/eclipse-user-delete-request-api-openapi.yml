@@ -243,6 +243,11 @@ paths:
           description: Error while modifying data.
 components:
   schemas:
+    UserDeleteRequests:
+      type: array
+      description: The list of UserDeleteRequest objects found
+      items:
+        $ref: '#/components/schemas/UserDeleteRequest'
     RequestStatusUpdate:
       type: object
       additionalProperties: false
@@ -415,11 +420,6 @@ components:
         created: '1686086484'
         changed: '1686086484'
         url: https://api.eclipse.org/account/user_delete_request/1
-    UserDeleteRequests:
-      type: array
-      description: The list of UserDeleteRequest objects found
-      items:
-        $ref: '#/components/schemas/UserDeleteRequest'
   securitySchemes:
     OAuth2:
       type: oauth2

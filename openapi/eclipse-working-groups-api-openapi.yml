@@ -321,10 +321,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/BasicPersonData'
-    WorkingGroups:
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkingGroup'
     BasicPersonData:
       type: object
       properties:
@@ -342,6 +338,28 @@ components:
           description: list of relation codes that are active for the current user
           items:
             type: string
+    WorkingGroupParticipationAgreement:
+      type: object
+      properties:
+        document_id:
+          $ref: '#/components/schemas/ObjectID'
+        pdf:
+          type: string
+          description: Link to the PDF version of the participation agreement
+    WorkingGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroup'
+    ObjectID:
+      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
+      type:
+      - string
+      - 'null'
+      minimum: 1
+    OrganizationWorkingGroupRepresentatives:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/BasicPersons'
     WorkingGroup:
       type: object
       properties:
@@ -406,46 +424,11 @@ components:
               description:
                 type: string
                 description: the label for the participation level
-    WorkingGroupParticipationAgreement:
-      type: object
-      properties:
-        document_id:
-          $ref: '#/components/schemas/ObjectID'
-        pdf:
-          type: string
-          description: Link to the PDF version of the participation agreement
-    ObjectID:
-      description: Unique identifier for an addressable object in the API. Can be null when posting or updating objects in the API if part of the root element or is a new entity. Should always be set in responses.
-      type:
-      - string
-      - 'null'
-      minimum: 1
-    OrganizationWorkingGroupRepresentatives:
-      type: object
+    WorkingGroupMailingLists:
       additionalProperties:
-        $ref: '#/components/schemas/BasicPersons'
-    WorkingGroupLevels:
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkingGroupLevel'
-    CommitteeMember:
-      type: object
-      additionalProperties: false
-      required:
-      - name
-      - username
-      description: A committee member representative.
-      properties:
-        name:
+        type: array
+        items:
           type: string
-          description: The name of the representative.
-        username:
-          type: string
-          description: The representative's EF username.
-        organization:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/MemberOrganization'
     WorkingGroupParticipationAgreements:
       type: object
       additionalProperties: false
@@ -454,102 +437,6 @@ components:
           $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
         organization:
           $ref: '#/components/schemas/WorkingGroupParticipationAgreement_2'
-    WorkingGroupParticipationAgreement_2:
-      type:
-      - object
-      - 'null'
-      additionalProperties: false
-      properties:
-        document_id:
-          $ref: '#/components/schemas/ObjectID'
-        pdf:
-          type: string
-          description: Link to the PDF version of the participation agreement
-    WorkingGroupCommittee:
-      type: object
-      additionalProperties: false
-      required:
-      - group_prefix
-      - working_group
-      description: Definition of the WG committee
-      properties:
-        group_prefix:
-          type: string
-          description: Prefix of the code representing the relation, used internally when using common relation types.
-        working_group:
-          type: string
-          description: The WG alias.
-        appointed_primary:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        appointed_alternate:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        elected_primary:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        elected_alternate:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        committer_representative:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        invited_guest:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        foundation_staff:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        pmc_representatives:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-        planning_council_representatives:
-          anyOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/CommitteeRole'
-    WorkingGroup_2:
-      type: object
-      additionalProperties: false
-      required:
-      - alias
-      - title
-      - status
-      - logo
-      - description
-      - resources
-      - levels
-      properties:
-        alias:
-          type: string
-          description: internal alias for the working group
-        title:
-          type: string
-          description: Public-facing or official name of the working group
-        status:
-          type: string
-          description: Current status of the working group (e.g. incubating, active, archived)
-        logo:
-          type: string
-          description: image link for the working groups logo
-        description:
-          type: string
-          description: Short description of the working group
-        resources:
-          $ref: '#/components/schemas/WorkingGroupResources'
-        levels:
-          $ref: '#/components/schemas/WorkingGroupLevels'
-        committee_mailing_lists:
-          oneOf:
-          - $ref: '#/components/schemas/WorkingGroupMailingLists'
-          - type: 'null'
     Error:
       type: object
       additionalProperties: false
@@ -573,11 +460,57 @@ components:
           - type: string
           - type: 'null'
           description: The friendly message for the error
-    WorkingGroupMailingLists:
-      additionalProperties:
-        type: array
-        items:
+    CommitteeRole:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - description
+      - members
+      description: The committee position.
+      properties:
+        code:
           type: string
+          description: The code representing the relation. Used internally when using common relation types.
+        description:
+          type: string
+          description: The relation description.
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommitteeMember'
+    CommitteeMember:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      - username
+      description: A committee member representative.
+      properties:
+        name:
+          type: string
+          description: The name of the representative.
+        username:
+          type: string
+          description: The representative's EF username.
+        organization:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/MemberOrganization'
+    MemberOrganizationLogos:
+      type: object
+      description: A member organization's logo data
+      properties:
+        print:
+          type:
+          - string
+          - 'null'
+          description: The print logo URL.
+        web:
+          type:
+          - string
+          - 'null'
+          description: The web logo URL.
     WorkingGroupResources:
       type: object
       additionalProperties: false
@@ -657,6 +590,67 @@ components:
         description:
           type: string
           description: the label for the participation level
+    WorkingGroupParticipationAgreement_2:
+      type:
+      - object
+      - 'null'
+      additionalProperties: false
+      properties:
+        document_id:
+          $ref: '#/components/schemas/ObjectID'
+        pdf:
+          type: string
+          description: Link to the PDF version of the participation agreement
+    WorkingGroupCommittee:
+      type: object
+      additionalProperties: false
+      required:
+      - group_prefix
+      - working_group
+      description: Definition of the WG committee
+      properties:
+        group_prefix:
+          type: string
+          description: Prefix of the code representing the relation, used internally when using common relation types.
+        working_group:
+          type: string
+          description: The WG alias.
+        appointed_primary:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        appointed_alternate:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        elected_primary:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        elected_alternate:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        committer_representative:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        invited_guest:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        foundation_staff:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        pmc_representatives:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
+        planning_council_representatives:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/CommitteeRole'
     MemberOrganization:
       type: object
       additionalProperties: false
@@ -678,39 +672,45 @@ components:
         is_active_member:
           type: boolean
           description: Whether the organization is an active member of the Eclipse Foundation.
-    MemberOrganizationLogos:
-      type: object
-      description: A member organization's logo data
-      properties:
-        print:
-          type:
-          - string
-          - 'null'
-          description: The print logo URL.
-        web:
-          type:
-          - string
-          - 'null'
-          description: The web logo URL.
-    CommitteeRole:
+    WorkingGroupLevels:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkingGroupLevel'
+    WorkingGroup_2:
       type: object
       additionalProperties: false
       required:
-      - code
+      - alias
+      - title
+      - status
+      - logo
       - description
-      - members
-      description: The committee position.
+      - resources
+      - levels
       properties:
-        code:
+        alias:
           type: string
-          description: The code representing the relation. Used internally when using common relation types.
+          description: internal alias for the working group
+        title:
+          type: string
+          description: Public-facing or official name of the working group
+        status:
+          type: string
+          description: Current status of the working group (e.g. incubating, active, archived)
+        logo:
+          type: string
+          description: image link for the working groups logo
         description:
           type: string
-          description: The relation description.
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommitteeMember'
+          description: Short description of the working group
+        resources:
+          $ref: '#/components/schemas/WorkingGroupResources'
+        levels:
+          $ref: '#/components/schemas/WorkingGroupLevels'
+        committee_mailing_lists:
+          oneOf:
+          - $ref: '#/components/schemas/WorkingGroupMailingLists'
+          - type: 'null'
   securitySchemes:
     openId:
       type: openIdConnect
