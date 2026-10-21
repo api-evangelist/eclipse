@@ -46,3 +46,3532 @@
     detected: '2026-10-15'
   status: not-a-workflow
   arazzo: null
+- slug: eclipse-abacus-ai
+  label: Abacus.ai
+  partner: abacusai
+  partner_name: Abacus.ai
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/abacusai
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: abacusai
+    publisher_id: abacusai
+    matched_domain: abacus.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-adacore
+  label: AdaCore
+  partner: adacore
+  partner_name: AdaCore
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/AdaCore
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: AdaCore
+    publisher_id: AdaCore
+    matched_domain: adacore.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-advanced-micro-devices
+  label: Advanced Micro Devices
+  partner: advanced-micro-devices
+  partner_name: Advanced Micro Devices
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/AMD
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: AMD
+    publisher_id: AMD
+    matched_domain: amd.com
+    matched_by: domain+verified
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-aikido-security
+  label: Aikido Security
+  partner: aikido-security
+  partner_name: Aikido Security
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/AikidoSecurity
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Aikido Security
+    publisher_id: AikidoSecurity
+    matched_domain: aikido.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-amazon
+  label: Amazon
+  partner: amazon
+  partner_name: Amazon
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/AmazonWebServices-AISolutionsArchitecture
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: AWS - AI Solutions Architecture
+    publisher_id: AmazonWebServices-AISolutionsArchitecture
+    matched_domain: amazon.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-apicurio
+  label: Apicurio
+  partner: apicurio
+  partner_name: Apicurio
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Apicurio
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Apicurio
+    publisher_id: Apicurio
+    matched_domain: apicur.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-apollo-graphql
+  label: Apollo GraphQL
+  partner: apollo-graphql
+  partner_name: Apollo GraphQL
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/apollographql
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Apollo GraphQL
+    publisher_id: apollographql
+    matched_domain: apollographql.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-applitools
+  label: Applitools
+  partner: applitools
+  partner_name: Applitools
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/applitools
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Applitools
+    publisher_id: applitools
+    matched_domain: applitools.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-astronomer
+  label: Astronomer
+  partner: astronomer
+  partner_name: Astronomer
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Astronomer
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Astronomer
+    publisher_id: Astronomer
+    matched_domain: astronomer.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-augment-code
+  label: Augment Code
+  partner: augment-code
+  partner_name: Augment Code
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Augment
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Augment
+    publisher_id: Augment
+    matched_domain: augmentcode.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-authzed
+  label: Authzed
+  partner: authzed
+  partner_name: Authzed
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/authzed
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: authzed
+    publisher_id: authzed
+    matched_domain: authzed.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-baidu
+  label: Baidu
+  partner: baidu
+  partner_name: Baidu
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/BaiduComate
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: BaiduComate
+    publisher_id: BaiduComate
+    matched_domain: baidu.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-bit
+  label: Bit
+  partner: bit
+  partner_name: Bit
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/bit
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Bit Composable Software
+    publisher_id: bit
+    matched_domain: bit.cloud
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-black-duck
+  label: Black Duck
+  partner: black-duck
+  partner_name: Black Duck
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/blackduck
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Black Duck
+    publisher_id: blackduck
+    matched_domain: blackduck.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-braintrust
+  label: Braintrust
+  partner: braintrust
+  partner_name: Braintrust
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/braintrustdata
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: braintrustdata
+    publisher_id: braintrustdata
+    matched_domain: braintrust.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-brokk
+  label: Brokk
+  partner: brokk
+  partner_name: Brokk
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/brokk
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: brokk
+    publisher_id: brokk
+    matched_domain: brokk.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-buf
+  label: Buf
+  partner: buf
+  partner_name: Buf
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/bufbuild
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: bufbuild
+    publisher_id: bufbuild
+    matched_domain: buf.build
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-builder-io
+  label: Builder.io
+  partner: builder-io
+  partner_name: Builder.io
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/builder
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Builder.io
+    publisher_id: builder
+    matched_domain: builder.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-bun
+  label: Bun
+  partner: bun
+  partner_name: Bun
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/oven
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Bun
+    publisher_id: oven
+    matched_domain: bun.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-certora
+  label: Certora
+  partner: certora
+  partner_name: Certora
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/certora
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: certora
+    publisher_id: certora
+    matched_domain: certora.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-circleci
+  label: CircleCI
+  partner: circleci
+  partner_name: CircleCI
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/CircleCI
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: CircleCI
+    publisher_id: CircleCI
+    matched_domain: circleci.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-coalesce
+  label: Coalesce
+  partner: coalesce
+  partner_name: Coalesce
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/coalesce
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Coalesce
+    publisher_id: coalesce
+    matched_domain: coalesce.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-codacy
+  label: Codacy
+  partner: codacy
+  partner_name: Codacy
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/codacy-app
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Codacy
+    publisher_id: codacy-app
+    matched_domain: codacy.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-coder
+  label: Coder
+  partner: coder
+  partner_name: Coder
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/coder
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Coder Technologies, Inc.
+    publisher_id: coder
+    matched_domain: coder.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-coderabbit
+  label: CodeRabbit
+  partner: coderabbit
+  partner_name: CodeRabbit
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/coderabbit
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: CodeRabbit
+    publisher_id: coderabbit
+    matched_domain: coderabbit.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-confluent
+  label: Confluent
+  partner: confluent
+  partner_name: Confluent
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/confluentinc
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Confluent
+    publisher_id: confluentinc
+    matched_domain: confluent.io
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-continue
+  label: Continue
+  partner: continue-dev
+  partner_name: Continue
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Continue
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Continue
+    publisher_id: Continue
+    matched_domain: continue.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-copado
+  label: Copado
+  partner: copado
+  partner_name: Copado
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/copado
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Copado
+    publisher_id: copado
+    matched_domain: copado.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-corridor
+  label: Corridor
+  partner: corridor
+  partner_name: Corridor
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/corridor
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Corridor
+    publisher_id: corridor
+    matched_domain: corridor.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-couchbase
+  label: Couchbase
+  partner: couchbase
+  partner_name: Couchbase
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/couchbase
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Couchbase
+    publisher_id: couchbase
+    matched_domain: couchbase.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-cycode
+  label: Cycode
+  partner: cycode
+  partner_name: Cycode
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/cycode
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Cycode
+    publisher_id: cycode
+    matched_domain: cycode.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-dagger
+  label: Dagger
+  partner: dagger
+  partner_name: Dagger
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Dagger
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Dagger
+    publisher_id: Dagger
+    matched_domain: dagger.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-databricks
+  label: Databricks
+  partner: databricks
+  partner_name: Databricks
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/databricks
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Databricks
+    publisher_id: databricks
+    matched_domain: databricks.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-datadog
+  label: Datadog
+  partner: datadog
+  partner_name: Datadog
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/datadog
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Datadog
+    publisher_id: datadog
+    matched_domain: datadoghq.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-daytona
+  label: Daytona
+  partner: daytona-io
+  partner_name: Daytona
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/daytonaio
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Daytona
+    publisher_id: daytonaio
+    matched_domain: daytona.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-dbt
+  label: dbt
+  partner: dbt
+  partner_name: dbt
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/dbtLabsInc
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: dbtLabsInc
+    publisher_id: dbtLabsInc
+    matched_domain: getdbt.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-deepnote
+  label: Deepnote
+  partner: deepnote
+  partner_name: Deepnote
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Deepnote
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Deepnote
+    publisher_id: Deepnote
+    matched_domain: deepnote.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-deployxa
+  label: Deployxa
+  partner: deployxa
+  partner_name: Deployxa
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/deployxa
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: deployxa
+    publisher_id: deployxa
+    matched_domain: deployxa.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-docspring
+  label: DocSpring
+  partner: docspring
+  partner_name: DocSpring
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/DocSpring
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: DocSpring
+    publisher_id: DocSpring
+    matched_domain: docspring.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-dodo-payments
+  label: Dodo Payments
+  partner: dodo-payments
+  partner_name: Dodo Payments
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/dodopayments
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Dodo Payments
+    publisher_id: dodopayments
+    matched_domain: dodopayments.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-doppler
+  label: Doppler
+  partner: doppler
+  partner_name: Doppler
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/doppler
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Doppler
+    publisher_id: doppler
+    matched_domain: doppler.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-dynatrace
+  label: Dynatrace
+  partner: dynatrace
+  partner_name: Dynatrace
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Dynatrace
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Dynatrace
+    publisher_id: Dynatrace
+    matched_domain: dynatrace.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-elastic
+  label: Elastic
+  partner: elastic
+  partner_name: Elastic
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Elastic
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Elastic
+    publisher_id: Elastic
+    matched_domain: elastic.co
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-expo
+  label: Expo
+  partner: expo
+  partner_name: Expo
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/expo
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Expo
+    publisher_id: expo
+    matched_domain: expo.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-faros-ai
+  label: Faros AI
+  partner: faros
+  partner_name: Faros AI
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/farosai
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Faros AI
+    publisher_id: farosai
+    matched_domain: faros.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-gatling
+  label: Gatling
+  partner: gatling
+  partner_name: Gatling
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/GatlingCorp
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: GatlingCorp
+    publisher_id: GatlingCorp
+    matched_domain: gatling.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-gen-digital
+  label: Gen Digital
+  partner: gen-digital
+  partner_name: Gen Digital
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Gen
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Gen
+    publisher_id: Gen
+    matched_domain: gendigital.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-gitea
+  label: Gitea
+  partner: gitea
+  partner_name: Gitea
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Gitea
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Gitea
+    publisher_id: Gitea
+    matched_domain: gitea.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-gitguardian
+  label: GitGuardian
+  partner: gitguardian
+  partner_name: GitGuardian
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/gitguardian-secret-security
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: GitGuardian
+    publisher_id: gitguardian-secret-security
+    matched_domain: gitguardian.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-gitkraken
+  label: GitKraken
+  partner: gitkraken
+  partner_name: GitKraken
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/eamodio
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: GitKraken
+    publisher_id: eamodio
+    matched_domain: gitkraken.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-gooddata
+  label: GoodData
+  partner: gooddata
+  partner_name: GoodData
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/GoodData
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: GoodData
+    publisher_id: GoodData
+    matched_domain: gooddata.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-google
+  label: Google
+  partner: google
+  partner_name: Google
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Google
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Google
+    publisher_id: Google
+    matched_domain: google.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-google-workspace
+  label: Google Workspace
+  partner: google-workspace
+  partner_name: Google Workspace
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/google-workspace
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: google-workspace
+    publisher_id: google-workspace
+    matched_domain: google.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-grafana
+  label: Grafana
+  partner: grafana-com
+  partner_name: Grafana
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Grafana
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Grafana Labs
+    publisher_id: Grafana
+    matched_domain: grafana.com
+    matched_by: domain+verified
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-graphite
+  label: Graphite
+  partner: graphite-com
+  partner_name: Graphite
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Graphite
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Graphite
+    publisher_id: Graphite
+    matched_domain: graphite.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-graphql
+  label: GraphQL
+  partner: graphql
+  partner_name: GraphQL
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/GraphQL
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: GraphQL Foundation
+    publisher_id: GraphQL
+    matched_domain: graphql.org
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-harness
+  label: Harness
+  partner: harness
+  partner_name: Harness
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/harness-inc
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: harness-inc
+    publisher_id: harness-inc
+    matched_domain: harness.io
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-hiro
+  label: Hiro
+  partner: hiro
+  partner_name: Hiro
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/hirosystems
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Hiro
+    publisher_id: hirosystems
+    matched_domain: hiro.so
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-hubspot
+  label: HubSpot
+  partner: hubspot
+  partner_name: HubSpot
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/HubSpot
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: HubSpot
+    publisher_id: HubSpot
+    matched_domain: hubspot.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-hugging-face
+  label: Hugging Face
+  partner: hugging-face
+  partner_name: Hugging Face
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/huggingface
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Hugging Face
+    publisher_id: huggingface
+    matched_domain: huggingface.co
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-ibm
+  label: IBM
+  partner: ibm
+  partner_name: IBM
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/IBM
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: IBM
+    publisher_id: IBM
+    matched_domain: ibm.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+    other_publisher_ids:
+    - watson-devex
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-ifs
+  label: IFS
+  partner: ifs
+  partner_name: IFS
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/IFS
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: IFS
+    publisher_id: IFS
+    matched_domain: ifs.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-imandra
+  label: Imandra
+  partner: imandra
+  partner_name: Imandra
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Imandra
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Imandra
+    publisher_id: Imandra
+    matched_domain: imandra.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-infracost
+  label: Infracost
+  partner: infracost
+  partner_name: Infracost
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/infracost
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: infracost
+    publisher_id: infracost
+    matched_domain: infracost.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-jfrog
+  label: JFrog
+  partner: jfrog
+  partner_name: JFrog
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/JFrog
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: JFrog
+    publisher_id: JFrog
+    matched_domain: jfrog.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-juliahub
+  label: Juliahub
+  partner: juliahub
+  partner_name: Juliahub
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/JuliaComputing
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: JuliaHub
+    publisher_id: JuliaComputing
+    matched_domain: juliahub.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-kadena
+  label: Kadena
+  partner: kadena
+  partner_name: Kadena
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Kadena
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Kadena
+    publisher_id: Kadena
+    matched_domain: kadena.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-keel
+  label: Keel
+  partner: keel
+  partner_name: Keel
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/teamkeel
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Keel
+    publisher_id: teamkeel
+    matched_domain: keel.so
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-kestra
+  label: Kestra
+  partner: kestra
+  partner_name: Kestra
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/kestra-io
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Kestra
+    publisher_id: kestra-io
+    matched_domain: kestra.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-laravel
+  label: Laravel
+  partner: laravel
+  partner_name: Laravel
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/laravel
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Laravel
+    publisher_id: laravel
+    matched_domain: laravel.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-ledger
+  label: Ledger
+  partner: ledger
+  partner_name: Ledger
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/LedgerHQ
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: LedgerHQ
+    publisher_id: LedgerHQ
+    matched_domain: ledger.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-localstack
+  label: LocalStack
+  partner: localstack
+  partner_name: LocalStack
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/localstack
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: localstack
+    publisher_id: localstack
+    matched_domain: localstack.cloud
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-matlab
+  label: MATLAB
+  partner: matlab
+  partner_name: MATLAB
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/mathworks
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: MathWorks
+    publisher_id: mathworks
+    matched_domain: mathworks.com
+    matched_by: domain+verified
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-mistral-ai
+  label: Mistral AI
+  partner: mistral
+  partner_name: Mistral AI
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/mistralai
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: mistralai
+    publisher_id: mistralai
+    matched_domain: mistral.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-modular
+  label: Modular
+  partner: modular
+  partner_name: Modular
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/modular-mojotools
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Modular
+    publisher_id: modular-mojotools
+    matched_domain: modular.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-mondoo
+  label: Mondoo
+  partner: mondoo
+  partner_name: Mondoo
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/mondoo
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: mondoo
+    publisher_id: mondoo
+    matched_domain: mondoo.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-neo4j
+  label: Neo4j
+  partner: neo4j
+  partner_name: Neo4j
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/neo4j-extensions
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Neo4j
+    publisher_id: neo4j-extensions
+    matched_domain: neo4j.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-netapp
+  label: NetApp
+  partner: netapp
+  partner_name: NetApp
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/NetApp
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: NetApp
+    publisher_id: NetApp
+    matched_domain: netapp.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-nokia
+  label: Nokia
+  partner: nokia-corp
+  partner_name: Nokia
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Nokia
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Nokia
+    publisher_id: Nokia
+    matched_domain: nokia.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-nvidia
+  label: Nvidia
+  partner: nvidia
+  partner_name: Nvidia
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/NVIDIA
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: NVIDIA
+    publisher_id: NVIDIA
+    matched_domain: nvidia.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-odoo
+  label: Odoo
+  partner: odoo
+  partner_name: Odoo
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Odoo
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Odoo
+    publisher_id: Odoo
+    matched_domain: odoo.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-onapsis
+  label: Onapsis
+  partner: onapsis
+  partner_name: Onapsis
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/onapsis
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Onapsis
+    publisher_id: onapsis
+    matched_domain: onapsis.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-open-liberty
+  label: Open Liberty
+  partner: open-liberty
+  partner_name: Open Liberty
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Open-Liberty
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Open Liberty
+    publisher_id: Open-Liberty
+    matched_domain: openliberty.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-openfga
+  label: OpenFGA
+  partner: openfga
+  partner_name: OpenFGA
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/OpenFGA
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: OpenFGA
+    publisher_id: OpenFGA
+    matched_domain: openfga.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-opentofu
+  label: OpenTofu
+  partner: opentofu
+  partner_name: OpenTofu
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/OpenTofu
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: OpenTofu
+    publisher_id: OpenTofu
+    matched_domain: opentofu.org
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-opik
+  label: Opik
+  partner: opik
+  partner_name: Opik
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/opik
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Opik
+    publisher_id: opik
+    matched_domain: comet.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-palo-alto-networks
+  label: Palo Alto Networks
+  partner: palo-alto-networks
+  partner_name: Palo Alto Networks
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/PrismaCloud
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Palo Alto Networks
+    publisher_id: PrismaCloud
+    matched_domain: paloaltonetworks.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-polyapi
+  label: PolyAPI
+  partner: polyapi
+  partner_name: PolyAPI
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/PolyAPICorp
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: PolyAPICorp
+    publisher_id: PolyAPICorp
+    matched_domain: polyapi.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-posit
+  label: Posit
+  partner: posit
+  partner_name: Posit
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/posit
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Posit Software, PBC
+    publisher_id: posit
+    matched_domain: posit.co
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-posthog
+  label: PostHog
+  partner: posthog
+  partner_name: PostHog
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/posthog
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: PostHog
+    publisher_id: posthog
+    matched_domain: posthog.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-postman
+  label: Postman
+  partner: postman
+  partner_name: Postman
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Postman
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Postman
+    publisher_id: Postman
+    matched_domain: postman.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-prisma
+  label: Prisma
+  partner: prisma
+  partner_name: Prisma
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Prisma
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Prisma
+    publisher_id: Prisma
+    matched_domain: prisma.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-prismatic
+  label: Prismatic
+  partner: prismatic
+  partner_name: Prismatic
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/prismatic
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Prismatic
+    publisher_id: prismatic
+    matched_domain: prismatic.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-qt
+  label: Qt
+  partner: qt
+  partner_name: Qt
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/theqtcompany
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Qt Group
+    publisher_id: theqtcompany
+    matched_domain: qt.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-rainbird-technologies
+  label: Rainbird Technologies
+  partner: rainbird-technologies
+  partner_name: Rainbird Technologies
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/RainbirdTechnologies
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Rainbird Technologies
+    publisher_id: RainbirdTechnologies
+    matched_domain: rainbird.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-red-hat
+  label: Red Hat
+  partner: red-hat
+  partner_name: Red Hat
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/redhat
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Red Hat
+    publisher_id: redhat
+    matched_domain: redhat.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-redocly
+  label: Redocly
+  partner: redocly
+  partner_name: Redocly
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Redocly
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Redocly
+    publisher_id: Redocly
+    matched_domain: redocly.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-renesas
+  label: Renesas
+  partner: renesas
+  partner_name: Renesas
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/RenesasElectronicsCorporation
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Renesas Electronics Corporation
+    publisher_id: RenesasElectronicsCorporation
+    matched_domain: renesas.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-salesforce
+  label: Salesforce
+  partner: salesforce
+  partner_name: Salesforce
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/sfdc
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Salesforce Engineering
+    publisher_id: sfdc
+    matched_domain: salesforce.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sanity
+  label: Sanity
+  partner: sanity
+  partner_name: Sanity
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/sanity-io
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Sanity
+    publisher_id: sanity-io
+    matched_domain: sanity.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sap
+  label: SAP
+  partner: sap
+  partner_name: SAP
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/SAPSE
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: SAPSE
+    publisher_id: SAPSE
+    matched_domain: sap.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sas-institute
+  label: SAS Institute
+  partner: sas
+  partner_name: SAS Institute
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/SAS
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: SAS
+    publisher_id: SAS
+    matched_domain: sas.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sauce-labs
+  label: Sauce Labs
+  partner: sauce-labs
+  partner_name: Sauce Labs
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/saucelabs
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: saucelabs
+    publisher_id: saucelabs
+    matched_domain: saucelabs.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-seismic-systems
+  label: Seismic Systems
+  partner: seismic-systems
+  partner_name: Seismic Systems
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/SeismicSys
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Seismic Systems
+    publisher_id: SeismicSys
+    matched_domain: seismic.systems
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sentry
+  label: Sentry
+  partner: sentry-system
+  partner_name: Sentry
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/sentry
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: sentry
+    publisher_id: sentry
+    matched_domain: sentry.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-servicenow
+  label: ServiceNow
+  partner: servicenow
+  partner_name: ServiceNow
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/ServiceNow
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: ServiceNow
+    publisher_id: ServiceNow
+    matched_domain: servicenow.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-shopify
+  label: Shopify
+  partner: shopify
+  partner_name: Shopify
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Shopify
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Shopify
+    publisher_id: Shopify
+    matched_domain: shopify.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-silverfin
+  label: Silverfin
+  partner: silverfin
+  partner_name: Silverfin
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Silverfin
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Silverfin
+    publisher_id: Silverfin
+    matched_domain: silverfin.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sinch
+  label: Sinch
+  partner: sinch
+  partner_name: Sinch
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Sinch
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Sinch
+    publisher_id: Sinch
+    matched_domain: sinch.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-skydio
+  label: Skydio
+  partner: skydio
+  partner_name: Skydio
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/skydio
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Skydio, Inc
+    publisher_id: skydio
+    matched_domain: skydio.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-snowflake
+  label: Snowflake
+  partner: snowflake
+  partner_name: Snowflake
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/snowflake
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Snowflake
+    publisher_id: snowflake
+    matched_domain: snowflake.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-snyk
+  label: Snyk
+  partner: snyk
+  partner_name: Snyk
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/snyk-security
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: snyk-security
+    publisher_id: snyk-security
+    matched_domain: snyk.io
+    matched_by: domain+name-among-holders
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-software
+  label: Software
+  partner: software
+  partner_name: Software
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/softwaredotcom
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Antenna
+    publisher_id: softwaredotcom
+    matched_domain: antenna.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sourcegraph
+  label: Sourcegraph
+  partner: sourcegraph
+  partner_name: Sourcegraph
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/sourcegraph
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: sourcegraph
+    publisher_id: sourcegraph
+    matched_domain: sourcegraph.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-speclynx
+  label: SpecLynx
+  partner: speclynx
+  partner_name: SpecLynx
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/SpecLynx
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: SpecLynx
+    publisher_id: SpecLynx
+    matched_domain: speclynx.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sphinx
+  label: Sphinx
+  partner: sphinx
+  partner_name: Sphinx
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/sphinx
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Sphinx
+    publisher_id: sphinx
+    matched_domain: sphinx.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-sst
+  label: SST
+  partner: sst-dev
+  partner_name: SST
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/sst-dev
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: SST
+    publisher_id: sst-dev
+    matched_domain: sst.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-starkware
+  label: Starkware
+  partner: starkware
+  partner_name: Starkware
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/starkware
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: StarkWare Industries
+    publisher_id: starkware
+    matched_domain: starkware.co
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-supermaven
+  label: Supermaven
+  partner: supermaven
+  partner_name: Supermaven
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Supermaven
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Supermaven
+    publisher_id: Supermaven
+    matched_domain: supermaven.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-supra
+  label: Supra
+  partner: supra
+  partner_name: Supra
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Supra
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Supra
+    publisher_id: Supra
+    matched_domain: supra.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-surrealdb
+  label: SurrealDB
+  partner: surrealdb
+  partner_name: SurrealDB
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/surrealdb
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: SurrealDB
+    publisher_id: surrealdb
+    matched_domain: surrealdb.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-swimm
+  label: Swimm
+  partner: swimm
+  partner_name: Swimm
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Swimm
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Swimm
+    publisher_id: Swimm
+    matched_domain: swimm.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-tailscale
+  label: Tailscale
+  partner: tailscale
+  partner_name: Tailscale
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/tailscale
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Tailscale
+    publisher_id: tailscale
+    matched_domain: tailscale.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-tempo-labs
+  label: Tempo Labs
+  partner: tempo-labs
+  partner_name: Tempo Labs
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/TempoLabs
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Tempo
+    publisher_id: TempoLabs
+    matched_domain: tempo.new
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-tenstorrent
+  label: Tenstorrent
+  partner: tenstorrent
+  partner_name: Tenstorrent
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Tenstorrent
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Tenstorrent
+    publisher_id: Tenstorrent
+    matched_domain: tenstorrent.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-testsigma
+  label: Testsigma
+  partner: testsigma
+  partner_name: Testsigma
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/testsigma
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Testsigma Technologies Inc
+    publisher_id: testsigma
+    matched_domain: testsigma.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-thunder-client
+  label: Thunder Client
+  partner: thunder-client
+  partner_name: Thunder Client
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/rangav
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Thunder Client
+    publisher_id: rangav
+    matched_domain: thunderclient.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-thunder-compute
+  label: Thunder Compute
+  partner: thundercompute
+  partner_name: Thunder Compute
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/ThunderCompute
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Thunder Compute
+    publisher_id: ThunderCompute
+    matched_domain: thundercompute.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-tla-plus-foundation
+  label: TLA Plus Foundation
+  partner: tla-plus-foundation
+  partner_name: TLA Plus Foundation
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/tlaplus
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: TLA+ (Temporal Logic of Actions)
+    publisher_id: tlaplus
+    matched_domain: tlapl.us
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-unblocked
+  label: Unblocked
+  partner: unblocked
+  partner_name: Unblocked
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/nextchaptersoftware
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Unblocked
+    publisher_id: nextchaptersoftware
+    matched_domain: getunblocked.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-veracode
+  label: Veracode
+  partner: veracode
+  partner_name: Veracode
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Veracode
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Veracode
+    publisher_id: Veracode
+    matched_domain: veracode.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-vespa
+  label: Vespa
+  partner: vespa-ai
+  partner_name: Vespa
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/vespaai
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Vespa.ai
+    publisher_id: vespaai
+    matched_domain: vespa.ai
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-virtue-ai
+  label: Virtue Ai
+  partner: virtue-ai
+  partner_name: Virtue Ai
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/virtueai
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Virtue AI
+    publisher_id: virtueai
+    matched_domain: virtueai.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-virustotal
+  label: VirusTotal
+  partner: virustotal
+  partner_name: VirusTotal
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/virustotal
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: virustotal
+    publisher_id: virustotal
+    matched_domain: virustotal.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-vue-js
+  label: Vue.js
+  partner: vuejs
+  partner_name: Vue.js
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Vue
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Vue
+    publisher_id: Vue
+    matched_domain: vuejs.org
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-wasp
+  label: Wasp
+  partner: wasp
+  partner_name: Wasp
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/wasp-lang
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Wasp
+    publisher_id: wasp-lang
+    matched_domain: wasp.sh
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-wherobots
+  label: Wherobots
+  partner: wherobots
+  partner_name: Wherobots
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/Wherobots
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Wherobots
+    publisher_id: Wherobots
+    matched_domain: wherobots.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-windmill
+  label: Windmill
+  partner: windmill
+  partner_name: Windmill
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/windmill-labs
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: windmill-labs
+    publisher_id: windmill-labs
+    matched_domain: windmill.dev
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-wiz
+  label: Wiz
+  partner: wiz
+  partner_name: Wiz
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/WizCloud
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: Wiz
+    publisher_id: WizCloud
+    matched_domain: wiz.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-xano
+  label: Xano
+  partner: xano
+  partner_name: Xano
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/xano
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: xano
+    publisher_id: xano
+    matched_domain: xano.com
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+  status: not-a-workflow
+  arazzo: null
+- slug: eclipse-zenml
+  label: ZenML
+  partner: zenml
+  partner_name: ZenML
+  category: IDE / developer extension marketplace listing
+  type: marketplace
+  marketplace: open-vsx
+  channel: partner-built
+  evidence: https://open-vsx.org/namespace/ZenML
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Open VSX Registry
+    spec_file: null
+    role: open-vsx-publisher
+    registered_name: ZenML
+    publisher_id: ZenML
+    matched_domain: zenml.io
+    matched_by: domain
+    detected_by: sweep-ide-extension-marketplaces.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, store); listing alone = participation. Listing / install / download counts
+      are context, never counted. Publisher vetting badges -> publisher_verified (weight 0)
+    other_publisher_ids:
+    - zenml-io
+  status: not-a-workflow
+  arazzo: null
