@@ -10,6 +10,9 @@ checked:
 - https://repo.ros2.org/rosdistro_cache/rolling-cache.yaml.gz
 - https://open-vsx.org/api/-/search
 - https://open-vsx.org/api/{namespace}/details
+- https://api.first.org/data/v1/teams
+- https://raw.githubusercontent.com/CVEProject/cve-website/dev/src/assets/data/CNAsList.json
+- https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
 marketplace_apps:
 - marketplace: open-vsx
   channel: partner-built
@@ -4485,5 +4488,45 @@ edges:
   - ZenML Tutorial
   badges:
   - Verified namespace
+- partner_name: CVE Program (CVE Numbering Authorities)
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.cve.org/PartnerInformation/ListofPartners/partner/eclipse
+  category: Vulnerability disclosure (CVE Numbering Authority)
+  contract_reference:
+    register: CVE Program CNA list (github.com/CVEProject/cve-website CNAsList.json @ 239d3d9b68e0)
+    standard: CVE Program CNA Operational Rules (CVE Numbering Authority)
+    spec_file: null
+    role: cve-numbering-authority
+    registered_name: Eclipse Foundation
+    matched_domain: eclipse.org
+    matched_by: domain
+    cna_id: CNA-2017-0008
+    cna_short_name: eclipse
+    cna_types:
+    - Vendor
+    - Open Source
+    cna_roles:
+    - CNA
+    scope: All projects hosted by the Eclipse Foundation as listed at <a href='https://www.eclipse.org/projects/'
+      target='_blank'>https://www.eclipse.org/projects/</a> and services provided by the Eclipse Foundation to support
+      open source projects as listed at <a href='https://www.eclipsestatus.io/' target='_blank'>https://www.eclipsestatus.io/</a>.
+    top_level_root: MITRE Corporation
+    root: n/a
+    security_advisories:
+    - https://www.eclipse.org/security/known.php
+    disclosure_policy:
+    - https://www.eclipse.org/security
+    country: Belgium
+    signal_note: listing as a CVE Numbering Authority = participation (a public commitment to assign CVE IDs and
+      publish advisories for its scope); never a count of CVEs
+    detected_by: sweep-vulnerability-disclosure-cna.py
+    detected: '2026-10-22'
+  detected_by: sweep-vulnerability-disclosure-cna.py
+  first_seen: '2026-10-22'
 source:
 - https://plugins.jetbrains.com/
