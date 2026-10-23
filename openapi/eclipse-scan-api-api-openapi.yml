@@ -983,3 +983,9 @@ components:
           type: string
           description: Security decision to apply to all specified scans
       description: Request body for making security decisions on quarantined scans
+x-provenance:
+  method: harvested
+  publisher: Eclipse Foundation
+  source: https://open-vsx.org/v3/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

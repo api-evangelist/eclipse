@@ -60,3 +60,9 @@ paths:
                 format: int32
       summary: Get sitemap
       x-summary-source: derived
+x-provenance:
+  method: harvested
+  publisher: Eclipse Foundation
+  source: https://open-vsx.org/v3/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

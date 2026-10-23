@@ -3488,3 +3488,9 @@ components:
           provider:
             type: string
             description: Authentication provider (e.g. github)
+x-provenance:
+  method: harvested
+  publisher: Eclipse Foundation
+  source: https://open-vsx.org/v3/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
