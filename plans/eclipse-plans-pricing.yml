@@ -1,0 +1,91 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://www.eclipse.org/membership/
+sources:
+- https://www.eclipse.org/membership/
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T141238
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: tiered-subscription
+delivery:
+  delivery: unclear
+  method: page
+  read: '2026-10-28'
+published: true
+note: Foundation membership fee schedule; annual fees tiered by membership class and annual corporate
+  revenue/organisation type.
+plan_count: 4
+currency: EUR
+plans:
+- name: Strategic
+  price_text: Starting at €30 000
+  price: 30000
+  currency: EUR
+  period: year
+  unit: organisation
+  included_quota: 'Fees scale by annual corporate revenue: €300 000 (> €1 billion), €180 000, €125 000,
+    €60 000, €30 000'
+- name: Contributing
+  price_text: Starting at €1 000
+  price: 1000
+  currency: EUR
+  period: year
+  unit: organisation
+  included_quota: €25 000 (> €1 billion), €17 500, €12 500, €9 000, €6 000, €1 500; Govt/NGO €6 000; Academic
+    €1 000
+- name: Associate
+  price_text: Starting at €0
+  price: 0
+  currency: EUR
+  period: year
+  unit: organisation
+  included_quota: €25 000 (> €1 billion) down to €1 500; €0 for Govt/Research/NGO and Academic/Publishing/User
+    Groups
+- name: Committer member
+  price_text: There is no cost to being a Committer member of the Foundation
+  currency: EUR
+  period: year
+  unit: individual
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - free
+  - subscription
+  units: []
+  plans:
+  - name: Strategic
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - year
+  - name: Contributing
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - year
+  - name: Associate
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - other
+    periods:
+    - year
+  - name: Committer member
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - other
+    periods:
+    - year
